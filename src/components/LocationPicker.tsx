@@ -33,7 +33,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ onLocationSelect, initi
   const placesServiceRef = useRef<google.maps.places.PlacesService | null>(null);
 
   // Google Maps APIキー
-  const GOOGLE_MAPS_API_KEY = 'AIzaSyCBQRE8qUDjNyxkqd7z0PuGlFIF3NT2yOw';
+  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyCBQRE8qUDjNyxKqd7z0PuGlFIF3NT2yOw';
 
   useEffect(() => {
     // Google Maps APIの初期化

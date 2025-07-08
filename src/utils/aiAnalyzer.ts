@@ -2,7 +2,7 @@ import { BirthData, PlanetPosition } from "../types";
 import { safeParseJSON, mapAIResponseToAIAnalysisResult } from './aiAnalyzerUtils';
 
 // OpenAI API設定
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || null;
 
 // エラーハンドリング用の設定
 const API_CONFIG = {
