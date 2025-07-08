@@ -11,7 +11,8 @@ export default defineConfig({
   preview: {
     host: '0.0.0.0',
     port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
-    strictPort: false
+    strictPort: false,
+    allowedHosts: ['starflect-production.up.railway.app', '.railway.app']
   },
   build: {
     outDir: 'dist',
