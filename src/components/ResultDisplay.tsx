@@ -272,61 +272,40 @@ const ResultDisplay: React.FC = React.memo(() => {
             
             {/* AI分析結果表示 */}
             {!isAiAnalyzing && aiAnalysis ? (
-              <>
-                <div className="planet-list-item">
-                  <div className="planet-list-title">✨ あなたの素晴らしい特徴</div>
-                  <div className="planet-list-analysis">
-                    <div className="planet-list-section good-traits">
-                      <p role="text" aria-label="あなたの良い特徴">{aiAnalysis.personalityInsights?.corePersonality}</p>
-                    </div>
+              <div className="planet-list-item">
+                <div className="planet-list-title">🌟 あなたの性格と運勢分析</div>
+                <div className="planet-list-analysis">
+                  <div className="planet-list-section good-traits">
+                    <strong>✨ あなたの素晴らしい特徴:</strong><br/>
+                    {aiAnalysis.personalityInsights?.corePersonality}
+                  </div>
+                  
+                  <div className="planet-list-section attention-points">
+                    <strong>🎯 注意すべきポイント:</strong><br/>
+                    {aiAnalysis.personalityInsights?.hiddenTraits}
+                  </div>
+                  
+                  <div className="planet-list-section fortune-love">
+                    <strong>💕 恋愛:</strong><br/>
+                    {aiAnalysis.detailedFortune?.loveLife}
+                  </div>
+                  
+                  <div className="planet-list-section fortune-career">
+                    <strong>💼 仕事:</strong><br/>
+                    {aiAnalysis.detailedFortune?.careerPath}
+                  </div>
+                  
+                  <div className="planet-list-section fortune-relationships">
+                    <strong>🌈 人間関係:</strong><br/>
+                    {aiAnalysis.personalityInsights?.relationshipStyle}
+                  </div>
+                  
+                  <div className="planet-list-section advice">
+                    <strong>🎨 あなたへのアドバイス:</strong><br/>
+                    {aiAnalysis.detailedFortune?.personalGrowth}
                   </div>
                 </div>
-
-                <div className="planet-list-item">
-                  <div className="planet-list-title">🎯 注意すべきポイント</div>
-                  <div className="planet-list-analysis">
-                    <div className="planet-list-section attention-points">
-                      <p role="text" aria-label="注意すべきポイント">{aiAnalysis.personalityInsights?.hiddenTraits}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="planet-list-item">
-                  <div className="planet-list-title">💕 恋愛</div>
-                  <div className="planet-list-analysis">
-                    <div className="planet-list-section fortune-love">
-                      <p role="text" aria-label="恋愛運">{aiAnalysis.detailedFortune?.loveLife}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="planet-list-item">
-                  <div className="planet-list-title">💼 仕事</div>
-                  <div className="planet-list-analysis">
-                    <div className="planet-list-section fortune-career">
-                      <p role="text" aria-label="仕事運">{aiAnalysis.detailedFortune?.careerPath}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="planet-list-item">
-                  <div className="planet-list-title">🌈 人間関係</div>
-                  <div className="planet-list-analysis">
-                    <div className="planet-list-section fortune-relationships">
-                      <p role="text" aria-label="人間関係運">{aiAnalysis.personalityInsights?.relationshipStyle}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="planet-list-item">
-                  <div className="planet-list-title">🎨 あなたへのアドバイス</div>
-                  <div className="planet-list-analysis">
-                    <div className="planet-list-section advice">
-                      <p role="text" aria-label="あなたへのアドバイス">{aiAnalysis.detailedFortune?.personalGrowth}</p>
-                    </div>
-                  </div>
-                </div>
-              </>
+              </div>
             ) : (
               <div className="planet-list-item">
                 <div className="planet-list-title">🤖 AI分析中...</div>
