@@ -328,9 +328,29 @@ main {
 
 .clear-button,
 .btn-clear {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   background: rgba(107, 114, 128, 0.1);
   color: var(--text-secondary);
   border: 2px solid var(--border-medium);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.clear-button:hover,
+.btn-clear:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(107, 114, 128, 0.3);
+  background: rgba(107, 114, 128, 0.15);
 }
 
 button:hover:not(:disabled) {
@@ -3884,6 +3904,15 @@ button:disabled {
     background: rgba(255, 255, 255, 0.95) !important;
     border-radius: 8px !important;
   }
+
+  /* === クリアボタンの調整 === */
+  .clear-button,
+  .btn-clear {
+    padding: 12px 20px !important;
+    font-size: 1rem !important;
+    margin: 10px 5px !important;
+    border-radius: 12px !important;
+  }
   
   .error-message h2 {
     font-size: 1.1rem !important;
@@ -4004,5 +4033,14 @@ button:disabled {
   .transit-insight {
     font-size: 0.85rem !important;
     padding: 10px !important;
+  }
+
+  /* === クリアボタンの調整 === */
+  .clear-button,
+  .btn-clear {
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+    margin: 5px 3px !important;
+    border-radius: 8px !important;
   }
 }
