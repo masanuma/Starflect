@@ -109,6 +109,9 @@ const ResultDisplay: React.FC = React.memo(() => {
       const horoscope = await generateCompleteHoroscope(data);
       setHoroscopeData(horoscope);
 
+      // 占星術計算結果をlocalStorageに保存（AIチャット用）
+      localStorage.setItem('horoscopeData', JSON.stringify(horoscope));
+
       // AI分析のキャッシュチェック
       const analysisKey = `ai_analysis_${data.name}_${data.birthDate.toISOString().split('T')[0]}`;
       const cachedAnalysis = localStorage.getItem(analysisKey);
