@@ -36,6 +36,11 @@ const InputForm: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
 
+    // お名前のバリデーション
+    if (!formData.name.trim()) {
+      newErrors.name = 'お名前を入力してください';
+    }
+
     // 生年月日のバリデーション
     if (!formData.birthDate) {
       newErrors.birthDate = '生年月日を入力してください';
@@ -155,19 +160,31 @@ const InputForm: React.FC = () => {
           noValidate
         >
           <div className="input-group">
-            <label htmlFor="name">お名前（任意）</label>
+            <label htmlFor="name">お名前 *</label>
             <input
               id="name"
               type="text"
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
               placeholder="山田太郎"
-              className="form-input"
-              aria-label="お名前を入力してください（任意項目）"
-              aria-describedby="name-hint"
+              className={`form-input ${errors.name ? 'error' : ''}`}
+              required
+              aria-label="お名前を入力してください（必須項目）"
+              aria-describedby={errors.name ? "name-error" : "name-hint"}
+              aria-invalid={errors.name ? 'true' : 'false'}
               tabIndex={1}
             />
-            <span id="name-hint" className="sr-only">名前の入力は任意です</span>
+            <span id="name-hint" className="sr-only">お名前を入力してください</span>
+            {errors.name && (
+              <span 
+                id="name-error" 
+                className="error-message" 
+                role="alert" 
+                aria-live="polite"
+              >
+                {errors.name}
+              </span>
+            )}
           </div>
 
           <div className="input-group">
@@ -198,7 +215,7 @@ const InputForm: React.FC = () => {
           </div>
 
           <div className="input-group">
-            <label htmlFor="birthTime">出生時刻 *</label>
+            <label htmlFor="birthTime">出生時刻（わからなかったらだいたいの時刻） *</label>
             <input
               id="birthTime"
               type="time"
@@ -225,7 +242,7 @@ const InputForm: React.FC = () => {
           </div>
 
           <div className="input-group">
-            <label htmlFor="birthPlace">出生地 *</label>
+            <label htmlFor="birthPlace">出生地（わからなかったらだいたいの場所） *</label>
             <div 
               role="group" 
               aria-labelledby="birthPlace" 

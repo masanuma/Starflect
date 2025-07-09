@@ -72,6 +72,22 @@ const ResultDisplay: React.FC = React.memo(() => {
     '今日', '明日', '今週', '来週', '今月', '来月', '1ヶ月', '3ヶ月', '6ヶ月', '1年'
   ];
 
+  // アコーディオンの開閉状態
+  const [accordionStates, setAccordionStates] = useState({
+    daily: true,       // 今日の星からのメッセージ（デフォルトで開く）
+    personality: false, // 10天体から読み解くあなた
+    planets: false,    // あなたの天体配置
+    aspects: false,    // あなたの天体の関係性
+    future: false      // 10天体占い
+  });
+
+  const toggleAccordion = (section: keyof typeof accordionStates) => {
+    setAccordionStates(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
   // 未来予測生成
   const handleGeneratePrediction = useCallback(async () => {
     if (!birthData || !horoscopeData) return;
@@ -244,31 +260,85 @@ const ResultDisplay: React.FC = React.memo(() => {
       <div className="result-content">
         <div style={{ textAlign: 'right', marginBottom: 16 }}>
           <button className="btn-primary" onClick={handleChatNavigation}>
-            🤖 AIチャット占い師と話す
+            🤖 10天体AIチャット占い
           </button>
-        </div>
+                </div>
         
 
         
         <div className="basic-info">
-          <h2>📊 基本情報</h2>
-          <p><strong>名前:</strong> {birthData.name}</p>
+          <p><strong>おなまえ:</strong> {birthData.name}</p>
           <p><strong>生年月日:</strong> {birthData.birthDate.toLocaleDateString('ja-JP')}</p>
-          <p><strong>出生時刻:</strong> {birthData.birthTime}</p>
-          <p><strong>出生地:</strong> {birthData.birthPlace.city}</p>
+          <p><strong>出生時刻（わからなかったらだいたいの時刻で）:</strong> {birthData.birthTime}</p>
+          <p><strong>出生地（わからなかったらだいたいの場所で）:</strong> {birthData.birthPlace.city}</p>
         </div>
+
+        {/* トランジット分析セクション */}
+        {transitAnalysis && (
+          <div className="analysis-section">
+            <h2 
+              className="section-title accordion-title" 
+              onClick={() => toggleAccordion('daily')}
+              style={{ cursor: 'pointer', userSelect: 'none' }}
+            >
+              🌟 今日の星からのメッセージ {accordionStates.daily ? '▲' : '▼'}
+            </h2>
+            {accordionStates.daily && (
+              <div className="planets-list">
+              {/* 今日のガイダンス */}
+              <div className="planet-list-item">
+                <div className="planet-list-title">💫 今日のあなたへのメッセージ</div>
+                <div className="planet-list-analysis">
+                  <div className="planet-list-section">
+                    <div className="daily-guidance">
+                      {transitAnalysis.dailyGuidance}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 重要なトランジット */}
+              {transitAnalysis.keyInsights && transitAnalysis.keyInsights.length > 0 && (
+                <div className="planet-list-item">
+                  <div className="planet-list-title">✨ 今日の特別な星の動き</div>
+                  <div className="planet-list-analysis">
+                    <div className="planet-list-section">
+                      <strong>星の動きって何？</strong><br/>
+                      あなたが生まれた時の星の配置と、今日の星の配置を比べることで、今日のあなたに影響する特別なエネルギーが分かります。まるで星があなたに「今日はこんな日ですよ」と教えてくれているようなものです。
+                    </div>
+                    {transitAnalysis.keyInsights.map((insight: string, index: number) => (
+                      <div key={index} className="planet-list-section">
+                        <div className="transit-insight">
+                          {insight}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* 太陽星座の詳細表示 */}
         <div className="analysis-section">
-          <h2 className="section-title">🌟 10天体から読み解くあなた</h2>
-          <div 
-            className="planets-list"
-            role="region"
-            aria-labelledby="personality-section"
-            aria-describedby="personality-description"
+          <h2 
+            className="section-title accordion-title" 
+            onClick={() => toggleAccordion('personality')}
+            style={{ cursor: 'pointer', userSelect: 'none' }}
           >
-            <h3 id="personality-section" className="sr-only">性格分析セクション</h3>
-            <span id="personality-description" className="sr-only">あなたの太陽星座に基づく性格の特徴を表示しています</span>
+            🌟 10天体から読み解くあなた {accordionStates.personality ? '▲' : '▼'}
+          </h2>
+          {accordionStates.personality && (
+            <div 
+              className="planets-list"
+              role="region"
+              aria-labelledby="personality-section"
+              aria-describedby="personality-description"
+            >
+              <h3 id="personality-section" className="sr-only">性格分析セクション</h3>
+              <span id="personality-description" className="sr-only">あなたの太陽星座に基づく性格の特徴を表示しています</span>
             
             {/* AI分析結果表示 */}
             {!isAiAnalyzing && aiAnalysis ? (
@@ -276,33 +346,27 @@ const ResultDisplay: React.FC = React.memo(() => {
                 <div className="planet-list-title">🌟 あなたの性格と運勢分析</div>
                 <div className="planet-list-analysis">
                   <div className="planet-list-section good-traits">
-                    <strong>✨ あなたの素晴らしい特徴:</strong><br/>
-                    {aiAnalysis.personalityInsights?.corePersonality}
+                    <strong>✨ あなたの素晴らしい特徴:</strong> {aiAnalysis.personalityInsights?.corePersonality}
                   </div>
                   
                   <div className="planet-list-section attention-points">
-                    <strong>🎯 注意すべきポイント:</strong><br/>
-                    {aiAnalysis.personalityInsights?.hiddenTraits}
+                    <strong>🎯 注意すべきポイント:</strong> {aiAnalysis.personalityInsights?.hiddenTraits}
                   </div>
                   
                   <div className="planet-list-section fortune-love">
-                    <strong>💕 恋愛:</strong><br/>
-                    {aiAnalysis.detailedFortune?.loveLife}
+                    <strong>💕 恋愛:</strong> {aiAnalysis.detailedFortune?.loveLife}
                   </div>
                   
                   <div className="planet-list-section fortune-career">
-                    <strong>💼 仕事:</strong><br/>
-                    {aiAnalysis.detailedFortune?.careerPath}
+                    <strong>💼 仕事:</strong> {aiAnalysis.detailedFortune?.careerPath}
                   </div>
                   
                   <div className="planet-list-section fortune-relationships">
-                    <strong>🌈 人間関係:</strong><br/>
-                    {aiAnalysis.personalityInsights?.relationshipStyle}
+                    <strong>🌈 人間関係:</strong> {aiAnalysis.personalityInsights?.relationshipStyle}
                   </div>
                   
                   <div className="planet-list-section advice">
-                    <strong>🎨 あなたへのアドバイス:</strong><br/>
-                    {aiAnalysis.detailedFortune?.personalGrowth}
+                    <strong>🎨 あなたへのアドバイス:</strong> {aiAnalysis.detailedFortune?.personalGrowth}
                   </div>
                 </div>
               </div>
@@ -322,27 +386,47 @@ const ResultDisplay: React.FC = React.memo(() => {
                 </div>
               </div>
             )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* 天体配置セクション */}
         <div className="analysis-section">
-          <h2 className="section-title">🌟 あなたの天体配置</h2>
-          <div 
-            className="planets-list"
-            role="region"
-            aria-labelledby="planets-section"
-            aria-describedby="planets-description"
+          <h2 
+            className="section-title accordion-title" 
+            onClick={() => toggleAccordion('planets')}
+            style={{ cursor: 'pointer', userSelect: 'none' }}
           >
-            <h3 id="planets-section" className="sr-only">天体配置セクション</h3>
-            <span id="planets-description" className="sr-only">生まれた時の天体の位置と意味を表示しています</span>
+            🌟 あなたの天体配置 {accordionStates.planets ? '▲' : '▼'}
+          </h2>
+          {accordionStates.planets && (
+            <div 
+              className="planets-list"
+              role="region"
+              aria-labelledby="planets-section"
+              aria-describedby="planets-description"
+            >
+              <h3 id="planets-section" className="sr-only">天体配置セクション</h3>
+              <span id="planets-description" className="sr-only">生まれた時の天体の位置と意味を表示しています</span>
+
+            <div className="planet-list-item">
+              <div className="planet-list-title">⭐ 10天体とは</div>
+              <div className="planet-list-analysis">
+                <div className="planet-list-section">
+                  <strong>10天体とは？</strong><br/>
+                  西洋占星術で使われる10個の天体（太陽、月、水星、金星、火星、木星、土星、天王星、海王星、冥王星）のことです。
+                  それぞれが異なるエネルギーや性格の特徴を表しており、
+                  あなたが生まれた瞬間にどの星座にあったかで、その天体の影響の表れ方が決まります。
+                </div>
+              </div>
+            </div>
 
             <div className="planet-list-item">
               <div className="planet-list-title">🌟 あなたの10天体星座とその影響</div>
               <div className="planet-list-analysis">
                 {horoscopeData.planets.map((planet, index) => (
                   <div className="planet-list-section" key={index}>
-                    <strong>✨ {planet.planet}星座は {planet.sign} です ({planet.degree.toFixed(1)}度)</strong><br/>
+                    <strong>✨ {planet.planet}星座は {planet.sign} です</strong><br/>
                     <strong>星座の特徴:</strong> {aiAnalysis?.planetAnalysis?.[planet.planet]?.signCharacteristics ?? 'データなし'}<br/>
                     <strong>あなたへの影響:</strong> {aiAnalysis?.planetAnalysis?.[planet.planet]?.personalImpact ?? 'データなし'}<br/>
                     <strong>アドバイス:</strong> {aiAnalysis?.planetAnalysis?.[planet.planet]?.advice ?? 'データなし'}
@@ -350,20 +434,28 @@ const ResultDisplay: React.FC = React.memo(() => {
                 ))}
               </div>
             </div>
-          </div>
+            </div>
+          )}
         </div>
 
         {/* アスペクト分析セクション */}
         <div className="analysis-section">
-          <h2 className="section-title">🌟 あなたの天体の関係性</h2>
-          <div 
-            className="planets-list"
-            role="region"
-            aria-labelledby="aspects-section"
-            aria-describedby="aspects-description"
+          <h2 
+            className="section-title accordion-title" 
+            onClick={() => toggleAccordion('aspects')}
+            style={{ cursor: 'pointer', userSelect: 'none' }}
           >
-            <h3 id="aspects-section" className="sr-only">アスペクト分析セクション</h3>
-            <span id="aspects-description" className="sr-only">天体同士の角度関係とその意味を表示しています</span>
+            🌟 あなたの天体の関係性 {accordionStates.aspects ? '▲' : '▼'}
+          </h2>
+          {accordionStates.aspects && (
+            <div 
+              className="planets-list"
+              role="region"
+              aria-labelledby="aspects-section"
+              aria-describedby="aspects-description"
+            >
+              <h3 id="aspects-section" className="sr-only">アスペクト分析セクション</h3>
+              <span id="aspects-description" className="sr-only">天体同士の角度関係とその意味を表示しています</span>
 
             <div className="planet-list-item">
               <div className="planet-list-title">⭐ アスペクト分析</div>
@@ -428,60 +520,30 @@ const ResultDisplay: React.FC = React.memo(() => {
                 </div>
               </div>
             </div>
-          </div>
+            </div>
+          )}
         </div>
 
-        {/* トランジット分析セクション */}
-        {transitAnalysis && (
-          <div className="analysis-section">
-            <h2 className="section-title">🌟 今日の星からのメッセージ</h2>
-            <div className="planets-list">
-              {/* 今日のガイダンス */}
-              <div className="planet-list-item">
-                <div className="planet-list-title">💫 今日のあなたへのメッセージ</div>
-                <div className="planet-list-analysis">
-                  <div className="planet-list-section">
-                    <div className="daily-guidance">
-                      {transitAnalysis.dailyGuidance}
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              {/* 重要なトランジット */}
-              {transitAnalysis.keyInsights && transitAnalysis.keyInsights.length > 0 && (
-                <div className="planet-list-item">
-                  <div className="planet-list-title">✨ 今日の特別な星の動き</div>
-                  <div className="planet-list-analysis">
-                    <div className="planet-list-section">
-                      <strong>星の動きって何？</strong><br/>
-                      あなたが生まれた時の星の配置と、今日の星の配置を比べることで、今日のあなたに影響する特別なエネルギーが分かります。まるで星があなたに「今日はこんな日ですよ」と教えてくれているようなものです。
-                    </div>
-                    {transitAnalysis.keyInsights.map((insight: string, index: number) => (
-                      <div key={index} className="planet-list-section">
-                        <div className="transit-insight">
-                          {insight}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
 
         {/* 未来予測セクション */}
         <div className="analysis-section">
-          <h2 className="section-title">🔮 未来予測</h2>
-          <div 
-            className="planets-list"
-            role="region"
-            aria-labelledby="prediction-section"
-            aria-describedby="prediction-description"
+          <h2 
+            className="section-title accordion-title" 
+            onClick={() => toggleAccordion('future')}
+            style={{ cursor: 'pointer', userSelect: 'none' }}
           >
-            <h3 id="prediction-section" className="sr-only">未来予測セクション</h3>
-            <span id="prediction-description" className="sr-only">選択した期間の運勢予測を表示しています</span>
+            🔮 10天体占い {accordionStates.future ? '▲' : '▼'}
+          </h2>
+          {accordionStates.future && (
+            <div 
+              className="planets-list"
+              role="region"
+              aria-labelledby="prediction-section"
+              aria-describedby="prediction-description"
+            >
+              <h3 id="prediction-section" className="sr-only">未来予測セクション</h3>
+              <span id="prediction-description" className="sr-only">選択した期間の運勢予測を表示しています</span>
             
             {/* 期間選択 */}
             <div className="planet-list-item">
@@ -628,7 +690,8 @@ const ResultDisplay: React.FC = React.memo(() => {
                 )}
               </>
             )}
-          </div>
+            </div>
+          )}
         </div>
 
         <div 

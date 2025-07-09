@@ -286,7 +286,7 @@ const HoroscopeChart: React.FC<HoroscopeChartProps> = ({ horoscopeData, size = 4
               <g 
                 key={planet.planet} 
                 role="group" 
-                aria-label={`${planet.planet} - ${planet.sign}座 ${planet.degree.toFixed(1)}度${planet.retrograde ? ' 逆行中' : ''}`}
+                aria-label={`${planet.planet} - ${planet.sign}座${planet.retrograde ? ' 逆行中' : ''}`}
               >
                 {/* 天体記号 */}
                 <circle

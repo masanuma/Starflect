@@ -4038,3 +4038,29 @@ button:disabled {
     border-radius: 8px !important;
   }
 }
+
+/* === アコーディオンスタイル === */
+.accordion-title {
+  transition: all 0.2s ease;
+  position: relative;
+  padding: 16px 20px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin-bottom: 10px;
+  user-select: none;
+}
+
+.accordion-title:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+.accordion-title:active {
+  transform: translateY(0);
+}
+
+/* アコーディオンの折りたたみトランジション */
+.planets-list {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
