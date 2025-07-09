@@ -260,7 +260,7 @@ const ResultDisplay: React.FC = React.memo(() => {
 
         {/* 太陽星座の詳細表示 */}
         <div className="analysis-section">
-          <h2 className="section-title">🌟 あなたはこんな人です</h2>
+          <h2 className="section-title">🌟 10天体から読み解くあなた</h2>
           <div 
             className="planets-list"
             role="region"

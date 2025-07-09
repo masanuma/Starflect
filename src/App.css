@@ -3100,6 +3100,9 @@ button:disabled {
   border-radius: 15px;
   border: 1px solid rgba(102, 126, 234, 0.3);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* 全体的なコンテナの改善 */
@@ -3762,6 +3765,9 @@ button:disabled {
     background: rgba(255, 255, 255, 0.9) !important;
     border-radius: 8px !important;
     margin: 15px 5px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   /* === 分析セクションの調整 === */
