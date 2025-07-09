@@ -29,8 +29,6 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ onLocationSelect, initi
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const markerRef = useRef<google.maps.Marker | null>(null);
-  // 廃止されたAutocompleteServiceの代わりにnullで初期化
-  const autocompleteRef = useRef<any>(null);
   const placesServiceRef = useRef<google.maps.places.PlacesService | null>(null);
 
   // Google Maps APIキー
