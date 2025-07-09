@@ -263,8 +263,8 @@ const ResultDisplay: React.FC = React.memo(() => {
         <div className="basic-info">
           <p><strong>おなまえ:</strong> {birthData.name}</p>
           <p><strong>生年月日:</strong> {birthData.birthDate.toLocaleDateString('ja-JP')}</p>
-          <p><strong>出生時刻（わからなかったらだいたいの時刻で）:</strong> {birthData.birthTime}</p>
-          <p><strong>出生地（わからなかったらだいたいの場所で）:</strong> {birthData.birthPlace.city}</p>
+          <p><strong>出生時刻:</strong> {birthData.birthTime}</p>
+          <p><strong>出生地:</strong> {birthData.birthPlace.city}</p>
         </div>
 
         {/* トランジット分析セクション */}
