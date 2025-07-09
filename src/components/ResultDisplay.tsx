@@ -78,7 +78,7 @@ const ResultDisplay: React.FC = React.memo(() => {
     personality: false, // 10天体から読み解くあなた
     planets: false,    // あなたの天体配置
     aspects: false,    // あなたの天体の関係性
-    future: false      // 10天体占い
+    future: true       // 10天体占い（デフォルトで開く）
   });
 
   const toggleAccordion = (section: keyof typeof accordionStates) => {
@@ -189,9 +189,7 @@ const ResultDisplay: React.FC = React.memo(() => {
     window.location.href = '/';
   }, []);
 
-  const handlePrint = useCallback(() => {
-    window.print();
-  }, []);
+
 
   // エラー表示
   if (error) {
@@ -258,11 +256,7 @@ const ResultDisplay: React.FC = React.memo(() => {
   return (
     <div className="result-container">
       <div className="result-content">
-        <div style={{ textAlign: 'right', marginBottom: 16 }}>
-          <button className="btn-primary" onClick={handleChatNavigation}>
-            🤖 10天体AIチャット占い
-          </button>
-                </div>
+
         
 
         
@@ -590,9 +584,18 @@ const ResultDisplay: React.FC = React.memo(() => {
                       aria-label={isPredicting ? "予測を生成中です。しばらくお待ちください" : `${selectedTimeframe}の運勢予測を生成します`}
                       aria-describedby="prediction-btn-hint"
                     >
-                      {isPredicting ? '🔮 未来を読み取り中...' : `🌟 ${selectedTimeframe}の運勢を予測する`}
+                      {isPredicting ? '🔮 未来を読み取り中...' : `🌟 ${selectedTimeframe}の運勢を占う`}
                     </button>
                     <span id="prediction-btn-hint" className="sr-only">期間を選択してからこのボタンをクリックしてください</span>
+                  </div>
+                  <div className="generate-section" style={{ marginTop: '16px' }}>
+                    <button
+                      className="generate-prediction-btn"
+                      onClick={handleChatNavigation}
+                      aria-label="10天体AIチャット占いを開始します"
+                    >
+                      🤖 10天体AIチャット占い
+                    </button>
                   </div>
                 </div>
               </div>
@@ -706,14 +709,6 @@ const ResultDisplay: React.FC = React.memo(() => {
             tabIndex={0}
           >
             新しい分析を開始
-          </button>
-          <button 
-            onClick={handlePrint} 
-            className="btn-secondary"
-            aria-label="現在の分析結果を印刷します"
-            tabIndex={0}
-          >
-            結果を印刷
           </button>
         </div>
       </div>
