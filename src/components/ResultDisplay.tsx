@@ -248,7 +248,7 @@ const ResultDisplay: React.FC = React.memo(() => {
           </button>
         </div>
         
-        <h1>✨ あなたのホロスコープ分析結果</h1>
+
         
         <div className="basic-info">
           <h2>📊 基本情報</h2>
@@ -376,7 +376,7 @@ const ResultDisplay: React.FC = React.memo(() => {
 
         {/* アスペクト分析セクション */}
         <div className="analysis-section">
-          <h2 className="section-title">🌟 あなたの天体の関係性（アスペクト）</h2>
+          <h2 className="section-title">🌟 あなたの天体の関係性</h2>
           <div 
             className="planets-list"
             role="region"
