@@ -527,21 +527,50 @@ const StepByStepResult: React.FC<StepByStepResultProps> = () => {
           <h2 className="level-title-text">🔮 3天体の本格占い</h2>
         </div>
         
-        <div className="three-planets-display">
-          <div className="planet-card">
-            <h4>☀️ 太陽星座</h4>
-            <p>{sun?.sign}</p>
-            <span>基本性格</span>
+        {/* あなたの3天体セクション */}
+        <div className="zodiac-section">
+          <h3 className="section-title">⭐ あなたの3天体</h3>
+          <div className="three-planets-display">
+            <div className="planet-card">
+              <div className="planet-title-line">
+                <span className="planet-emoji">☀️</span>
+                <span className="planet-name">太陽星座</span>
+                <span className="zodiac-emoji">{zodiacInfo[sun?.sign || '']?.icon}</span>
+                <span className="zodiac-name">{sun?.sign}</span>
+              </div>
+              <div className="planet-description">基本性格</div>
+            </div>
+            <div className="planet-card">
+              <div className="planet-title-line">
+                <span className="planet-emoji">🌙</span>
+                <span className="planet-name">月星座</span>
+                <span className="zodiac-emoji">{zodiacInfo[moon?.sign || '']?.icon}</span>
+                <span className="zodiac-name">{moon?.sign}</span>
+              </div>
+              <div className="planet-description">感情・本音</div>
+            </div>
+            <div className="planet-card">
+              <div className="planet-title-line">
+                <span className="planet-emoji">🌅</span>
+                <span className="planet-name">上昇星座</span>
+                <span className="zodiac-emoji">{zodiacInfo[rising?.sign || '']?.icon}</span>
+                <span className="zodiac-name">{rising?.sign}</span>
+              </div>
+              <div className="planet-description">外見・印象</div>
+            </div>
           </div>
-          <div className="planet-card">
-            <h4>🌙 月星座</h4>
-            <p>{moon?.sign}</p>
-            <span>感情・本音</span>
-          </div>
-          <div className="planet-card">
-            <h4>🌅 上昇星座</h4>
-            <p>{rising?.sign}</p>
-            <span>外見・印象</span>
+        </div>
+
+        {/* 3天体から見たあなた */}
+        <div className="personality-section">
+          <h3 className="section-title">🌟 3天体から見たあなた</h3>
+          <div className="three-planets-analysis">
+            <div className="analysis-overview">
+              <p>
+                {sun?.sign}の太陽星座、{moon?.sign}の月星座、{rising?.sign}の上昇星座という3つの天体の組み合わせから、あなたの複層的な性格を分析します。
+                表面的な性格だけでなく、内面の感情や人からの印象まで、多角的にあなたらしさを解き明かします。
+              </p>
+            </div>
           </div>
         </div>
 
@@ -689,14 +718,71 @@ const StepByStepResult: React.FC<StepByStepResultProps> = () => {
           )}
         </div>
 
-        <div className="return-buttons">
+        {/* 10天体の完全占いの説明 */}
+        <div className="three-planets-introduction">
+          <h3 className="section-title">🌌 10天体の完全占いとは</h3>
+          <div className="intro-overview">
+            <p>
+              太陽・月・上昇星座だけでは分からない、あなたの深層心理、隠された才能、人生の使命まで完全に解明します。
+              恋愛・結婚運の詳細、仕事での成功法則、人間関係の傾向など、10天体すべての配置から導き出される
+              あなただけの人生攻略法が明らかになります。
+            </p>
+          </div>
+          
+          <div className="three-planets-preview">
+            <div className="planet-preview">
+              <span className="planet-icon">🌟</span>
+              <div className="planet-info">
+                <h4>自分の核心（太陽・月）</h4>
+                <p>基本的な性格と内面の感情、あなたの根本的な性質</p>
+              </div>
+            </div>
+            
+            <div className="planet-preview">
+              <span className="planet-icon">💕</span>
+              <div className="planet-info">
+                <h4>恋愛と行動（金星・火星）</h4>
+                <p>恋愛観、美意識、行動パターン、エネルギーの使い方</p>
+              </div>
+            </div>
+            
+            <div className="planet-preview">
+              <span className="planet-icon">🧠</span>
+              <div className="planet-info">
+                <h4>知性と成長（水星・木星・土星）</h4>
+                <p>コミュニケーション能力、拡大・成長、責任感と課題</p>
+              </div>
+            </div>
+            
+            <div className="planet-preview">
+              <span className="planet-icon">🌌</span>
+              <div className="planet-info">
+                <h4>変革と深層（天王星・海王星・冥王星）</h4>
+                <p>変化への対応、直感力、深層心理、潜在能力</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        {/* レベルアップボタン */}
+        {/* レベルアップボタン */}
+        <div className="level-up-section">
           <button 
-            className="return-button secondary"
-            onClick={() => setCurrentLevel(1)}
+            className="level-up-button"
+            onClick={handleLevelUp}
           >
-            太陽星座の占いに戻る
+            10天体の完全占いへ 🌌
           </button>
-          <a href="/" className="return-button primary">
+        </div>
+
+        {/* アクションボタン */}
+        <div className="action-buttons">
+          <a href="/ai-fortune" className="ai-chat-button">
+            🤖 AI占い師に相談する
+          </a>
+          <a href="/" className="new-fortune-button">
             新しい占いを始める
           </a>
         </div>
@@ -713,14 +799,119 @@ const StepByStepResult: React.FC<StepByStepResultProps> = () => {
           <h2 className="level-title-text">🌌 10天体の完全占い</h2>
         </div>
         
-        <div className="all-planets-display">
-          <div className="planets-grid">
-            {horoscopeData.planets.map((planet, index) => (
-              <div key={index} className="planet-item">
-                <span className="planet-name">{planet.planet}</span>
-                <span className="planet-sign">{planet.sign}</span>
-              </div>
-            ))}
+                <div className="four-sections-display">
+          {/* セクション1: 自分の核心 (太陽と月) */}
+          <div className="section-card">
+            <h4 className="section-title">🌟 自分の核心</h4>
+            <div className="section-description">基本的な性格と内面の感情</div>
+            <div className="section-planets">
+              {horoscopeData.planets.filter(p => ['太陽', '月'].includes(p.planet)).map((planet, index) => {
+                const getPlanetEmoji = (planetName: string) => {
+                  const planetEmojis: { [key: string]: string } = {
+                    '太陽': '☀️',
+                    '月': '🌙'
+                  };
+                  return planetEmojis[planetName] || '⭐';
+                };
+
+                return (
+                  <div key={index} className="planet-item">
+                    <div className="planet-title-line">
+                      <span className="planet-emoji">{getPlanetEmoji(planet.planet)}</span>
+                      <span className="planet-name">{planet.planet}</span>
+                      <span className="zodiac-emoji">{zodiacInfo[planet.sign]?.icon}</span>
+                      <span className="zodiac-name">{planet.sign}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* セクション2: 恋愛と行動 (金星と火星) */}
+          <div className="section-card">
+            <h4 className="section-title">💕 恋愛と行動</h4>
+            <div className="section-description">恋愛観と行動パターン</div>
+            <div className="section-planets">
+              {horoscopeData.planets.filter(p => ['金星', '火星'].includes(p.planet)).map((planet, index) => {
+                const getPlanetEmoji = (planetName: string) => {
+                  const planetEmojis: { [key: string]: string } = {
+                    '金星': '♀️',
+                    '火星': '♂️'
+                  };
+                  return planetEmojis[planetName] || '⭐';
+                };
+
+                return (
+                  <div key={index} className="planet-item">
+                    <div className="planet-title-line">
+                      <span className="planet-emoji">{getPlanetEmoji(planet.planet)}</span>
+                      <span className="planet-name">{planet.planet}</span>
+                      <span className="zodiac-emoji">{zodiacInfo[planet.sign]?.icon}</span>
+                      <span className="zodiac-name">{planet.sign}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* セクション3: 知性と成長 (水星・木星・土星) */}
+          <div className="section-card">
+            <h4 className="section-title">🧠 知性と成長</h4>
+            <div className="section-description">コミュニケーション、成長、責任感</div>
+            <div className="section-planets">
+              {horoscopeData.planets.filter(p => ['水星', '木星', '土星'].includes(p.planet)).map((planet, index) => {
+                const getPlanetEmoji = (planetName: string) => {
+                  const planetEmojis: { [key: string]: string } = {
+                    '水星': '☿️',
+                    '木星': '♃',
+                    '土星': '♄'
+                  };
+                  return planetEmojis[planetName] || '⭐';
+                };
+
+                return (
+                  <div key={index} className="planet-item">
+                    <div className="planet-title-line">
+                      <span className="planet-emoji">{getPlanetEmoji(planet.planet)}</span>
+                      <span className="planet-name">{planet.planet}</span>
+                      <span className="zodiac-emoji">{zodiacInfo[planet.sign]?.icon}</span>
+                      <span className="zodiac-name">{planet.sign}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* セクション4: 変革と深層 (外惑星) */}
+          <div className="section-card">
+            <h4 className="section-title">🌌 変革と深層</h4>
+            <div className="section-description">変化への対応と深層心理</div>
+            <div className="section-planets">
+              {horoscopeData.planets.filter(p => ['天王星', '海王星', '冥王星'].includes(p.planet)).map((planet, index) => {
+                const getPlanetEmoji = (planetName: string) => {
+                  const planetEmojis: { [key: string]: string } = {
+                    '天王星': '♅',
+                    '海王星': '♆',
+                    '冥王星': '♇'
+                  };
+                  return planetEmojis[planetName] || '⭐';
+                };
+
+                return (
+                  <div key={index} className="planet-item">
+                    <div className="planet-title-line">
+                      <span className="planet-emoji">{getPlanetEmoji(planet.planet)}</span>
+                      <span className="planet-name">{planet.planet}</span>
+                      <span className="zodiac-emoji">{zodiacInfo[planet.sign]?.icon}</span>
+                      <span className="zodiac-name">{planet.sign}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -859,14 +1050,12 @@ const StepByStepResult: React.FC<StepByStepResultProps> = () => {
           )}
         </div>
 
-        <div className="return-buttons">
-          <button 
-            className="return-button secondary"
-            onClick={() => setCurrentLevel(2)}
-          >
-            3天体の占いに戻る
-          </button>
-          <a href="/" className="return-button primary">
+        {/* アクションボタン */}
+        <div className="action-buttons">
+          <a href="/ai-fortune" className="ai-chat-button">
+            🤖 AI占い師に相談する
+          </a>
+          <a href="/" className="new-fortune-button">
             新しい占いを始める
           </a>
         </div>

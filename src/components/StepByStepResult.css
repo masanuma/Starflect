@@ -7,6 +7,40 @@
   min-height: 100vh;
 }
 
+/* 統一ボックススタイル - 全ての「ボックスの中のボックス」に適用 */
+.fortune-card,
+.analysis-overview,
+.zodiac-element,
+.zodiac-quality,
+.zodiac-ruling,
+.prediction-item,
+.planet-card,
+.all-planets-display .planet-item,
+.complete-fortune-grid .fortune-card,
+.planet-preview,
+.todays-fortune .fortune-item,
+.special-days-card,
+.ai-analysis,
+.educational-content,
+.tips-section,
+.practical-use,
+.advanced-content {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 0.8rem 1rem !important; /* 縦幅を狭く、統一パディング */
+  margin: 0 !important; /* マージンを削除してコンテナのgapのみで制御 */
+  background: white !important;
+  border-radius: 10px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.2s ease !important;
+}
+
+/* 3天体ボックス専用スタイル - 上記統一スタイルを上書き */
+.three-planets-display .planet-card {
+  padding: 0.3rem 0.5rem !important; /* 3天体は特に縦幅を狭く */
+}
+
 /* 共通カードスタイル */
 .card-primary {
   background: linear-gradient(135deg, #f3f0ff 0%, #f8fafc 100%);
@@ -324,34 +358,34 @@
   padding: 2rem 1.5rem !important; /* 左右の余白を1.5remに統一 */
 }
 
-/* 3天体の本格占いの説明文を薄い紫のボックスで囲む */
+/* 3天体の本格占いの説明文 - 紫背景に合わせて白文字 */
 .intro-overview {
-  background: rgba(255, 255, 255, 0.3) !important; /* 薄い紫のボックス */
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 10px;
   padding: 1rem;
-  margin: 1rem 0; /* 外側余白を1remに */
+  margin: 1.5rem 0;
   border: 1px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(5px);
-  color: white; /* 白文字 */
+  color: white;
 }
 
 /* 3天体プレビューの絵文字を左側、文言を右側に配置 */
 .planet-preview {
   display: flex !important;
-  flex-direction: row !important; /* 横並びを確実にする */
+  flex-direction: row !important;
   align-items: center !important;
-  margin: 1rem 0 !important; /* 外側余白を上下1remに統一 */
-  padding: 0.6rem !important; /* パディングをもっと小さくする */
-  background: rgba(255, 255, 255, 0.3); /* intro-overviewと同じ背景色 */
-  border-radius: 8px; /* 角の丸みも少し小さくする */
-  border: 1px solid rgba(255, 255, 255, 0.3); /* intro-overviewと同じ枠線 */
-  transition: all 0.3s ease;
+  margin: 0 !important;
+  padding: 0.8rem !important;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
 }
 
 /* 最初の3天体プレビューの上余白を調整 */
 .planet-preview:first-child {
-  margin-top: 1rem !important; /* 最初の要素も上余白を1remに統一 */
+  margin-top: 0 !important; /* gapで制御するため0に */
 }
 
 .planet-preview .planet-icon {
@@ -386,17 +420,17 @@
   font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols', 'EmojiOne Mozilla', 'Twemoji Mozilla', 'Segoe UI Symbol', 'Noto Emoji', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
 
-/* 3天体の本格占いとは - 白文字 */
+/* 3天体の本格占いとは - 紫背景に合わせて白文字 */
 .three-planets-introduction > h3 {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   padding: 0 !important;
   margin-bottom: 1.5rem !important;
-  text-align: left !important; /* 左詰め */
-  font-size: 1.4rem !important; /* 統一フォントサイズ */
+  text-align: left !important;
+  font-size: 1.4rem !important;
   font-weight: 600 !important;
-  color: white !important; /* 白文字 */
+  color: white !important;
   font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols', 'EmojiOne Mozilla', 'Twemoji Mozilla', 'Segoe UI Symbol', 'Noto Emoji', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
 
@@ -667,10 +701,15 @@
 
 .three-signs-analysis .analysis-overview {
   background: white;
-  border-radius: 10px;
-  padding: 1rem 1.5rem; /* 左右の余白を拡大 */
-  margin: 0; /* マージンを削除してコンテナのgapのみで制御 */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  /* 3つのカードと同じ幅・位置設定 */
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  text-align: center;
 }
 
 .analysis-title {
@@ -782,6 +821,10 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
+  min-width: 200px; /* 統一した最小幅 */
+  max-width: 280px; /* 統一した最大幅 */
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .level-up-button:hover {
@@ -1118,7 +1161,10 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 120px;
+  min-width: 200px; /* 統一した最小幅 */
+  max-width: 280px; /* 統一した最大幅 */
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .generate-fortune-button:hover {
@@ -2046,6 +2092,97 @@
   background: #fed7aa !important; /* 今日のアドバイス - オレンジ */
 }
 
+/* 特別なボックスの背景色上書き */
+.three-signs-analysis .analysis-overview {
+  background: white !important; /* 説明文ボックスは白背景 */
+}
+
+.planet-preview {
+  background: rgba(255, 255, 255, 0.3) !important; /* 紫背景内のプレビューボックス */
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+/* その他の特別な背景色 */
+.ai-analysis {
+  background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%) !important;
+  border-left: 4px solid #38b2ac !important;
+}
+
+.educational-content {
+  background: linear-gradient(135deg, #e8f4f8 0%, #f0f8ff 100%) !important;
+  border: 1px solid rgba(44, 82, 130, 0.2) !important;
+}
+
+.tips-section {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%) !important;
+}
+
+.practical-use {
+  background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%) !important;
+  border: 1px solid #b8f5cd !important;
+}
+
+.advanced-content {
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%) !important;
+  border: 1px solid #d6bcfa !important;
+}
+
+/* レスポンシブ対応 - ボックス縦幅統一 */
+@media (max-width: 768px) {
+  .fortune-card,
+  .analysis-overview,
+  .zodiac-element,
+  .zodiac-quality,
+  .zodiac-ruling,
+  .prediction-item,
+  .planet-card,
+  .all-planets-display .planet-item,
+  .complete-fortune-grid .fortune-card,
+  .planet-preview,
+  .todays-fortune .fortune-item,
+  .special-days-card,
+  .ai-analysis,
+  .educational-content,
+  .tips-section,
+  .practical-use,
+  .advanced-content {
+    padding: 0.6rem 0.8rem !important; /* モバイルでは更に狭く */
+  }
+  
+  /* 3天体ボックス専用 - モバイル */
+  .three-planets-display .planet-card {
+    padding: 0.25rem 0.4rem !important; /* モバイルでも縦幅を狭く保つ */
+  }
+}
+
+@media (max-width: 480px) {
+  .fortune-card,
+  .analysis-overview,
+  .zodiac-element,
+  .zodiac-quality,
+  .zodiac-ruling,
+  .prediction-item,
+  .planet-card,
+  .all-planets-display .planet-item,
+  .complete-fortune-grid .fortune-card,
+  .planet-preview,
+  .todays-fortune .fortune-item,
+  .special-days-card,
+  .ai-analysis,
+  .educational-content,
+  .tips-section,
+  .practical-use,
+  .advanced-content {
+    padding: 0.4rem 0.6rem !important; /* 小さな画面では最も狭く */
+  }
+  
+  /* 3天体ボックス専用 - 小画面 */
+  .three-planets-display .planet-card {
+    padding: 0.2rem 0.3rem !important; /* 最小画面でも縦幅を狭く保つ */
+  }
+}
+
 /* 運勢タイトルの絵文字をカラー表示 */
 .fortune-title {
   color: #2d3748;
@@ -2138,6 +2275,81 @@
   min-height: 60px; /* 10天体の1行表示に合わせて高さを調整 */
 }
 
+/* 4つのセクション表示スタイル */
+.four-sections-display {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  padding: 0;
+}
+
+.section-card {
+  background: white;
+  border-radius: 15px;
+  padding: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  transition: transform 0.3s ease;
+}
+
+.section-card:hover {
+  transform: translateY(-3px);
+}
+
+.section-card .section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.section-card .section-description {
+  font-size: 0.9rem;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.section-planets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.section-planets .planet-item {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.section-planets .planet-item .planet-title-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.3rem;
+  line-height: 1;
+}
+
+.section-planets .planet-item .planet-emoji,
+.section-planets .planet-item .zodiac-emoji {
+  font-size: 1.4rem;
+}
+
+.section-planets .planet-item .planet-name,
+.section-planets .planet-item .zodiac-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2d3748;
+}
+
 /* 10天体の1行表示スタイル */
 .planet-single-line {
   font-size: 1rem;
@@ -2204,8 +2416,6 @@
 /* 重要な日（注意する日＋ラッキーデー統合）のスタイル */
 .special-days-card {
   background: #f0f9ff !important; /* 薄いブルー背景 */
-  border: none !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .special-day-item {
@@ -2307,36 +2517,36 @@
 
 /* 完全占い専用の特別な背景色 */
 .complete-fortune-grid .fortune-card:nth-child(1) {
-  background: #fed7aa; /* 全体運 - オレンジ */
+  background: #fed7aa !important; /* 全体運 - オレンジ */
 }
 
 .complete-fortune-grid .fortune-card:nth-child(2) {
-  background: #fbcfe8; /* 恋愛運 - ピンク */
+  background: #fbcfe8 !important; /* 恋愛運 - ピンク */
 }
 
 .complete-fortune-grid .fortune-card:nth-child(3) {
-  background: #bfdbfe; /* 仕事運 - ブルー */
+  background: #bfdbfe !important; /* 仕事運 - ブルー */
 }
 
 .complete-fortune-grid .fortune-card:nth-child(4) {
-  background: #a7f3d0; /* 健康運 - グリーン */
+  background: #a7f3d0 !important; /* 健康運 - グリーン */
 }
 
 .complete-fortune-grid .fortune-card:nth-child(5) {
-  background: #ddd6fe; /* 金銭運 - パープル */
+  background: #ddd6fe !important; /* 金銭運 - パープル */
 }
 
 .complete-fortune-grid .fortune-card:nth-child(6) {
-  background: #fef3c7; /* コミュニケーション運 - イエロー */
+  background: #fef3c7 !important; /* コミュニケーション運 - イエロー */
 }
 
 .complete-fortune-grid .fortune-card:nth-child(7) {
-  background: #fde2e8; /* 成長・学習運 - ライトピンク */
+  background: #fde2e8 !important; /* 成長・学習運 - ライトピンク */
 }
 
 .complete-fortune-grid .fortune-card:nth-child(8) {
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); /* 重要な日 - オレンジグラデーション */
-  border: 1px solid #ffb74d;
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%) !important; /* 重要な日 - オレンジグラデーション */
+  border: 1px solid #ffb74d !important;
 }
 
 /* レスポンシブデザイン - 768px以下 */
@@ -2522,44 +2732,69 @@
 }
 
 /* レベル2とレベル3の追加スタイル */
+/* 3天体表示 - クリーンなCSS */
 .three-planets-display {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .three-planets-display .planet-card {
   background: white;
-  border-radius: 15px;
-  padding: 1.5rem;
+  border-radius: 10px;
+  padding: 0.3rem 0.5rem !important; /* 縦幅をかなり狭く */
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: auto !important; /* 高さ制限なし */
 }
 
 .three-planets-display .planet-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
-.three-planets-display .planet-card h4 {
-  color: #4a5568;
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+.three-planets-display .planet-card .planet-title-line {
+  display: flex;
+  align-items: baseline; /* 絵文字と星座名の下端を揃える */
+  justify-content: center;
+  gap: 0.3rem;
+  margin-bottom: 0.2rem;
+  line-height: 1;
+  height: auto;
+  min-height: 1.8rem; /* 最低限の高さを確保して位置を揃える */
 }
 
-.three-planets-display .planet-card p {
-  color: #2d3748;
-  font-size: 1.4rem;
+.three-planets-display .planet-card .planet-emoji,
+.three-planets-display .planet-card .zodiac-emoji {
+  font-size: 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.three-planets-display .planet-card .planet-name,
+.three-planets-display .planet-card .zodiac-name {
+  font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  color: #2d3748;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  vertical-align: middle;
 }
 
-.three-planets-display .planet-card span {
+.three-planets-display .planet-card .planet-description {
   color: #718096;
   font-size: 0.9rem;
+  margin-top: 0.1rem;
+  line-height: 1.2;
 }
 
 .all-planets-display {
@@ -2588,18 +2823,34 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
-.all-planets-display .planet-name {
-  display: block;
-  color: #4a5568;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
+.all-planets-display .planet-item .planet-title-line {
+  display: flex;
+  align-items: baseline; /* 絵文字と星座名の下端を揃える */
+  justify-content: center;
+  gap: 0.3rem;
+  line-height: 1;
+  height: auto;
+  min-height: 1.8rem; /* 最低限の高さを確保して位置を揃える */
 }
 
-.all-planets-display .planet-sign {
-  display: block;
-  color: #2d3748;
+.all-planets-display .planet-item .planet-emoji,
+.all-planets-display .planet-item .zodiac-emoji {
+  font-size: 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.all-planets-display .planet-item .planet-name,
+.all-planets-display .planet-item .zodiac-name {
   font-size: 1.1rem;
   font-weight: 600;
+  color: #2d3748;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  vertical-align: middle;
 }
 
 .return-buttons {
@@ -2669,24 +2920,61 @@
 .level-3 .level-title {
   text-align: center;
   margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.level-2 .level-title::before,
+.level-3 .level-title::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: titleShine 3s infinite;
 }
 
 .level-2 .level-title-text,
 .level-3 .level-title-text {
+  color: white;
   font-size: 2rem;
   font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 1rem;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 /* レスポンシブデザイン */
+/* 3天体表示レスポンシブ */
 @media (max-width: 768px) {
   .three-planets-display {
     grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  
+  .three-planets-display .planet-card {
+    padding: 0.25rem 0.4rem !important; /* モバイルでも縦幅を狭く保つ */
   }
   
   .all-planets-display .planets-grid {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+  
+  .all-planets-display .planet-item .planet-emoji,
+  .all-planets-display .planet-item .zodiac-emoji {
+    font-size: 1.4rem;
+  }
+  
+  .all-planets-display .planet-item .planet-name,
+  .all-planets-display .planet-item .zodiac-name {
+    font-size: 1rem;
   }
   
   .return-buttons {
@@ -2701,8 +2989,52 @@
 }
 
 @media (max-width: 480px) {
+  .three-planets-display {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  
   .three-planets-display .planet-card {
-    padding: 1rem;
+    padding: 0.2rem 0.3rem !important; /* 最小画面でも縦幅を狭く保つ */
+  }
+  
+  .three-planets-display .planet-card .planet-emoji,
+  .three-planets-display .planet-card .zodiac-emoji {
+    font-size: 1.4rem;
+  }
+  
+  .three-planets-display .planet-card .planet-name,
+  .three-planets-display .planet-card .zodiac-name {
+    font-size: 1rem;
+  }
+  
+  .all-planets-display .planet-item .planet-emoji,
+  .all-planets-display .planet-item .zodiac-emoji {
+    font-size: 1.2rem;
+  }
+  
+  .all-planets-display .planet-item .planet-name,
+  .all-planets-display .planet-item .zodiac-name {
+    font-size: 0.9rem;
+  }
+  
+  /* 4つのセクション表示のレスポンシブデザイン */
+  .four-sections-display {
+    gap: 0.8rem;
+  }
+  
+  .section-card {
+    padding: 0.8rem;
+  }
+  
+  .section-planets .planet-item .planet-emoji,
+  .section-planets .planet-item .zodiac-emoji {
+    font-size: 1.2rem;
+  }
+  
+  .section-planets .planet-item .planet-name,
+  .section-planets .planet-item .zodiac-name {
+    font-size: 0.9rem;
   }
   
   .all-planets-display .planet-item {
@@ -2715,21 +3047,19 @@
   }
 }
 
-/* 3天体の本格占い紹介セクション - 占いボックスと完全に同じ設定 */
+/* 3天体の本格占い紹介セクション - 美しい紫のグラデーション */
 .three-planets-introduction {
-  /* 占いボックスと同じ基本スタイル */
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   border: 1px solid;
   
-  /* 占いボックスと同じ幅と余白設定 */
-  width: 600px !important; /* 他のセクションと同じ固定幅600px */
-  max-width: 90vw !important; /* 小画面での最大幅 */
-  margin: 2rem auto !important; /* 中央揃え */
-  padding: 2rem 1.5rem !important; /* 左右の余白を1.5remに統一 */
+  width: 600px !important;
+  max-width: 90vw !important;
+  margin: 2rem auto !important;
+  padding: 2rem 1.5rem !important;
   
-  /* 紫のグラデーション背景 */
+  /* 美しい紫のグラデーション背景 */
   background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
   border-color: #7c3aed;
 }
@@ -2737,8 +3067,11 @@
 /* introduction-cardは不要になったため削除 */
 
 .three-planets-preview {
-  margin-top: 1rem !important; /* 上のマージンを小さくする */
+  margin-top: 0.5rem !important; /* 他のアイテム間隔と統一 */
   margin-bottom: 0.5rem !important; /* 下のマージンも追加 */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 /* 既存のplanet-previewを無効化 - 上記で新しいスタイルを定義済み */
@@ -2753,21 +3086,27 @@
 
 .planet-preview .planet-info h4 {
   color: white;
-  font-size: 1rem !important; /* サイズを少し小さくする */
+  font-size: 1rem !important;
   font-weight: 600;
-  margin-bottom: 0.2rem !important; /* マージンも小さくする */
-  line-height: 1.3 !important; /* 行間を詰める */
+  margin-bottom: 0.2rem !important;
+  line-height: 1.3 !important;
 }
 
 .planet-preview .planet-info p {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 0.85rem !important; /* サイズを少し小さくする */
+  font-size: 0.85rem !important;
   margin: 0;
-  line-height: 1.3 !important; /* 行間を詰める */
+  line-height: 1.3 !important;
 }
 
-/* アクションボタン */
-.action-buttons {
+/* アクションボタン - 最強の横並び設定 */
+.action-buttons,
+.action-buttons *,
+div.action-buttons,
+.step-by-step-result .action-buttons,
+.level-1 .action-buttons,
+.level-2 .action-buttons,
+.three-planets-introduction .action-buttons {
   display: flex !important;
   flex-direction: row !important; /* 横並びに変更 */
   align-items: center !important;
@@ -2779,23 +3118,30 @@
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  flex-wrap: nowrap !important;
 }
 
 /* 特定性を高めるための追加セレクタ */
 .three-planets-introduction .action-buttons,
-.level-1 .action-buttons {
+.level-1 .action-buttons,
+.level-2 .action-buttons,
+.step-by-step-result .action-buttons,
+div.action-buttons {
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 1rem !important;
+  flex-wrap: nowrap !important;
 }
 
 /* ボタンの個別スタイル */
 .action-buttons .ai-chat-button,
 .action-buttons .new-fortune-button {
   display: inline-block !important;
-  flex-shrink: 0 !important;
+  flex: 1 1 0 !important; /* 等分幅 */
+  min-width: 150px !important; /* 最小幅 */
+  max-width: 250px !important; /* 最大幅 */
 }
 
 .ai-chat-button {
@@ -2803,15 +3149,17 @@
   color: white;
   padding: 1rem 2rem;
   border-radius: 25px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: 700;
   text-decoration: none;
   text-align: center;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
   display: inline-block !important; /* インラインブロック表示 */
-  flex-shrink: 0; /* 縮小しないように */
   white-space: nowrap; /* テキストの改行を防止 */
+  min-width: 200px; /* 統一した最小幅 */
+  max-width: 280px; /* 統一した最大幅 */
+  box-sizing: border-box;
 }
 
 .ai-chat-button:hover {
@@ -2820,27 +3168,29 @@
 }
 
 .new-fortune-button {
-  background: rgba(255, 255, 255, 0.15); /* 薄い白背景を追加 */
-  color: rgba(255, 255, 255, 0.9); /* 文字をもっと不透明に */
-  padding: 0.5rem 1rem;
-  border-radius: 15px;
-  font-size: 1rem;
-  font-weight: 500;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 1rem 1.8rem;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  font-weight: 700;
   text-decoration: none;
   text-align: center;
   transition: all 0.3s ease;
   box-shadow: none;
-  border: 1px solid rgba(255, 255, 255, 0.5); /* 枠線ももう少し濃く */
-  position: static; /* absoluteを解除 */
-  display: inline-block !important; /* インラインブロック表示 */
-  flex-shrink: 0; /* 縮小しないように */
-  white-space: nowrap; /* テキストの改行を防止 */
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  position: static;
+  display: inline-block !important;
+  white-space: nowrap;
+  min-width: 200px; /* 統一した最小幅 */
+  max-width: 280px; /* 統一した最大幅 */
+  box-sizing: border-box;
 }
 
 .new-fortune-button:hover {
   color: white;
-  background: rgba(255, 255, 255, 0.25); /* ホバー時により不透明に */
-  border-color: rgba(255, 255, 255, 0.7); /* ホバー時の枠線も濃く */
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.7);
 }
 
 /* 3天体の本格占い紹介セクション - レスポンシブ対応 */
@@ -2869,25 +3219,45 @@
   }
 
   .action-buttons {
-    gap: 0.8rem !important;
+    display: flex !important;
     flex-direction: row !important; /* 横並びを維持 */
     align-items: center !important;
     justify-content: center !important; /* 中央揃え */
-    flex-wrap: wrap; /* 必要に応じて改行 */
+    gap: 0.8rem !important;
+    flex-wrap: nowrap !important; /* 改行しない */
+  }
+  
+  .three-planets-introduction .action-buttons,
+  .level-1 .action-buttons,
+  .level-2 .action-buttons,
+  .step-by-step-result .action-buttons,
+  div.action-buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.8rem !important;
+    flex-wrap: nowrap !important; /* 改行しない */
   }
 
   .ai-chat-button {
     padding: 0.8rem 1.5rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
+    flex: 1 1 0 !important; /* 等分幅 */
+    min-width: 120px !important; /* 最小幅 */
+    max-width: 200px !important; /* 最大幅 */
   }
 
   .new-fortune-button {
     position: static;
-    padding: 0.6rem 1rem;
-    font-size: 0.9rem;
-    background: rgba(255, 255, 255, 0.15); /* レスポンシブ版でも同じ背景 */
-    color: rgba(255, 255, 255, 0.9); /* レスポンシブ版でも同じ文字色 */
-    border: 1px solid rgba(255, 255, 255, 0.5); /* レスポンシブ版でも同じ枠線 */
+    padding: 0.8rem 1.3rem;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    flex: 1 1 0 !important; /* 等分幅 */
+    min-width: 120px !important; /* 最小幅 */
+    max-width: 200px !important; /* 最大幅 */
   }
 }
 
@@ -2910,17 +3280,100 @@
     margin-bottom: 0 !important; /* 下マージンなし */
   }
 
+  .action-buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.6rem !important;
+    flex-wrap: nowrap !important;
+  }
+  
+  .three-planets-introduction .action-buttons,
+  .level-1 .action-buttons,
+  .level-2 .action-buttons,
+  .step-by-step-result .action-buttons,
+  div.action-buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.6rem !important;
+    flex-wrap: nowrap !important;
+  }
+
   .ai-chat-button {
-    padding: 0.7rem 1.2rem;
-    font-size: 0.95rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 1.1rem;
+    flex: 1 1 0 !important; /* 等分幅 */
+    min-width: 100px !important; /* 最小幅 */
+    max-width: 180px !important; /* 最大幅 */
   }
 
   .new-fortune-button {
     position: static;
-    padding: 0.5rem 0.8rem;
-    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+    font-size: 1.1rem;
     background: rgba(255, 255, 255, 0.15); /* 小画面でも同じ背景 */
     color: rgba(255, 255, 255, 0.9); /* 小画面でも同じ文字色 */
     border: 1px solid rgba(255, 255, 255, 0.5); /* 小画面でも同じ枠線 */
+    flex: 1 1 0 !important; /* 等分幅 */
+    min-width: 100px !important; /* 最小幅 */
+    max-width: 180px !important; /* 最大幅 */
+  }
+}
+
+/* 最強の横並び設定 - 全てのデバイスで確実に横並びにする */
+.action-buttons,
+.action-buttons *,
+div.action-buttons,
+.step-by-step-result .action-buttons,
+.level-1 .action-buttons,
+.level-2 .action-buttons,
+.three-planets-introduction .action-buttons,
+[class*="action-buttons"] {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 1rem !important;
+  flex-wrap: nowrap !important;
+}
+
+/* 小画面用の最強設定 */
+@media (max-width: 768px) {
+  .action-buttons,
+  .action-buttons *,
+  div.action-buttons,
+  .step-by-step-result .action-buttons,
+  .level-1 .action-buttons,
+  .level-2 .action-buttons,
+  .three-planets-introduction .action-buttons,
+  [class*="action-buttons"] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.8rem !important;
+    flex-wrap: nowrap !important;
+  }
+}
+
+/* 非常に小さい画面用の最強設定 */
+@media (max-width: 480px) {
+  .action-buttons,
+  .action-buttons *,
+  div.action-buttons,
+  .step-by-step-result .action-buttons,
+  .level-1 .action-buttons,
+  .level-2 .action-buttons,
+  .three-planets-introduction .action-buttons,
+  [class*="action-buttons"] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.6rem !important;
+    flex-wrap: nowrap !important;
   }
 }
