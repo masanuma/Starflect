@@ -2,8 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BirthData } from '../types';
 import LocationPicker from './LocationPicker';
+import { FortuneMode } from './ModeSelection';
 
-const InputForm: React.FC = () => {
+interface InputFormProps {
+  mode?: FortuneMode;
+  onBackToModeSelection?: () => void;
+}
+
+const InputForm: React.FC<InputFormProps> = ({ mode = 'detailed', onBackToModeSelection }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -51,19 +57,22 @@ const InputForm: React.FC = () => {
       }
     }
 
-    // 出生時刻のバリデーション
-    if (!formData.birthTime) {
-      newErrors.birthTime = '出生時刻を入力してください';
-    } else {
-      const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-      if (!timeRegex.test(formData.birthTime)) {
-        newErrors.birthTime = '正しい時刻形式（HH:MM）で入力してください';
+    // 詳しい占いの場合のみ、出生時刻と出生地をバリデーション
+    if (mode === 'detailed') {
+      // 出生時刻のバリデーション
+      if (!formData.birthTime) {
+        newErrors.birthTime = '出生時刻を入力してください';
+      } else {
+        const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+        if (!timeRegex.test(formData.birthTime)) {
+          newErrors.birthTime = '正しい時刻形式（HH:MM）で入力してください';
+        }
       }
-    }
 
-    // 出生地のバリデーション
-    if (!formData.birthPlace.trim() && !locationData) {
-      newErrors.birthPlace = '出生地を入力してください';
+      // 出生地のバリデーション
+      if (!formData.birthPlace.trim() && !locationData) {
+        newErrors.birthPlace = '出生地を入力してください';
+      }
     }
 
     setErrors(newErrors);
@@ -84,11 +93,12 @@ const InputForm: React.FC = () => {
       const birthData: BirthData = {
         name: formData.name || undefined,
         birthDate: new Date(formData.birthDate),
-        birthTime: formData.birthTime,
+        // 簡単占いの場合は正午をデフォルト値として使用
+        birthTime: mode === 'detailed' ? formData.birthTime : '12:00',
         birthPlace: {
-          city: locationData?.city || formData.birthPlace,
-          latitude: locationData?.latitude || 35.6762, // デフォルト: 東京の緯度
-          longitude: locationData?.longitude || 139.6503, // デフォルト: 東京の経度
+          city: mode === 'detailed' ? (locationData?.city || formData.birthPlace) : '東京',
+          latitude: mode === 'detailed' ? (locationData?.latitude || 35.6762) : 35.6762,
+          longitude: mode === 'detailed' ? (locationData?.longitude || 139.6503) : 139.6503,
           timezone: 'Asia/Tokyo'
         }
       };
@@ -214,57 +224,67 @@ const InputForm: React.FC = () => {
             )}
           </div>
 
-          <div className="input-group">
-            <label htmlFor="birthTime">出生時刻（わからなかったらだいたいの時刻） *</label>
-            <input
-              id="birthTime"
-              type="time"
-              value={formData.birthTime}
-              onChange={(e) => handleInputChange('birthTime', e.target.value)}
-              className={`form-input ${errors.birthTime ? 'error' : ''}`}
-              required
-              aria-label="出生時刻を入力してください（必須項目）"
-              aria-describedby={errors.birthTime ? "birthTime-error" : "birthTime-hint"}
-              aria-invalid={errors.birthTime ? 'true' : 'false'}
-              tabIndex={3}
-            />
-            <small id="birthTime-hint" className="input-hint">24時間形式で入力してください</small>
-            {errors.birthTime && (
-              <span 
-                id="birthTime-error" 
-                className="error-message" 
-                role="alert" 
-                aria-live="polite"
-              >
-                {errors.birthTime}
-              </span>
-            )}
-          </div>
-
-          <div className="input-group">
-            <label htmlFor="birthPlace">出生地（わからなかったらだいたいの場所） *</label>
-            <div 
-              role="group" 
-              aria-labelledby="birthPlace" 
-              aria-describedby={errors.birthPlace ? "birthPlace-error" : "birthPlace-hint"}
-            >
-              <LocationPicker
-                onLocationSelect={handleLocationSelect}
-                initialValue={formData.birthPlace}
+          {/* 詳しい占いの場合のみ出生時刻を表示 */}
+          {mode === 'detailed' && (
+            <div className="input-group">
+              <label htmlFor="birthTime">出生時刻 *</label>
+              <input
+                id="birthTime"
+                type="time"
+                value={formData.birthTime}
+                onChange={(e) => handleInputChange('birthTime', e.target.value)}
+                className={`form-input ${errors.birthTime ? 'error' : ''}`}
+                required
+                aria-label="出生時刻を入力してください（必須項目）"
+                aria-describedby={errors.birthTime ? "birthTime-error" : "birthTime-hint"}
+                aria-invalid={errors.birthTime ? 'true' : 'false'}
+                tabIndex={3}
               />
+              <small id="birthTime-hint" className="input-hint">
+                💡 出生時刻が分かると、月星座や上昇星座も占えます
+              </small>
+              {errors.birthTime && (
+                <span 
+                  id="birthTime-error" 
+                  className="error-message" 
+                  role="alert" 
+                  aria-live="polite"
+                >
+                  {errors.birthTime}
+                </span>
+              )}
             </div>
-            <span id="birthPlace-hint" className="sr-only">出生地を入力または地図から選択してください</span>
-            {errors.birthPlace && (
-              <span 
-                id="birthPlace-error" 
-                className="error-message" 
-                role="alert" 
-                aria-live="polite"
+          )}
+
+          {/* 詳しい占いの場合のみ出生地を表示 */}
+          {mode === 'detailed' && (
+            <div className="input-group">
+              <label htmlFor="birthPlace">出生地 *</label>
+              <div 
+                role="group" 
+                aria-labelledby="birthPlace" 
+                aria-describedby={errors.birthPlace ? "birthPlace-error" : "birthPlace-hint"}
               >
-                {errors.birthPlace}
-              </span>
-            )}
-          </div>
+                <LocationPicker
+                  onLocationSelect={handleLocationSelect}
+                  initialValue={formData.birthPlace}
+                />
+              </div>
+              <small id="birthPlace-hint" className="input-hint">
+                💡 出生地により、より正確な星の配置が分かります
+              </small>
+              {errors.birthPlace && (
+                <span 
+                  id="birthPlace-error" 
+                  className="error-message" 
+                  role="alert" 
+                  aria-live="polite"
+                >
+                  {errors.birthPlace}
+                </span>
+              )}
+            </div>
+          )}
 
           {errors.submit && (
             <div 

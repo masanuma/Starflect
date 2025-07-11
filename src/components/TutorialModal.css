@@ -1,0 +1,343 @@
+/* チュートリアルモーダルのスタイル */
+.tutorial-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tutorial-modal {
+  background: white;
+  border-radius: 25px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* プログレス表示 */
+.tutorial-progress {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: white;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: white;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ヘッダー */
+.tutorial-header {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+}
+
+.close-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* チュートリアル内容 */
+.tutorial-content {
+  padding: 3rem 2rem 2rem;
+  text-align: center;
+}
+
+.tutorial-image {
+  margin-bottom: 2rem;
+}
+
+.tutorial-icon {
+  font-size: 5rem;
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.tutorial-text h3 {
+  font-size: 2rem;
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.tutorial-text p {
+  font-size: 1.2rem;
+  color: #4a5568;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ナビゲーション */
+.tutorial-navigation {
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e2e8f0;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-button {
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.nav-button.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.nav-button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.nav-button.secondary {
+  background: #f7fafc;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.nav-button.secondary:hover {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+/* ドットインジケーター */
+.tutorial-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem 2rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: #e2e8f0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: scale(1.2);
+}
+
+.dot:hover {
+  transform: scale(1.1);
+  background: #cbd5e0;
+}
+
+.dot.active:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+  .tutorial-modal {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .tutorial-progress {
+    padding: 0.8rem 1.5rem;
+  }
+  
+  .tutorial-content {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+  
+  .tutorial-icon {
+    font-size: 4rem;
+  }
+  
+  .tutorial-text h3 {
+    font-size: 1.8rem;
+  }
+  
+  .tutorial-text p {
+    font-size: 1.1rem;
+  }
+  
+  .tutorial-navigation {
+    padding: 1.5rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .nav-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .nav-button {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tutorial-modal {
+    width: 98%;
+    margin: 0.5rem;
+  }
+  
+  .tutorial-progress {
+    padding: 0.6rem 1rem;
+  }
+  
+  .progress-text {
+    font-size: 0.8rem;
+  }
+  
+  .tutorial-content {
+    padding: 1.5rem 1rem 1rem;
+  }
+  
+  .tutorial-icon {
+    font-size: 3rem;
+  }
+  
+  .tutorial-text h3 {
+    font-size: 1.5rem;
+  }
+  
+  .tutorial-text p {
+    font-size: 1rem;
+  }
+  
+  .tutorial-navigation {
+    padding: 1rem;
+  }
+  
+  .nav-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .nav-button {
+    width: 100%;
+    padding: 0.8rem 1rem;
+  }
+  
+  .tutorial-dots {
+    padding: 0.5rem 1rem 1rem;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* アクセシビリティ */
+@media (prefers-reduced-motion: reduce) {
+  .tutorial-modal-overlay,
+  .tutorial-modal,
+  .progress-fill,
+  .tutorial-icon,
+  .nav-button,
+  .dot {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* フォーカス状態 */
+.close-button:focus,
+.nav-button:focus,
+.dot:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* ハイライト効果（将来的にJSで実装予定） */
+.tutorial-highlight {
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.5) !important;
+  border-radius: 10px;
+  transition: box-shadow 0.3s ease;
+} 

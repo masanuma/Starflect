@@ -190,43 +190,7 @@ const HoroscopeChart: React.FC<HoroscopeChartProps> = ({ horoscopeData, size = 4
           })}
         </g>
 
-        {/* 12ハウス線 */}
-        <g role="group" aria-label="12ハウスの境界線">
-          {Array.from({ length: 12 }, (_, i) => {
-            const angle = (i * 30) * (Math.PI / 180);
-            const innerPos = getPosition(angle, innerRadius);
-            const centerPos = getPosition(angle, planetRadius);
-            
-            return (
-              <g key={`house-${i}`} role="group" aria-label={`第${i + 1}ハウス`}>
-                <line
-                  x1={innerPos.x}
-                  y1={innerPos.y}
-                  x2={centerPos.x}
-                  y2={centerPos.y}
-                  stroke="rgba(255, 255, 255, 0.2)"
-                  strokeWidth="1"
-                  strokeDasharray="2,2"
-                  aria-hidden="true"
-                />
-                
-                {/* ハウス番号 */}
-                <text
-                  x={getPosition(angle + (15 * Math.PI / 180), planetRadius + 15).x}
-                  y={getPosition(angle + (15 * Math.PI / 180), planetRadius + 15).y}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fontSize="12"
-                  fill="rgba(255, 255, 255, 0.6)"
-                  fontWeight="bold"
-                  aria-label={`第${i + 1}ハウス`}
-                >
-                  {i + 1}
-                </text>
-              </g>
-            );
-          })}
-        </g>
+
 
         {/* アスペクトライン */}
         {showAspects && (() => {

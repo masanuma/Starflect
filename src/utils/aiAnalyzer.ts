@@ -114,6 +114,14 @@ export interface AIAnalysisResult {
     financialProspects: string;
     personalGrowth: string;
   };
+  todaysFortune?: {
+    overallLuck: string;
+    loveLuck: string;
+    workLuck: string;
+    healthLuck: string;
+    moneyLuck: string;
+    todaysAdvice: string;
+  };
   lifePath: {
     majorThemes: string[];
     challengesToOvercome: string[];
@@ -166,18 +174,71 @@ export interface ChatMessage {
   category?: "general" | "love" | "career" | "health" | "spiritual";
 }
 
-// プロンプト生成関数（厳格化）
+// プロンプト生成関数（モード対応）
+const generateSimpleAnalysisPrompt = (
+  birthData: BirthData,
+  sunSign: string
+): string => {
+  return `
+【簡単占い分析のご依頼】
+
+太陽星座を中心とした基本的な性格分析と今日の運勢をお願いします。
+初心者の方にも分かりやすく、親しみやすい内容でお願いします。
+
+【クライアント情報】
+お名前: ${birthData.name}
+生年月日: ${birthData.birthDate.toLocaleDateString('ja-JP')}
+太陽星座: ${sunSign}
+今日の日付: ${new Date().toLocaleDateString('ja-JP')}
+
+【出力形式】
+必ず以下のJSON形式のみでご回答ください。簡潔で分かりやすい内容にしてください。
+
+{
+  "personalityInsights": {
+    "corePersonality": "太陽星座から見たあなたの性格を150-200文字で、ですます調でやさしく詳しく解説してください。性格の特徴、行動パターン、価値観、強みなどを含めて包括的に説明してください。",
+    "hiddenTraits": "内面の特徴を50-70文字で、ですます調でやさしく解説してください。",
+    "lifePhilosophy": "人生で大切にしていることを40-60文字で、ですます調で解説してください。",
+    "relationshipStyle": "人間関係の特徴を50-70文字で、ですます調でやさしく解説してください。",
+    "careerTendencies": "お仕事での特徴を50-70文字で、ですます調でやさしく解説してください。"
+  },
+  "detailedFortune": {
+    "overallTrend": "全体的な運勢を40-60文字で、ですます調でやさしく解説してください。",
+    "loveLife": "恋愛運を40-60文字で、ですます調でやさしく解説してください。",
+    "careerPath": "仕事運を40-60文字で、ですます調でやさしく解説してください。",
+    "healthWellness": "健康運を40-60文字で、ですます調でやさしく解説してください。",
+    "financialProspects": "金運を40-60文字で、ですます調でやさしく解説してください。",
+    "personalGrowth": "成長運を40-60文字で、ですます調でやさしく解説してください。"
+  },
+  "todaysFortune": {
+    "overallLuck": "今日の全体運を60-80文字で、ですます調でやさしく詳しく解説してください。",
+    "loveLuck": "今日の恋愛運を60-80文字で、ですます調でやさしく詳しく解説してください。",
+    "workLuck": "今日の仕事運を60-80文字で、ですます調でやさしく詳しく解説してください。",
+    "healthLuck": "今日の健康運を60-80文字で、ですます調でやさしく詳しく解説してください。",
+    "moneyLuck": "今日の金運を60-80文字で、ですます調でやさしく詳しく解説してください。",
+    "todaysAdvice": "今日のアドバイスを80-100文字で、ですます調でやさしく詳しく解説してください。"
+  }
+}
+
+【厳守事項】
+- JSON以外のテキストは絶対に出力しないでください
+- 初心者の方でも理解しやすい、やさしい表現で書いてください
+- 文字数を守って簡潔にまとめてください
+- 必ずですます調で統一してください
+`;
+};
+
+// プロンプト生成関数（簡単占いモード対応）
 const generateEnhancedAnalysisPrompt = (
   birthData: BirthData,
   planets: PlanetPosition[]
 ): string => {
   return `
-【占星術分析のご依頼】
+【詳細占星術分析のご依頼】
 
-以下の出生データと天体配置をもとに、クライアント様の性格や運勢、アドバイスについて、
+以下の出生データと天体配置をもとに、クライアント様の性格や運勢について、
 必ず丁寧語（「です・ます」調）で統一し、親しみやすく分かりやすく解説してください。
 ※重要：すべての文章は「です」「ます」「でしょう」「されます」などの丁寧語で終わらせてください。
-「だ」「である」「だろう」などの断定調は絶対に使用しないでください。
 
 【クライアント情報】
 お名前: ${birthData.name}
@@ -193,46 +254,88 @@ ${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('
 
 {
   "personalityInsights": {
-    "corePersonality": "太陽星座の特徴を50文字以上で、必ずですます調でやさしく解説してください。",
-    "hiddenTraits": "月星座の隠れた特性を50文字以上で、必ずですます調でやさしく解説してください。",
-    "lifePhilosophy": "人生哲学や価値観を50文字以上で、必ずですます調でやさしく解説してください。",
-    "relationshipStyle": "人間関係のスタイルを50文字以上で、必ずですます調でやさしく解説してください。",
-    "careerTendencies": "キャリア傾向を50文字以上で、必ずですます調でやさしく解説してください。"
+    "corePersonality": "太陽星座の特徴を100文字以上で、必ずですます調でやさしく解説してください。性格の特徴、行動パターン、強みなどを含めて説明してください。",
+    "hiddenTraits": "月星座の隠れた特性を100文字以上で、必ずですます調でやさしく解説してください。内面の感情、プライベートな面、本能的な反応などを含めて説明してください。",
+    "lifePhilosophy": "人生哲学や価値観を80文字以上で、必ずですます調でやさしく解説してください。何を重視し、どのような生き方を理想とするのかを説明してください。",
+    "relationshipStyle": "人間関係のスタイルを100文字以上で、必ずですます調でやさしく解説してください。友人関係、恋愛関係でのコミュニケーションスタイルを含めて説明してください。",
+    "careerTendencies": "キャリア傾向を100文字以上で、必ずですます調でやさしく解説してください。適職、仕事への取り組み方、成功のポイントを含めて説明してください。"
   },
   "detailedFortune": {
-    "overallTrend": "全体的な運勢傾向を50文字以上で、必ずですます調でやさしく解説してください。",
-    "loveLife": "恋愛運を50文字以上で、必ずですます調でやさしく解説してください。",
-    "careerPath": "仕事運を50文字以上で、必ずですます調でやさしく解説してください。",
-    "healthWellness": "健康運を50文字以上で、必ずですます調でやさしく解説してください。",
-    "financialProspects": "金運を50文字以上で、必ずですます調でやさしく解説してください。",
-    "personalGrowth": "成長運を50文字以上で、必ずですます調でやさしく解説してください。"
+    "overallTrend": "全体的な運勢傾向を80文字以上で、必ずですます調でやさしく解説してください。現在の運勢の流れと今後の展望を含めて説明してください。",
+    "loveLife": "恋愛運を80文字以上で、必ずですます調でやさしく解説してください。恋愛の傾向、パートナーシップの可能性を含めて説明してください。",
+    "careerPath": "仕事運を80文字以上で、必ずですます調でやさしく解説してください。仕事での成功のポイント、キャリアの方向性を含めて説明してください。",
+    "healthWellness": "健康運を80文字以上で、必ずですます調でやさしく解説してください。体調管理のポイント、wellness向上のアドバイスを含めて説明してください。",
+    "financialProspects": "金運を80文字以上で、必ずですます調でやさしく解説してください。収入の傾向、金銭管理のポイントを含めて説明してください。",
+    "personalGrowth": "成長運を80文字以上で、必ずですます調でやさしく解説してください。自己成長の方向性、学習すべきことを含めて説明してください。"
   }
 }
 
 【厳守事項】
 - JSON以外のテキストや説明文は絶対に出力しないでください
 - JSONの前後に余計な文字や改行を入れないでください
-- 各項目を50文字以上で、丁寧な日本語（です・ます調、敬語）でやさしく解説してください
+- 各項目を指定された文字数以上で、丁寧な日本語（です・ます調）でやさしく解説してください
 - 「あなたの太陽は○○座にあり」のような表現は絶対に使用しないでください
 - 必ず上記のJSON形式のみでご回答ください
 `;
 };
 
 // 強化されたOpenAI API呼び出し関数
-const callOpenAIAPI = async (prompt: string): Promise<AIAnalysisResult> => {
-  const data = await callOpenAIWithRetry(
-    prompt,
-    "あなたは30年以上の経験を持つ世界最高の占星術師です。JSON以外のテキストや説明文は絶対に出力せず、必ずJSON形式のみで回答してください。",
-    800
-  );
-  const content = data.choices[0].message.content;
+const callOpenAIAPI = async (prompt: string, maxTokens: number = 1800): Promise<AIAnalysisResult> => {
   try {
+    const data = await callOpenAIWithRetry(
+      prompt,
+      "あなたは30年以上の経験を持つ世界最高の占星術師です。JSON以外のテキストや説明文は絶対に出力せず、必ずJSON形式のみで回答してください。",
+      maxTokens
+    );
+    const content = data.choices[0].message.content;
+    
     const aiResultRaw = safeParseJSON(content);
     return mapAIResponseToAIAnalysisResult(aiResultRaw);
   } catch (error) {
-    console.error('JSON parsing error:', error);
-    console.error('Raw content:', content);
-    throw new Error('AI応答の解析に失敗しました。再度お試しください。');
+    console.error('AI分析エラー:', error);
+    
+    // フォールバック処理：デフォルトの分析結果を返す
+    const defaultResult: AIAnalysisResult = {
+      personalityInsights: {
+        corePersonality: "現在AI分析が利用できません。基本的な占星術データをご覧ください。",
+        hiddenTraits: "現在AI分析が利用できません。",
+        lifePhilosophy: "現在AI分析が利用できません。",
+        relationshipStyle: "現在AI分析が利用できません。",
+        careerTendencies: "現在AI分析が利用できません。"
+      },
+      detailedFortune: {
+        overallTrend: "現在AI分析が利用できません。",
+        loveLife: "現在AI分析が利用できません。",
+        careerPath: "現在AI分析が利用できません。",
+        healthWellness: "現在AI分析が利用できません。",
+        financialProspects: "現在AI分析が利用できません。",
+        personalGrowth: "現在AI分析が利用できません。"
+      },
+      todaysFortune: {
+        overallLuck: "現在AI分析が利用できません。",
+        loveLuck: "現在AI分析が利用できません。",
+        workLuck: "現在AI分析が利用できません。",
+        healthLuck: "現在AI分析が利用できません。",
+        moneyLuck: "現在AI分析が利用できません。",
+        todaysAdvice: "現在AI分析が利用できません。"
+      },
+      lifePath: {
+        majorThemes: [],
+        challengesToOvercome: [],
+        opportunitiesToSeize: [],
+        spiritualJourney: "現在AI分析が利用できません。"
+      },
+      practicalAdvice: {
+        dailyHabits: [],
+        relationshipTips: [],
+        careerGuidance: [],
+        wellnessRecommendations: []
+      },
+      planetAnalysis: {},
+      aiPowered: false
+    };
+    
+    return defaultResult;
   }
 };
 
@@ -259,15 +362,15 @@ ${planet.planet}: ${planet.sign}座 ${planet.degree.toFixed(1)}度
 【出力形式】
 必ず以下のJSON形式のみで回答してください。キーは英語、値は日本語（必ずですます調）で記述してください。
 {
-  "signCharacteristics": "${planet.planet}星座の特徴を50文字以上で要点のみ簡潔に、必ずですます調で記述",
-  "personalImpact": "あなたへの影響を50文字以上で要点のみ簡潔に、必ずですます調で記述",
-  "advice": "具体的なアドバイスを50文字以上で要点のみ簡潔に、必ずですます調で記述"
+  "signCharacteristics": "${planet.planet}星座の特徴を100文字以上で詳しく、必ずですます調で記述",
+  "personalImpact": "あなたへの影響を100文字以上で詳しく、必ずですます調で記述",
+  "advice": "具体的なアドバイスを100文字以上で詳しく、必ずですます調で記述"
 }
 
 【厳守事項】
 - JSON以外のテキストや説明文は絶対に出力しないでください
 - JSONの前後に余計な文字や改行を入れないでください
-- 各項目を50文字以上で要点のみ簡潔に記述してください
+- 各項目を100文字以上で詳しく記述してください
 - 「あなたの太陽は○○座にあり」のような表現は絶対に使用しないでください
 - 必ず上記のJSON形式のみで回答してください
 `;
@@ -276,49 +379,78 @@ ${planet.planet}: ${planet.sign}座 ${planet.degree.toFixed(1)}度
 // 天体ごとにAPIを呼び出してplanetAnalysisを合成
 async function generatePlanetAnalysisAll(birthData: BirthData, planets: PlanetPosition[]): Promise<any> {
   const result: any = {};
+  
   for (const planet of planets) {
-    const prompt = generatePlanetAnalysisPrompt(birthData, planet);
-    const data = await callOpenAIWithRetry(
-      prompt,
-      "あなたは30年以上の経験を持つ世界最高の占星術師です。JSON以外のテキストや説明文は絶対に出力せず、必ずJSON形式のみで回答してください。",
-      400
-    );
-    const content = data.choices[0].message.content;
     try {
+      const prompt = generatePlanetAnalysisPrompt(birthData, planet);
+      const data = await callOpenAIWithRetry(
+        prompt,
+        "あなたは30年以上の経験を持つ世界最高の占星術師です。JSON以外のテキストや説明文は絶対に出力せず、必ずJSON形式のみで回答してください。",
+        400
+      );
+      const content = data.choices[0].message.content;
+      
       const parsed = safeParseJSON(content);
       result[planet.planet] = parsed;
     } catch (e) {
+      console.error(`天体分析エラー (${planet.planet}):`, e);
       result[planet.planet] = {
-        signCharacteristics: 'AI応答エラー',
-        personalImpact: 'AI応答エラー',
-        advice: 'AI応答エラー'
+        signCharacteristics: `${planet.planet}の詳細な分析は現在利用できません。`,
+        personalImpact: `${planet.planet}の影響については後ほど確認してください。`,
+        advice: `${planet.planet}に関するアドバイスは現在利用できません。`
       };
     }
   }
   return result;
 }
 
-// メインのAI分析関数
+// メインのAI分析関数（モード対応）
 export const generateAIAnalysis = async (
   birthData: BirthData,
-  planets: PlanetPosition[]
+  planets: PlanetPosition[],
+  mode: 'simple' | 'detailed' = 'detailed'
 ): Promise<AIAnalysisResult> => {
   if (!OPENAI_API_KEY) {
     throw new Error('OpenAI APIキーが設定されていません。OPENAI_SETUP.mdを参照して設定してください。');
   }
 
-  // 全体分析（personalityInsights, detailedFortune）は一括
-  const enhancedPrompt = generateEnhancedAnalysisPrompt(birthData, planets);
-  const baseResult = await callOpenAIAPI(enhancedPrompt);
+  let baseResult: AIAnalysisResult;
 
-  // planetAnalysisは天体ごとに分割API呼び出し
-  const planetAnalysis = await generatePlanetAnalysisAll(birthData, planets);
+  if (mode === 'simple') {
+    // 簡単占い: 太陽星座中心の基本分析
+    const sunPlanet = planets.find(p => p.planet === '太陽' || p.planet === 'Sun');
+    const sunSign = sunPlanet?.sign || '牡羊座';
+    
+    const simplePrompt = generateSimpleAnalysisPrompt(birthData, sunSign);
+    baseResult = await callOpenAIAPI(simplePrompt, 1200); // 短いトークン数
+    
+    // 簡単占いでは planetAnalysis は基本的な3天体のみ
+    const mainPlanets = planets.filter(p => 
+      ['太陽', 'Sun', '月', 'Moon', '上昇星座', 'Ascendant'].includes(p.planet)
+    );
+    const planetAnalysis = mainPlanets.length > 0 
+      ? await generatePlanetAnalysisAll(birthData, mainPlanets.slice(0, 2)) // 太陽・月のみ
+      : {};
 
-  return {
-    ...baseResult,
-    planetAnalysis,
-    aiPowered: true
-  };
+    return {
+      ...baseResult,
+      planetAnalysis,
+      aiPowered: true
+    };
+  } else {
+    // 詳しい占い: 全天体の詳細分析
+    const enhancedPrompt = generateEnhancedAnalysisPrompt(birthData, planets);
+    baseResult = await callOpenAIAPI(enhancedPrompt, 1800); // 多めのトークン数
+
+    // planetAnalysisは天体ごとに分割API呼び出し
+    const planetAnalysis = await generatePlanetAnalysisAll(birthData, planets);
+
+    return {
+      ...baseResult,
+      planetAnalysis,
+      aiPowered: true
+    };
+  }
 };
 
 // 未来予測プロンプト生成関数（期間を柔軟に対応）

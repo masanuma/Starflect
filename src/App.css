@@ -4064,3 +4064,199 @@ button:disabled {
   transition: all 0.3s ease;
   overflow: hidden;
 }
+
+/* ホームラッパー */
+.home-wrapper {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* 入力フォームラッパー */
+.input-form-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* 戻るボタン */
+.back-button-container {
+  margin-bottom: 20px;
+}
+
+.back-button {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #6c757d;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+/* モード説明セクション */
+.mode-explanation {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-left: 4px solid #007bff;
+}
+
+.mode-info h3 {
+  margin: 0 0 10px 0;
+  color: #343a40;
+}
+
+.mode-info p {
+  margin: 0;
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+.mode-info.simple {
+  border-left-color: #667eea;
+}
+
+.mode-info.detailed {
+  border-left-color: #f093fb;
+}
+
+/* AI占い専用画面 */
+.ai-fortune-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.ai-fortune-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.ai-fortune-header h2 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.ai-fortune-header p {
+  font-size: 1.2rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.ai-fortune-content {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chat-introduction {
+  margin-bottom: 30px;
+}
+
+.intro-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.intro-card {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.intro-card:hover {
+  transform: translateY(-5px);
+}
+
+.intro-card h4 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+}
+
+.intro-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.chat-placeholder {
+  text-align: center;
+  padding: 40px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  color: #6c757d;
+}
+
+.chat-placeholder p {
+  margin: 10px 0;
+  font-size: 1.1rem;
+}
+
+.back-home-link {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.back-home-link:hover {
+  background: #0056b3;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .home-wrapper {
+    padding: 15px;
+  }
+  
+  .ai-fortune-header h2 {
+    font-size: 2rem;
+  }
+  
+  .ai-fortune-header p {
+    font-size: 1rem;
+  }
+  
+  .intro-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .ai-fortune-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-wrapper {
+    padding: 10px;
+  }
+  
+  .ai-fortune-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .mode-explanation {
+    padding: 15px;
+  }
+  
+  .chat-placeholder {
+    padding: 30px 15px;
+  }
+}

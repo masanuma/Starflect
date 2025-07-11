@@ -1,0 +1,1049 @@
+/* StepByStepResult.tsx 専用スタイル */
+.step-result-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+}
+
+/* ローディング画面 */
+.loading-section {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 2rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-section h3 {
+  color: #2d3748;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.loading-step {
+  color: #4a5568;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.progress-bar {
+  width: 200px;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  animation: progress 2s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  100% { width: 100%; }
+}
+
+/* エラー画面 */
+.error-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.error-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.error-section h3 {
+  color: #e53e3e;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.back-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* プログレスヘッダー */
+.progress-header {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+}
+
+.progress-steps::before {
+  content: '';
+  position: absolute;
+  top: 25px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #e2e8f0;
+  z-index: 1;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.step-number {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #a0aec0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: scale(1.1);
+}
+
+.step-label {
+  font-size: 0.9rem;
+  color: #4a5568;
+  font-weight: 600;
+}
+
+.step.active .step-label {
+  color: #2d3748;
+}
+
+/* レベル別結果表示 */
+.result-level {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.level-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.level-header h2 {
+  font-size: 2.2rem;
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.level-description {
+  font-size: 1.1rem;
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+/* レベル1: 太陽星座 */
+.level-1 {
+  border-left: 5px solid #667eea;
+}
+
+.main-result-card {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-radius: 15px;
+  padding: 2rem;
+}
+
+.zodiac-display {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.zodiac-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.zodiac-name {
+  font-size: 2.5rem;
+  color: #2d3748;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.zodiac-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.zodiac-element,
+.zodiac-quality,
+.zodiac-ruling {
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.label {
+  display: block;
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.value {
+  font-size: 1.1rem;
+  color: #2d3748;
+  font-weight: 700;
+}
+
+.personality-keywords {
+  text-align: center;
+}
+
+.personality-keywords h4 {
+  font-size: 1.3rem;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.keyword-tag {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* レベル2: 主要3天体 */
+.level-2 {
+  border-left: 5px solid #f093fb;
+}
+
+.planets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.planet-card {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.planet-card:hover {
+  transform: translateY(-5px);
+}
+
+.planet-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.planet-icon {
+  font-size: 2rem;
+  margin-right: 1rem;
+}
+
+.planet-info h4 {
+  font-size: 1.3rem;
+  color: #2d3748;
+  margin-bottom: 0.3rem;
+}
+
+.planet-meaning {
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin: 0;
+}
+
+.planet-sign {
+  margin-bottom: 1rem;
+}
+
+.sign-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.sign-icon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.sign-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.planet-description {
+  font-size: 0.95rem;
+  color: #4a5568;
+  line-height: 1.5;
+}
+
+/* レベル3: 全天体 */
+.level-3 {
+  border-left: 5px solid #4facfe;
+}
+
+.all-planets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.detailed-planet-card {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-radius: 12px;
+  padding: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.detailed-planet-card:hover {
+  transform: translateY(-3px);
+}
+
+.sign-house-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sign-info {
+  display: flex;
+  align-items: center;
+}
+
+.house-info {
+  background: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  color: #4a5568;
+  font-weight: 600;
+}
+
+/* 「もっと詳しく」ボタン */
+.level-up-section {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.level-up-button {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border: none;
+  padding: 1.2rem 3rem;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
+}
+
+.level-up-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(240, 147, 251, 0.4);
+}
+
+.level-up-button:active {
+  transform: translateY(-1px);
+}
+
+.level-up-description {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #4a5568;
+}
+
+/* AI分析 */
+.ai-analysis {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+  border-radius: 15px;
+  border-left: 4px solid #38b2ac;
+}
+
+.ai-analysis h4 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.analysis-text {
+  color: #2d3748;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* AI分析ローディング状態 */
+.ai-analysis.ai-loading {
+  background: linear-gradient(135deg, #fef5e7 0%, #fbd38d 100%);
+  border-left: 4px solid #f6ad55;
+}
+
+.ai-loading-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ai-loading-content .loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #fbd38d;
+  border-top: 3px solid #f6ad55;
+  margin: 0;
+}
+
+.ai-loading-content p {
+  color: #744210;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* AI分析エラー状態 */
+.ai-analysis.ai-error {
+  background: linear-gradient(135deg, #fed7d7 0%, #fbb6ce 100%);
+  border-left: 4px solid #f56565;
+}
+
+.ai-analysis.ai-error .error-text {
+  color: #742a2a;
+  font-style: italic;
+  margin: 0;
+}
+
+/* 今日の運勢スタイル */
+.todays-fortune {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #fff5ee 0%, #ffeaa7 100%);
+  border-radius: 15px;
+  border-left: 4px solid #fdcb6e;
+}
+
+.todays-fortune h4 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.fortune-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fortune-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+}
+
+.fortune-label {
+  font-weight: 600;
+  color: #d68910;
+  min-width: 80px;
+  font-size: 0.9rem;
+}
+
+.fortune-text {
+  color: #2d3748;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.advice-item {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #fdcb6e;
+  font-weight: 500;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .fortune-item {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .fortune-label {
+    min-width: auto;
+  }
+}
+
+/* デバッグ機能 */
+.debug-controls {
+  background: #fed7d7;
+  border: 2px solid #fc8181;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 2rem 0;
+}
+
+.debug-controls h4 {
+  color: #c53030;
+  margin-bottom: 1rem;
+}
+
+.debug-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.debug-button {
+  background: #c53030;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.debug-button:hover {
+  background: #9c2626;
+}
+
+/* 教育コンテンツ */
+.educational-content {
+  background: linear-gradient(135deg, #e8f4f8 0%, #f0f8ff 100%);
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 2rem 0;
+  border: 1px solid rgba(44, 82, 130, 0.2);
+  box-shadow: 0 6px 20px rgba(44, 82, 130, 0.1);
+}
+
+.educational-content h3 {
+  color: #2c5282;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.content-text {
+  margin-bottom: 1.5rem;
+}
+
+.content-text p {
+  color: #2d3748;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.tips-section {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.tips-section h4 {
+  color: #2c5282;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.tips-section p {
+  color: #4a5568;
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+}
+
+.practical-use {
+  background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border: 1px solid #b8f5cd;
+  box-shadow: 0 3px 10px rgba(47, 133, 90, 0.1);
+}
+
+.practical-use h4 {
+  color: #2f855a;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.practical-use p {
+  color: #2d3748;
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+}
+
+/* 上級コンテンツ */
+.advanced-content {
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border: 1px solid #d6bcfa;
+  box-shadow: 0 3px 10px rgba(107, 70, 193, 0.1);
+}
+
+.advanced-content h4 {
+  color: #6b46c1;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.advanced-text p {
+  color: #4a5568;
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+}
+
+/* 次のレベル予告 */
+.next-level-preview {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  animation: glow 3s ease-in-out infinite alternate;
+  position: relative;
+  overflow: hidden;
+}
+
+.next-level-preview::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shine 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  }
+  to {
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  50% {
+    transform: translateX(100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+.next-level-preview h4 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+.next-level-preview p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  opacity: 0.95;
+  position: relative;
+  z-index: 1;
+}
+
+/* 期間選択運勢セクション */
+.period-fortune-section {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 2rem 0;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.period-fortune-section h3 {
+  color: #2d3748;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.period-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.period-button {
+  background: #f7fafc;
+  color: #4a5568;
+  border: 2px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.period-button:hover {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+.period-button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.generate-prediction-button {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto 1.5rem;
+  min-width: 150px;
+}
+
+.generate-prediction-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(72, 187, 120, 0.3);
+}
+
+.generate-prediction-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 運勢結果表示 */
+.prediction-result {
+  background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  border: 1px solid rgba(245, 101, 101, 0.2);
+}
+
+.prediction-result h4 {
+  color: #2d3748;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.prediction-result > p {
+  color: #4a5568;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.prediction-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.prediction-item {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.prediction-label {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.9rem;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.prediction-text {
+  color: #4a5568;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  flex: 1;
+}
+
+.important-dates {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.important-dates h5 {
+  color: #2d3748;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+}
+
+.important-dates ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.important-dates li {
+  color: #4a5568;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.important-dates li:before {
+  content: "📅";
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+  .step-result-container {
+    padding: 1rem;
+  }
+  
+  .progress-steps {
+    gap: 1rem;
+  }
+  
+  .step-number {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .zodiac-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .planets-grid,
+  .all-planets-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .level-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .zodiac-name {
+    font-size: 2rem;
+  }
+  
+  .level-up-button {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+
+  .period-selector {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .period-button {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .prediction-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .prediction-item {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .prediction-label {
+    min-width: auto;
+  }
+  
+  .educational-content {
+    padding: 1rem;
+  }
+  
+  .next-level-preview {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .step-result-container {
+    padding: 0.5rem;
+  }
+  
+  .result-level {
+    padding: 1rem;
+  }
+  
+  .progress-header {
+    padding: 1rem;
+  }
+  
+  .progress-steps {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .progress-steps::before {
+    display: none;
+  }
+  
+  .zodiac-icon {
+    font-size: 3rem;
+  }
+  
+  .zodiac-name {
+    font-size: 1.8rem;
+  }
+  
+  .level-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .period-fortune-section {
+    padding: 1rem;
+  }
+  
+  .generate-prediction-button {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .prediction-result {
+    padding: 1rem;
+  }
+} 
