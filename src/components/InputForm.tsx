@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BirthData } from '../types';
 import LocationPicker from './LocationPicker';
-import { FortuneMode } from './ModeSelection';
+type FortuneMode = 'sun-sign' | 'three-planets' | 'ten-planets' | 'ai-chat';
 
 interface InputFormProps {
   mode?: FortuneMode;
   onBackToModeSelection?: () => void;
 }
 
-const InputForm: React.FC<InputFormProps> = ({ mode = 'detailed', onBackToModeSelection }) => {
+const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets', onBackToModeSelection }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -28,16 +28,56 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'detailed', onBackToModeSe
 
   // コンポーネントマウント時に前回の入力値を復元
   useEffect(() => {
-    const savedFormData = localStorage.getItem('savedFormData');
-    if (savedFormData) {
-      try {
-        const parsedData = JSON.parse(savedFormData);
-        setFormData(parsedData);
-      } catch (error) {
-        console.error('保存されたフォームデータの読み込みに失敗:', error);
+    console.log('🔍 InputForm - 初期化処理開始, mode:', mode);
+    
+    // レベルアップフラグをチェック
+    const needThreePlanetsInput = localStorage.getItem('starflect_need_three_planets_input') === 'true';
+    console.log('🔍 レベルアップフラグ:', needThreePlanetsInput);
+    
+    if (needThreePlanetsInput && mode === 'three-planets') {
+      // レベルアップフロー: 既存のbirthDataから名前と生年月日を復元
+      console.log('🔍 レベルアップフロー: 既存データを復元');
+      const existingBirthData = localStorage.getItem('birthData');
+      if (existingBirthData) {
+        try {
+          const birthData = JSON.parse(existingBirthData);
+          console.log('🔍 既存の出生データ:', birthData);
+          
+          const restoredFormData = {
+            name: birthData.name || '',
+            birthDate: birthData.birthDate ? new Date(birthData.birthDate).toISOString().split('T')[0] : '',
+            birthTime: '',
+            birthPlace: ''
+          };
+          
+                     console.log('🔍 復元されたフォームデータ:', restoredFormData);
+          setFormData(restoredFormData);
+          
+          // savedFormDataも更新して整合性を保つ
+          localStorage.setItem('savedFormData', JSON.stringify(restoredFormData));
+          
+          // データ復元完了後にフラグを削除
+          localStorage.removeItem('starflect_need_three_planets_input');
+          console.log('🔍 レベルアップフラグを削除しました');
+        } catch (error) {
+          console.error('既存出生データの読み込みに失敗:', error);
+        }
+      }
+    } else {
+      // 通常フロー: savedFormDataから復元
+      console.log('🔍 通常フロー: savedFormDataから復元');
+      const savedFormData = localStorage.getItem('savedFormData');
+      if (savedFormData) {
+        try {
+          const parsedData = JSON.parse(savedFormData);
+          console.log('🔍 保存されたフォームデータ:', parsedData);
+          setFormData(parsedData);
+        } catch (error) {
+          console.error('保存されたフォームデータの読み込みに失敗:', error);
+        }
       }
     }
-  }, []);
+  }, [mode]);
 
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
@@ -58,7 +98,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'detailed', onBackToModeSe
     }
 
     // 詳しい占いの場合のみ、出生時刻と出生地をバリデーション
-    if (mode === 'detailed') {
+    if (mode === 'three-planets' || mode === 'ten-planets') {
       // 出生時刻のバリデーション
       if (!formData.birthTime) {
         newErrors.birthTime = '出生時刻を入力してください';
@@ -94,17 +134,30 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'detailed', onBackToModeSe
         name: formData.name || undefined,
         birthDate: new Date(formData.birthDate),
         // 簡単占いの場合は正午をデフォルト値として使用
-        birthTime: mode === 'detailed' ? formData.birthTime : '12:00',
+        birthTime: (mode === 'three-planets' || mode === 'ten-planets') ? formData.birthTime : '12:00',
         birthPlace: {
-          city: mode === 'detailed' ? (locationData?.city || formData.birthPlace) : '東京',
-          latitude: mode === 'detailed' ? (locationData?.latitude || 35.6762) : 35.6762,
-          longitude: mode === 'detailed' ? (locationData?.longitude || 139.6503) : 139.6503,
+          city: (mode === 'three-planets' || mode === 'ten-planets') ? (locationData?.city || formData.birthPlace) : '東京',
+          latitude: (mode === 'three-planets' || mode === 'ten-planets') ? (locationData?.latitude || 35.6762) : 35.6762,
+          longitude: (mode === 'three-planets' || mode === 'ten-planets') ? (locationData?.longitude || 139.6503) : 139.6503,
           timezone: 'Asia/Tokyo'
         }
       };
 
       // ローカルストレージに保存
+      console.log('🔍 InputForm - 保存するデータ:');
+      console.log('  birthData:', birthData);
+      console.log('  mode:', mode);
+      console.log('  保存するselectedMode:', mode || 'sun-sign');
+      
       localStorage.setItem('birthData', JSON.stringify(birthData));
+      
+      // 選択されたモードを保存
+      localStorage.setItem('selectedMode', mode || 'sun-sign');
+      
+      // 保存後の確認
+      console.log('🔍 保存後のlocalStorage確認:');
+      console.log('  selectedMode:', localStorage.getItem('selectedMode'));
+      console.log('  birthData keys:', Object.keys(JSON.parse(localStorage.getItem('birthData') || '{}')));
       
       // 結果画面に遷移
       navigate('/result');
@@ -161,6 +214,14 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'detailed', onBackToModeSe
     <div className="input-form-container">
       <div className="form-card">
         <h2>あなたの出生情報を入力してください</h2>
+        
+        {/* 3天体モードのレベルアップ時のメッセージ */}
+        {mode === 'three-planets' && formData.name && formData.birthDate && (
+          <div className="level-up-message">
+            <p>🌙✨ 3天体の本格占いに必要な追加情報を入力してください</p>
+            <p>出生時刻と出生地を追加することで、より詳しい占い結果が得られます。</p>
+          </div>
+        )}
         
         <form 
           onSubmit={handleSubmit} 
@@ -225,7 +286,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'detailed', onBackToModeSe
           </div>
 
           {/* 詳しい占いの場合のみ出生時刻を表示 */}
-          {mode === 'detailed' && (
+          {(mode === 'three-planets' || mode === 'ten-planets') && (
             <div className="input-group">
               <label htmlFor="birthTime">出生時刻 *</label>
               <input
@@ -257,7 +318,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'detailed', onBackToModeSe
           )}
 
           {/* 詳しい占いの場合のみ出生地を表示 */}
-          {mode === 'detailed' && (
+          {(mode === 'three-planets' || mode === 'ten-planets') && (
             <div className="input-group">
               <label htmlFor="birthPlace">出生地 *</label>
               <div 
@@ -305,7 +366,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'detailed', onBackToModeSe
               aria-describedby="submit-hint"
               tabIndex={4}
             >
-              {isLoading ? '分析中...' : 'ホロスコープを分析する'}
+              {isLoading ? '分析中...' : '占いを始める'}
             </button>
             <span id="submit-hint" className="sr-only">全ての必須項目を入力後、このボタンで分析を開始できます</span>
             

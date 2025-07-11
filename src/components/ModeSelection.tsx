@@ -3,7 +3,7 @@ import TutorialModal from './TutorialModal';
 import './ModeSelection.css';
 
 interface ModeSelectionProps {
-  onSelectMode: (mode: 'simple' | 'detailed' | 'ai') => void;
+  onSelectMode: (mode: 'sun-sign' | 'three-planets' | 'ten-planets' | 'ai-chat') => void;
 }
 
 const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
@@ -21,30 +21,64 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
     setShowTutorial(false);
   };
 
+  // ローカルDB削除（過去の占い結果をリセット）
+  const handleResetData = () => {
+    if (window.confirm('過去の占い結果をすべて削除しますか？\n入力した名前、生年月日、時刻、出生地の情報も削除されます。\nこの操作は取り消せません。')) {
+      // ローカルストレージから占い関連データを削除
+      const keys = Object.keys(localStorage);
+      keys.forEach(key => {
+        // チュートリアル完了フラグ以外はすべて削除
+        if (key !== 'starflect_tutorial_completed') {
+          // 主要な個人情報・占い結果のキーを削除
+          if (key === 'birthData' || 
+              key === 'savedFormData' || 
+              key === 'horoscopeData' || 
+              key.startsWith('starflect-birth-data') || 
+              key.startsWith('ai_chat_history_') || 
+              key.startsWith('ai_analysis_') || 
+              key.startsWith('starflect_')) {
+            localStorage.removeItem(key);
+          }
+        }
+      });
+      alert('過去の占い結果と入力データをリセットしました。');
+    }
+  };
+
   const modes = [
     {
-      id: 'simple',
-      title: '簡単占い',
+      id: 'sun-sign',
+      title: '太陽星座の簡単占い',
       icon: '🌟',
       duration: '30秒',
-      description: '生年月日だけで基本的な性格を占います',
-      features: ['星座', '星座から見たあなた', '今日の占い'],
+      description: '生年月日だけで基本的な性格を占います\n迷ったらこちら！',
+      features: ['太陽星座', '星座から見たあなた', '星座占い'],
       gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       required: '生年月日のみ'
     },
     {
-      id: 'detailed',
-      title: '詳しい占い',
-      icon: '🔮',
+      id: 'three-planets',
+      title: '3天体の本格占い',
+      icon: '🌙✨',
+      duration: '1分',
+      description: '太陽・月・上昇星座の組み合わせ分析',
+      features: ['3天体', '詳細な性格分析', '3天体の星座占い'],
+      gradient: 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)',
+      required: '出生時刻・場所も必要'
+    },
+    {
+      id: 'ten-planets',
+      title: '10天体の完全占い',
+      icon: '🌌⭐',
       duration: '2分',
-      description: '詳細な出生データで本格的な占星術分析',
-      features: ['全10天体', 'AI分析', '詳しい運勢'],
+      description: '全10天体で最も詳細な占星術分析',
+      features: ['全10天体', '完全分析', '10天体の星座占い'],
       gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
       required: '出生時刻・場所も必要'
     },
     {
-      id: 'ai',
-      title: 'AI占い',
+      id: 'ai-chat',
+      title: 'AIチャット',
       icon: '🤖',
       duration: '対話式',
       description: 'AIとチャットしながら、あなたの質問に答えます',
@@ -56,9 +90,14 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
 
   return (
     <div className="mode-selection-container">
-      <div className="mode-selection-header">
-        <h2 className="mode-title">占いモードを選択してください</h2>
-        <p className="mode-subtitle">あなたに合った占い方法をお選びください</p>
+      {/* チュートリアルボタンを太陽星座の簡単占いの上に配置 */}
+      <div className="tutorial-info-box">
+        <button 
+          className="tutorial-button-banner"
+          onClick={() => setShowTutorial(true)}
+        >
+          📖 使い方や10天体についてはこちら
+        </button>
       </div>
       
       <div className="mode-cards">
@@ -67,7 +106,7 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
             key={mode.id}
             className="mode-card"
             style={{ background: mode.gradient }}
-            onClick={() => onSelectMode(mode.id as 'simple' | 'detailed' | 'ai')}
+            onClick={() => onSelectMode(mode.id as 'sun-sign' | 'three-planets' | 'ten-planets' | 'ai-chat')}
           >
             <div className="mode-card-content">
               <div className="mode-icon">{mode.icon}</div>
@@ -85,26 +124,30 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
                 <span className="required-label">必要な情報:</span>
                 <span className="required-text">{mode.required}</span>
               </div>
-              
-              <button className="mode-select-button">
-                このモードで始める
-              </button>
             </div>
           </div>
         ))}
       </div>
       
-      <div className="mode-help">
-        <p>💡 迷ったら「簡単占い」からお試しください</p>
+
+              
+        {/* 過去の占い結果をリセットボタン */}
+        <div className="reset-data-section">
+          <button 
+            className="reset-data-button"
+            onClick={handleResetData}
+          >
+            🗑️ 過去の占い結果をリセット
+          </button>
+        </div>
+        
+        {/* チュートリアルモーダル */}
+        <TutorialModal 
+          isOpen={showTutorial} 
+          onClose={handleCloseTutorial} 
+        />
       </div>
-      
-      {/* チュートリアルモーダル */}
-      <TutorialModal 
-        isOpen={showTutorial} 
-        onClose={handleCloseTutorial} 
-      />
-    </div>
-  );
-};
+    );
+  };
 
 export default ModeSelection; 

@@ -33,7 +33,7 @@ const fetchWithTimeout = async (url: string, options: RequestInit, timeout: numb
 };
 
 // リトライ機能付きAPI呼び出し
-const callOpenAIWithRetry = async (prompt: string, systemMessage: string, maxTokens: number = 800): Promise<any> => {
+const callOpenAIWithRetry = async (prompt: string, systemMessage: string, maxTokens: number = 1200): Promise<any> => {
   let lastError: Error | null = null;
   
   for (let attempt = 1; attempt <= API_CONFIG.maxRetries; attempt++) {
@@ -58,7 +58,7 @@ const callOpenAIWithRetry = async (prompt: string, systemMessage: string, maxTok
                 content: prompt
               }
             ],
-            temperature: 0.7,
+            temperature: 0.9,
             max_tokens: maxTokens
           })
         },
@@ -185,46 +185,53 @@ const generateSimpleAnalysisPrompt = (
 太陽星座を中心とした基本的な性格分析と今日の運勢をお願いします。
 初心者の方にも分かりやすく、親しみやすい内容でお願いします。
 
+【重要】毎回新しい視点で分析し、異なる角度からのアドバイスを提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。
+
 【クライアント情報】
 お名前: ${birthData.name}
 生年月日: ${birthData.birthDate.toLocaleDateString('ja-JP')}
 太陽星座: ${sunSign}
 今日の日付: ${new Date().toLocaleDateString('ja-JP')}
 
+【分析実行時刻】
+${new Date().toLocaleString('ja-JP')} - 分析ID: ${Math.random().toString(36).substr(2, 9)}
+
 【出力形式】
 必ず以下のJSON形式のみでご回答ください。簡潔で分かりやすい内容にしてください。
 
 {
   "personalityInsights": {
-    "corePersonality": "太陽星座から見たあなたの性格を150-200文字で、ですます調でやさしく詳しく解説してください。性格の特徴、行動パターン、価値観、強みなどを含めて包括的に説明してください。",
-    "hiddenTraits": "内面の特徴を50-70文字で、ですます調でやさしく解説してください。",
-    "lifePhilosophy": "人生で大切にしていることを40-60文字で、ですます調で解説してください。",
-    "relationshipStyle": "人間関係の特徴を50-70文字で、ですます調でやさしく解説してください。",
-    "careerTendencies": "お仕事での特徴を50-70文字で、ですます調でやさしく解説してください。"
+    "corePersonality": "太陽星座から見たあなたの性格を200-250文字で、ですます調でやさしく詳しく解説してください。性格の特徴、行動パターン、価値観、強みを含めて包括的に説明し、特によいところと注意すべきところも明確に含めてください。",
+    "hiddenTraits": "内面の特徴を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "lifePhilosophy": "人生で大切にしていることを70-90文字で、ですます調で解説してください。よいところと注意すべきところも含めて説明してください。",
+    "relationshipStyle": "人間関係の特徴を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "careerTendencies": "お仕事での特徴を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。"
   },
   "detailedFortune": {
-    "overallTrend": "全体的な運勢を40-60文字で、ですます調でやさしく解説してください。",
-    "loveLife": "恋愛運を40-60文字で、ですます調でやさしく解説してください。",
-    "careerPath": "仕事運を40-60文字で、ですます調でやさしく解説してください。",
-    "healthWellness": "健康運を40-60文字で、ですます調でやさしく解説してください。",
-    "financialProspects": "金運を40-60文字で、ですます調でやさしく解説してください。",
-    "personalGrowth": "成長運を40-60文字で、ですます調でやさしく解説してください。"
+    "overallTrend": "全体的な運勢を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "loveLife": "恋愛運を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "careerPath": "仕事運を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "healthWellness": "健康運を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "financialProspects": "金運を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "personalGrowth": "成長運を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。"
   },
   "todaysFortune": {
-    "overallLuck": "今日の全体運を60-80文字で、ですます調でやさしく詳しく解説してください。",
-    "loveLuck": "今日の恋愛運を60-80文字で、ですます調でやさしく詳しく解説してください。",
-    "workLuck": "今日の仕事運を60-80文字で、ですます調でやさしく詳しく解説してください。",
-    "healthLuck": "今日の健康運を60-80文字で、ですます調でやさしく詳しく解説してください。",
-    "moneyLuck": "今日の金運を60-80文字で、ですます調でやさしく詳しく解説してください。",
-    "todaysAdvice": "今日のアドバイスを80-100文字で、ですます調でやさしく詳しく解説してください。"
+    "overallLuck": "今日の全体運を100-120文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "loveLuck": "今日の恋愛運を100-120文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "workLuck": "今日の仕事運を100-120文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "healthLuck": "今日の健康運を100-120文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "moneyLuck": "今日の金運を100-120文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。",
+    "todaysAdvice": "今日のアドバイスを120-150文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。"
   }
 }
 
 【厳守事項】
 - JSON以外のテキストは絶対に出力しないでください
 - 初心者の方でも理解しやすい、やさしい表現で書いてください
-- 文字数を守って簡潔にまとめてください
+- 文字数を守って詳しく説明してください
 - 必ずですます調で統一してください
+- 必ずよいところと注意すべきところを含めて説明してください
+- わかりやすい表現で少し長めに書いてください
 `;
 };
 
@@ -254,19 +261,19 @@ ${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('
 
 {
   "personalityInsights": {
-    "corePersonality": "太陽星座の特徴を100文字以上で、必ずですます調でやさしく解説してください。性格の特徴、行動パターン、強みなどを含めて説明してください。",
-    "hiddenTraits": "月星座の隠れた特性を100文字以上で、必ずですます調でやさしく解説してください。内面の感情、プライベートな面、本能的な反応などを含めて説明してください。",
-    "lifePhilosophy": "人生哲学や価値観を80文字以上で、必ずですます調でやさしく解説してください。何を重視し、どのような生き方を理想とするのかを説明してください。",
-    "relationshipStyle": "人間関係のスタイルを100文字以上で、必ずですます調でやさしく解説してください。友人関係、恋愛関係でのコミュニケーションスタイルを含めて説明してください。",
-    "careerTendencies": "キャリア傾向を100文字以上で、必ずですます調でやさしく解説してください。適職、仕事への取り組み方、成功のポイントを含めて説明してください。"
+    "corePersonality": "太陽星座の特徴を150文字以上で、必ずですます調でやさしく解説してください。性格の特徴、行動パターン、強みなどを含めて説明し、特によいところと注意すべきところも明確に含めてください。",
+    "hiddenTraits": "月星座の隠れた特性を150文字以上で、必ずですます調でやさしく解説してください。内面の感情、プライベートな面、本能的な反応などを含めて説明し、よいところと注意すべきところも含めてください。",
+    "lifePhilosophy": "人生哲学や価値観を120文字以上で、必ずですます調でやさしく解説してください。何を重視し、どのような生き方を理想とするのかを説明し、よいところと注意すべきところも含めてください。",
+    "relationshipStyle": "人間関係のスタイルを150文字以上で、必ずですます調でやさしく解説してください。友人関係、恋愛関係でのコミュニケーションスタイルを含めて説明し、よいところと注意すべきところも含めてください。",
+    "careerTendencies": "キャリア傾向を150文字以上で、必ずですます調でやさしく解説してください。適職、仕事への取り組み方、成功のポイントを含めて説明し、よいところと注意すべきところも含めてください。"
   },
   "detailedFortune": {
-    "overallTrend": "全体的な運勢傾向を80文字以上で、必ずですます調でやさしく解説してください。現在の運勢の流れと今後の展望を含めて説明してください。",
-    "loveLife": "恋愛運を80文字以上で、必ずですます調でやさしく解説してください。恋愛の傾向、パートナーシップの可能性を含めて説明してください。",
-    "careerPath": "仕事運を80文字以上で、必ずですます調でやさしく解説してください。仕事での成功のポイント、キャリアの方向性を含めて説明してください。",
-    "healthWellness": "健康運を80文字以上で、必ずですます調でやさしく解説してください。体調管理のポイント、wellness向上のアドバイスを含めて説明してください。",
-    "financialProspects": "金運を80文字以上で、必ずですます調でやさしく解説してください。収入の傾向、金銭管理のポイントを含めて説明してください。",
-    "personalGrowth": "成長運を80文字以上で、必ずですます調でやさしく解説してください。自己成長の方向性、学習すべきことを含めて説明してください。"
+    "overallTrend": "全体的な運勢傾向を120文字以上で、必ずですます調でやさしく解説してください。現在の運勢の流れと今後の展望を含めて説明し、よいところと注意すべきところも含めてください。",
+    "loveLife": "恋愛運を120文字以上で、必ずですます調でやさしく解説してください。恋愛の傾向、パートナーシップの可能性を含めて説明し、よいところと注意すべきところも含めてください。",
+    "careerPath": "仕事運を120文字以上で、必ずですます調でやさしく解説してください。仕事での成功のポイント、キャリアの方向性を含めて説明し、よいところと注意すべきところも含めてください。",
+    "healthWellness": "健康運を120文字以上で、必ずですます調でやさしく解説してください。体調管理のポイント、wellness向上のアドバイスを含めて説明し、よいところと注意すべきところも含めてください。",
+    "financialProspects": "金運を120文字以上で、必ずですます調でやさしく解説してください。収入の傾向、金銭管理のポイントを含めて説明し、よいところと注意すべきところも含めてください。",
+    "personalGrowth": "成長運を120文字以上で、必ずですます調でやさしく解説してください。自己成長の方向性、学習すべきことを含めて説明し、よいところと注意すべきところも含めてください。"
   }
 }
 
@@ -275,16 +282,18 @@ ${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('
 - JSONの前後に余計な文字や改行を入れないでください
 - 各項目を指定された文字数以上で、丁寧な日本語（です・ます調）でやさしく解説してください
 - 「あなたの太陽は○○座にあり」のような表現は絶対に使用しないでください
+- 必ずよいところと注意すべきところを含めて説明してください
+- わかりやすい表現で少し長めに書いてください
 - 必ず上記のJSON形式のみでご回答ください
 `;
 };
 
 // 強化されたOpenAI API呼び出し関数
-const callOpenAIAPI = async (prompt: string, maxTokens: number = 1800): Promise<AIAnalysisResult> => {
+const callOpenAIAPI = async (prompt: string, maxTokens: number = 2500): Promise<AIAnalysisResult> => {
   try {
     const data = await callOpenAIWithRetry(
       prompt,
-      "あなたは30年以上の経験を持つ世界最高の占星術師です。JSON以外のテキストや説明文は絶対に出力せず、必ずJSON形式のみで回答してください。",
+      "あなたは30年以上の経験を持つ世界最高の占星術師です。毎回異なる視点から創造的で多様な分析を提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。JSON以外のテキストや説明文は絶対に出力せず、必ずJSON形式のみで回答してください。わかりやすい表現で少し長めに書き、必ずよいところと注意すべきところを含めて説明してください。",
       maxTokens
     );
     const content = data.choices[0].message.content;
@@ -422,7 +431,7 @@ export const generateAIAnalysis = async (
     const sunSign = sunPlanet?.sign || '牡羊座';
     
     const simplePrompt = generateSimpleAnalysisPrompt(birthData, sunSign);
-    baseResult = await callOpenAIAPI(simplePrompt, 1200); // 短いトークン数
+    baseResult = await callOpenAIAPI(simplePrompt, 1500); // 短いトークン数
     
     // 簡単占いでは planetAnalysis は基本的な3天体のみ
     const mainPlanets = planets.filter(p => 
@@ -440,7 +449,7 @@ export const generateAIAnalysis = async (
   } else {
     // 詳しい占い: 全天体の詳細分析
     const enhancedPrompt = generateEnhancedAnalysisPrompt(birthData, planets);
-    baseResult = await callOpenAIAPI(enhancedPrompt, 1800); // 多めのトークン数
+    baseResult = await callOpenAIAPI(enhancedPrompt, 2500); // 多めのトークン数
 
     // planetAnalysisは天体ごとに分割API呼び出し
     const planetAnalysis = await generatePlanetAnalysisAll(birthData, planets);
@@ -506,6 +515,8 @@ function generateFuturePredictionPrompt(
 
 以下の出生データと天体配置をもとに、${timeframe}の運勢・アドバイスを、各分野200文字以上の丁寧な日本語で、できるだけ具体的に解説してください。
 
+【重要】毎回新しい視点で分析し、異なる角度からのアドバイスを提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。
+
 【クライアント情報】
 お名前: ${birthData.name}
 生年月日: ${birthData.birthDate.toLocaleDateString('ja-JP')}
@@ -517,6 +528,9 @@ ${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('
 
 【予測期間】
 ${timeframe} (${startDate.toLocaleDateString('ja-JP')} 〜 ${endDate.toLocaleDateString('ja-JP')})
+
+【分析実行時刻】
+${new Date().toLocaleString('ja-JP')} - 分析ID: ${Math.random().toString(36).substr(2, 9)}
 
 【出力形式】
 必ず以下のJSON形式のみでご回答ください。キーは英語、値は日本語（敬語・丁寧語）で記述してください。
@@ -557,7 +571,7 @@ export const generateFuturePrediction = async (
   const prompt = generateFuturePredictionPrompt(birthData, planets, timeframe);
   const data = await callOpenAIWithRetry(
     prompt,
-    "あなたは経験豊富な占星術師です。必ずfuturePredictionキーをルートに持つ英語キーのJSON形式のみで回答してください。JSON以外のテキストや説明文は絶対に出力しないでください。",
+    "あなたは経験豊富な占星術師です。毎回異なる視点から創造的で多様な分析を提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。必ずfuturePredictionキーをルートに持つ英語キーのJSON形式のみで回答してください。JSON以外のテキストや説明文は絶対に出力しないでください。",
     4000
   );
 
@@ -656,8 +670,8 @@ ${message}
 
   const data = await callOpenAIWithRetry(
     contextPrompt,
-    "あなたは経験豊富な占星術師です。天体配置とアスペクト分析を活用して、親身で具体的なアドバイスを提供してください。",
-    600
+    "あなたは経験豊富な占星術師です。天体配置とアスペクト分析を活用して、親身で具体的なアドバイスを提供してください。十分な文字数で詳しく分析してください。",
+    1500
   );
 
   return data.choices[0].message.content;

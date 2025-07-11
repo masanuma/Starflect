@@ -4260,3 +4260,25 @@ button:disabled {
     padding: 30px 15px;
   }
 }
+
+/* レベルアップメッセージ */
+.level-up-message {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #0ea5e9;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.level-up-message p {
+  margin: 0.5rem 0;
+  color: #0c4a6e;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.level-up-message p:first-child {
+  font-weight: 600;
+  font-size: 1.1rem;
+}

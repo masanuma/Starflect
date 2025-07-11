@@ -12,21 +12,27 @@ const TutorialModal: React.FC<TutorialModalProps> = ({ isOpen, onClose }) => {
   const tutorialSteps = [
     {
       title: "🌟 Starflectへようこそ！",
-      content: "あなただけの星座占いを体験できます。まずは、3つの占いモードから選んでみましょう。",
+      content: "あなただけの星座占いを体験できます。まずは、4つの占いモードから選んでみましょう。",
       image: "✨",
       highlight: ".mode-cards"
     },
     {
-      title: "🌟 簡単占い",
-      content: "生年月日だけで30秒で占えます。占星術が初めての方におすすめです。",
+      title: "🌟 太陽星座の簡単占い",
+      content: "生年月日だけで30秒で占えます。\n迷ったらここから！\n占星術が初めての方におすすめです。",
       image: "🌟",
       highlight: ".mode-card:first-child"
     },
     {
-      title: "🔮 詳しい占い",
-      content: "出生時刻と出生地も入力して、より詳細で正確な占い結果を得られます。",
-      image: "🔮",
+      title: "🌙✨ 3天体の本格占い",
+      content: "太陽・月・上昇星座の3天体を分析します。出生時刻と出生地も入力して、より詳細で正確な占い結果を得られます。",
+      image: "🌙✨",
       highlight: ".mode-card:nth-child(2)"
+    },
+    {
+      title: "🌌 10天体の完全占い",
+      content: "全10天体を使った最も詳細な占星術分析です。最高精度の占い結果を得られます。",
+      image: "🌌",
+      highlight: ".mode-card:nth-child(3)"
     },
     {
       title: "🤖 AI占い",
@@ -42,8 +48,14 @@ const TutorialModal: React.FC<TutorialModalProps> = ({ isOpen, onClose }) => {
     },
     {
       title: "🎯 段階的な結果表示",
-      content: "占い結果は3段階で表示されます。「もっと詳しく」ボタンを押すと、より詳細な分析が見られます。",
+      content: "占い結果は3段階で表示されます。「3天体の本格占いへ🔮」「10天体の完全占い🌌」ボタンを押すと、より詳細な分析が見られます。",
       image: "📊",
+      highlight: ""
+    },
+    {
+      title: "🔄 結果のリセット",
+      content: "「天体からみたあなた」の結果をリセットしたい場合は、トップページの「過去の占い結果をリセット」ボタンを押してください。新しい分析結果を生成できます。",
+      image: "🔄",
       highlight: ""
     },
     {
