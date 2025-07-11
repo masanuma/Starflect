@@ -9,7 +9,7 @@ interface InputFormProps {
   onBackToModeSelection?: () => void;
 }
 
-const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets', onBackToModeSelection }) => {
+const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',

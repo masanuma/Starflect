@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { chatWithAIAstrologer, ChatMessage as AIMessage } from '../utils/aiAnalyzer';
+import { useNavigate } from 'react-router-dom';
+import { chatWithAIAstrologer } from '../utils/aiAnalyzer';
 import { BirthData } from '../types';
 import './AIFortuneChat.css';
 

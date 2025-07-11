@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import ModeSelection from './components/ModeSelection'
 import InputForm from './components/InputForm'
 import StepByStepResult from './components/StepByStepResult'
