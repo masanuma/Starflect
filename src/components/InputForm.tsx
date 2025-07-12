@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BirthData } from '../types';
 import LocationPicker from './LocationPicker';
@@ -11,6 +11,7 @@ interface InputFormProps {
 
 const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
   const navigate = useNavigate();
+  const birthTimeRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     birthDate: '',
@@ -32,7 +33,11 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
     
     // レベルアップフラグをチェック
     const needThreePlanetsInput = localStorage.getItem('starflect_need_three_planets_input') === 'true';
+    // データ不足フラグをチェック
+    const missingDataMode = localStorage.getItem('starflect_missing_data_mode');
+    
     console.log('🔍 レベルアップフラグ:', needThreePlanetsInput);
+    console.log('🔍 データ不足フラグ:', missingDataMode);
     
     if (needThreePlanetsInput && mode === 'three-planets') {
       // レベルアップフロー: 既存のbirthDataから名前と生年月日を復元
@@ -76,6 +81,16 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
           console.error('保存されたフォームデータの読み込みに失敗:', error);
         }
       }
+    }
+    
+    // データ不足から来た場合、出生時刻にフォーカスを当てる
+    if (missingDataMode && (mode === 'three-planets' || mode === 'ten-planets')) {
+      console.log('🔍 データ不足からの遷移のため、出生時刻にフォーカスを当てます');
+      setTimeout(() => {
+        if (birthTimeRef.current) {
+          birthTimeRef.current.focus();
+        }
+      }, 100);
     }
   }, [mode]);
 
@@ -215,13 +230,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
       <div className="form-card">
         <h2>あなたの出生情報を入力してください</h2>
         
-        {/* 3天体モードのレベルアップ時のメッセージ */}
-        {mode === 'three-planets' && formData.name && formData.birthDate && (
-          <div className="level-up-message">
-            <p>🌙✨ 3天体の本格占いに必要な追加情報を入力してください</p>
-            <p>出生時刻と出生地を追加することで、より詳しい占い結果が得られます。</p>
-          </div>
-        )}
+
         
         <form 
           onSubmit={handleSubmit} 
@@ -291,6 +300,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
               <label htmlFor="birthTime">出生時刻 *</label>
               <input
                 id="birthTime"
+                ref={birthTimeRef}
                 type="time"
                 value={formData.birthTime}
                 onChange={(e) => handleInputChange('birthTime', e.target.value)}

@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ModeSelection from './components/ModeSelection'
 import InputForm from './components/InputForm'
 import StepByStepResult from './components/StepByStepResult'
@@ -37,9 +37,19 @@ function HomeWrapper() {
   
   // レベルアップフラグを先にチェック（削除しない）
   const needThreePlanetsInput = localStorage.getItem('starflect_need_three_planets_input') === 'true';
-  console.log('🔍 HomeWrapper - フラグチェック:', needThreePlanetsInput);
+  // データ不足によるモード選択フラグをチェック
+  const missingDataMode = localStorage.getItem('starflect_missing_data_mode');
+  
+  console.log('🔍 HomeWrapper - フラグチェック:');
+  console.log('  needThreePlanetsInput:', needThreePlanetsInput);
+  console.log('  missingDataMode:', missingDataMode);
   
   const [selectedMode, setSelectedMode] = useState<FortuneMode | null>(() => {
+    // データ不足によるモード選択が優先
+    if (missingDataMode) {
+      console.log('🔍 データ不足により自動モード選択:', missingDataMode);
+      return missingDataMode as FortuneMode;
+    }
     // レベルアップから3天体モードでの入力が必要な場合は自動的に3天体モードに設定
     if (needThreePlanetsInput) {
       console.log('🔍 レベルアップフラグが見つかりました。3天体モードに設定します。');
@@ -51,9 +61,21 @@ function HomeWrapper() {
 
   // レベルアップから来たかどうかを記録
   const [isFromLevelUp] = useState(needThreePlanetsInput);
-  console.log('🔍 isFromLevelUp:', isFromLevelUp, 'selectedMode:', selectedMode);
+  // データ不足から来たかどうかを記録
+  const [isFromMissingData] = useState(!!missingDataMode);
+  
+  console.log('🔍 フラグ状態:');
+  console.log('  isFromLevelUp:', isFromLevelUp);
+  console.log('  isFromMissingData:', isFromMissingData);
+  console.log('  selectedMode:', selectedMode);
 
   // フラグの削除はInputFormで行うため、ここでは削除しない
+  // ただし、missingDataModeフラグは使用後に削除（useEffect内で削除）
+  useEffect(() => {
+    if (missingDataMode) {
+      localStorage.removeItem('starflect_missing_data_mode');
+    }
+  }, [missingDataMode]);
 
   const handleModeSelect = (mode: FortuneMode) => {
     // データがそろっているかチェック
@@ -186,6 +208,8 @@ function AIFortuneWrapper() {
 
 // 段階的結果表示のラッパー
 function StepByStepResultWrapper() {
+  const navigate = useNavigate();
+  
   // localStorageから選択されたモードを取得
   const selectedMode = localStorage.getItem('selectedMode');
   const birthDataRaw = localStorage.getItem('birthData');
@@ -194,6 +218,8 @@ function StepByStepResultWrapper() {
   console.log('🔍 StepByStepResultWrapper - デバッグ情報:');
   console.log('  selectedMode:', selectedMode);
   console.log('  birthDataRaw:', birthDataRaw);
+  
+  // データ不足チェックはStepByStepResultコンポーネント内で行うため、ここでは削除
   
   if (selectedMode) {
     console.log('🔍 selectedModeが存在します:', selectedMode);

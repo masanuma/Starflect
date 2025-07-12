@@ -157,7 +157,7 @@ export const calculateAllAspects = (planets: PlanetPosition[]): Aspect[] => {
 export const getAspectStrength = (aspect: Aspect): number => {
   const baseStrength = aspect.exactness;
   
-  // 重要な天体（太陽、月、アセンダント）は強度を上げる
+  // 重要な天体（太陽、月、上昇星座）は強度を上げる
   const importantPlanets = ['太陽', '月'];
   const hasImportantPlanet = importantPlanets.includes(aspect.planet1) || 
                            importantPlanets.includes(aspect.planet2);
