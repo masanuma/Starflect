@@ -166,6 +166,7 @@ function HomeWrapper() {
     } else {
       // 必要なデータがない場合は、InputFormを表示
       console.log('🔍 データが不足しているため、InputFormを表示します');
+      localStorage.setItem('selectedMode', mode);
       setSelectedMode(mode);
     }
   };
