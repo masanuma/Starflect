@@ -27,6 +27,7 @@ const AIFortuneChat: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [birthData, setBirthData] = useState<BirthData | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const latestMessageRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   // 出生データを取得
@@ -414,13 +415,19 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
     scrollToBottom();
   }, [birthData]);
 
-  // メッセージが更新されたら自動スクロール
+  // メッセージが更新されたら自動スクロール（初期表示のみ）
   useEffect(() => {
-    scrollToBottom();
+    if (messages.length <= 1) {
+      scrollToBottom();
+    }
   }, [messages]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const scrollToLatestMessage = () => {
+    latestMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   // メッセージ送信
@@ -456,6 +463,11 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         setIsTyping(false);
         setIsLoading(false);
         
+        // 新しい返答の文頭にスクロール
+        setTimeout(() => {
+          scrollToLatestMessage();
+        }, 100);
+        
         // 新しい提案チップを表示
         updateSuggestions(text);
       }, 1500);
@@ -473,6 +485,11 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         setMessages(prev => [...prev, errorMessage]);
         setIsTyping(false);
         setIsLoading(false);
+        
+        // エラーメッセージの文頭にスクロール
+        setTimeout(() => {
+          scrollToLatestMessage();
+        }, 100);
       }, 1500);
     }
   };
@@ -551,10 +568,11 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
 
       {/* メッセージエリア */}
       <div className="messages-container">
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <div 
             key={message.id} 
             className={`message ${message.isUser ? 'user-message' : 'ai-message'}`}
+            ref={!message.isUser && index === messages.length - 1 ? latestMessageRef : null}
           >
             <div className="message-content">
               {!message.isUser && (
