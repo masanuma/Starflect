@@ -207,6 +207,8 @@ const AIChat: React.FC<Props> = React.memo(({ birthData, planets }) => {
 
   // ナビゲーション関数をメモ化
   const handleBackNavigation = useCallback(() => {
+    // ページトップに移動
+    window.scrollTo(0, 0);
     navigate('/result');
   }, [navigate]);
 

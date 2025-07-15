@@ -526,46 +526,19 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
     <div className="ai-fortune-container">
       {/* ヘッダー */}
       <div className="ai-chat-header">
-        <div style={{ display: 'flex', gap: '1rem' }}>
+        <div className="back-button-container">
           <button 
-            onClick={(e) => {
-              console.log('確実な戻るボタンがクリックされました');
-              e.preventDefault();
-              e.stopPropagation();
-              
-              // 確実にホームページに戻る
-              console.log('window.location.href = / を実行します');
-              window.location.href = window.location.origin + '/';
+            onClick={() => {
+              // selectedModeをリセットして占いモード選択画面に戻る
+              localStorage.removeItem('selectedMode');
+              window.scrollTo(0, 0);
+              navigate('/');
             }}
             className="back-button"
-            style={{ 
-              zIndex: 1000,
-              position: 'relative',
-              pointerEvents: 'auto',
-              cursor: 'pointer'
-            }}
+            type="button"
           >
-            ← 戻る
+            ← 占いモード選択に戻る
           </button>
-          
-          {/* 代替リンク - aタグで確実に遷移 */}
-          <a 
-            href="/"
-            className="back-button"
-            style={{ 
-              textDecoration: 'none',
-              display: 'inline-block',
-              zIndex: 1000,
-              position: 'relative',
-              cursor: 'pointer'
-            }}
-            onClick={(e) => {
-              console.log('確実なホームリンクがクリックされました');
-              console.log('aタグでの遷移を実行します');
-            }}
-          >
-            🏠 ホーム
-          </a>
         </div>
         <div className="ai-info">
           <div className="ai-avatar">🔮</div>

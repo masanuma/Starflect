@@ -175,6 +175,8 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
       console.log('  birthData keys:', Object.keys(JSON.parse(localStorage.getItem('birthData') || '{}')));
       
       // 結果画面に遷移
+      // ページトップに移動
+      window.scrollTo(0, 0);
       navigate('/result');
     } catch (error) {
       console.error('Error processing birth data:', error);

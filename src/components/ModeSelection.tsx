@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TutorialModal from './TutorialModal';
+import { confirmAndClearData } from '../utils/dataManager';
 import './ModeSelection.css';
 
 interface ModeSelectionProps {
@@ -23,39 +24,9 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
 
   // ローカルDB削除（過去の占い結果をリセット）
   const handleResetData = () => {
-    if (window.confirm('過去の占い結果をすべて削除しますか？\n入力した名前、生年月日、時刻、出生地の情報も削除されます。\nこの操作は取り消せません。')) {
-      console.log('🔍 【リセット開始】削除前のローカルストレージ:', Object.keys(localStorage));
-      
-      // ローカルストレージから占い関連データを削除
-      const keys = Object.keys(localStorage);
-      let deletedKeys: string[] = [];
-      
-      keys.forEach(key => {
-        // チュートリアル完了フラグ以外はすべて削除
-        if (key !== 'starflect_tutorial_completed') {
-          // 主要な個人情報・占い結果のキーを削除
-          if (key === 'birthData' || 
-              key === 'savedFormData' || 
-              key === 'horoscopeData' || 
-              key === 'selectedMode' ||
-              key.startsWith('starflect-birth-data') || 
-              key.startsWith('ai_chat_history_') || 
-              key.startsWith('ai_analysis_') || 
-              key.startsWith('starflect_') ||
-              key.startsWith('three_planets_personality_') ||
-              key.startsWith('level3_analysis_')) {
-            localStorage.removeItem(key);
-            deletedKeys.push(key);
-          }
-        }
-      });
-      
-      console.log('🔍 【リセット完了】削除されたキー:', deletedKeys);
-      console.log('🔍 【リセット完了】削除後のローカルストレージ:', Object.keys(localStorage));
-      
-      alert('過去の占い結果と入力データをリセットしました。\n' + 
-            '削除されたデータ: ' + deletedKeys.length + '件');
-    }
+    confirmAndClearData(
+      '過去の占い結果をすべて削除しますか？\n入力した名前、生年月日、時刻、出生地の情報も削除されます。\nこの操作は取り消せません。'
+    );
   };
 
   const modes = [

@@ -77,7 +77,43 @@ function HomeWrapper() {
     }
   }, [missingDataMode]);
 
+  // selectedModeのリセットを監視するuseEffect
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const storedMode = localStorage.getItem('selectedMode');
+      if (!storedMode && selectedMode !== null) {
+        console.log('🔍 selectedModeがlocalStorageから削除されました。状態をリセットします。');
+        setSelectedMode(null);
+      }
+    };
+
+    // localStorageの変更を監視
+    window.addEventListener('storage', handleStorageChange);
+    
+    // 定期的にlocalStorageをチェック（同一タブでの変更を検知）
+    const interval = setInterval(() => {
+      const storedMode = localStorage.getItem('selectedMode');
+      if (!storedMode && selectedMode !== null) {
+        console.log('🔍 selectedModeが削除されました。状態をリセットします。');
+        setSelectedMode(null);
+      }
+    }, 100);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [selectedMode]);
+
   const handleModeSelect = (mode: FortuneMode) => {
+    // AI占い師の場合は特別処理
+    if (mode === 'ai-chat') {
+      console.log('🔍 AI占い師モードを選択しました');
+      localStorage.setItem('selectedMode', mode);
+      setSelectedMode(mode);
+      return;
+    }
+
     // データがそろっているかチェック
     const birthDataRaw = localStorage.getItem('birthData');
     let canSkipInput = false;
@@ -124,6 +160,8 @@ function HomeWrapper() {
       // 必要なデータがある場合は、モードを設定して結果画面に遷移
       console.log('🔍 データがそろっているため、結果画面に遷移します');
       localStorage.setItem('selectedMode', mode);
+      // ページトップに移動
+      window.scrollTo(0, 0);
       navigate('/result');
     } else {
       // 必要なデータがない場合は、InputFormを表示
@@ -134,6 +172,8 @@ function HomeWrapper() {
 
   const handleBackToModeSelection = () => {
     setSelectedMode(null);
+    // ページトップに移動
+    window.scrollTo(0, 0);
   };
 
   return (
