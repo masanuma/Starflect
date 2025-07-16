@@ -6,6 +6,19 @@ import { chatWithAIAstrologer, generateAIAnalysis, AIAnalysisResult } from '../u
 import { confirmAndClearData } from '../utils/dataManager';
 import './StepByStepResult.css';
 
+// 🔥 パフォーマンス最適化: デバッグ出力の制御
+const isDevelopment = import.meta.env.DEV;
+const debugLog = (...args: any[]) => {
+  if (isDevelopment) {
+    console.log(...args);
+  }
+};
+const debugError = (...args: any[]) => {
+  if (isDevelopment) {
+    console.error(...args);
+  }
+};
+
 // 表示レベルの定義
 type DisplayLevel = 1 | 2 | 3;
 
@@ -39,29 +52,29 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   
   // selectedModeに基づいて初期レベルを設定
   const getInitialLevel = useCallback((): DisplayLevel => {
-    console.log('🔍 getInitialLevel - selectedMode:', selectedMode);
+    debugLog('🔍 getInitialLevel - selectedMode:', selectedMode);
     if (selectedMode === 'three-planets') {
-      console.log('🔍 3天体モードのため、レベル2に設定');
+      debugLog('🔍 3天体モードのため、レベル2に設定');
       return 2;
     } else if (selectedMode === 'ten-planets') {
-      console.log('🔍 10天体モードのため、レベル3に設定');
+      debugLog('🔍 10天体モードのため、レベル3に設定');
       return 3;
     } else {
-      console.log('🔍 太陽星座モードのため、レベル1に設定');
+      debugLog('🔍 太陽星座モードのため、レベル1に設定');
       return 1;
     }
   }, [selectedMode]);
   
   const [currentLevel, setCurrentLevel] = useState<DisplayLevel>(() => {
-    console.log('🔍 初期レベル設定 - selectedMode:', selectedMode);
+    debugLog('🔍 初期レベル設定 - selectedMode:', selectedMode);
     if (selectedMode === 'three-planets') {
-      console.log('🔍 3天体モードのため、レベル2に設定');
+      debugLog('🔍 3天体モードのため、レベル2に設定');
       return 2;
     } else if (selectedMode === 'ten-planets') {
-      console.log('🔍 10天体モードのため、レベル3に設定');
+      debugLog('🔍 10天体モードのため、レベル3に設定');
       return 3;
     } else {
-      console.log('🔍 太陽星座モードのため、レベル1に設定');
+      debugLog('🔍 太陽星座モードのため、レベル1に設定');
       return 1;
     }
   });
@@ -172,13 +185,13 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   // レベル1の占い生成
   const handleGenerateLevel1Fortune = async () => {
     if (!sunSign) {
-      console.error('🔍 【占いエラー】sunSignが見つかりません');
+      debugError('🔍 【占いエラー】sunSignが見つかりません');
       return;
     }
     
-    console.log('🔍 【レベル1占い開始】sunSign:', sunSign, 'selectedPeriod:', selectedPeriod);
-    console.log('🔍 【データ確認】birthData:', birthData);
-    console.log('🔍 【データ確認】horoscopeData:', horoscopeData);
+    debugLog('🔍 【レベル1占い開始】sunSign:', sunSign, 'selectedPeriod:', selectedPeriod);
+    debugLog('🔍 【データ確認】birthData:', birthData);
+    debugLog('🔍 【データ確認】horoscopeData:', horoscopeData);
     
     setIsGeneratingLevel1(true);
     
@@ -223,26 +236,26 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         各項目は2-3文で具体的に書いてください。
       `;
       
-      console.log('🔍 【AI占い呼び出し】プロンプト:', analysisPrompt);
+      debugLog('🔍 【AI占い呼び出し】プロンプト:', analysisPrompt);
       
       const aiResult = await chatWithAIAstrologer(analysisPrompt, birthData!, horoscopeData!.planets);
       
-      console.log('🔍 【AI占い結果】aiResult:', aiResult);
-      console.log('🔍 【AI占い結果】文字数:', aiResult?.length || 0);
+      debugLog('🔍 【AI占い結果】aiResult:', aiResult);
+      debugLog('🔍 【AI占い結果】文字数:', aiResult?.length || 0);
       
       if (aiResult && aiResult.trim()) {
-        console.log('🔍 【占い結果設定】有効な結果を受信:', aiResult.substring(0, 200) + '...');
+        debugLog('🔍 【占い結果設定】有効な結果を受信:', aiResult.substring(0, 200) + '...');
         setLevel1Fortune(aiResult);
-        console.log('🔍 【占い結果設定】level1Fortuneに設定完了');
+        debugLog('🔍 【占い結果設定】level1Fortuneに設定完了');
       } else {
-        console.log('🔍 【占いエラー】AIの応答が空またはnull');
-        console.log('🔍 【占いエラー】aiResult:', aiResult);
+        debugLog('🔍 【占いエラー】AIの応答が空またはnull');
+        debugLog('🔍 【占いエラー】aiResult:', aiResult);
         // AI分析に失敗した場合はエラーメッセージを表示
         setLevel1Fortune('AI占い師が現在利用できません。しばらくしてから再度お試しください。');
       }
     } catch (error) {
-      console.error('占い生成エラー:', error);
-      console.error('エラーの詳細:', error instanceof Error ? error.message : String(error));
+      debugError('占い生成エラー:', error);
+      debugError('エラーの詳細:', error instanceof Error ? error.message : String(error));
       // エラーの場合もAI専用エラーメッセージを表示
       setLevel1Fortune('AI占い師との接続でエラーが発生しました。インターネット接続を確認の上、再度お試しください。');
     } finally {
@@ -426,21 +439,21 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         注意：マークダウン記号（**、-など）は使用せず、全体的な感想やまとめ文は記載しないでください。`;
       }
       
-      console.log('🔍 【3天体占いAI呼び出し】プロンプト:', analysisPrompt);
+      debugLog('🔍 【3天体占いAI呼び出し】プロンプト:', analysisPrompt);
       const aiResult = await chatWithAIAstrologer(analysisPrompt, birthData, horoscopeData.planets);
-      console.log('🔍 【3天体占いAI応答】結果:', aiResult);
-      console.log('🔍 【3天体占いAI応答】文字数:', aiResult?.length || 0);
+      debugLog('🔍 【3天体占いAI応答】結果:', aiResult);
+      debugLog('🔍 【3天体占いAI応答】文字数:', aiResult?.length || 0);
       
       if (aiResult && aiResult.trim()) {
         setLevel2Fortune(aiResult);
-        console.log('🔍 【3天体占い結果設定】level2Fortuneに設定完了');
+        debugLog('🔍 【3天体占い結果設定】level2Fortuneに設定完了');
       } else {
-        console.log('🔍 【3天体占いエラー】AIの応答が空またはnull');
+        debugLog('🔍 【3天体占いエラー】AIの応答が空またはnull');
         setLevel2Fortune('AI占い師が現在利用できません。しばらくしてから再度お試しください。');
       }
     } catch (error) {
-      console.error('3天体占い生成エラー:', error);
-      console.error('エラーの詳細:', error instanceof Error ? error.message : String(error));
+      debugError('3天体占い生成エラー:', error);
+      debugError('エラーの詳細:', error instanceof Error ? error.message : String(error));
       setLevel2Fortune('3天体の占い中にエラーが発生しました。しばらくしてから再度お試しください。');
     } finally {
       setIsGeneratingLevel2(false);
@@ -449,16 +462,16 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
 
   // レベル3の占い生成
   const handleGenerateLevel3Fortune = async () => {
-    console.log('🔍 【Level3占い生成開始】====================');
-    console.log('🔍 【Level3占い生成開始】selectedPeriod:', selectedPeriod);
-    console.log('🔍 【Level3占い生成開始】horoscopeData:', horoscopeData);
+    debugLog('🔍 【Level3占い生成開始】====================');
+    debugLog('🔍 【Level3占い生成開始】selectedPeriod:', selectedPeriod);
+    debugLog('🔍 【Level3占い生成開始】horoscopeData:', horoscopeData);
     
     if (!horoscopeData) {
-      console.log('🔍 【Level3占いエラー】horoscopeDataが見つかりません');
+      debugLog('🔍 【Level3占いエラー】horoscopeDataが見つかりません');
       return;
     }
     
-    console.log('🔍 【Level3占い生成】処理開始');
+    debugLog('🔍 【Level3占い生成】処理開始');
     setIsGeneratingLevel3(true);
     
     try {
@@ -516,25 +529,25 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         各項目は3-4文で具体的に書き、どの天体の影響かを明記してください。
       `;
       
-      console.log('🔍 【Level3占い】AI占い師呼び出し開始');
-      console.log('🔍 【Level3占い】analysisPrompt:', analysisPrompt);
+      debugLog('🔍 【Level3占い】AI占い師呼び出し開始');
+      debugLog('🔍 【Level3占い】analysisPrompt:', analysisPrompt);
       
       const aiResult = await chatWithAIAstrologer(analysisPrompt, birthData!, horoscopeData!.planets);
       
-      console.log('🔍 【Level3占い】AI占い師結果:', aiResult);
-      console.log('🔍 【Level3占い】結果文字数:', aiResult?.length || 0);
+      debugLog('🔍 【Level3占い】AI占い師結果:', aiResult);
+      debugLog('�� 【Level3占い】結果文字数:', aiResult?.length || 0);
       
       if (aiResult && aiResult.trim()) {
-        console.log('🔍 【Level3占い】有効な結果を受信:', aiResult.substring(0, 200) + '...');
+        debugLog('🔍 【Level3占い】有効な結果を受信:', aiResult.substring(0, 200) + '...');
         setLevel3Fortune(aiResult);
-        console.log('🔍 【Level3占い】level3Fortuneに設定完了');
+        debugLog('🔍 【Level3占い】level3Fortuneに設定完了');
       } else {
-        console.log('🔍 【Level3占いエラー】AIの応答が空またはnull');
+        debugLog('🔍 【Level3占いエラー】AIの応答が空またはnull');
         setLevel3Fortune('AI占い師が現在利用できません。しばらくしてから再度お試しください。');
       }
     } catch (error) {
-      console.error('レベル3占い生成エラー:', error);
-      console.error('エラーの詳細:', error instanceof Error ? error.message : String(error));
+      debugError('レベル3占い生成エラー:', error);
+      debugError('エラーの詳細:', error instanceof Error ? error.message : String(error));
       setLevel3Fortune('10天体の分析中にエラーが発生しました。しばらくしてから再度お試しください。');
     } finally {
       setIsGeneratingLevel3(false);
@@ -559,16 +572,16 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         const expiryTime = cached.timestamp + (cached.expiryDays * 24 * 60 * 60 * 1000);
         
         if (now < expiryTime) {
-          console.log('🔍 【キャッシュ有効】キャッシュからAI分析を読み込みます');
+          debugLog('🔍 【キャッシュ有効】キャッシュからAI分析を読み込みます');
           const analysis = cached.analysis || cached;
           setLevel3Analysis(analysis);
           return;
         } else {
-          console.log('🔍 【キャッシュ期限切れ】キャッシュを削除します');
+          debugLog('🔍 【キャッシュ期限切れ】キャッシュを削除します');
           localStorage.removeItem(cacheKey);
         }
       } catch (error) {
-        console.error('キャッシュデータの解析エラー:', error);
+        debugError('キャッシュデータの解析エラー:', error);
         // キャッシュが壊れている場合は削除
         localStorage.removeItem(cacheKey);
       }
@@ -577,10 +590,10 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     setIsGeneratingLevel3Analysis(true);
     
     try {
-      console.log('🔍 【AI分析開始】generateAIAnalysisを呼び出します');
+      debugLog('🔍 【AI分析開始】generateAIAnalysisを呼び出します');
       // 速度改善のため、簡単な分析モードを使用
       const analysis = await generateAIAnalysis(birthData, horoscopeData.planets, 'simple');
-      console.log('🔍 【AI分析完了】結果:', analysis);
+      debugLog('🔍 【AI分析完了】結果:', analysis);
       setLevel3Analysis(analysis);
       
       // 結果をキャッシュに保存（7日間有効）
@@ -590,10 +603,10 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         expiryDays: 7
       };
       localStorage.setItem(cacheKey, JSON.stringify(cacheData));
-      console.log('🔍 【キャッシュ保存】AI分析結果を保存しました');
+      debugLog('🔍 【キャッシュ保存】AI分析結果を保存しました');
     } catch (error) {
-      console.error('レベル3AI分析エラー:', error);
-      console.error('エラーの詳細:', error instanceof Error ? error.message : String(error));
+      debugError('レベル3AI分析エラー:', error);
+      debugError('エラーの詳細:', error instanceof Error ? error.message : String(error));
       // エラーの場合はデフォルトの分析結果を設定
       const defaultAnalysis = {
         personalityInsights: {
@@ -646,7 +659,8 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     const moon = planets.find(p => p.planet === '月');
     const ascendant = planets.find(p => p.planet === '上昇星座');
     
-    return `three_planets_personality_${sun?.sign}_${moon?.sign}_${ascendant?.sign}`;
+    // 🔥 キャッシュ最適化: 期間情報を含めてより効率的なキャッシュ管理
+    return `three_planets_personality_v2_${sun?.sign}_${moon?.sign}_${ascendant?.sign}`;
   };
 
   // ローカルストレージから3天体性格分析を読み込み
@@ -656,14 +670,28 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     const key = generateThreePlanetsKey(birthData, horoscopeData.planets);
     const saved = localStorage.getItem(key);
     
-    console.log('🔍 【キャッシュ確認】キー:', key);
-    console.log('🔍 【キャッシュ確認】保存データ:', saved ? '存在' : '未保存');
+    debugLog('🔍 【キャッシュ確認】キー:', key);
+    debugLog('🔍 【キャッシュ確認】保存データ:', saved ? '存在' : '未保存');
     
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const data = JSON.parse(saved);
+        
+        // 🔥 キャッシュ期間チェック: 3天体性格分析は90日間有効
+        if (data.timestamp) {
+          const now = Date.now();
+          const expiryTime = data.timestamp + (90 * 24 * 60 * 60 * 1000); // 90日間
+          
+          if (now > expiryTime) {
+            debugLog('🔍 【キャッシュ期限切れ】3天体性格分析キャッシュを削除');
+            localStorage.removeItem(key);
+            return null;
+          }
+        }
+        
+        return data.analysis || data;
       } catch (error) {
-        console.error('3天体性格分析の読み込みエラー:', error);
+        debugError('3天体性格分析の読み込みエラー:', error);
       }
     }
     return null;
@@ -676,9 +704,15 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     const key = generateThreePlanetsKey(birthData, horoscopeData.planets);
     
     try {
-      localStorage.setItem(key, JSON.stringify(analysis));
+      // 🔥 キャッシュ最適化: タイムスタンプ付きで保存
+      const cacheData = {
+        analysis,
+        timestamp: Date.now(),
+        version: 'v2'
+      };
+      localStorage.setItem(key, JSON.stringify(cacheData));
     } catch (error) {
-      console.error('3天体性格分析の保存エラー:', error);
+      debugError('3天体性格分析の保存エラー:', error);
     }
   };
 
@@ -688,7 +722,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     
     const key = generateThreePlanetsKey(birthData, horoscopeData.planets);
     localStorage.removeItem(key);
-    console.log('🔍 【キャッシュクリア】3天体性格分析のキャッシュを削除しました');
+    debugLog('🔍 【キャッシュクリア】3天体性格分析のキャッシュを削除しました');
     
     // 画面上の結果もクリア
     setThreePlanetsPersonality(null);
@@ -702,17 +736,17 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     (window as any).clearThreePlanetsCache = clearThreePlanetsCache;
     // デバッグ用：3天体性格分析の状態を確認
     (window as any).debug3PlanetsPersonality = () => {
-      console.log('🔍 【3天体性格分析デバッグ】');
-      console.log('  currentLevel:', currentLevel);
-      console.log('  selectedMode:', selectedMode);
-      console.log('  horoscopeData:', !!horoscopeData);
-      console.log('  birthData:', !!birthData);
-      console.log('  threePlanetsPersonality:', !!threePlanetsPersonality);
-      console.log('  isGeneratingThreePlanetsPersonality:', isGeneratingThreePlanetsPersonality);
+      debugLog('🔍 【3天体性格分析デバッグ】');
+      debugLog('  currentLevel:', currentLevel);
+      debugLog('  selectedMode:', selectedMode);
+      debugLog('  horoscopeData:', !!horoscopeData);
+      debugLog('  birthData:', !!birthData);
+      debugLog('  threePlanetsPersonality:', !!threePlanetsPersonality);
+      debugLog('  isGeneratingThreePlanetsPersonality:', isGeneratingThreePlanetsPersonality);
       if (horoscopeData && birthData) {
         const key = generateThreePlanetsKey(birthData, horoscopeData.planets);
-        console.log('  cacheKey:', key);
-        console.log('  cachedData:', localStorage.getItem(key) ? '存在' : '未保存');
+        debugLog('  cacheKey:', key);
+        debugLog('  cachedData:', localStorage.getItem(key) ? '存在' : '未保存');
       }
     };
   }
@@ -724,12 +758,12 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     // まずローカルストレージから確認
     const saved = loadThreePlanetsPersonality();
     if (saved) {
-      console.log('🔍 【キャッシュ使用】保存済みの3天体性格分析を使用します');
+      debugLog('🔍 【キャッシュ使用】保存済みの3天体性格分析を使用します');
       setThreePlanetsPersonality(saved);
       return;
     }
     
-    console.log('🔍 【AI生成開始】3天体性格分析を新規生成します');
+    debugLog('🔍 【AI生成開始】3天体性格分析を新規生成します');
     setIsGeneratingThreePlanetsPersonality(true);
     
           try {
@@ -784,9 +818,9 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         各セクションは具体的で実用的なアドバイスを含めてください。例えば「太陽の${sun?.sign}の影響で職場では〜のような場面で力を発揮します」「月の${moon?.sign}により恋愛では〜に注意しましょう」といった具体例を使ってください。
       `;
       
-      console.log('🔍 【AI呼び出し中】chatWithAIAstrologerを実行します...');
+      debugLog('🔍 【AI呼び出し中】chatWithAIAstrologerを実行します...');
       const aiResult = await chatWithAIAstrologer(analysisPrompt, birthData, horoscopeData.planets);
-      console.log('🔍 【AI呼び出し完了】結果:', aiResult ? '成功' : '失敗');
+      debugLog('🔍 【AI呼び出し完了】結果:', aiResult ? '成功' : '失敗');
       
       if (aiResult && aiResult.trim()) {
         // AIの結果をパース
@@ -794,7 +828,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         
         // ローカルストレージに保存
         saveThreePlanetsPersonality(parsedAnalysis);
-        console.log('🔍 【キャッシュ保存】3天体性格分析をローカルストレージに保存しました');
+        debugLog('🔍 【キャッシュ保存】3天体性格分析をローカルストレージに保存しました');
         
         setThreePlanetsPersonality(parsedAnalysis);
       } else {
@@ -803,7 +837,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         });
       }
     } catch (error) {
-      console.error('3天体性格分析生成エラー:', error);
+      debugError('3天体性格分析生成エラー:', error);
       setThreePlanetsPersonality({
         error: '3天体の性格分析中にエラーが発生しました。しばらくしてから再度お試しください。'
       });
@@ -847,7 +881,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
       // 3天体の本格占い（レベル2）に進む場合、データ不足チェック
       if (currentLevel === 1) {
         if (!birthData) {
-          console.log('🔍 出生データがありません。');
+          debugLog('🔍 出生データがありません。');
           setShowDataMissingMessage(true);
           return;
         }
@@ -857,12 +891,12 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                                   !birthData.birthPlace.city || 
                                   birthData.birthPlace.city === '東京';
         
-        console.log('🔍 レベルアップ時のデータチェック:');
-        console.log('  missingBirthTime:', missingBirthTime);
-        console.log('  missingBirthPlace:', missingBirthPlace);
+        debugLog('🔍 レベルアップ時のデータチェック:');
+        debugLog('  missingBirthTime:', missingBirthTime);
+        debugLog('  missingBirthPlace:', missingBirthPlace);
         
         if (missingBirthTime || missingBirthPlace) {
-          console.log('🔍 3天体の本格占いに必要なデータが不足しています。');
+          debugLog('🔍 3天体の本格占いに必要なデータが不足しています。');
           setShowDataMissingMessage(true);
           return;
         }
@@ -874,7 +908,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
       
       // レベル2（3天体）に上がる時、3天体性格分析をリセット
       if (nextLevel === 2) {
-        console.log('🔍 【レベルアップ】3天体性格分析をリセット');
+        debugLog('🔍 【レベルアップ】3天体性格分析をリセット');
         setThreePlanetsPersonality(null);
         setIsGeneratingThreePlanetsPersonality(false);
       }
@@ -983,27 +1017,27 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           )}
           
           {(() => {
-            console.log('🔍 【占い表示条件】level1Fortune:', !!level1Fortune, 'isGeneratingLevel1:', isGeneratingLevel1);
-            console.log('🔍 【占い表示条件】level1Fortune内容:', level1Fortune?.substring(0, 200) + '...');
+            debugLog('�� 【占い表示条件】level1Fortune:', !!level1Fortune, 'isGeneratingLevel1:', isGeneratingLevel1);
+            debugLog('🔍 【占い表示条件】level1Fortune内容:', level1Fortune?.substring(0, 200) + '...');
             return level1Fortune && !isGeneratingLevel1;
           })() && (
             <div className="five-fortunes-section">
               <h3>🔮 AI占い結果 - {getPeriodTitle()}</h3>
               <div className="five-fortunes-grid">
                 {(() => {
-                  console.log('🔍 【占い結果表示開始】====================');
-                  console.log('🔍 【占い結果表示開始】level1Fortune:', level1Fortune);
+                  debugLog('🔍 【占い結果表示開始】====================');
+                  debugLog('🔍 【占い結果表示開始】level1Fortune:', level1Fortune);
                   
                   // AI生成結果を【】セクションで分割
                   const parseAIFortune = (fortuneText: string | null) => {
-                    console.log('🔍 【parseAIFortune開始】====================');
+                    debugLog('🔍 【parseAIFortune開始】====================');
                     if (!fortuneText) {
-                      console.log('🔍 【parseAIFortune】fortuneTextが空です');
+                      debugLog('🔍 【parseAIFortune】fortuneTextが空です');
                       return { overall: '', love: '', work: '', health: '', money: '', advice: '' };
                     }
                     
-                    console.log('🔍 【占い結果解析開始】入力テキスト:', fortuneText);
-                    console.log('🔍 【占い結果解析開始】テキスト長:', fortuneText?.length || 0);
+                    debugLog('🔍 【占い結果解析開始】入力テキスト:', fortuneText);
+                    debugLog('🔍 【占い結果解析開始】テキスト長:', fortuneText?.length || 0);
                     
                     const sections = {
                       overall: '',
@@ -1018,30 +1052,38 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     const sectionMatches = fortuneText.match(/【[^】]*】[^【]*/g) || [];
                     const markdownSections = fortuneText.match(/###[^#]*?(?=###|$)/g) || [];
                     
-                    console.log('🔍 【セクション分割結果】【】形式:', sectionMatches);
-                    console.log('🔍 【セクション分割結果】### 形式:', markdownSections);
+                    debugLog('🔍 【セクション分割結果】【】形式:', sectionMatches);
+                    debugLog('🔍 【セクション分割結果】### 形式:', markdownSections);
                     
                     // 【】形式の処理
                     sectionMatches.forEach(section => {
-                      console.log('🔍 【セクション解析中】:', section);
+                      debugLog('🔍 【セクション解析中】:', section);
                       if (section.includes('全体運') || section.includes('全体的') || section.includes('総合運')) {
                         sections.overall = section.replace(/【[^】]*】/, '').trim();
+                        debugLog('🔍 【全体運設定】:', sections.overall);
                       } else if (section.includes('恋愛運') || section.includes('恋愛')) {
                         sections.love = section.replace(/【[^】]*】/, '').trim();
+                        debugLog('🔍 【恋愛運設定】:', sections.love);
                       } else if (section.includes('仕事運') || section.includes('仕事')) {
                         sections.work = section.replace(/【[^】]*】/, '').trim();
+                        debugLog('🔍 【仕事運設定】:', sections.work);
                       } else if (section.includes('健康運') || section.includes('健康')) {
                         sections.health = section.replace(/【[^】]*】/, '').trim();
+                        debugLog('🔍 【健康運設定】:', sections.health);
                       } else if (section.includes('金銭運') || section.includes('金運') || section.includes('財運')) {
                         sections.money = section.replace(/【[^】]*】/, '').trim();
+                        debugLog('🔍 【金銭運設定】:', sections.money);
                       } else if (section.includes('アドバイス') || section.includes('今日の') || section.includes('今週の') || section.includes('今月の')) {
                         sections.advice = section.replace(/【[^】]*】/, '').trim();
+                        debugLog('🔍 【アドバイス設定】:', sections.advice);
+                      } else {
+                        debugLog('🔍 【未分類セクション】:', section);
                       }
                     });
                     
                     // ### 形式の処理
                     markdownSections.forEach(section => {
-                      console.log('🔍 【### セクション解析中】:', section);
+                      debugLog('🔍 【### セクション解析中】:', section);
                       if (section.includes('全体運') || section.includes('全体的') || section.includes('総合運')) {
                         sections.overall = section.replace(/###[^#]*?運/, '').trim();
                       } else if (section.includes('恋愛運') || section.includes('恋愛')) {
@@ -1059,23 +1101,23 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     
                     // どちらの形式でも解析できなかった場合は、全体を全体運として扱う
                     if (sectionMatches.length === 0 && markdownSections.length === 0) {
-                      console.log('🔍 【セクション分割失敗】全体運として扱います');
+                      debugLog('🔍 【セクション分割失敗】全体運として扱います');
                       sections.overall = fortuneText.trim();
                     }
                     
-                    console.log('🔍 【解析結果】:', sections);
+                    debugLog('🔍 【解析結果】:', sections);
                     return sections;
                   };
                   
                   const fortuneSections = parseAIFortune(level1Fortune);
                   
-                  console.log('🔍 【解析後の運勢セクション】:', fortuneSections);
-                  console.log('🔍 【各セクションの内容】:');
-                  console.log('  overall:', fortuneSections.overall);
-                  console.log('  love:', fortuneSections.love);
-                  console.log('  work:', fortuneSections.work);
-                  console.log('  health:', fortuneSections.health);
-                  console.log('  money:', fortuneSections.money);
+                  debugLog('🔍 【解析後の運勢セクション】:', fortuneSections);
+                  debugLog('🔍 【各セクションの内容】:');
+                  debugLog('  overall:', fortuneSections.overall);
+                  debugLog('  love:', fortuneSections.love);
+                  debugLog('  work:', fortuneSections.work);
+                  debugLog('  health:', fortuneSections.health);
+                  debugLog('  money:', fortuneSections.money);
                   
                   return (
                     <>
@@ -1405,8 +1447,8 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
               <div className="five-fortunes-grid">
                 {(() => {
                   const parseAIFortune = (fortuneText: string) => {
-                    console.log('🔍 【占い結果解析開始】入力テキスト:', fortuneText);
-                    console.log('🔍 【占い結果解析開始】テキスト長:', fortuneText?.length || 0);
+                    debugLog('🔍 【占い結果解析開始】入力テキスト:', fortuneText);
+                    debugLog('🔍 【占い結果解析開始】テキスト長:', fortuneText?.length || 0);
                     
                     const sections = {
                       overall: '',
@@ -1437,7 +1479,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     
                     if (importantDaysLines.length > 0) {
                       sections.importantDays = importantDaysLines.join('\n').trim();
-                      console.log('🔍 【重要な日絵文字検出】:', sections.importantDays);
+                      debugLog('🔍 【重要な日絵文字検出】:', sections.importantDays);
                       
                       // 重要な日の行を除去したテキストで以降の処理を続行
                       fortuneText = otherLines.join('\n').trim();
@@ -1446,66 +1488,65 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     const sectionMatches = fortuneText.match(/【[^】]*】[^【]*/g) || [];
                     const markdownSections = fortuneText.match(/###[^#]*?(?=###|$)/g) || [];
                     
-                    console.log('🔍 【セクション検出】マッチした【】セクション数:', sectionMatches.length);
-                    console.log('🔍 【セクション検出】マッチしたセクション:', sectionMatches);
-                    console.log('🔍 【セクション検出】マッチした### セクション数:', markdownSections.length);
-                    console.log('🔍 【セクション検出】マッチした### セクション:', markdownSections);
+                    debugLog('🔍 【セクション検出】マッチした【】セクション数:', sectionMatches.length);
+                    debugLog('🔍 【セクション検出】マッチしたセクション:', sectionMatches);
+                    debugLog('�� 【セクション検出】マッチした### セクション数:', markdownSections.length);
+                    debugLog('🔍 【セクション検出】マッチした### セクション:', markdownSections);
                     
                     // 【】形式の処理
                     sectionMatches.forEach((section, index) => {
-                      console.log(`🔍 【セクション${index}】内容:`, section);
+                      debugLog(`🔍 【セクション${index}】内容:`, section);
                       
-                      // 重要な日を優先的にチェック
-                      if (section.includes('重要な日') || section.includes('重要日') || section.includes('重要な月') || section.includes('ラッキーデー') || section.includes('注意日') || section.includes('ラッキー月') || section.includes('注意月')) {
-                        if (!sections.importantDays) {
-                          sections.importantDays = section.replace(/【[^】]*】/, '').trim();
-                          console.log('🔍 【重要な日/月設定】:', sections.importantDays);
-                        }
-                      } else if (section.includes('全体運') || section.includes('全体的') || section.includes('総合運')) {
+                      if (section.includes('全体運') || section.includes('全体的') || section.includes('総合運')) {
                         sections.overall = section.replace(/【[^】]*】/, '').trim();
-                        console.log('🔍 【全体運設定】:', sections.overall);
+                        debugLog('🔍 【全体運設定】:', sections.overall);
                       } else if (section.includes('恋愛運') || section.includes('恋愛')) {
                         sections.love = section.replace(/【[^】]*】/, '').trim();
-                        console.log('🔍 【恋愛運設定】:', sections.love);
+                        debugLog('🔍 【恋愛運設定】:', sections.love);
                       } else if (section.includes('仕事運') || section.includes('仕事')) {
                         sections.work = section.replace(/【[^】]*】/, '').trim();
-                        console.log('🔍 【仕事運設定】:', sections.work);
+                        debugLog('🔍 【仕事運設定】:', sections.work);
                       } else if (section.includes('健康運') || section.includes('健康')) {
                         sections.health = section.replace(/【[^】]*】/, '').trim();
-                        console.log('🔍 【健康運設定】:', sections.health);
+                        debugLog('🔍 【健康運設定】:', sections.health);
                       } else if (section.includes('金銭運') || section.includes('金運') || section.includes('財運')) {
                         sections.money = section.replace(/【[^】]*】/, '').trim();
-                        console.log('🔍 【金銭運設定】:', sections.money);
+                        debugLog('🔍 【金銭運設定】:', sections.money);
+                      } else if (section.includes('重要な日') || section.includes('重要日') || section.includes('重要な月') || section.includes('ラッキーデー') || section.includes('注意日') || section.includes('ラッキー月') || section.includes('注意月')) {
+                        if (!sections.importantDays) {
+                          sections.importantDays = section.replace(/【[^】]*】/, '').trim();
+                          debugLog('🔍 【重要な日/月設定】:', sections.importantDays);
+                        }
                       } else {
-                        console.log('🔍 【未分類セクション】:', section);
+                        debugLog('🔍 【未分類セクション】:', section);
                       }
                     });
                     
                     // ### 形式の処理
                     markdownSections.forEach((section, index) => {
-                      console.log(`🔍 【### セクション${index}】内容:`, section);
+                      debugLog(`🔍 【### セクション${index}】内容:`, section);
                       
                       if (section.includes('全体運') || section.includes('全体的') || section.includes('総合運')) {
                         sections.overall = section.replace(/###[^#]*?運/, '').trim();
-                        console.log('🔍 【### 全体運設定】:', sections.overall);
+                        debugLog('🔍 【### 全体運設定】:', sections.overall);
                       } else if (section.includes('恋愛運') || section.includes('恋愛')) {
                         sections.love = section.replace(/###[^#]*?運/, '').trim();
-                        console.log('🔍 【### 恋愛運設定】:', sections.love);
+                        debugLog('🔍 【### 恋愛運設定】:', sections.love);
                       } else if (section.includes('仕事運') || section.includes('仕事')) {
                         sections.work = section.replace(/###[^#]*?運/, '').trim();
-                        console.log('🔍 【### 仕事運設定】:', sections.work);
+                        debugLog('🔍 【### 仕事運設定】:', sections.work);
                       } else if (section.includes('健康運') || section.includes('健康')) {
                         sections.health = section.replace(/###[^#]*?運/, '').trim();
-                        console.log('🔍 【### 健康運設定】:', sections.health);
+                        debugLog('🔍 【### 健康運設定】:', sections.health);
                       } else if (section.includes('金銭運') || section.includes('金運') || section.includes('財運')) {
                         sections.money = section.replace(/###[^#]*?運/, '').trim();
-                        console.log('🔍 【### 金銭運設定】:', sections.money);
+                        debugLog('🔍 【### 金銭運設定】:', sections.money);
                       } else {
-                        console.log('🔍 【### 未分類セクション】:', section);
+                        debugLog('🔍 【### 未分類セクション】:', section);
                       }
                     });
                     
-                    console.log('🔍 【最終解析結果】:', sections);
+                    debugLog('🔍 【最終解析結果】:', sections);
                     return sections;
                   };
                   
@@ -1516,10 +1557,10 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                                        fortuneSections.work || fortuneSections.health || 
                                        fortuneSections.money || fortuneSections.importantDays;
                   
-                  console.log('🔍 【表示判定】セクション存在チェック:', hasAnySections);
+                  debugLog('🔍 【表示判定】セクション存在チェック:', hasAnySections);
                   
                   if (!hasAnySections) {
-                    console.log('🔍 【フォールバック表示】解析失敗のため適切なメッセージを表示');
+                    debugLog('🔍 【フォールバック表示】解析失敗のため適切なメッセージを表示');
                     return (
                       <div className="fortune-card">
                         <h4 className="fortune-title">🔮 占い結果</h4>
@@ -1927,24 +1968,24 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           )}
           
           {(() => {
-            console.log('🔍 【Level3占い表示条件】level3Fortune:', !!level3Fortune);
-            console.log('🔍 【Level3占い表示条件】isGeneratingLevel3:', isGeneratingLevel3);
-            console.log('🔍 【Level3占い表示条件】level3Fortune内容:', level3Fortune?.substring(0, 200) + '...');
+            debugLog('🔍 【Level3占い表示条件】level3Fortune:', !!level3Fortune);
+            debugLog('🔍 【Level3占い表示条件】isGeneratingLevel3:', isGeneratingLevel3);
+            debugLog('🔍 【Level3占い表示条件】level3Fortune内容:', level3Fortune?.substring(0, 200) + '...');
             return level3Fortune && !isGeneratingLevel3;
           })() && (
             <div className="five-fortunes-section">
               <h3>🔮 10天体完全占い結果 - {getPeriodTitle()}</h3>
               <div className="five-fortunes-grid">
                 {(() => {
-                  console.log('🔍 【Level3占い結果表示開始】====================');
-                  console.log('🔍 【Level3占い結果表示開始】level3Fortune:', level3Fortune);
+                  debugLog('🔍 【Level3占い結果表示開始】====================');
+                  debugLog('🔍 【Level3占い結果表示開始】level3Fortune:', level3Fortune);
                   
                   const parseAIFortune = (fortuneText: string | null) => {
-                    console.log('🔍 【Level3parseAIFortune開始】====================');
-                    console.log('🔍 【Level3parseAIFortune開始】fortuneText:', fortuneText);
+                    debugLog('🔍 【Level3parseAIFortune開始】====================');
+                    debugLog('🔍 【Level3parseAIFortune開始】fortuneText:', fortuneText);
                     
                     if (!fortuneText) {
-                      console.log('🔍 【Level3parseAIFortune】fortuneTextが空です');
+                      debugLog('🔍 【Level3parseAIFortune】fortuneTextが空です');
                       return { overall: '', love: '', work: '', health: '', money: '', advice: '' };
                     }
                     
@@ -1978,7 +2019,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     
                     if (importantDaysLines.length > 0) {
                       sections.importantDays = importantDaysLines.join('\n').trim();
-                      console.log('🔍 【Level3 重要な日絵文字検出】:', sections.importantDays);
+                      debugLog('🔍 【Level3 重要な日絵文字検出】:', sections.importantDays);
                       
                       // 重要な日の行を除去したテキストで以降の処理を続行
                       fortuneText = otherLines.join('\n').trim();
@@ -1988,8 +2029,8 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     const sectionMatches = fortuneText.match(/【[^】]*】[^【]*/g) || [];
                     const markdownSections = fortuneText.match(/###[^#]*?(?=###|$)/g) || [];
                     
-                    console.log('🔍 【Level3セクション分割結果】【】形式:', sectionMatches);
-                    console.log('🔍 【Level3セクション分割結果】### 形式:', markdownSections);
+                    debugLog('🔍 【Level3セクション分割結果】【】形式:', sectionMatches);
+                    debugLog('🔍 【Level3セクション分割結果】### 形式:', markdownSections);
                     
                     // 【】形式の処理
                     sectionMatches.forEach(section => {
@@ -1997,7 +2038,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                       if (section.includes('重要な日') || section.includes('重要日') || section.includes('重要な月') || section.includes('ラッキーデー') || section.includes('注意日') || section.includes('ラッキー月') || section.includes('注意月')) {
                         if (!sections.importantDays) {
                           sections.importantDays = section.replace(/【[^】]*】/, '').trim();
-                          console.log('🔍 【Level3 重要な日/月設定】:', sections.importantDays);
+                          debugLog('🔍 【Level3 重要な日/月設定】:', sections.importantDays);
                         }
                       } else if (section.includes('全体運') || section.includes('全体的') || section.includes('総合運')) {
                         sections.overall = section.replace(/【[^】]*】/, '').trim();
@@ -2016,12 +2057,12 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     
                     // ### 形式の処理
                     markdownSections.forEach(section => {
-                      console.log('🔍 【Level3 ### セクション解析中】:', section);
+                      debugLog('🔍 【Level3 ### セクション解析中】:', section);
                       // 重要な日を優先的にチェック
                       if (section.includes('重要な日') || section.includes('重要日') || section.includes('重要な月') || section.includes('ラッキーデー') || section.includes('注意日') || section.includes('ラッキー月') || section.includes('注意月')) {
                         if (!sections.importantDays) {
                           sections.importantDays = section.replace(/###[^#]*?/, '').trim();
-                          console.log('🔍 【Level3 ### 重要な日/月設定】:', sections.importantDays);
+                          debugLog('🔍 【Level3 ### 重要な日/月設定】:', sections.importantDays);
                         }
                       } else if (section.includes('全体運') || section.includes('全体的') || section.includes('総合運')) {
                         sections.overall = section.replace(/###[^#]*?運/, '').trim();
@@ -2038,7 +2079,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                       }
                     });
                     
-                    console.log('🔍 【Level3解析結果】:', sections);
+                    debugLog('🔍 【Level3解析結果】:', sections);
                     
                     return sections;
                   };
@@ -2158,13 +2199,13 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                                       !parsed.birthPlace.city || 
                                       parsed.birthPlace.city === '東京';
             
-            console.log('🔍 StepByStepResult - データチェック:');
-            console.log('  selectedMode:', selectedMode);
-            console.log('  missingBirthTime:', missingBirthTime);
-            console.log('  missingBirthPlace:', missingBirthPlace);
+            debugLog('🔍 StepByStepResult - データチェック:');
+            debugLog('  selectedMode:', selectedMode);
+            debugLog('  missingBirthTime:', missingBirthTime);
+            debugLog('  missingBirthPlace:', missingBirthPlace);
             
             if (missingBirthTime || missingBirthPlace) {
-              console.log('🔍 必要なデータが不足しています。メッセージを表示します。');
+              debugLog('🔍 必要なデータが不足しています。メッセージを表示します。');
               setShowDataMissingMessage(true);
               setLoading(false);
               return;
@@ -2179,7 +2220,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           
           setLoading(false);
         } catch (error) {
-          console.error('データの読み込みエラー:', error);
+          debugError('データの読み込みエラー:', error);
           setError('データの読み込みに失敗しました。');
           setLoading(false);
         }
@@ -2202,7 +2243,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   // selectedModeが変更された際にレベルを更新
   useEffect(() => {
     const newLevel = getInitialLevel();
-    console.log('🔍 selectedMode変更検出 - 新しいレベル:', newLevel);
+    debugLog('🔍 selectedMode変更検出 - 新しいレベル:', newLevel);
     setCurrentLevel(newLevel);
   }, [getInitialLevel]);
 
@@ -2210,7 +2251,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   const [hasInitialScrolled, setHasInitialScrolled] = useState(false);
   useEffect(() => {
     if (!loading && !error && !showDataMissingMessage && horoscopeData && birthData && !hasInitialScrolled) {
-      console.log('🔍 初期読み込み時のページトップスクロール');
+      debugLog('🔍 初期読み込み時のページトップスクロール');
       window.scrollTo(0, 0);
       setHasInitialScrolled(true);
     }
@@ -2218,33 +2259,33 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
 
   // コンポーネントの初期化時に3天体性格分析を自動実行（レベル2でのみ）
   useEffect(() => {
-    console.log('🔍 【3天体性格分析useEffect】実行条件チェック');
-    console.log('  currentLevel:', currentLevel);
-    console.log('  horoscopeData:', !!horoscopeData);
-    console.log('  birthData:', !!birthData);
-    console.log('  threePlanetsPersonality:', !!threePlanetsPersonality);
-    console.log('  isGeneratingThreePlanetsPersonality:', isGeneratingThreePlanetsPersonality);
+    debugLog('🔍 【3天体性格分析useEffect】実行条件チェック');
+    debugLog('  currentLevel:', currentLevel);
+    debugLog('  horoscopeData:', !!horoscopeData);
+    debugLog('  birthData:', !!birthData);
+    debugLog('  threePlanetsPersonality:', !!threePlanetsPersonality);
+    debugLog('  isGeneratingThreePlanetsPersonality:', isGeneratingThreePlanetsPersonality);
     
     if (currentLevel === 2 && horoscopeData && birthData && !threePlanetsPersonality && !isGeneratingThreePlanetsPersonality) {
-      console.log('🔍 【3天体性格分析】レベル2で自動実行開始');
+      debugLog('🔍 【3天体性格分析】レベル2で自動実行開始');
       const saved = loadThreePlanetsPersonality();
       if (saved) {
-        console.log('🔍 【3天体性格分析】保存済みデータを使用');
+        debugLog('🔍 【3天体性格分析】保存済みデータを使用');
         setThreePlanetsPersonality(saved);
       } else {
-        console.log('🔍 【3天体性格分析】新規生成を開始');
+        debugLog('🔍 【3天体性格分析】新規生成を開始');
         // 保存されたデータがない場合は自動的に生成
         generateThreePlanetsPersonality();
       }
     } else {
-      console.log('🔍 【3天体性格分析】実行条件を満たしていません');
+      debugLog('🔍 【3天体性格分析】実行条件を満たしていません');
     }
   }, [currentLevel, horoscopeData, birthData, threePlanetsPersonality, isGeneratingThreePlanetsPersonality]);
 
   // selectedModeが変更された時の処理
   useEffect(() => {
     if (selectedMode === 'three-planets' && currentLevel === 2) {
-      console.log('🔍 【selectedMode変更】3天体モードに変更されました');
+      debugLog('🔍 【selectedMode変更】3天体モードに変更されました');
       // 3天体性格分析をリセットして新しい分析を開始
       setThreePlanetsPersonality(null);
       setIsGeneratingThreePlanetsPersonality(false);

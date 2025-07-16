@@ -3651,3 +3651,160 @@ div.action-buttons,
     font-size: 1rem;
   }
 }
+
+/* アニメーション効果の最適化 */
+
+/* カードホバーアニメーションの改善 */
+.fortune-card,
+.analysis-overview,
+.planet-card,
+.analysis-section,
+.educational-content,
+.tips-section,
+.practical-use,
+.advanced-content {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  will-change: transform, box-shadow !important;
+}
+
+.fortune-card:hover,
+.analysis-overview:hover,
+.planet-card:hover,
+.analysis-section:hover,
+.educational-content:hover,
+.tips-section:hover,
+.practical-use:hover,
+.advanced-content:hover {
+  transform: translateY(-4px) scale(1.01) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15) !important;
+  border-color: rgba(102, 126, 234, 0.4) !important;
+}
+
+/* ボタンアニメーションの改善 */
+.generate-fortune-button,
+.level-up-button,
+.ai-chat-button,
+.new-fortune-button,
+.generate-analysis-button,
+.retry-button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  will-change: transform, box-shadow !important;
+}
+
+.generate-fortune-button:hover,
+.level-up-button:hover,
+.ai-chat-button:hover,
+.new-fortune-button:hover,
+.generate-analysis-button:hover,
+.retry-button:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.generate-fortune-button:active,
+.level-up-button:active,
+.ai-chat-button:active,
+.new-fortune-button:active,
+.generate-analysis-button:active,
+.retry-button:active {
+  transform: translateY(0) scale(0.98) !important;
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ローディングアニメーションの改善 */
+@keyframes spinGlow {
+  0% {
+    transform: rotate(0deg);
+    filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(102, 126, 234, 0.6));
+  }
+  100% {
+    transform: rotate(360deg);
+    filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.3));
+  }
+}
+
+.loading-spinner {
+  animation: spinGlow 2s linear infinite !important;
+  will-change: transform, filter !important;
+}
+
+/* フェードインアニメーションの改善 */
+@keyframes smoothFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 段階表示アニメーション */
+.level-content {
+  animation: smoothFadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+  will-change: opacity, transform !important;
+}
+
+/* プログレスアニメーションの改善 */
+@keyframes progressPulseSmooth {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+  }
+}
+
+.progress-step.active {
+  animation: progressPulseSmooth 2s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+  will-change: transform, box-shadow !important;
+}
+
+/* パフォーマンス最適化: GPU加速の明示 */
+.fortune-card,
+.analysis-overview,
+.planet-card,
+.loading-spinner,
+.progress-step,
+.generate-fortune-button,
+.level-up-button {
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  perspective: 1000px !important;
+}
+
+/* 縮小モーション設定への対応（上書き） */
+@media (prefers-reduced-motion: reduce) {
+  .fortune-card,
+  .analysis-overview,
+  .planet-card,
+  .analysis-section,
+  .educational-content,
+  .tips-section,
+  .practical-use,
+  .advanced-content,
+  .generate-fortune-button,
+  .level-up-button,
+  .ai-chat-button,
+  .new-fortune-button,
+  .loading-spinner,
+  .progress-step,
+  .level-content {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .fortune-card:hover,
+  .analysis-overview:hover,
+  .planet-card:hover {
+    transform: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+  }
+}

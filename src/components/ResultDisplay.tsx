@@ -225,26 +225,47 @@ const ResultDisplay: React.FC = React.memo(() => {
             <div className="loading-progress">
               <div className="progress-step">
                 <span className={birthData ? 'completed' : 'active'}>📊 データ読み込み</span>
+                {birthData && <span className="check-mark">✅</span>}
               </div>
               <div className="progress-step">
                 <span className={horoscopeData ? 'completed' : birthData ? 'active' : 'pending'}>🔮 天体計算</span>
+                {horoscopeData && <span className="check-mark">✅</span>}
               </div>
               <div className="progress-step">
                 <span className={aiAnalysis ? 'completed' : isAiAnalyzing ? 'active' : horoscopeData ? 'active' : 'pending'}>
                   🤖 AI分析 {isAiAnalyzing ? '(実行中...)' : ''}
                 </span>
+                {aiAnalysis && <span className="check-mark">✅</span>}
               </div>
             </div>
             
+            {/* 🔥 パフォーマンス最適化: スケルトンUIの追加 */}
+            {isAiAnalyzing && (
+              <div className="skeleton-preview">
+                <h3>🌟 分析結果プレビュー</h3>
+                <div className="skeleton-card">
+                  <div className="skeleton-title"></div>
+                  <div className="skeleton-content-line"></div>
+                  <div className="skeleton-content-line"></div>
+                  <div className="skeleton-content-line short"></div>
+                </div>
+                <div className="skeleton-card">
+                  <div className="skeleton-title"></div>
+                  <div className="skeleton-content-line"></div>
+                  <div className="skeleton-content-line short"></div>
+                </div>
+              </div>
+            )}
+            
             {isAiAnalyzing && (
               <p style={{ marginTop: '16px', fontSize: '14px', color: '#666' }}>
-                🤖 初回のAI分析は1-2分程度かかります。しばらくお待ちください...
+                🤖 初回のAI分析は最大30秒程度かかります。並列処理で高速化済みです...
               </p>
             )}
             
             {!isAiAnalyzing && aiAnalysis && (
-              <p style={{ marginTop: '16px', fontSize: '14px', color: '#666' }}>
-                💡 過去の分析結果を読み込みました
+              <p style={{ marginTop: '16px', fontSize: '14px', color: '#4CAF50', fontWeight: 'bold' }}>
+                💡 分析完了！キャッシュからの高速読み込みでした
               </p>
             )}
           </div>

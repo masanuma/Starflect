@@ -7,7 +7,7 @@ const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || null;
 // エラーハンドリング用の設定
 const API_CONFIG = {
   maxRetries: 3,
-  timeout: 60000, // 60秒に延長
+  timeout: 30000, // 🔥 60秒から30秒に短縮してレスポンシブ性向上
   retryDelay: 1000, // 1秒
 };
 
@@ -389,7 +389,8 @@ ${planet.planet}: ${planet.sign}座 ${planet.degree.toFixed(1)}度
 async function generatePlanetAnalysisAll(birthData: BirthData, planets: PlanetPosition[]): Promise<any> {
   const result: any = {};
   
-  for (const planet of planets) {
+  // 🔥 パフォーマンス最適化: 順次実行から並列実行に変更
+  const analysisPromises = planets.map(async (planet) => {
     try {
       const prompt = generatePlanetAnalysisPrompt(birthData, planet);
       const data = await callOpenAIWithRetry(
@@ -400,16 +401,28 @@ async function generatePlanetAnalysisAll(birthData: BirthData, planets: PlanetPo
       const content = data.choices[0].message.content;
       
       const parsed = safeParseJSON(content);
-      result[planet.planet] = parsed;
+      return { planet: planet.planet, analysis: parsed };
     } catch (e) {
       console.error(`天体分析エラー (${planet.planet}):`, e);
-      result[planet.planet] = {
-        signCharacteristics: `${planet.planet}の詳細な分析は現在利用できません。`,
-        personalImpact: `${planet.planet}の影響については後ほど確認してください。`,
-        advice: `${planet.planet}に関するアドバイスは現在利用できません。`
+      return {
+        planet: planet.planet,
+        analysis: {
+          signCharacteristics: `${planet.planet}の詳細な分析は現在利用できません。`,
+          personalImpact: `${planet.planet}の影響については後ほど確認してください。`,
+          advice: `${planet.planet}に関するアドバイスは現在利用できません。`
+        }
       };
     }
-  }
+  });
+
+  // 並列実行ですべての天体分析を取得
+  const analysisResults = await Promise.all(analysisPromises);
+  
+  // 結果をオブジェクトにマッピング
+  analysisResults.forEach(({ planet, analysis }) => {
+    result[planet] = analysis;
+  });
+
   return result;
 }
 

@@ -13,12 +13,17 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
+        {/* アクセシビリティ: スキップリンク */}
+        <a href="#main-content" className="skip-link">
+          メインコンテンツにスキップ
+        </a>
+        
+        <header className="App-header" role="banner">
           <h1>✨ Starflect</h1>
           <p>あなただけの星占い<br />生まれた瞬間の星の配置から、もっと詳しいあなたを発見</p>
         </header>
         
-        <main>
+        <main id="main-content" role="main">
           <Routes>
             <Route path="/" element={<HomeWrapper />} />
             <Route path="/result" element={<StepByStepResultWrapper />} />
