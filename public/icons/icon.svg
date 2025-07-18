@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <!-- メインのグラデーション（Starflectブランドカラー） -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f093fb;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 星のグラデーション -->
+    <linearGradient id="starGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffed4e;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 光る効果 -->
+    <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
+      <stop offset="70%" style="stop-color:#ffffff;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- 背景円 -->
+  <circle cx="96" cy="96" r="88" fill="url(#bgGradient)" stroke="#ffffff" stroke-width="4"/>
+  
+  <!-- 光る効果のオーバーレイ -->
+  <circle cx="96" cy="96" r="80" fill="url(#glowGradient)"/>
+  
+  <!-- メインの星（8角星） -->
+  <path d="M96 25 L102 55 L132 55 L110 75 L116 105 L96 85 L76 105 L82 75 L60 55 L90 55 Z" 
+        fill="url(#starGradient)" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- 内側の小さな星 -->
+  <path d="M96 45 L98 55 L108 55 L101 61 L103 71 L96 65 L89 71 L91 61 L84 55 L94 55 Z" 
+        fill="#ffffff" opacity="0.9"/>
+  
+  <!-- 周囲の小さな星たち -->
+  <circle cx="140" cy="60" r="4" fill="#ffd700"/>
+  <path d="M140 52 L141 56 L145 56 L142 59 L143 63 L140 60 L137 63 L138 59 L135 56 L139 56 Z" 
+        fill="#ffffff" opacity="0.8"/>
+  
+  <circle cx="52" cy="132" r="3" fill="#ffed4e"/>
+  <path d="M52 127 L53 130 L56 130 L54 132 L55 135 L52 133 L49 135 L50 132 L48 130 L51 130 Z" 
+        fill="#ffffff" opacity="0.7"/>
+  
+  <circle cx="145" cy="135" r="2.5" fill="#ffffff"/>
+  <circle cx="47" cy="57" r="2" fill="#ffd700"/>
+  
+  <!-- 星座の線（おとめ座風） -->
+  <path d="M75 70 L96 85 L117 70 M85 110 L96 85 M107 110 L96 85" 
+        stroke="#ffffff" stroke-width="1.5" opacity="0.6"/>
+  
+  <!-- 追加の小さな点（星座） -->
+  <circle cx="75" cy="70" r="1.5" fill="#ffffff" opacity="0.8"/>
+  <circle cx="117" cy="70" r="1.5" fill="#ffffff" opacity="0.8"/>
+  <circle cx="85" cy="110" r="1.5" fill="#ffffff" opacity="0.8"/>
+  <circle cx="107" cy="110" r="1.5" fill="#ffffff" opacity="0.8"/>
+  
+  <!-- キラキラ効果 -->
+  <g opacity="0.7">
+    <path d="M125 85 L127 87 L129 85 L127 83 Z" fill="#ffffff"/>
+    <path d="M127 83 L127 89" stroke="#ffffff" stroke-width="0.5"/>
+    <path d="M125 85 L129 85" stroke="#ffffff" stroke-width="0.5"/>
+  </g>
+  
+  <g opacity="0.6">
+    <path d="M65 100 L66 101 L67 100 L66 99 Z" fill="#ffd700"/>
+    <path d="M66 99 L66 102" stroke="#ffd700" stroke-width="0.5"/>
+    <path d="M64 100 L68 100" stroke="#ffd700" stroke-width="0.5"/>
+  </g>
+</svg> 

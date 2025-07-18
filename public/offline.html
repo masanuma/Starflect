@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>オフライン - Starflect</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      padding: 20px;
+    }
+    
+    .offline-container {
+      text-align: center;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .offline-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+    
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+    
+    .features {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 25px 0;
+      text-align: left;
+    }
+    
+    .features h3 {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .features ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .features li {
+      padding: 8px 0;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    
+    .features li::before {
+      content: "✨ ";
+      margin-right: 8px;
+    }
+    
+    .retry-button {
+      background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+    
+    .retry-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(79, 172, 254, 0.4);
+    }
+    
+    .network-status {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    
+    .online {
+      color: #4ade80;
+    }
+    
+    .offline {
+      color: #f87171;
+    }
+    
+    @media (max-width: 480px) {
+      .offline-container {
+        padding: 30px 20px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .offline-icon {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-container">
+    <div class="offline-icon">🌟</div>
+    <h1>Starflect</h1>
+    <p>現在オフラインです</p>
+    
+    <div class="features">
+      <h3>オフラインでも利用可能な機能</h3>
+      <ul>
+        <li>過去の占い結果の確認</li>
+        <li>天体位置の計算</li>
+        <li>ホロスコープチャートの表示</li>
+        <li>基本的な星座情報</li>
+      </ul>
+    </div>
+    
+    <p>
+      新しいAI分析や占い師チャットを利用するには、<br>
+      インターネット接続が必要です。
+    </p>
+    
+    <button class="retry-button" onclick="retryConnection()">
+      🔄 再接続を試す
+    </button>
+    
+    <div class="network-status">
+      ネットワーク状態: <span id="status" class="offline">オフライン</span>
+    </div>
+  </div>
+
+  <script>
+    // ネットワーク状態の監視
+    function updateNetworkStatus() {
+      const statusElement = document.getElementById('status');
+      const retryButton = document.querySelector('.retry-button');
+      
+      if (navigator.onLine) {
+        statusElement.textContent = 'オンライン';
+        statusElement.className = 'online';
+        retryButton.textContent = '🚀 Starflectに戻る';
+        retryButton.onclick = () => window.location.href = '/';
+      } else {
+        statusElement.textContent = 'オフライン';
+        statusElement.className = 'offline';
+        retryButton.textContent = '🔄 再接続を試す';
+        retryButton.onclick = retryConnection;
+      }
+    }
+    
+    // 再接続を試行
+    function retryConnection() {
+      if (navigator.onLine) {
+        window.location.href = '/';
+      } else {
+        // 少し待ってから再チェック
+        setTimeout(() => {
+          if (navigator.onLine) {
+            window.location.href = '/';
+          }
+        }, 1000);
+      }
+    }
+    
+    // ネットワーク状態の変化を監視
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+    
+    // 初期状態を設定
+    updateNetworkStatus();
+    
+    // 定期的にネットワーク状態をチェック
+    setInterval(updateNetworkStatus, 5000);
+    
+    // 自動で接続をチェック
+    setInterval(() => {
+      if (navigator.onLine) {
+        fetch('/', { method: 'HEAD', cache: 'no-cache' })
+          .then(() => {
+            window.location.href = '/';
+          })
+          .catch(() => {
+            // まだ接続できない
+          });
+      }
+    }, 10000);
+  </script>
+</body>
+</html> 
