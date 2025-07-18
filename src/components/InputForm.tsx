@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BirthData } from '../types';
 import LocationPicker from './LocationPicker';
+import WheelPicker from './WheelPicker';
 type FortuneMode = 'sun-sign' | 'three-planets' | 'ten-planets' | 'ai-chat';
 
 interface InputFormProps {
@@ -42,6 +43,24 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
     if (!formData.birthDate) return 1;
     return new Date(formData.birthDate).getMonth() + 1;
   };
+
+  // 年のオプション配列を作成
+  const yearOptions = Array.from({ length: new Date().getFullYear() - 1924 + 1 }, (_, i) => {
+    const year = new Date().getFullYear() - i;
+    return { value: year, label: `${year}年` };
+  });
+
+  // 月のオプション配列を作成
+  const monthOptions = Array.from({ length: 12 }, (_, i) => {
+    const month = i + 1;
+    return { value: month, label: `${month}月` };
+  });
+
+  // 日のオプション配列を作成
+  const dayOptions = Array.from({ length: getDaysInMonth(getSelectedYear(), getSelectedMonth()) }, (_, i) => {
+    const day = i + 1;
+    return { value: day, label: `${day}日` };
+  });
 
   // コンポーネントマウント時に前回の入力値を復元
   useEffect(() => {
@@ -215,6 +234,22 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
     }
   };
 
+  // 年月日選択ハンドラー
+  const handleDateChange = (field: 'year' | 'month' | 'day', value: string | number) => {
+    const currentDate = formData.birthDate ? new Date(formData.birthDate) : new Date();
+    const newDate = new Date(currentDate);
+    
+    if (field === 'year') {
+      newDate.setFullYear(Number(value));
+    } else if (field === 'month') {
+      newDate.setMonth(Number(value) - 1);
+    } else if (field === 'day') {
+      newDate.setDate(Number(value));
+    }
+    
+    handleInputChange('birthDate', newDate.toISOString().split('T')[0]);
+  };
+
   const handleClearForm = () => {
     const emptyFormData = {
       name: '',
@@ -291,74 +326,44 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
               <div className="date-selectors">
                 <div className="date-selector">
                   <label htmlFor="birthYear" className="sr-only">年</label>
-                  <select
-                    id="birthYear"
+                  <WheelPicker
+                    options={yearOptions}
                     value={formData.birthDate ? new Date(formData.birthDate).getFullYear() : ''}
-                    onChange={(e) => {
-                      const currentDate = formData.birthDate ? new Date(formData.birthDate) : new Date();
-                      const newDate = new Date(currentDate);
-                      newDate.setFullYear(parseInt(e.target.value) || new Date().getFullYear());
-                      handleInputChange('birthDate', newDate.toISOString().split('T')[0]);
-                    }}
-                    className={`form-select ${errors.birthDate ? 'error' : ''}`}
-                    required
-                    aria-label="年を選択してください"
-                    tabIndex={2}
-                  >
-                    <option value="">年</option>
-                    {Array.from({ length: new Date().getFullYear() - 1924 + 1 }, (_, i) => new Date().getFullYear() - i).map(year => (
-                      <option key={year} value={year}>{year}年</option>
-                    ))}
-                  </select>
+                    onChange={(value) => handleDateChange('year', value)}
+                    height={120}
+                    itemHeight={30}
+                    className={errors.birthDate ? 'error' : ''}
+                    placeholder="年"
+                  />
                 </div>
                 <div className="date-selector">
                   <label htmlFor="birthMonth" className="sr-only">月</label>
-                  <select
-                    id="birthMonth"
+                  <WheelPicker
+                    options={monthOptions}
                     value={formData.birthDate ? new Date(formData.birthDate).getMonth() + 1 : ''}
-                    onChange={(e) => {
-                      const currentDate = formData.birthDate ? new Date(formData.birthDate) : new Date();
-                      const newDate = new Date(currentDate);
-                      newDate.setMonth(parseInt(e.target.value) - 1 || 0);
-                      handleInputChange('birthDate', newDate.toISOString().split('T')[0]);
-                    }}
-                    className={`form-select ${errors.birthDate ? 'error' : ''}`}
-                    required
-                    aria-label="月を選択してください"
-                    tabIndex={3}
-                  >
-                    <option value="">月</option>
-                    {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
-                      <option key={month} value={month}>{month}月</option>
-                    ))}
-                  </select>
+                    onChange={(value) => handleDateChange('month', value)}
+                    height={120}
+                    itemHeight={30}
+                    className={errors.birthDate ? 'error' : ''}
+                    placeholder="月"
+                  />
                 </div>
                 <div className="date-selector">
                   <label htmlFor="birthDay" className="sr-only">日</label>
-                  <select
-                    id="birthDay"
+                  <WheelPicker
+                    options={dayOptions}
                     value={formData.birthDate ? new Date(formData.birthDate).getDate() : ''}
-                    onChange={(e) => {
-                      const currentDate = formData.birthDate ? new Date(formData.birthDate) : new Date();
-                      const newDate = new Date(currentDate);
-                      newDate.setDate(parseInt(e.target.value) || 1);
-                      handleInputChange('birthDate', newDate.toISOString().split('T')[0]);
-                    }}
-                    className={`form-select ${errors.birthDate ? 'error' : ''}`}
-                    required
-                    aria-label="日を選択してください"
-                    tabIndex={4}
-                  >
-                    <option value="">日</option>
-                    {Array.from({ length: getDaysInMonth(getSelectedYear(), getSelectedMonth()) }, (_, i) => i + 1).map(day => (
-                      <option key={day} value={day}>{day}日</option>
-                    ))}
-                  </select>
+                    onChange={(value) => handleDateChange('day', value)}
+                    height={120}
+                    itemHeight={30}
+                    className={errors.birthDate ? 'error' : ''}
+                    placeholder="日"
+                  />
                 </div>
               </div>
             </div>
             <small id="birthDate-hint" className="input-hint">
-              💡 年月日をそれぞれ選択してください
+              💡 スクロールして年月日を選択してください
             </small>
             {errors.birthDate && (
               <span 
