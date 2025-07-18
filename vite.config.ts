@@ -12,7 +12,7 @@ export default defineConfig({
     host: '0.0.0.0',
     port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
     strictPort: false,
-    allowedHosts: ['starflect-production.up.railway.app', '.railway.app']
+    allowedHosts: ['starflect-production.up.railway.app', '.railway.app', 'starflect.asanuma.works']
   },
   build: {
     outDir: 'dist',
