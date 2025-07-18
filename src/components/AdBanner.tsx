@@ -13,9 +13,12 @@ const AdBanner: React.FC<AdBannerProps> = ({
   demoMode = true  // 一時的に常にデモモードで動作
 }) => {
   const adRef = useRef<HTMLDivElement>(null);
+  
+  // 一時的に常にデモモードを強制
+  const forceDemoMode = true;
 
   useEffect(() => {
-    if (!demoMode && adRef.current) {
+    if (!forceDemoMode && !demoMode && adRef.current) {
       // Google AdSense初期化（実装時）
       try {
         // 要素が表示されているかチェック
@@ -29,8 +32,10 @@ const AdBanner: React.FC<AdBannerProps> = ({
       } catch (error) {
         console.log('AdSense読み込みエラー:', error);
       }
+    } else {
+      console.log('AdSense: デモモードで動作中');
     }
-  }, [demoMode]);
+  }, [demoMode, forceDemoMode]);
 
   // サンプル用の広告コンテンツ
   const renderDemoAd = () => {
@@ -108,7 +113,7 @@ const AdBanner: React.FC<AdBannerProps> = ({
       role="banner"
       aria-label="広告"
     >
-      {demoMode ? renderDemoAd() : renderRealAd()}
+      {forceDemoMode || demoMode ? renderDemoAd() : renderRealAd()}
     </div>
   );
 };
