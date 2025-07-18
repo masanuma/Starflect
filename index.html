@@ -62,7 +62,7 @@
          crossorigin="anonymous"></script>
     
     <!-- Security (Relaxed for AdSense review) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:; style-src 'self' 'unsafe-inline' https: data:; img-src 'self' data: https: blob:; connect-src 'self' https: wss:; font-src 'self' data: https:; manifest-src 'self';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:; style-src 'self' 'unsafe-inline' https: data:; img-src 'self' data: https: blob:; connect-src 'self' https: wss:; font-src 'self' data: https:; manifest-src 'self'; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com;" />
   </head>
   <body>
     <div id="root"></div>
@@ -109,45 +109,70 @@
       
       // PWA インストールプロンプト
       let deferredPrompt;
+      
+      // PWA初期化
+      window.starflectPWA = {
+        canInstall: false,
+        install: null
+      };
+      
       window.addEventListener('beforeinstallprompt', (e) => {
-        console.log('📱 PWA インストールプロンプト準備完了');
-        e.preventDefault();
-        deferredPrompt = e;
-        
-        // インストールボタンを表示
-        showInstallButton();
+        try {
+          console.log('📱 PWA インストールプロンプト準備完了');
+          e.preventDefault();
+          deferredPrompt = e;
+          
+          // インストールボタンを表示
+          showInstallButton();
+        } catch (error) {
+          console.error('❌ PWA インストールプロンプトエラー:', error);
+        }
       });
       
       window.addEventListener('appinstalled', () => {
-        console.log('🎉 PWA インストール完了');
-        deferredPrompt = null;
-        hideInstallButton();
+        try {
+          console.log('🎉 PWA インストール完了');
+          deferredPrompt = null;
+          hideInstallButton();
+        } catch (error) {
+          console.error('❌ PWA インストール完了エラー:', error);
+        }
       });
       
       // インストールボタンの表示/非表示
       function showInstallButton() {
-        // React側でインストールボタンを表示する処理
-        window.starflectPWA = {
-          canInstall: true,
-          install: () => {
-            if (deferredPrompt) {
-              deferredPrompt.prompt();
-              deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                  console.log('✅ ユーザーがPWAインストールを受け入れました');
-                } else {
-                  console.log('❌ ユーザーがPWAインストールを拒否しました');
-                }
-                deferredPrompt = null;
-              });
+        try {
+          // React側でインストールボタンを表示する処理
+          window.starflectPWA = {
+            canInstall: true,
+            install: () => {
+              if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                  if (choiceResult.outcome === 'accepted') {
+                    console.log('✅ ユーザーがPWAインストールを受け入れました');
+                  } else {
+                    console.log('❌ ユーザーがPWAインストールを拒否しました');
+                  }
+                  deferredPrompt = null;
+                }).catch((error) => {
+                  console.error('❌ PWA インストールエラー:', error);
+                });
+              }
             }
-          }
-        };
+          };
+        } catch (error) {
+          console.error('❌ PWA インストールボタン表示エラー:', error);
+        }
       }
       
       function hideInstallButton() {
-        if (window.starflectPWA) {
-          window.starflectPWA.canInstall = false;
+        try {
+          if (window.starflectPWA) {
+            window.starflectPWA.canInstall = false;
+          }
+        } catch (error) {
+          console.error('❌ PWA インストールボタン非表示エラー:', error);
         }
       }
       
@@ -159,39 +184,19 @@
             console.log('🔔 通知権限:', permission);
             
             if (permission === 'granted') {
-              // プッシュ通知の登録
-              const registration = await navigator.serviceWorker.ready;
-              const subscription = await registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY') // 後で設定
-              });
-              
-              console.log('📧 プッシュ通知登録完了:', subscription);
-              
-              // サーバーに登録情報を送信（将来の実装）
-              // await sendSubscriptionToServer(subscription);
+              console.log('✅ 通知権限が付与されました');
+              // プッシュ通知の登録は将来の実装で対応
+              // VAPID Key設定後に実装予定
             }
           } catch (error) {
             console.error('❌ 通知権限エラー:', error);
           }
+        } else {
+          console.log('📱 このブラウザは通知をサポートしていません');
         }
       }
       
-      // VAPID キーのエンコード
-      function urlBase64ToUint8Array(base64String) {
-        const padding = '='.repeat((4 - base64String.length % 4) % 4);
-        const base64 = (base64String + padding)
-          .replace(/\-/g, '+')
-          .replace(/_/g, '/');
-        
-        const rawData = window.atob(base64);
-        const outputArray = new Uint8Array(rawData.length);
-        
-        for (let i = 0; i < rawData.length; ++i) {
-          outputArray[i] = rawData.charCodeAt(i);
-        }
-        return outputArray;
-      }
+
       
       // 通知権限要求をグローバルに公開
       window.starflectNotification = { requestPermission: requestNotificationPermission };
