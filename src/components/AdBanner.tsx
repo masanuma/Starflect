@@ -10,16 +10,22 @@ interface AdBannerProps {
 const AdBanner: React.FC<AdBannerProps> = ({ 
   position, 
   size = 'medium', 
-  demoMode = true 
+  demoMode = true  // 一時的に常にデモモードで動作
 }) => {
   const adRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!demoMode) {
+    if (!demoMode && adRef.current) {
       // Google AdSense初期化（実装時）
       try {
-        // @ts-ignore
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        // 要素が表示されているかチェック
+        const rect = adRef.current.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          // @ts-ignore
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } else {
+          console.log('AdSense: 要素が表示されていません');
+        }
       } catch (error) {
         console.log('AdSense読み込みエラー:', error);
       }
