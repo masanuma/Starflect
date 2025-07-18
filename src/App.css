@@ -4838,3 +4838,96 @@ main::before {
   aria-valuenow: "0";
   aria-label: "待機中";
 }
+
+/* フッター */
+.App-footer {
+  margin-top: 60px;
+  padding: 40px 20px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-links {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-links a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.footer-separator {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+}
+
+.footer-note {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+.footer-note p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+
+.disclaimer {
+  font-size: 0.8rem !important;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .App-footer {
+    margin-top: 40px;
+    padding: 30px 15px 20px;
+  }
+  
+  .footer-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .footer-separator {
+    display: none;
+  }
+  
+  .footer-links a {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+  
+  .footer-note p {
+    font-size: 0.8rem;
+  }
+  
+  .disclaimer {
+    font-size: 0.7rem !important;
+  }
+}

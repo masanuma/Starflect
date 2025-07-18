@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { chatWithAIAstrologer } from '../utils/aiAnalyzer';
 import { BirthData } from '../types';
+import AdBanner from './AdBanner';
 import './AIFortuneChat.css';
 
 interface Message {
@@ -566,6 +567,13 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         </div>
       </div>
 
+      {/* 広告表示7: AI占い師タイトルとチャット欄の間 */}
+      <AdBanner 
+        position="level-transition" 
+        size="medium" 
+        demoMode={false} 
+      />
+
       {/* メッセージエリア */}
       <div className="messages-container">
         {messages.map((message, index) => (
@@ -631,6 +639,13 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
           </div>
         </div>
       )}
+
+      {/* 広告表示8: フッターの上 */}
+      <AdBanner 
+        position="result-bottom" 
+        size="medium" 
+        demoMode={false} 
+      />
 
       {/* 入力エリア */}
       <div className="input-container">

@@ -1,0 +1,293 @@
+/* 広告バナーのベーススタイル */
+.ad-banner {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* デモ広告のスタイル */
+.demo-ad {
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8efff 100%);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.demo-ad:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+}
+
+/* 広告ヘッダー */
+.demo-ad__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(102, 126, 234, 0.1);
+  border-bottom: 1px solid rgba(102, 126, 234, 0.15);
+}
+
+.demo-ad__label {
+  font-size: 0.7rem;
+  color: #667eea;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.demo-ad__close {
+  color: #888;
+  cursor: pointer;
+  font-size: 0.9rem;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.demo-ad__close:hover {
+  background: rgba(136, 136, 136, 0.1);
+  color: #555;
+}
+
+/* 広告コンテンツ */
+.demo-ad__content {
+  display: flex;
+  padding: 15px;
+  align-items: center;
+  gap: 15px;
+}
+
+.demo-ad__image {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.demo-ad__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.demo-ad__title {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.3;
+}
+
+.demo-ad__description {
+  margin: 0 0 12px 0;
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.4;
+  white-space: pre-line;
+}
+
+.demo-ad__button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.demo-ad__button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* サイズバリエーション */
+.demo-ad--small {
+  max-width: 320px;
+}
+
+.demo-ad--small .demo-ad__content {
+  padding: 12px;
+  gap: 10px;
+}
+
+.demo-ad--small .demo-ad__image {
+  width: 45px;
+  height: 45px;
+  font-size: 1.8rem;
+}
+
+.demo-ad--small .demo-ad__title {
+  font-size: 0.9rem;
+}
+
+.demo-ad--small .demo-ad__description {
+  font-size: 0.75rem;
+}
+
+.demo-ad--medium {
+  max-width: 728px;
+  width: 100%;
+}
+
+.demo-ad--large {
+  max-width: 300px;
+  flex-direction: column;
+}
+
+.demo-ad--large .demo-ad__content {
+  flex-direction: column;
+  text-align: center;
+  padding: 20px;
+}
+
+.demo-ad--large .demo-ad__image {
+  width: 80px;
+  height: 80px;
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+/* 配置位置別スタイル */
+.ad-banner--level-transition {
+  margin: 30px 0;
+  padding: 20px;
+  background: rgba(102, 126, 234, 0.03);
+  border-radius: 15px;
+}
+
+.ad-banner--level-transition .demo-ad {
+  background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+  border: 2px solid rgba(102, 126, 234, 0.15);
+}
+
+.ad-banner--result-bottom {
+  margin: 25px 0;
+  border-top: 1px solid rgba(102, 126, 234, 0.1);
+  padding: 25px 20px 0 20px;
+}
+
+/* チャットページ専用：幅を統一 */
+.ai-fortune-container .ad-banner--level-transition,
+.ai-fortune-container .ad-banner--result-bottom {
+  padding: 20px;
+  margin: 25px 0;
+}
+
+.ad-banner--chat-inline {
+  margin: 15px 0;
+}
+
+.ad-banner--chat-inline .demo-ad {
+  background: rgba(102, 126, 234, 0.05);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.ad-banner--sidebar {
+  position: sticky;
+  top: 20px;
+  margin: 0;
+  padding: 20px;
+}
+
+/* AdSenseコンテナ（実装時用） */
+.adsense-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.adsense-container--level-transition {
+  margin: 30px 0;
+  padding: 20px;
+  background: rgba(102, 126, 234, 0.03);
+  border-radius: 15px;
+}
+
+.adsense-container--result-bottom {
+  margin: 25px 0;
+  border-top: 1px solid rgba(102, 126, 234, 0.1);
+  padding-top: 25px;
+}
+
+.adsense-container--sidebar {
+  position: sticky;
+  top: 20px;
+  margin: 0;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .demo-ad--medium {
+    max-width: 100%;
+  }
+  
+  .demo-ad__content {
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .demo-ad__image {
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+  }
+  
+  .demo-ad__title {
+    font-size: 0.9rem;
+  }
+  
+  .demo-ad__description {
+    font-size: 0.8rem;
+  }
+  
+  .demo-ad__button {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+  
+  .ad-banner--level-transition {
+    padding: 15px;
+    margin: 20px 0;
+  }
+  
+  .ad-banner--sidebar {
+    display: none; /* モバイルではサイドバー広告を非表示 */
+  }
+}
+
+/* 小さなスマホ対応 */
+@media (max-width: 480px) {
+  .demo-ad__content {
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+  }
+  
+  .demo-ad__image {
+    margin-bottom: 10px;
+  }
+  
+  .ad-banner--level-transition {
+    padding: 10px;
+    margin: 15px 0;
+  }
+} 

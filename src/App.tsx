@@ -11,7 +11,12 @@ type FortuneMode = 'sun-sign' | 'three-planets' | 'ten-planets' | 'ai-chat';
 
 function App() {
   return (
-    <Router>
+    <Router
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true
+      }}
+    >
       <div className="App">
         {/* アクセシビリティ: スキップリンク */}
         <a href="#main-content" className="skip-link">
@@ -31,6 +36,24 @@ function App() {
             <Route path="/ai-fortune" element={<AIFortuneWrapper />} />
           </Routes>
         </main>
+        
+        <footer className="App-footer" role="contentinfo">
+          <div className="footer-content">
+            <div className="footer-links">
+              <a href="/privacy-policy.html">
+                🔒 プライバシーポリシー
+              </a>
+              <span className="footer-separator">|</span>
+              <a href="/terms-of-service.html">
+                📋 利用規約
+              </a>
+            </div>
+            <div className="footer-note">
+              <p>✨ Starflect - あなただけの星占い</p>
+              <p className="disclaimer">※ 当サービスは娯楽目的です。重要な決定には専門家にご相談ください。</p>
+            </div>
+          </div>
+        </footer>
       </div>
     </Router>
   )
@@ -308,24 +331,47 @@ function StepByStepResultWrapper() {
 
 // 既存のAIチャットのラッパー（既存機能用）
 function AIChatWrapper() {
-  // birthData, planetsをlocalStorageから取得
-  const birthDataRaw = localStorage.getItem('birthData');
-  let birthData = null;
-  if (birthDataRaw) {
-    birthData = JSON.parse(birthDataRaw);
-    if (birthData.birthDate) birthData.birthDate = new Date(birthData.birthDate);
+  const navigate = useNavigate();
+  const [birthData, setBirthData] = useState<any>(null);
+  const [planets, setPlanets] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    // birthData, planetsをlocalStorageから取得
+    const birthDataRaw = localStorage.getItem('birthData');
+    let parsedBirthData = null;
+    if (birthDataRaw) {
+      parsedBirthData = JSON.parse(birthDataRaw);
+      if (parsedBirthData.birthDate) parsedBirthData.birthDate = new Date(parsedBirthData.birthDate);
+    }
+    
+    const planetsRaw = localStorage.getItem('horoscopeData');
+    let parsedPlanets = [];
+    if (planetsRaw) {
+      try {
+        const parsed = JSON.parse(planetsRaw);
+        parsedPlanets = parsed.planets || [];
+      } catch {}
+    }
+    
+    // データがない場合は自動的にトップページにリダイレクト
+    if (!parsedBirthData || !parsedPlanets.length) {
+      console.log('🔍 AIチャット: 必要なデータがないため、トップページにリダイレクトします');
+      navigate('/');
+      return;
+    }
+    
+    // データがある場合は状態を設定
+    setBirthData(parsedBirthData);
+    setPlanets(parsedPlanets);
+    setIsLoading(false);
+  }, [navigate]);
+  
+  // ローディング中または データがない場合は何も表示しない
+  if (isLoading || !birthData || !planets.length) {
+    return null;
   }
-  const planetsRaw = localStorage.getItem('horoscopeData');
-  let planets = [];
-  if (planetsRaw) {
-    try {
-      const parsed = JSON.parse(planetsRaw);
-      planets = parsed.planets || [];
-    } catch {}
-  }
-  if (!birthData || !planets.length) {
-    return <div style={{padding: 32}}>必要なデータがありません。最初からやり直してください。</div>;
-  }
+  
   return <AIChat birthData={birthData} planets={planets} />;
 }
 

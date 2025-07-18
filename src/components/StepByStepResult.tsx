@@ -4,6 +4,7 @@ import { BirthData, HoroscopeData } from '../types';
 import { generateCompleteHoroscope } from '../utils/astronomyCalculator';
 import { chatWithAIAstrologer, generateAIAnalysis, AIAnalysisResult } from '../utils/aiAnalyzer';
 import { confirmAndClearData } from '../utils/dataManager';
+import AdBanner from './AdBanner';
 import './StepByStepResult.css';
 
 // 🔥 パフォーマンス最適化: デバッグ出力の制御
@@ -966,6 +967,14 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         <div className="level-title">
           <h2 className="level-title-text">☀️ 太陽星座の簡単占い</h2>
         </div>
+
+        {/* 広告表示1: 太陽星座タイトルと結果の間 */}
+        <AdBanner 
+          position="level-transition" 
+          size="medium" 
+          demoMode={false} 
+        />
+
         {/* あなたの星座 */}
         <div className="zodiac-section">
           <h3 className="section-title">⭐ あなたの星座</h3>
@@ -1229,6 +1238,13 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           </button>
         </div>
 
+        {/* 広告表示2: AI相談ボタンの上 */}
+        <AdBanner 
+          position="result-bottom" 
+          size="medium" 
+          demoMode={false} 
+        />
+
         {/* アクションボタン */}
         <div className="action-buttons">
           <a href="/ai-fortune" className="ai-chat-button">
@@ -1271,6 +1287,13 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         <div className="level-title">
           <h2 className="level-title-text">🔮 3天体の本格占い</h2>
         </div>
+
+        {/* 広告表示3: 3天体タイトルと結果の間 */}
+        <AdBanner 
+          position="level-transition" 
+          size="medium" 
+          demoMode={false} 
+        />
         
         {/* あなたの3天体セクション */}
         <div className="zodiac-section">
@@ -1685,7 +1708,6 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
 
 
         {/* レベルアップボタン */}
-        {/* レベルアップボタン */}
         <div className="level-up-section">
           <button 
             className="level-up-button"
@@ -1694,6 +1716,13 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
             10天体の完全占いへ 🌌
           </button>
         </div>
+
+        {/* 広告表示4: AI相談ボタンの上 */}
+        <AdBanner 
+          position="result-bottom" 
+          size="medium" 
+          demoMode={false} 
+        />
 
         {/* アクションボタン */}
         <div className="action-buttons">
@@ -1734,6 +1763,13 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         <div className="level-title">
           <h2 className="level-title-text">🌌 10天体の完全占い</h2>
         </div>
+
+        {/* 広告表示5: 10天体タイトルと結果の間 */}
+        <AdBanner 
+          position="level-transition" 
+          size="medium" 
+          demoMode={false} 
+        />
         
         {/* あなたの10天体 */}
         <div className="zodiac-section">
@@ -2160,6 +2196,13 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           )}
         </div>
 
+        {/* 広告表示6: AI相談ボタンの上 */}
+        <AdBanner 
+          position="result-bottom" 
+          size="medium" 
+          demoMode={false} 
+        />
+
         {/* アクションボタン */}
         <div className="action-buttons">
           <a href="/ai-fortune" className="ai-chat-button">
@@ -2221,17 +2264,21 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           setLoading(false);
         } catch (error) {
           debugError('データの読み込みエラー:', error);
-          setError('データの読み込みに失敗しました。');
-          setLoading(false);
+          // データ読み込みエラーの場合、トップページにリダイレクト
+          debugLog('🔍 データ読み込みエラーのため、トップページにリダイレクトします');
+          navigate('/');
+          return;
         }
       } else {
-        setError('出生データが見つかりません。');
-        setLoading(false);
+        // 出生データがない場合、トップページにリダイレクト
+        debugLog('🔍 出生データが見つからないため、トップページにリダイレクトします');
+        navigate('/');
+        return;
       }
     };
     
     loadData();
-  }, []);
+  }, [navigate]);
 
   // レベル3になった時に自動的に分析を実行
   useEffect(() => {
