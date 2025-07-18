@@ -27,6 +27,22 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
 
+  // 選択された年月に応じて日数を計算
+  const getDaysInMonth = (year: number, month: number) => {
+    if (!year || !month) return 31;
+    return new Date(year, month, 0).getDate();
+  };
+
+  const getSelectedYear = () => {
+    if (!formData.birthDate) return new Date().getFullYear();
+    return new Date(formData.birthDate).getFullYear();
+  };
+
+  const getSelectedMonth = () => {
+    if (!formData.birthDate) return 1;
+    return new Date(formData.birthDate).getMonth() + 1;
+  };
+
   // コンポーネントマウント時に前回の入力値を復元
   useEffect(() => {
     console.log('🔍 InputForm - 初期化処理開始, mode:', mode);
@@ -271,19 +287,79 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
 
           <div className="input-group">
             <label htmlFor="birthDate">生年月日 *</label>
-            <input
-              id="birthDate"
-              type="date"
-              value={formData.birthDate}
-              onChange={(e) => handleInputChange('birthDate', e.target.value)}
-              className={`form-input ${errors.birthDate ? 'error' : ''}`}
-              required
-              aria-label="生年月日を選択してください（必須項目）"
-              aria-describedby={errors.birthDate ? "birthDate-error" : "birthDate-hint"}
-              aria-invalid={errors.birthDate ? 'true' : 'false'}
-              tabIndex={2}
-            />
-            <span id="birthDate-hint" className="sr-only">カレンダーから生年月日を選択してください</span>
+            <div className="date-picker-container">
+              <div className="date-selectors">
+                <div className="date-selector">
+                  <label htmlFor="birthYear" className="sr-only">年</label>
+                  <select
+                    id="birthYear"
+                    value={formData.birthDate ? new Date(formData.birthDate).getFullYear() : ''}
+                    onChange={(e) => {
+                      const currentDate = formData.birthDate ? new Date(formData.birthDate) : new Date();
+                      const newDate = new Date(currentDate);
+                      newDate.setFullYear(parseInt(e.target.value) || new Date().getFullYear());
+                      handleInputChange('birthDate', newDate.toISOString().split('T')[0]);
+                    }}
+                    className={`form-select ${errors.birthDate ? 'error' : ''}`}
+                    required
+                    aria-label="年を選択してください"
+                    tabIndex={2}
+                  >
+                    <option value="">年</option>
+                    {Array.from({ length: new Date().getFullYear() - 1924 + 1 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                      <option key={year} value={year}>{year}年</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="date-selector">
+                  <label htmlFor="birthMonth" className="sr-only">月</label>
+                  <select
+                    id="birthMonth"
+                    value={formData.birthDate ? new Date(formData.birthDate).getMonth() + 1 : ''}
+                    onChange={(e) => {
+                      const currentDate = formData.birthDate ? new Date(formData.birthDate) : new Date();
+                      const newDate = new Date(currentDate);
+                      newDate.setMonth(parseInt(e.target.value) - 1 || 0);
+                      handleInputChange('birthDate', newDate.toISOString().split('T')[0]);
+                    }}
+                    className={`form-select ${errors.birthDate ? 'error' : ''}`}
+                    required
+                    aria-label="月を選択してください"
+                    tabIndex={3}
+                  >
+                    <option value="">月</option>
+                    {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
+                      <option key={month} value={month}>{month}月</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="date-selector">
+                  <label htmlFor="birthDay" className="sr-only">日</label>
+                  <select
+                    id="birthDay"
+                    value={formData.birthDate ? new Date(formData.birthDate).getDate() : ''}
+                    onChange={(e) => {
+                      const currentDate = formData.birthDate ? new Date(formData.birthDate) : new Date();
+                      const newDate = new Date(currentDate);
+                      newDate.setDate(parseInt(e.target.value) || 1);
+                      handleInputChange('birthDate', newDate.toISOString().split('T')[0]);
+                    }}
+                    className={`form-select ${errors.birthDate ? 'error' : ''}`}
+                    required
+                    aria-label="日を選択してください"
+                    tabIndex={4}
+                  >
+                    <option value="">日</option>
+                    {Array.from({ length: getDaysInMonth(getSelectedYear(), getSelectedMonth()) }, (_, i) => i + 1).map(day => (
+                      <option key={day} value={day}>{day}日</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <small id="birthDate-hint" className="input-hint">
+              💡 年月日をそれぞれ選択してください
+            </small>
             {errors.birthDate && (
               <span 
                 id="birthDate-error" 
@@ -311,7 +387,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
                 aria-label="出生時刻を入力してください（必須項目）"
                 aria-describedby={errors.birthTime ? "birthTime-error" : "birthTime-hint"}
                 aria-invalid={errors.birthTime ? 'true' : 'false'}
-                tabIndex={3}
+                tabIndex={5}
               />
               <small id="birthTime-hint" className="input-hint">
                 💡 出生時刻が分かると、月星座や上昇星座も占えます
@@ -376,7 +452,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
               disabled={isLoading}
               aria-label={isLoading ? "分析を実行中です。しばらくお待ちください" : "入力した情報でホロスコープ分析を開始します"}
               aria-describedby="submit-hint"
-              tabIndex={4}
+              tabIndex={7}
             >
               {isLoading ? '分析中...' : '占いを始める'}
             </button>
@@ -387,7 +463,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
               onClick={handleClearForm}
               className="clear-button"
               aria-label="入力した情報をすべてクリアします"
-              tabIndex={5}
+              tabIndex={8}
             >
               入力内容をクリア
             </button>
