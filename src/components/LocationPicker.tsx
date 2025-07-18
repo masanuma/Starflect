@@ -31,28 +31,35 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ onLocationSelect, initi
   const markerRef = useRef<google.maps.Marker | null>(null);
   const placesServiceRef = useRef<google.maps.places.PlacesService | null>(null);
 
-  // Google Maps APIキー
-  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyCBQRE8qUDjNyxKqd7z0PuGlFIF3NT2yOw';
+  // Google Maps APIキー（環境変数から取得）
+  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   useEffect(() => {
-    // Google Maps APIの初期化
-    const initializeGoogleMaps = async () => {
-      try {
-        const loader = new Loader({
-          apiKey: GOOGLE_MAPS_API_KEY,
-          version: 'weekly',
-          libraries: ['places']
-        });
-
-        await loader.load();
-        
-        // AutocompleteServiceは廃止されたため、使用しない
-        // フォールバック機能のみを使用
-        console.log('Google Maps API loaded successfully (using fallback search)');
-      } catch (error) {
-        console.error('Google Maps API initialization failed:', error);
+      // Google Maps APIの初期化
+  const initializeGoogleMaps = async () => {
+    try {
+      // 環境変数のAPIキーが設定されていない場合は、フォールバック機能のみを使用
+      if (!import.meta.env.VITE_GOOGLE_MAPS_API_KEY) {
+        console.log('Google Maps API key not found, using fallback search only');
+        return;
       }
-    };
+
+      const loader = new Loader({
+        apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        version: 'weekly',
+        libraries: ['places']
+      });
+
+      await loader.load();
+      
+      // AutocompleteServiceは廃止されたため、使用しない
+      // フォールバック機能のみを使用
+      console.log('Google Maps API loaded successfully (using fallback search)');
+    } catch (error) {
+      console.error('Google Maps API initialization failed:', error);
+      console.log('Falling back to manual location search');
+    }
+  };
 
     initializeGoogleMaps();
     
