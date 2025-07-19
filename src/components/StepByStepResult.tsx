@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BirthData, HoroscopeData } from '../types';
 import { generateCompleteHoroscope } from '../utils/astronomyCalculator';
 import { chatWithAIAstrologer, generateAIAnalysis, AIAnalysisResult } from '../utils/aiAnalyzer';
+import { getTimeContextForAI } from '../utils/dateUtils';
 import { confirmAndClearData } from '../utils/dataManager';
 import AdBanner from './AdBanner';
 import './StepByStepResult.css';
@@ -198,14 +199,15 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     
     try {
       // AI分析を実行
-      const currentDate = new Date();
+      const timeContext = getTimeContextForAI();
       const randomId = Math.random().toString(36).substring(2, 8);
       const analysisPrompt = `
         あなたは経験豊富な占い師です。以下の条件で占いを行ってください：
         - 星座: ${sunSign}
         - 期間: ${periodOptions.level1.find(p => p.value === selectedPeriod)?.label}
-        - 分析実行時刻: ${currentDate.toLocaleString()}
         - ランダムID: ${randomId}
+        
+        ${timeContext}
         
         **重要な文章作成ルール（必ず守ること）**：
         - ですます調で丁寧に記載すること
@@ -276,6 +278,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
       const ascendant = horoscopeData.planets.find(p => p.planet === '上昇星座');
       
       const currentDate = new Date();
+      const timeContext = getTimeContextForAI();
       const randomId = Math.random().toString(36).substring(2, 8);
       const selectedPeriodLabel = periodOptions.level2.find(p => p.value === selectedPeriod)?.label;
       
@@ -383,8 +386,9 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         
         【占い期間】
         - 期間: ${selectedPeriodLabel}
-        - 分析実行時刻: ${currentDate.toLocaleString()}
         - ランダムID: ${randomId}
+        
+        ${timeContext}
         
         **重要な文章作成ルール（必ず守ること）**：
         - 文章はですます調で丁寧に記載すること
@@ -479,13 +483,15 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
       const planetsInfo = horoscopeData.planets.map(p => `${p.planet}: ${p.sign} ${p.degree}度`).join(', ');
       
       const currentDate = new Date();
+      const timeContext = getTimeContextForAI();
       const randomId = Math.random().toString(36).substring(2, 8);
       const analysisPrompt = `
         あなたは経験豊富な西洋占星術師です。以下の10天体の配置を使って完全な占いを行ってください：
         ${planetsInfo}
         - 期間: ${periodOptions.level3.find(p => p.value === selectedPeriod)?.label}
-        - 分析実行時刻: ${currentDate.toLocaleString()}
         - ランダムID: ${randomId}
+        
+        ${timeContext}
         
         **重要な文章作成ルール（必ず守ること）**：
         - ですます調で丁寧に記載すること
@@ -559,8 +565,18 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   const handleGenerateLevel3Analysis = useCallback(async () => {
     if (!horoscopeData || !birthData) return;
     
-    // キャッシュキーを生成
-    const cacheKey = `level3_analysis_${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+    // キャッシュキーを生成（v5: フォーマット厳守対応）
+    const cacheKey = `level3_analysis_v5_${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+    
+    // 古いバージョンのキャッシュを削除（既存ユーザー対応）
+    const baseKey = `${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+    ['v2', 'v3', 'v4'].forEach(version => {
+      const oldKey = `level3_analysis_${version}_${baseKey}`;
+      if (localStorage.getItem(oldKey)) {
+        localStorage.removeItem(oldKey);
+        debugLog(`🧹 【古いキャッシュ削除】${version}キャッシュを削除しました`);
+      }
+    });
     
     // キャッシュからデータを確認
     const cachedAnalysis = localStorage.getItem(cacheKey);
@@ -592,8 +608,8 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     
     try {
       debugLog('🔍 【AI分析開始】generateAIAnalysisを呼び出します');
-      // 速度改善のため、簡単な分析モードを使用
-      const analysis = await generateAIAnalysis(birthData, horoscopeData.planets, 'simple');
+      // Level3の詳細分析モードを使用（tenPlanetSummary生成のため）
+      const analysis = await generateAIAnalysis(birthData, horoscopeData.planets, 'detailed');
       debugLog('🔍 【AI分析完了】結果:', analysis);
       setLevel3Analysis(analysis);
       
@@ -773,6 +789,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         const ascendant = horoscopeData.planets.find(p => p.planet === '上昇星座');
         
         const currentDate = new Date();
+        const timeContext = getTimeContextForAI();
         const randomId = Math.random().toString(36).substring(2, 8);
       
       const analysisPrompt = `
@@ -781,7 +798,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         - 月: ${moon?.sign} ${moon?.degree}度
         - 上昇星座: ${ascendant?.sign} ${ascendant?.degree}度
         
-        分析実行時刻: ${currentDate.toLocaleString()}
+        ${timeContext}
         ランダムID: ${randomId}
         
         **重要な文章作成ルール（必ず守ること）**：
@@ -1897,9 +1914,9 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           <h3 className="section-title">🌟 10天体から見たあなた</h3>
           <div className="analysis-overview">
             <p>
-              10天体すべての配置から、あなたの複層的な性格を詳しく分析します。
-              表面的な性格だけでなく、深層心理や潜在能力、人生の使命まで、
-              すべての天体の相互作用を考慮した包括的な分析をお届けします。
+              10天体すべての配置と相互作用を徹底的に分析し、あなたの人生の設計図を読み解きます。
+              表面的な性格だけでなく、深層心理、潜在能力、人生の使命、魂の成長方向まで、
+              最も詳細で包括的な分析をお届けします。これはあなただけの特別な人生の指針です。
             </p>
           </div>
           
@@ -1914,29 +1931,89 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           {/* AI分析結果の表示 */}
           {level3Analysis && !isGeneratingLevel3Analysis && (
             <div className="ai-analysis-results">
-              <div className="analysis-category">
-                <h4>🌟 基本的な性格</h4>
-                <p>{level3Analysis.personalityInsights?.corePersonality || 'AI分析データの読み込みに失敗しました。しばらく時間をおいてから再度お試しください。'}</p>
+              {/* 10天体の総合分析 */}
+              {level3Analysis.tenPlanetSummary && (
+                <>
+                  <div className="analysis-category major-analysis">
+                    <h4>🌟 10天体の総合的な影響</h4>
+                    <p>{level3Analysis.tenPlanetSummary.planetaryInfluences || 'AI分析データの読み込みに失敗しました。'}</p>
+                  </div>
+                  
+                  <div className="analysis-category major-analysis">
+                    <h4>📋 あなたの人生設計図</h4>
+                    <p>{level3Analysis.tenPlanetSummary.lifeDesign || 'AI分析データの読み込みに失敗しました。'}</p>
+                  </div>
+                  
+                  <div className="analysis-category major-analysis">
+                    <h4>💡 実生活への活用アドバイス</h4>
+                    <p>{level3Analysis.tenPlanetSummary.practicalAdvice || 'AI分析データの読み込みに失敗しました。'}</p>
+                  </div>
+                </>
+              )}
+              
+              {/* 詳細な性格分析 */}
+              <div className="personality-insights-section">
+                <h4 className="section-subtitle">📊 詳細な性格分析</h4>
+                
+                <div className="analysis-category">
+                  <h5>🌟 基本的な性格</h5>
+                  <p>{level3Analysis.personalityInsights?.corePersonality || 'AI分析データの読み込みに失敗しました。'}</p>
+                </div>
+                
+                <div className="analysis-category">
+                  <h5>🌙 深層心理と感情パターン</h5>
+                  <p>{level3Analysis.personalityInsights?.hiddenTraits || 'AI分析データの読み込みに失敗しました。'}</p>
+                </div>
+                
+                <div className="analysis-category">
+                  <h5>💫 人生観と価値観</h5>
+                  <p>{level3Analysis.personalityInsights?.lifePhilosophy || 'AI分析データの読み込みに失敗しました。'}</p>
+                </div>
+                
+                <div className="analysis-category">
+                  <h5>💕 人間関係とコミュニケーション</h5>
+                  <p>{level3Analysis.personalityInsights?.relationshipStyle || 'AI分析データの読み込みに失敗しました。'}</p>
+                </div>
+                
+                <div className="analysis-category">
+                  <h5>💼 キャリアと仕事への取り組み</h5>
+                  <p>{level3Analysis.personalityInsights?.careerTendencies || 'AI分析データの読み込みに失敗しました。'}</p>
+                </div>
               </div>
               
-              <div className="analysis-category">
-                <h4>💕 恋愛と行動力</h4>
-                <p>{level3Analysis.personalityInsights?.relationshipStyle || 'AI分析データの読み込みに失敗しました。しばらく時間をおいてから再度お試しください。'}</p>
-              </div>
-              
-              <div className="analysis-category">
-                <h4>🧠 知性と成長</h4>
-                <p>{level3Analysis.personalityInsights?.careerTendencies || 'AI分析データの読み込みに失敗しました。しばらく時間をおいてから再度お試しください。'}</p>
-              </div>
-              
-              <div className="analysis-category">
-                <h4>🌌 変革と深層心理</h4>
-                <p>{level3Analysis.personalityInsights?.hiddenTraits || 'AI分析データの読み込みに失敗しました。しばらく時間をおいてから再度お試しください。'}</p>
-              </div>
-              
-              <div className="analysis-category">
-                <h4>🎯 人生哲学</h4>
-                <p>{level3Analysis.personalityInsights?.lifePhilosophy || 'AI分析データの読み込みに失敗しました。しばらく時間をおいてから再度お試しください。'}</p>
+              {/* 詳細な運勢分析 */}
+              <div className="fortune-insights-section">
+                <h4 className="section-subtitle">🔮 詳細な運勢分析</h4>
+                
+                <div className="analysis-category">
+                  <h5>🌈 総合的な人生の流れ</h5>
+                  <p>{level3Analysis.detailedFortune?.overallTrend || 'AI分析データの読み込みに失敗しました。'}</p>
+                </div>
+                
+                <div className="analysis-category">
+                  <h5>💖 恋愛・結婚・パートナーシップ</h5>
+                  <p>{level3Analysis.detailedFortune?.loveLife || 'AI分析データの読み込みに失敗しました。'}</p>
+                </div>
+                
+                <div className="analysis-category">
+                  <h5>🚀 仕事・キャリア・社会的成功</h5>
+                  <p>{level3Analysis.detailedFortune?.careerPath || 'AI分析データの読み込みに失敗しました。'}</p>
+                </div>
+                
+                <div className="analysis-category">
+                  <h5>🌿 健康・体調・ライフスタイル</h5>
+                  <p>{level3Analysis.detailedFortune?.healthWellness || 'AI分析データの読み込みに失敗しました。'}</p>
+                </div>
+                
+                <div className="analysis-category">
+                  <h5>💰 金運・財運・物質的豊かさ</h5>
+                  <p>{level3Analysis.detailedFortune?.financialProspects || 'AI分析データの読み込みに失敗しました。'}</p>
+                </div>
+                
+                <div className="analysis-category">
+                  <h5>🌱 精神的成長・自己実現</h5>
+                  <p>{level3Analysis.detailedFortune?.personalGrowth || 'AI分析データの読み込みに失敗しました。'}</p>
+                </div>
               </div>
             </div>
           )}
@@ -1956,7 +2033,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                   className="clear-cache-button"
                   onClick={() => {
                     if (birthData) {
-                      const cacheKey = `level3_analysis_${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+                      const cacheKey = `level3_analysis_v5_${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
                       localStorage.removeItem(cacheKey);
                       handleGenerateLevel3Analysis();
                     }
