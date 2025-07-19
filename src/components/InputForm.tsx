@@ -330,7 +330,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
                     options={yearOptions}
                     value={formData.birthDate ? new Date(formData.birthDate).getFullYear() : ''}
                     onChange={(value) => handleDateChange('year', value)}
-                    height={120}
+                    height={110}
                     itemHeight={30}
                     className={errors.birthDate ? 'error' : ''}
                     placeholder="年"
@@ -342,7 +342,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
                     options={monthOptions}
                     value={formData.birthDate ? new Date(formData.birthDate).getMonth() + 1 : ''}
                     onChange={(value) => handleDateChange('month', value)}
-                    height={120}
+                    height={110}
                     itemHeight={30}
                     className={errors.birthDate ? 'error' : ''}
                     placeholder="月"
@@ -354,7 +354,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
                     options={dayOptions}
                     value={formData.birthDate ? new Date(formData.birthDate).getDate() : ''}
                     onChange={(value) => handleDateChange('day', value)}
-                    height={120}
+                    height={110}
                     itemHeight={30}
                     className={errors.birthDate ? 'error' : ''}
                     placeholder="日"
@@ -363,7 +363,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
               </div>
             </div>
             <small id="birthDate-hint" className="input-hint">
-              💡 スクロールして年月日を選択してください
+              💡 上下ボタンで1つずつ選択、または中央をスクロールして選択してください
             </small>
             {errors.birthDate && (
               <span 

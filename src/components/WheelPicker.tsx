@@ -145,8 +145,34 @@ const WheelPicker: React.FC<WheelPickerProps> = ({
     }
   }, [isDragging, currentTranslate, startY]);
 
+  // 上下ボタンのハンドラー
+  const handleStepUp = () => {
+    const currentIndex = getCurrentIndex();
+    if (currentIndex > 0) {
+      onChange(options[currentIndex - 1].value);
+    }
+  };
+
+  const handleStepDown = () => {
+    const currentIndex = getCurrentIndex();
+    if (currentIndex < options.length - 1) {
+      onChange(options[currentIndex + 1].value);
+    }
+  };
+
   return (
     <div className={`wheel-picker ${className}`}>
+      {/* 上ボタン */}
+      <button 
+        className="wheel-picker-step-button wheel-picker-step-up"
+        onClick={handleStepUp}
+        disabled={getCurrentIndex() === 0}
+        aria-label="前の項目を選択"
+      >
+        <span className="step-arrow">▲</span>
+        <span className="step-text">上へ</span>
+      </button>
+
       <div 
         ref={containerRef}
         className="wheel-picker-container"
@@ -165,16 +191,19 @@ const WheelPicker: React.FC<WheelPickerProps> = ({
             const offset = Math.abs(index * itemHeight + currentTranslate - (height - itemHeight) / 2);
             const opacity = Math.max(0.3, 1 - offset / (itemHeight * 2));
             const scale = Math.max(0.8, 1 - offset / (itemHeight * 4));
+            const isSelected = option.value === value;
             
             return (
               <div
                 key={option.value}
-                className="wheel-picker-item"
+                className={`wheel-picker-item ${isSelected ? 'selected' : ''}`}
                 style={{
                   height: itemHeight,
                   opacity,
                   transform: `scale(${scale})`,
-                  color: option.value === value ? 'var(--primary-color)' : 'var(--text-primary)'
+                  color: isSelected ? 'var(--primary-color)' : 'var(--text-primary)',
+                  fontSize: isSelected ? '1.4rem' : '1.1rem',
+                  fontWeight: isSelected ? '700' : '500'
                 }}
               >
                 {option.label}
@@ -186,6 +215,17 @@ const WheelPicker: React.FC<WheelPickerProps> = ({
         {/* 選択インジケーター */}
         <div className="wheel-picker-indicator" />
       </div>
+
+      {/* 下ボタン */}
+      <button 
+        className="wheel-picker-step-button wheel-picker-step-down"
+        onClick={handleStepDown}
+        disabled={getCurrentIndex() === options.length - 1}
+        aria-label="次の項目を選択"
+      >
+        <span className="step-arrow">▼</span>
+        <span className="step-text">下へ</span>
+      </button>
     </div>
   );
 };
