@@ -1929,24 +1929,10 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           )}
           
           {/* AI分析結果の表示 */}
-          {(() => {
-            debugLog('🔍 【表示条件チェック】level3Analysis:', !!level3Analysis);
-            debugLog('🔍 【表示条件チェック】isGeneratingLevel3Analysis:', isGeneratingLevel3Analysis);
-            debugLog('🔍 【表示条件チェック】tenPlanetSummary:', !!level3Analysis?.tenPlanetSummary);
-            debugLog('🔍 【表示条件チェック】planetaryInfluences:', !!level3Analysis?.tenPlanetSummary?.planetaryInfluences);
-            debugLog('🔍 【表示条件チェック】lifeDesign:', !!level3Analysis?.tenPlanetSummary?.lifeDesign);
-            debugLog('🔍 【表示条件チェック】practicalAdvice:', !!level3Analysis?.tenPlanetSummary?.practicalAdvice);
-            return level3Analysis && !isGeneratingLevel3Analysis;
-          })() && (
+          {level3Analysis && !isGeneratingLevel3Analysis && (
             <div className="ai-analysis-results">
               {/* 10天体の総合分析 */}
-              {(() => {
-                debugLog('🔍 【tenPlanetSummary表示判定】:', !!level3Analysis.tenPlanetSummary);
-                if (level3Analysis.tenPlanetSummary) {
-                  debugLog('🔍 【tenPlanetSummary内容】:', level3Analysis.tenPlanetSummary);
-                }
-                return level3Analysis.tenPlanetSummary;
-              })() && (
+              {level3Analysis.tenPlanetSummary && (
                 <>
                   <div className="analysis-category major-analysis">
                     <h4>🌟 10天体の総合的な影響</h4>
