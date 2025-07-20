@@ -88,6 +88,11 @@
   100% { transform: rotate(360deg); }
 }
 
+@keyframes generating-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .loading-section h3 {
   color: #2d3748;
   font-size: 1.8rem;
@@ -1208,7 +1213,7 @@
   border: 3px solid #e2e8f0;
   border-top: 3px solid #667eea;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: generating-spin 1s linear infinite !important;
 }
 
 .generating-message p {
@@ -3816,7 +3821,6 @@ div.action-buttons,
 .major-analysis {
   background: linear-gradient(135deg, #fef3e2 0%, #fef9c3 100%) !important;
   border: 2px solid #f59e0b !important;
-  border-left: 6px solid #f59e0b !important;
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2) !important;
   margin-bottom: 1.5rem !important;
   padding: 1.2rem 1.5rem !important;
@@ -3840,16 +3844,14 @@ div.action-buttons,
   padding: 0.8rem 1rem;
   background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
   border-radius: 8px;
-  border-left: 4px solid #0ea5e9;
 }
 
 .personality-insights-section,
 .fortune-insights-section {
   margin: 1.5rem 0;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  padding: 0;
+  background: transparent;
+  border: none;
 }
 
 .personality-insights-section .analysis-category h5,
