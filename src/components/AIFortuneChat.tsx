@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { chatWithAIAstrologer } from '../utils/aiAnalyzer';
+import { getTimeContextForAI } from '../utils/dateUtils';
 import { BirthData } from '../types';
 import AdBanner from './AdBanner';
 import './AIFortuneChat.css';
@@ -69,7 +70,9 @@ const AIFortuneChat: React.FC = () => {
 
 相談者の質問: ${question}
 
-分析実行時刻: ${new Date().toLocaleString('ja-JP')} - 分析ID: ${Math.random().toString(36).substr(2, 9)}
+${getTimeContextForAI()}
+
+分析ID: ${Math.random().toString(36).substr(2, 9)}
 
 `;
 

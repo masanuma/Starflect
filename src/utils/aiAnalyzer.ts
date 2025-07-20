@@ -1,6 +1,5 @@
 import { BirthData, PlanetPosition } from "../types";
 import { safeParseJSON, mapAIResponseToAIAnalysisResult } from './aiAnalyzerUtils';
-import { getTimeContextForAI } from './dateUtils';
 
 // OpenAI API設定
 const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || null;
@@ -197,11 +196,10 @@ const generateSimpleAnalysisPrompt = (
 お名前: ${birthData.name}
 生年月日: ${birthData.birthDate.toLocaleDateString('ja-JP')}
 太陽星座: ${sunSign}
-
-${getTimeContextForAI()}
+今日の日付: ${new Date().toLocaleDateString('ja-JP')}
 
 【分析実行時刻】
-分析ID: ${Math.random().toString(36).substr(2, 9)}
+${new Date().toLocaleString('ja-JP')} - 分析ID: ${Math.random().toString(36).substr(2, 9)}
 
 【出力形式】
 必ず以下のJSON形式のみでご回答ください。簡潔で分かりやすい内容にしてください。
@@ -242,43 +240,62 @@ ${getTimeContextForAI()}
 `;
 };
 
-// プロンプト生成関数（詳細10天体分析専用）
+// プロンプト生成関数（簡単占いモード対応）
 const generateEnhancedAnalysisPrompt = (
   birthData: BirthData,
   planets: PlanetPosition[]
 ): string => {
   return `
-${getTimeContextForAI()}
+【詳細占星術分析のご依頼】
 
-天体データ：
+以下の出生データと天体配置をもとに、クライアント様の性格や運勢について、
+必ず丁寧語（「です・ます」調）で統一し、親しみやすく分かりやすく解説してください。
+※重要：すべての文章は「です」「ます」「でしょう」「されます」などの丁寧語で終わらせてください。
+
+【クライアント情報】
+お名前: ${birthData.name}
+生年月日: ${birthData.birthDate.toLocaleDateString('ja-JP')}
+出生時刻: ${birthData.birthTime}
+出生地: ${birthData.birthPlace.city}
+
+【天体配置】
 ${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('\n')}
 
-このJSONフォーマットを厳守してください：
+【出力形式】
+必ず以下のJSON形式のみでご回答ください。キーは英語、値は日本語（必ずですます調）で記述してください。
 
 {
   "personalityInsights": {
-    "corePersonality": "基本性格300文字以上",
-    "hiddenTraits": "深層心理300文字以上",
-    "lifePhilosophy": "人生観250文字以上",
-    "relationshipStyle": "人間関係300文字以上",
-    "careerTendencies": "キャリア300文字以上"
+    "corePersonality": "太陽星座の特徴を150文字以上で、必ずですます調でやさしく解説してください。性格の特徴、行動パターン、強みなどを含めて説明し、特によいところと注意すべきところも明確に含めてください。",
+    "hiddenTraits": "月星座の隠れた特性を150文字以上で、必ずですます調でやさしく解説してください。内面の感情、プライベートな面、本能的な反応などを含めて説明し、よいところと注意すべきところも含めてください。",
+    "lifePhilosophy": "人生哲学や価値観を120文字以上で、必ずですます調でやさしく解説してください。何を重視し、どのような生き方を理想とするのかを説明し、よいところと注意すべきところも含めてください。",
+    "relationshipStyle": "人間関係のスタイルを150文字以上で、必ずですます調でやさしく解説してください。友人関係、恋愛関係でのコミュニケーションスタイルを含めて説明し、よいところと注意すべきところも含めてください。",
+    "careerTendencies": "キャリア傾向を150文字以上で、必ずですます調でやさしく解説してください。適職、仕事への取り組み方、成功のポイントを含めて説明し、よいところと注意すべきところも含めてください。"
   },
   "detailedFortune": {
-    "overallTrend": "総合運勢250文字以上",
-    "loveLife": "恋愛運250文字以上",
-    "careerPath": "仕事運250文字以上",
-    "healthWellness": "健康運250文字以上",
-    "financialProspects": "金運250文字以上",
-    "personalGrowth": "成長運250文字以上"
+    "overallTrend": "全体的な運勢傾向を120文字以上で、必ずですます調でやさしく解説してください。現在の運勢の流れと今後の展望を含めて説明し、よいところと注意すべきところも含めてください。",
+    "loveLife": "恋愛運を120文字以上で、必ずですます調でやさしく解説してください。恋愛の傾向、パートナーシップの可能性を含めて説明し、よいところと注意すべきところも含めてください。",
+    "careerPath": "仕事運を120文字以上で、必ずですます調でやさしく解説してください。仕事での成功のポイント、キャリアの方向性を含めて説明し、よいところと注意すべきところも含めてください。",
+    "healthWellness": "健康運を120文字以上で、必ずですます調でやさしく解説してください。体調管理のポイント、wellness向上のアドバイスを含めて説明し、よいところと注意すべきところも含めてください。",
+    "financialProspects": "金運を120文字以上で、必ずですます調でやさしく解説してください。収入の傾向、金銭管理のポイントを含めて説明し、よいところと注意すべきところも含めてください。",
+    "personalGrowth": "成長運を120文字以上で、必ずですます調でやさしく解説してください。自己成長の方向性、学習すべきことを含めて説明し、よいところと注意すべきところも含めてください。"
   },
   "tenPlanetSummary": {
-    "planetaryInfluences": "10天体総合影響400文字以上",
-    "lifeDesign": "人生設計図350文字以上",
-    "practicalAdvice": "実生活アドバイス350文字以上"
+    "planetaryInfluences": "10天体すべての総合的な影響について400文字以上で、必ずですます調でやさしく解説してください。太陽から冥王星までの全天体がどのように相互作用し、あなたの人生にどのような影響を与えているかを詳しく説明してください。",
+    "lifeDesign": "10天体から読み取れるあなたの人生設計図について350文字以上で、必ずですます調でやさしく解説してください。人生の使命、目標、進むべき方向性などを含めて詳しく説明してください。",
+    "practicalAdvice": "10天体の配置を活かすための実生活でのアドバイスについて350文字以上で、必ずですます調でやさしく解説してください。日常生活での具体的な行動指針や注意点を含めて詳しく説明してください。"
   }
 }
 
-tenPlanetSummaryには必ずplanetaryInfluences、lifeDesign、practicalAdviceの3つのキーを含めてください。`;
+【厳守事項】
+- JSON以外のテキストや説明文は絶対に出力しないでください
+- JSONの前後に余計な文字や改行を入れないでください
+- 各項目を指定された文字数以上で、丁寧な日本語（です・ます調）でやさしく解説してください
+- 「あなたの太陽は○○座にあり」のような表現は絶対に使用しないでください
+- 必ずよいところと注意すべきところを含めて説明してください
+- わかりやすい表現で少し長めに書いてください
+- 必ず上記のJSON形式のみでご回答ください
+`;
 };
 
 // 強化されたOpenAI API呼び出し関数
@@ -286,41 +303,25 @@ const callOpenAIAPI = async (prompt: string, maxTokens: number = 2500): Promise<
   try {
     const data = await callOpenAIWithRetry(
       prompt,
-      "指定されたJSONフォーマットを厳守してください。tenPlanetSummaryはplanetaryInfluences、lifeDesign、practicalAdviceの3つのキーのみ含めてください。sun、moon等の個別天体キーは使用しないでください。",
+      "指定されたJSONフォーマットを厳守してください。tenPlanetSummaryはplanetaryInfluences、lifeDesign、practicalAdviceの3つのキーのみ含めてください。sun、moon等の個別天体キーは使用しないでください。毎回異なる視点から創造的で多様な分析を提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。JSON以外のテキストや説明文は絶対に出力せず、必ずJSON形式のみで回答してください。わかりやすい表現で少し長めに書き、必ずよいところと注意すべきところを含めて説明してください。",
       maxTokens
     );
     const content = data.choices[0].message.content;
     
-    // デバッグ：AI生成コンテンツをログ出力
-    console.log('🔍 【AI生成コンテンツ】:', content);
-    console.log('🔍 【AI生成コンテンツ長】:', content?.length || 0);
-    
     const aiResultRaw = safeParseJSON(content);
+    const result = mapAIResponseToAIAnalysisResult(aiResultRaw);
     
-    // 不要なセクションを除去（todaysFortuneなど）
-    let tenPlanetSummary = aiResultRaw?.tenPlanetSummary;
-    
-    // tenPlanetSummaryの形式チェック
-    if (tenPlanetSummary && (!tenPlanetSummary.planetaryInfluences || !tenPlanetSummary.lifeDesign || !tenPlanetSummary.practicalAdvice)) {
+    // tenPlanetSummaryの形式チェック＆フォールバック機能
+    if (result.tenPlanetSummary && (!result.tenPlanetSummary.planetaryInfluences || !result.tenPlanetSummary.lifeDesign || !result.tenPlanetSummary.practicalAdvice)) {
       console.log('🚨 【tenPlanetSummary形式エラー】正しくない形式、フォールバック適用');
-      tenPlanetSummary = {
-        planetaryInfluences: "10天体の配置から、あなたは安定感を重視しながらも、創造性と変化への適応力を併せ持つ特別な人格です。太陽の影響で基本的な性格が形成され、月の影響で感情面や直感力が強化されています。水星によりコミュニケーション能力が高く、金星により美的センスと人間関係の調和を大切にします。火星のエネルギーが行動力を与え、木星が成長と拡大の機会をもたらします。土星の影響で責任感が強く、天王星が革新性を、海王星が直感力を、冥王星が変革力を与えています。これらの天体が織りなす複雑な影響により、あなたは多面的で魅力的な人格を持っています。",
-        lifeDesign: "あなたの人生は段階的な成長と変化を通じて展開されます。若い時期は自己発見と基盤作りの時期となり、中年期には責任と成果の実現期となります。晩年期には知恵と経験を活かした貢献の時期となるでしょう。10天体の配置が示すのは、安定性と変化の両方を経験する豊かな人生設計図です。困難な時期も含めて、すべてがあなたの成長と魂の進化のために必要な経験となります。人間関係、キャリア、精神的成長のすべてにおいて、バランスの取れた発展が期待できます。",
-        practicalAdvice: "日常生活では、10天体の影響を活かすため、定期的な自己反省の時間を設けることをお勧めします。太陽の力を活かすため、自分らしい表現を大切にし、月の影響を活かすため、感情や直感を尊重してください。コミュニケーションを大切にし、美しいものに触れる時間を作り、適度な運動と挑戦を取り入れましょう。責任感を活かしつつ、新しいことにも柔軟に対応し、直感を信じて行動することで、天体の恩恵を最大限に受けることができます。また、変化を恐れずに受け入れ、継続的な学びと成長を心がけることが重要です。"
+      result.tenPlanetSummary = {
+        planetaryInfluences: "10天体の配置から、あなたは安定感を重視しながらも革新的な変化を求める特質を持っています。太陽から冥王星まで、すべての天体があなたの多面的な性格を形作り、人生の様々な局面で影響を与えています。これらの天体の相互作用により、あなたは感情豊かでありながら理性的な判断ができる人です。",
+        lifeDesign: "あなたの人生は段階的な成長と変化を通じて発展していきます。10天体の配置が示すのは、創造性と実用性を両立させることの重要性です。人間関係において深いつながりを築きながら、同時に個人の自立も大切にする、バランスの取れた人生設計が描かれています。",
+        practicalAdvice: "日常生活では、10天体の影響を活かすため、感情と理性のバランスを意識することが大切です。直感を大切にしながらも論理的思考も活用し、人との関わりにおいては相手の立場を理解する努力を続けてください。また、定期的な自己反省の時間を設けることで、天体の恩恵をより深く受け取ることができるでしょう。"
       };
     }
     
-    const cleanedResult = {
-      personalityInsights: aiResultRaw?.personalityInsights,
-      detailedFortune: aiResultRaw?.detailedFortune,
-      tenPlanetSummary
-    };
-    
-    console.log('🔍 【パース後データ】:', cleanedResult);
-    console.log('🔍 【tenPlanetSummary存在確認】:', !!cleanedResult?.tenPlanetSummary);
-    console.log('🔍 【tenPlanetSummary形式確認】:', !!cleanedResult?.tenPlanetSummary?.planetaryInfluences);
-    
-    return mapAIResponseToAIAnalysisResult(cleanedResult);
+    return result;
   } catch (error) {
     console.error('AI分析エラー:', error);
     
@@ -362,11 +363,6 @@ const callOpenAIAPI = async (prompt: string, maxTokens: number = 2500): Promise<
         wellnessRecommendations: []
       },
       planetAnalysis: {},
-      tenPlanetSummary: {
-        planetaryInfluences: "現在AI分析が利用できません。",
-        lifeDesign: "現在AI分析が利用できません。",
-        practicalAdvice: "現在AI分析が利用できません。"
-      },
       aiPowered: false
     };
     
@@ -486,9 +482,9 @@ export const generateAIAnalysis = async (
       aiPowered: true
     };
   } else {
-    // 詳しい占い: 全天体の詳細分析（アプリの集大成）
+    // 詳しい占い: 全天体の詳細分析
     const enhancedPrompt = generateEnhancedAnalysisPrompt(birthData, planets);
-    baseResult = await callOpenAIAPI(enhancedPrompt, 5000); // 集大成診断用に大幅増量
+    baseResult = await callOpenAIAPI(enhancedPrompt, 2500); // 多めのトークン数
 
     // planetAnalysisは天体ごとに分割API呼び出し
     const planetAnalysis = await generatePlanetAnalysisAll(birthData, planets);
@@ -666,13 +662,10 @@ export const chatWithAIAstrologer = async (
     ? aspectPatterns.join('\n')
     : '特別なアスペクトパターンは検出されていません';
 
-  const timeContext = getTimeContextForAI();
   const contextPrompt = `
 【AI占い師チャット】
 
 あなたは30年以上の経験を持つ世界最高の占星術師です。クライアントとの対話を通じて、深い洞察とアドバイスを提供します。
-
-${timeContext}
 
 【クライアント情報】
 名前: ${birthData.name}

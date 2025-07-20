@@ -61,6 +61,11 @@ export function safeParseJSON(raw: string): any {
         financialProspects: "AI分析データの読み込みに失敗しました。",
         personalGrowth: "AI分析データの読み込みに失敗しました。"
       },
+      tenPlanetSummary: {
+        planetaryInfluences: "AI分析データの読み込みに失敗しました。",
+        lifeDesign: "AI分析データの読み込みに失敗しました。",
+        practicalAdvice: "AI分析データの読み込みに失敗しました。"
+      },
       planetAnalysis: {}
     };
   }
@@ -72,6 +77,7 @@ export function mapAIResponseToAIAnalysisResult(raw: any): any {
   const detailedFortune = raw.detailedFortune || {};
   const todaysFortune = raw.todaysFortune || {};
   const planetAnalysis = raw.planetAnalysis || {};
+  const tenPlanetSummary = raw.tenPlanetSummary || {};
 
   const result: any = {
     personalityInsights: {
@@ -99,6 +105,11 @@ export function mapAIResponseToAIAnalysisResult(raw: any): any {
         }
       ])
     ),
+    tenPlanetSummary: {
+      planetaryInfluences: tenPlanetSummary.planetaryInfluences || "データなし",
+      lifeDesign: tenPlanetSummary.lifeDesign || "データなし",
+      practicalAdvice: tenPlanetSummary.practicalAdvice || "データなし"
+    },
     aiPowered: true
   };
 

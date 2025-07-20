@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BirthData } from '../types';
 import LocationPicker from './LocationPicker';
-import WheelPicker from './WheelPicker';
 type FortuneMode = 'sun-sign' | 'three-planets' | 'ten-planets' | 'ai-chat';
 
 interface InputFormProps {
@@ -326,44 +325,59 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
               <div className="date-selectors">
                 <div className="date-selector">
                   <label htmlFor="birthYear" className="sr-only">年</label>
-                  <WheelPicker
-                    options={yearOptions}
+                  <select
+                    id="birthYear"
                     value={formData.birthDate ? new Date(formData.birthDate).getFullYear() : ''}
-                    onChange={(value) => handleDateChange('year', value)}
-                    height={110}
-                    itemHeight={30}
-                    className={errors.birthDate ? 'error' : ''}
-                    placeholder="年"
-                  />
+                    onChange={(e) => handleDateChange('year', e.target.value)}
+                    className={`form-select ${errors.birthDate ? 'error' : ''}`}
+                    aria-label="生年を選択してください"
+                  >
+                    <option value="">年</option>
+                    {yearOptions.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="date-selector">
                   <label htmlFor="birthMonth" className="sr-only">月</label>
-                  <WheelPicker
-                    options={monthOptions}
+                  <select
+                    id="birthMonth"
                     value={formData.birthDate ? new Date(formData.birthDate).getMonth() + 1 : ''}
-                    onChange={(value) => handleDateChange('month', value)}
-                    height={110}
-                    itemHeight={30}
-                    className={errors.birthDate ? 'error' : ''}
-                    placeholder="月"
-                  />
+                    onChange={(e) => handleDateChange('month', e.target.value)}
+                    className={`form-select ${errors.birthDate ? 'error' : ''}`}
+                    aria-label="生月を選択してください"
+                  >
+                    <option value="">月</option>
+                    {monthOptions.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="date-selector">
                   <label htmlFor="birthDay" className="sr-only">日</label>
-                  <WheelPicker
-                    options={dayOptions}
+                  <select
+                    id="birthDay"
                     value={formData.birthDate ? new Date(formData.birthDate).getDate() : ''}
-                    onChange={(value) => handleDateChange('day', value)}
-                    height={110}
-                    itemHeight={30}
-                    className={errors.birthDate ? 'error' : ''}
-                    placeholder="日"
-                  />
+                    onChange={(e) => handleDateChange('day', e.target.value)}
+                    className={`form-select ${errors.birthDate ? 'error' : ''}`}
+                    aria-label="生日を選択してください"
+                  >
+                    <option value="">日</option>
+                    {dayOptions.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
             <small id="birthDate-hint" className="input-hint">
-              💡 上下ボタンで1つずつ選択、または中央をスクロールして選択してください
+              💡 プルダウンメニューから年、月、日を選択してください
             </small>
             {errors.birthDate && (
               <span 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { BirthData, PlanetPosition } from '../types';
 import { chatWithAIAstrologer, getTransitInfoForChat, addTransitContextToChat, ChatMessage } from '../utils/aiAnalyzer';
+import { getTimeContextForAI } from '../utils/dateUtils';
 import { calculateAllAspects, detectAspectPatterns } from '../utils/aspectCalculator';
 
 interface Props {

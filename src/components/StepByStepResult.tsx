@@ -1397,52 +1397,93 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                 </div>
               ) : (
                 <div className="personality-sections">
-                  {threePlanetsPersonality.overall && (
+                  {/* 各セクションで空白チェックを追加 */}
+                  {(threePlanetsPersonality.overall || threePlanetsPersonality.relationships || 
+                    threePlanetsPersonality.work || threePlanetsPersonality.love || 
+                    threePlanetsPersonality.growth) ? (
+                    <>
+                      {threePlanetsPersonality.overall && (
+                        <div className="personality-card">
+                          <h4 className="personality-title">🌟 総合的な性格</h4>
+                          <div className="personality-content">
+                            <p>{threePlanetsPersonality.overall}</p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {threePlanetsPersonality.relationships && (
+                        <div className="personality-card">
+                          <h4 className="personality-title">👥 人間関係のスタイル</h4>
+                          <div className="personality-content">
+                            <p>{threePlanetsPersonality.relationships}</p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {threePlanetsPersonality.work && (
+                        <div className="personality-card">
+                          <h4 className="personality-title">💼 仕事への取り組み方</h4>
+                          <div className="personality-content">
+                            <p>{threePlanetsPersonality.work}</p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {threePlanetsPersonality.love && (
+                        <div className="personality-card">
+                          <h4 className="personality-title">💕 恋愛・パートナーシップ</h4>
+                          <div className="personality-content">
+                            <p>{threePlanetsPersonality.love}</p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {threePlanetsPersonality.growth && (
+                        <div className="personality-card">
+                          <h4 className="personality-title">🌱 成長のポイント</h4>
+                          <div className="personality-content">
+                            <p>{threePlanetsPersonality.growth}</p>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : (
                     <div className="personality-card">
-                      <h4 className="personality-title">🌟 総合的な性格</h4>
+                      <h4 className="personality-title">🌟 3天体からみたあなた</h4>
                       <div className="personality-content">
-                        <p>{threePlanetsPersonality.overall}</p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {threePlanetsPersonality.relationships && (
-                    <div className="personality-card">
-                      <h4 className="personality-title">👥 人間関係のスタイル</h4>
-                      <div className="personality-content">
-                        <p>{threePlanetsPersonality.relationships}</p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {threePlanetsPersonality.work && (
-                    <div className="personality-card">
-                      <h4 className="personality-title">💼 仕事への取り組み方</h4>
-                      <div className="personality-content">
-                        <p>{threePlanetsPersonality.work}</p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {threePlanetsPersonality.love && (
-                    <div className="personality-card">
-                      <h4 className="personality-title">💕 恋愛・パートナーシップ</h4>
-                      <div className="personality-content">
-                        <p>{threePlanetsPersonality.love}</p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {threePlanetsPersonality.growth && (
-                    <div className="personality-card">
-                      <h4 className="personality-title">🌱 成長のポイント</h4>
-                      <div className="personality-content">
-                        <p>{threePlanetsPersonality.growth}</p>
+                        <p>分析結果の読み込み中にエラーが発生しました。</p>
+                        <button 
+                          className="retry-button"
+                          onClick={() => {
+                            setThreePlanetsPersonality(null);
+                            generateThreePlanetsPersonality();
+                          }}
+                        >
+                          再度分析する
+                        </button>
                       </div>
                     </div>
                   )}
                 </div>
               )}
+            </div>
+          )}
+          
+          {/* 分析が開始されていない場合の初期状態表示 */}
+          {!threePlanetsPersonality && !isGeneratingThreePlanetsPersonality && (
+            <div className="three-planets-analysis-results">
+              <div className="personality-card">
+                <h4 className="personality-title">🌟 3天体からみたあなた</h4>
+                <div className="personality-content">
+                  <p>分析を開始する準備ができました。</p>
+                  <button 
+                    className="retry-button"
+                    onClick={generateThreePlanetsPersonality}
+                  >
+                    分析を開始
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </div>

@@ -3808,3 +3808,80 @@ div.action-buttons,
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
   }
 }
+
+/* ============================================
+   10天体集大成診断用スタイル
+   ============================================ */
+
+.major-analysis {
+  background: linear-gradient(135deg, #fef3e2 0%, #fef9c3 100%) !important;
+  border: 2px solid #f59e0b !important;
+  border-left: 6px solid #f59e0b !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2) !important;
+  margin-bottom: 1.5rem !important;
+  padding: 1.2rem 1.5rem !important;
+}
+
+.major-analysis h4 {
+  color: #92400e;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-subtitle {
+  color: #1e40af;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin: 2rem 0 1rem 0;
+  padding: 0.8rem 1rem;
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+  border-radius: 8px;
+  border-left: 4px solid #0ea5e9;
+}
+
+.personality-insights-section,
+.fortune-insights-section {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.personality-insights-section .analysis-category h5,
+.fortune-insights-section .analysis-category h5 {
+  color: #374151;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ai-analysis-results .analysis-category {
+  margin-bottom: 1.2rem;
+}
+
+.ai-analysis-results .analysis-category p {
+  line-height: 1.7;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+/* 集大成診断の説明テキストスタイル */
+.analysis-overview p {
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.analysis-overview strong {
+  color: #dc2626;
+  font-weight: 700;
+}
