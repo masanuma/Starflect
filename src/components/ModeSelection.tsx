@@ -45,8 +45,8 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
       title: '星が伝える 隠れた自分診断',
       icon: '🌙✨',
       duration: '1分',
-      description: '時刻・場所で隠れた運勢が分かる！\n総合・金銭・恋愛・仕事・成長運を発見',
-      features: ['隠れた運勢を発見', '5つの運勢分析', '3天体の複合占い'],
+      description: '時刻・場所で隠れた内面が分かる！\n普段気づかない自分の本当の姿を発見',
+      features: ['隠れた内面を発見', '本当の自分を分析', '3天体の複合診断'],
       gradient: 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)',
       required: '出生時刻・場所も必要'
     },
@@ -55,8 +55,8 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
       title: '星が伝える あなたの印象診断',
       icon: '🌌⭐',
       duration: '2分',
-      description: '10天体の完全運勢占い！\n総合・金銭・恋愛・仕事・成長の5つの運勢を詳しく分析',
-              features: ['総合運', '金銭運', '恋愛運', '仕事運', '成長運'],
+      description: '10天体で他人から見たあなたを完全分析！\n話し方・行動・第一印象など外面的な特徴を詳しく診断',
+      features: ['他人からの印象', '話し方の特徴', '外面的な行動', '第一印象分析', '社交での振る舞い'],
       gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
       required: '出生時刻・場所も必要'
     },
