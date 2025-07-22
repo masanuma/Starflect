@@ -32,31 +32,31 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
   const modes = [
     {
       id: 'sun-sign',
-      title: 'お手軽星座占い',
+      title: 'お手軽12星座占い',
       icon: '🌟',
       duration: '30秒',
-      description: '生年月日だけで占える！\n雑誌の星座占いより少し詳しく',
-      features: ['生年月日のみ', '手軽で簡単', '星座の基本性格'],
+      description: '占い初心者でも安心！まずはここから\n気になることはAI占い師に相談',
+      features: ['まずは生年月日から', 'AI占い師に相談'],
       gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       required: '生年月日のみ'
     },
     {
       id: 'three-planets',
-      title: '詳しい星座占い',
+      title: '隠れた自分発見占い',
       icon: '🌙✨',
       duration: '1分',
-      description: '月は2時間、上昇星座は4分で変わる！\n時刻・場所でもっと詳しいあなたが判明',
-      features: ['3つの星を分析', '詳細な性格分析', '時刻・場所で個別化'],
+      description: '時刻・場所で隠れた自分が分かる！\n表と裏の違いを発見してみよう',
+      features: ['隠れた自分を発見', '表と裏の違い', '意外な一面'],
       gradient: 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)',
       required: '出生時刻・場所も必要'
     },
     {
       id: 'ten-planets',
-      title: 'プロ級星座占い',
+      title: 'まわりから見たあなた占い',
       icon: '🌌⭐',
       duration: '2分',
-      description: '10天体で数百万通りの組み合わせ\n雑誌占いの12種類とは別次元の精度',
-      features: ['全10個の星分析', '最高精度', 'プロレベル占星術'],
+      description: '話し方・恋愛・仕事での振る舞い方！\n周りが見てる「いつものあなた」を大解剖',
+      features: ['話し方の癖', '恋愛での行動', '仕事での振る舞い'],
       gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
       required: '出生時刻・場所も必要'
     },
