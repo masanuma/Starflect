@@ -389,54 +389,48 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
       const includeImportantDays = selectedPeriod !== 'today' && selectedPeriod !== 'tomorrow';
       
       let analysisPrompt = `
-        あなたは経験豊富な西洋占星術師です。以下の3天体の情報と性格分析結果を基に、${selectedPeriodLabel}の運勢を詳しく占ってください：
+        あなたは「隠れた運勢」の専門家です。${selectedPeriodLabel}の運勢を、3天体の複合分析から読み解いてください：
         
-        【3天体の配置】
-        - 太陽: ${sun?.sign} ${sun?.degree}度
-        - 月: ${moon?.sign} ${moon?.degree}度
-        - 上昇星座: ${ascendant?.sign} ${ascendant?.degree}度
+        【隠れた運勢の3天体】
+        - 価値観と意志: ${sun?.sign} ${sun?.degree}度 
+        - 感情と直感: ${moon?.sign} ${moon?.degree}度
+        - 無意識の行動: ${ascendant?.sign} ${ascendant?.degree}度
         ${personalityContext}
         
         【占い期間】
         - 期間: ${selectedPeriodLabel}
         - ランダムID: ${randomId}
         
-        ${timeContext}
+        **絶対に守るべき重要ルール**：
+        - マークダウン記号（**、###、-など）は一切使用禁止
+        - 季節や時期に関する表現（夏のエネルギー、今の時期、季節が〜など）は一切使用禁止
+        - 「これらの要素」「上記の特徴」などの曖昧な参照は禁止。具体的に何を指すか必ず明記すること
+        - 文章はですます調で親しみやすく記載
+        - 「実は」「隠れた」「意外にも」を積極活用し、運勢の深い洞察を提供
         
-        **重要な文章作成ルール（必ず守ること）**：
-        - 文章はですます調で丁寧に記載すること
-        - 特徴と注意点をできるだけ記載すること
-        - 難しい言い回しや難しい熟語はできるだけ用いないこと
-        - 利用者ターゲットは30代であるが理解力は大学生レベルとすること
-        - 可能な限り具体的な例を用いて表現すること
-        - プロンプトは利用者には見えないようにすること
-        - 利用者の生年月日や出生場所の情報をプロンプトとして画面に表示しないこと
-        - 文章の最後に「###」などの記号は絶対に記載しないこと
-        - **重要**: 「アセンダント」という用語は絶対に使用せず、必ず「上昇星座」と記載すること
+        **隠れた運勢分析の視点**：
+        - 表面的な占いでは分からない深い運勢の流れを発見すること
+        - 価値観（${sun?.sign}）と感情（${moon?.sign}）の相克から生まれる運勢の変化
+        - 無意識の行動（${ascendant?.sign}）が引き寄せる隠れたチャンスや注意点
+        - 3天体の複合的な影響で生まれる特別な運勢のパターン
+        - 普通の占いでは気づかない、この人だけの隠れた幸運や成長のタイミング
         
-        **占い要求事項**：
-        - 3天体の配置（太陽・月・上昇星座）と性格分析結果を総合的に考慮してください
-        - ${selectedPeriodLabel}の星の運行（現在の天体の動きと影響）も考慮してください
-        - 必ず各セクションで「太陽の${sun?.sign}の影響で〜」「月の${moon?.sign}により〜」「上昇星座の${ascendant?.sign}から〜」のような具体的な3天体の影響を明記してください
-        - 毎回新しい視点で分析を行い、異なる結果を提供してください
-        - この分析は一度きりのものなので、創造性と多様性を重視してください
+        以下の5項目で隠れた運勢を占ってください。各項目2-3文で具体的に：
         
-        以下の項目について簡潔に分析してください：
-        
-        【全体運】
-        太陽の${sun?.sign}、月の${moon?.sign}、上昇星座の${ascendant?.sign}の影響を明記しながら、この期間の総合的な運勢と注意点を1-2文で記載。
-        
-        【恋愛運】
-        太陽・月・上昇星座の影響を含めて、恋愛・パートナーシップの分析結果を踏まえた、この期間の恋愛運勢を1-2文で記載。
-        
-        【仕事運】
-        3天体の影響を明記しながら、仕事への取り組み方の分析を基に、この期間の仕事運勢を1-2文で記載。
-        
-        【健康運】
-        太陽・月・上昇星座の影響を考慮した、この期間の健康面での注意点とアドバイスを1-2文で記載。
+        【総合運】
+        太陽（${sun?.sign}）・月（${moon?.sign}）・上昇星座（${ascendant?.sign}）の複合的な流れから見える全体的な運気と隠れたチャンス。
         
         【金銭運】
-        3天体の影響を含めて、性格分析結果から見える金銭管理の傾向を踏まえた、この期間の金銭運を1-2文で記載。`;
+        価値観（${sun?.sign}）と感情面（${moon?.sign}）の相互作用から導かれる金銭面での隠れた動きや注意点。
+        
+        【恋愛運】
+        表の魅力（${sun?.sign}）と本音（${moon?.sign}）のギャップから生まれる恋愛・人間関係での隠れた展開。
+        
+        【仕事運】
+        意志力（${sun?.sign}）と無意識の行動（${ascendant?.sign}）が織りなす仕事面での隠れた成功の鍵や課題。
+        
+        【成長運】
+        3天体の調和から見える隠れた成長チャンス。今後意識すべき自己発展のポイントと方向性。`;
       
       // 今日の占い以外では重要な日/月を追加
       if (includeImportantDays) {
@@ -465,8 +459,22 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
       if (aiResult && aiResult.trim()) {
         setLevel2Fortune(aiResult);
         debugLog('🔍 【3天体占い結果設定】level2Fortuneに設定完了');
+        
+        // AIチャット用にLevel2の占い結果をローカルストレージに保存
+        const storageKey = `level2_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
+        const fortuneData = {
+          mode: 'hidden-self-discovery',
+          period: selectedPeriod,
+          result: aiResult,
+          timestamp: Date.now(),
+          sunSign: sun?.sign,
+          moonSign: moon?.sign,
+          ascendantSign: ascendant?.sign
+        };
+        localStorage.setItem(storageKey, JSON.stringify(fortuneData));
+        debugLog('🔍 【AIチャット用保存】Level2結果をローカルストレージに保存:', storageKey);
       } else {
-        debugLog('🔍 【3天体占いエラー】AIの応答が空またはnull');
+        debugLog('🔍 【隠れた自分発見占いエラー】AIの応答が空またはnull');
         setLevel2Fortune('AI占い師が現在利用できません。しばらくしてから再度お試しください。');
       }
     } catch (error) {
@@ -805,48 +813,29 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         const timeContext = getTimeContextForAI();
         const randomId = Math.random().toString(36).substring(2, 8);
       
-      const analysisPrompt = `
-        あなたは経験豊富な西洋占星術師です。以下の3天体の組み合わせから、この人の性格を詳しく分析してください：
-        - 太陽: ${sun?.sign} ${sun?.degree}度
-        - 月: ${moon?.sign} ${moon?.degree}度
-        - 上昇星座: ${ascendant?.sign} ${ascendant?.degree}度
+            const analysisPrompt = `
+        以下の形式で必ず回答してください。【】記号を使って5つのセクションに分けて回答することが絶対条件です。
         
-        ${timeContext}
-        ランダムID: ${randomId}
+        天体: 太陽${sun?.sign}・月${moon?.sign}・上昇星座${ascendant?.sign}
         
-        **重要な文章作成ルール（必ず守ること）**：
-        - 文章はですます調で丁寧に記載すること
-        - 特徴と注意点をできるだけ記載すること
-        - 難しい言い回しや難しい熟語はできるだけ用いないこと
-        - 利用者ターゲットは30代であるが理解力は大学生レベルとすること
-        - 可能な限り具体的な例を用いて表現すること
-        - プロンプトは利用者には見えないようにすること
-        - 利用者の生年月日や出生場所の情報をプロンプトとして画面に表示しないこと
-        - **重要**: 「アセンダント」という用語は絶対に使用せず、必ず「上昇星座」と記載すること
+        回答例（この通りの形式で回答）：
         
-        **3天体の根拠を明記する重要なルール**：
-        - 各セクションで、太陽・月・上昇星座のどの要素がその特徴に影響しているかを必ず明記すること
-        - 例：「太陽の${sun?.sign}の影響で〜」「月の${moon?.sign}により〜」「上昇星座の${ascendant?.sign}から〜」
-        - 各特徴について、どの天体のどの星座が根拠になっているかを具体的に説明すること
+        【心の奥底にある性格】
+        太陽${sun?.sign}の表向きとは違い、月${moon?.sign}の影響で意外な一面があります。普段は見せない隠れた性格を教えてください。
         
-        以下の5つのセクションに分けて分析してください。各セクションは2-3文で具体的に記載してください：
+        【建前と本音の違い】
+        表向きは太陽${sun?.sign}ですが、本音では月${moon?.sign}の違う気持ちです。周りが知らない本当の想いがあります。
         
-        【総合的な性格】
-        3天体の組み合わせから見える基本的な性格の特徴と注意点（どの天体のどの星座が影響しているかを明記）
+        【無意識に現れる癖】
+        上昇星座${ascendant?.sign}による、本人も気づかない行動パターンです。自動的に出る隠れた癖があります。
         
-        【人間関係のスタイル】
-        友人や同僚との関係性の築き方の特徴と注意点（どの天体のどの星座が影響しているかを明記）
+        【本当の感情の動き】
+        月${moon?.sign}が示す、表面では見せない本当の感情です。心の奥の本当の気持ちがあります。
         
-        【仕事への取り組み方】
-        職場での行動パターンや仕事のスタイルの特徴と注意点（どの天体のどの星座が影響しているかを明記）
+        【内面的な成長課題】
+        この3天体の組み合わせから見える成長の道筋です。隠れた可能性や課題があります。
         
-        【恋愛・パートナーシップ】
-        恋愛関係やパートナーとの関係での特徴と注意点（どの天体のどの星座が影響しているかを明記）
-        
-        【成長のポイント】
-        この3天体の組み合わせから見える成長の可能性とストレス対処法、意識すべき点（どの天体のどの星座が影響しているかを明記）
-        
-        各セクションは具体的で実用的なアドバイスを含めてください。例えば「太陽の${sun?.sign}の影響で職場では〜のような場面で力を発揮します」「月の${moon?.sign}により恋愛では〜に注意しましょう」といった具体例を使ってください。
+        上記の【】形式を絶対に守って回答してください。【】記号がないと回答が無効になります。
       `;
       
       debugLog('🔍 【AI呼び出し中】chatWithAIAstrologerを実行します...');
@@ -879,29 +868,110 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
 
   // AI分析結果をパース
   const parseThreePlanetsAnalysis = (analysisText: string) => {
+    debugLog('🔍 【AI生成結果全体】:', analysisText);
+    
     const sections = {
-      overall: '',
-      relationships: '',
-      work: '',
-      love: '',
-      growth: ''
+      innerChange: '',
+      emotionalFlow: '',
+      unconsciousChange: '',
+      honneBalance: '',
+      soulGrowth: '',
+      importantDays: ''
     };
     
     const sectionMatches = analysisText.match(/【[^】]*】[^【]*/g) || [];
+    debugLog('🔍 【セクション数】:', sectionMatches.length);
+    debugLog('🔍 【抽出されたセクション一覧】:', sectionMatches);
     
-    sectionMatches.forEach(section => {
-      if (section.includes('総合的な性格') || section.includes('総合')) {
-        sections.overall = section.replace(/【[^】]*】/, '').trim();
-      } else if (section.includes('人間関係') || section.includes('人間関係のスタイル')) {
-        sections.relationships = section.replace(/【[^】]*】/, '').trim();
-      } else if (section.includes('仕事') || section.includes('仕事への取り組み方')) {
-        sections.work = section.replace(/【[^】]*】/, '').trim();
-      } else if (section.includes('恋愛') || section.includes('パートナーシップ')) {
-        sections.love = section.replace(/【[^】]*】/, '').trim();
-      } else if (section.includes('成長') || section.includes('成長のポイント')) {
-        sections.growth = section.replace(/【[^】]*】/, '').trim();
+    // 【】記号がない場合のフォールバック処理
+    if (sectionMatches.length === 0) {
+      debugLog('🔍 【フォールバック処理】【】記号がないため、キーワードベースでパース開始');
+      
+      // キーワードベースでセクションを分割
+      const keywords = [
+        { key: 'innerChange', patterns: ['心の奥底', '隠れた性格', '内面', '奥底', '隠れた一面'] },
+        { key: 'emotionalFlow', patterns: ['建前と本音', '本音', '建前', '表向き', '本当の想い'] },
+        { key: 'unconsciousChange', patterns: ['無意識', '行動パターン', '癖', '自動的'] },
+        { key: 'honneBalance', patterns: ['感情の動き', '本当の感情', '心の奥', '感情'] },
+        { key: 'soulGrowth', patterns: ['成長', '課題', '可能性', '道筋'] }
+      ];
+      
+      keywords.forEach(({ key, patterns }) => {
+        for (const pattern of patterns) {
+          if (analysisText.includes(pattern)) {
+            // パターンを含む段落を抽出
+            const sentences = analysisText.split(/[。.]\s*/);
+            const relevantSentences = sentences.filter(sentence => 
+              sentence.includes(pattern) && sentence.length > 10
+            );
+            
+            if (relevantSentences.length > 0) {
+              const content = relevantSentences.slice(0, 2).join('。') + '。';
+              // 型安全性のため個別に設定
+              if (key === 'innerChange') sections.innerChange = content;
+              else if (key === 'emotionalFlow') sections.emotionalFlow = content;
+              else if (key === 'unconsciousChange') sections.unconsciousChange = content;
+              else if (key === 'honneBalance') sections.honneBalance = content;
+              else if (key === 'soulGrowth') sections.soulGrowth = content;
+              debugLog(`🔍 【フォールバック】${key}設定:`, content);
+              break;
+            }
+          }
+        }
+      });
+      
+      // キーワードベースでも何も取得できない場合の最終フォールバック
+      const hasAnyContent = Object.values(sections).some(value => value.length > 0);
+      if (!hasAnyContent) {
+        debugLog('🔍 【最終フォールバック】段落分割でセクション作成');
+        const paragraphs = analysisText.split(/\n\n+|。\s*\n/).filter(p => p.trim().length > 20);
+        
+        if (paragraphs.length >= 3) {
+          sections.innerChange = paragraphs[0]?.trim() || '';
+          sections.emotionalFlow = paragraphs[1]?.trim() || '';
+          sections.unconsciousChange = paragraphs[2]?.trim() || '';
+          sections.honneBalance = paragraphs[3]?.trim() || '';
+          sections.soulGrowth = paragraphs[4]?.trim() || '';
+          debugLog('🔍 【最終フォールバック】段落分割完了');
+        }
+      }
+    }
+    
+    sectionMatches.forEach((section, index) => {
+      debugLog(`🔍 【セクション${index}】内容:`, section);
+      
+      if (section.includes('心の奥底') || section.includes('隠れた性格') || section.includes('奥底にある性格')) {
+        sections.innerChange = section.replace(/【[^】]*】/, '').trim();
+        debugLog('🔍 【心の奥底にある性格設定】:', sections.innerChange);
+      } else if (section.includes('建前と本音') || section.includes('本音の違い') || section.includes('表の顔')) {
+        sections.emotionalFlow = section.replace(/【[^】]*】/, '').trim();
+        debugLog('🔍 【建前と本音の違い設定】:', sections.emotionalFlow);
+      } else if (section.includes('無意識に現れる癖') || section.includes('無意識') || section.includes('癖')) {
+        sections.unconsciousChange = section.replace(/【[^】]*】/, '').trim();
+        debugLog('🔍 【無意識に現れる癖設定】:', sections.unconsciousChange);
+      } else if (section.includes('本当の感情') || section.includes('感情の動き') || section.includes('心の中')) {
+        sections.honneBalance = section.replace(/【[^】]*】/, '').trim();
+        debugLog('🔍 【本当の感情の動き設定】:', sections.honneBalance);
+      } else if (section.includes('内面的') || section.includes('成長課題') || section.includes('精神的')) {
+        sections.soulGrowth = section.replace(/【[^】]*】/, '').trim();
+        debugLog('🔍 【内面的な成長課題設定】:', sections.soulGrowth);
+      } else if (section.includes('重要な日') || section.includes('重要日') || section.includes('重要な月') || section.includes('ラッキーデー') || section.includes('注意日') || section.includes('ラッキー月') || section.includes('注意月')) {
+        if (!sections.importantDays) {
+          sections.importantDays = section.replace(/【[^】]*】/, '').trim();
+          debugLog('🔍 【重要な日/月設定】:', sections.importantDays);
+        }
+      } else {
+        debugLog('🔍 【未分類セクション】:', section);
       }
     });
+    
+    debugLog('🔍 【最終解析結果】:', sections);
+    debugLog('🔍 【解析結果チェック】各プロパティの値:');
+    debugLog('  innerChange:', sections.innerChange);
+    debugLog('  emotionalFlow:', sections.emotionalFlow);
+    debugLog('  unconsciousChange:', sections.unconsciousChange);
+    debugLog('  honneBalance:', sections.honneBalance);
+    debugLog('  soulGrowth:', sections.soulGrowth);
     
     return sections;
   };
@@ -1246,37 +1316,37 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           )}
         </div>
 
-        {/* 3天体の本格占いの説明 */}
+        {/* 隠れた自分発見占いの説明 */}
         <div className="three-planets-introduction">
-          <h3 className="section-title">🔮 3天体の本格占いとは</h3>
+          <h3 className="section-title">🔮 隠れた運勢占いとは</h3>
           <div className="intro-overview">
             <p>
-              太陽星座だけでは分からない、あなたの隠れた無意識の行動パターン、上昇星座で「人から見られているあなたの印象」がわかります。月星座で「本当の感情やプライベートな自分」がわかります。この3つの組み合わせで、なぜ同じ星座でも人によって性格が違うのかが明確になります。
+              普通の12星座占いでは分からない、あなたの隠れた運勢を発見！時刻と場所を入力すると、3天体の複合分析から見える深い運勢の流れが明らかになります。「なぜ同じ星座でも運勢が違うの？」その答えがここにあります。
             </p>
           </div>
           
           <div className="three-planets-preview">
             <div className="planet-preview">
-              <span className="planet-icon">🌙</span>
+              <span className="planet-icon">🌟</span>
               <div className="planet-info">
-                <h4>月星座：本当の感情・プライベートな自分</h4>
-                <p>家族や親しい人前での本当のあなた</p>
+                <h4>総合運：3天体が織りなす全体的な運気</h4>
+                <p>複合的な流れから見える隠れたチャンス</p>
               </div>
             </div>
             
             <div className="planet-preview">
-              <span className="planet-icon">🌅</span>
+              <span className="planet-icon">💰</span>
               <div className="planet-info">
-                <h4>上昇星座：第一印象・見た目の特徴</h4>
-                <p>初対面の人があなたに与える印象</p>
+                <h4>金銭運：価値観と感情の相克が生む金運</h4>
+                <p>隠れた金銭面での動きや注意点</p>
               </div>
             </div>
             
             <div className="planet-preview">
-              <span className="planet-icon">🎯</span>
+              <span className="planet-icon">❤️</span>
               <div className="planet-info">
-                <h4>3つの組み合わせによる詳細な性格分析</h4>
-                <p>太陽・月・上昇星座の複合的な性格診断</p>
+                <h4>恋愛運：表と本音のギャップから生まれる展開</h4>
+                <p>人間関係での隠れた可能性</p>
               </div>
             </div>
           </div>
@@ -1288,7 +1358,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
             className="level-up-button"
             onClick={handleLevelUp}
           >
-            3天体の本格占いへ 🔮
+            隠れた運勢占いへ 🔮
           </button>
         </div>
 
@@ -1339,58 +1409,58 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         </div>
         
         <div className="level-title">
-          <h2 className="level-title-text">🔮 3天体の本格占い</h2>
+          <h2 className="level-title-text">🔮 隠れた運勢占い</h2>
         </div>
 
-        {/* 広告表示3: 3天体タイトルと結果の間 */}
+        {/* 広告表示3: 隠れた自分発見占いタイトルと結果の間 */}
         <AdBanner 
           position="level-transition" 
           size="medium" 
           demoMode={false} 
         />
         
-        {/* あなたの3天体セクション */}
+        {/* あなたの内面を構成する３つの天体セクション */}
         <div className="zodiac-section">
-          <h3 className="section-title">⭐ あなたの3天体</h3>
+          <h3 className="section-title">⭐ あなたの内面を構成する３つの天体</h3>
           <div className="three-planets-display">
             <div className="planet-card">
               <div className="planet-description">
-                あなたの基本的な性格と人生の目的を表します。<br/>
-                意識的な自己表現や、周囲に見せたい理想の自分を示しています。<br/>
+                あなたの基本的な性格と表に出る自分を表します。<br/>
+                普段から周囲に見せている、意識的な自己表現を示しています。<br/>
                 <br/>
               </div>
               <div className="planet-title-line">
                 <br/>
                 <span className="planet-emoji">☀️</span>
-                <span className="planet-name">太陽星座</span>
+                <span className="planet-name">太陽 (表の自分)</span>
                 <span className="zodiac-emoji">{zodiacInfo[sun?.sign || '']?.icon}</span>
                 <span className="zodiac-name">{sun?.sign}</span>
               </div>
             </div>
             <div className="planet-card">
               <div className="planet-description">
-                内面の感情や本音、無意識の反応パターンを表します。<br/>
-                プライベートな場面での素の感情や、心の奥深くにある欲求を示しています。<br/>
+                内面の感情や本音、プライベートな場面での素の自分を表します。<br/>
+                家族や親しい人の前で見せる、心の奥深くにある本当のあなたです。<br/>
                 <br/>
               </div>
               <div className="planet-title-line">
                 <br/>
                 <span className="planet-emoji">🌙</span>
-                <span className="planet-name">月星座</span>
+                <span className="planet-name">月 (裏の自分)</span>
                 <span className="zodiac-emoji">{zodiacInfo[moon?.sign || '']?.icon}</span>
                 <span className="zodiac-name">{moon?.sign}</span>
               </div>
             </div>
             <div className="planet-card">
               <div className="planet-description">
-                他人に与える第一印象や外見的な特徴を表します。<br/>
-                初対面の人が感じるあなたの雰囲気や、自然な行動パターンを示しています。<br/>
+                無意識の行動パターンや本能的なアプローチ方法を表します。<br/>
+                自然にとってしまう行動や、人生への取り組み方を示しています。<br/>
                 <br/>
               </div>
               <div className="planet-title-line">
                 <br/>
                 <span className="planet-emoji">🌅</span>
-                <span className="planet-name">上昇星座</span>
+                <span className="planet-name">上昇星座 (自然な行動)</span>
                 <span className="zodiac-emoji">{zodiacInfo[ascendant?.sign || '']?.icon}</span>
                 <span className="zodiac-name">{ascendant?.sign}</span>
               </div>
@@ -1398,15 +1468,15 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           </div>
         </div>
 
-        {/* 3天体から見たあなた */}
+        {/* あなたの隠れた一面を発見 */}
         <div className="personality-section">
-          <h3 className="section-title">🌟 3天体から見たあなた</h3>
+          <h3 className="section-title">🔮 あなたの隠れた一面を発見</h3>
           
           {/* 概要説明 */}
           {!threePlanetsPersonality && !isGeneratingThreePlanetsPersonality && (
             <div className="analysis-overview">
               <p>
-                {sun?.sign}の太陽星座、{moon?.sign}の月星座、{ascendant?.sign}の上昇星座という3つの天体の組み合わせから、あなたの複層的な性格を詳しく分析します。
+                太陽（{sun?.sign}）・月（{moon?.sign}）・上昇星座（{ascendant?.sign}）という３つの天体から、あなたの内面的な性格を詳しく読み解きます。
               </p>
             </div>
           )}
@@ -1435,68 +1505,65 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
               ) : (
                 <div className="personality-sections">
                   {/* 各セクションで空白チェックを追加 */}
-                  {(threePlanetsPersonality.overall || threePlanetsPersonality.relationships || 
-                    threePlanetsPersonality.work || threePlanetsPersonality.love || 
-                    threePlanetsPersonality.growth) ? (
+                  {(threePlanetsPersonality.innerChange || threePlanetsPersonality.emotionalFlow || 
+                    threePlanetsPersonality.unconsciousChange || threePlanetsPersonality.honneBalance || 
+                    threePlanetsPersonality.soulGrowth) ? (
                     <>
-                      {threePlanetsPersonality.overall && (
+                      {threePlanetsPersonality.innerChange && (
                         <div className="personality-card">
-                          <h4 className="personality-title">🌟 総合的な性格</h4>
+                          <h4 className="personality-title">🧠 心の奥底にある性格</h4>
                           <div className="personality-content">
-                            <p>{threePlanetsPersonality.overall}</p>
+                            <p>{threePlanetsPersonality.innerChange}</p>
                           </div>
                         </div>
                       )}
                       
-                      {threePlanetsPersonality.relationships && (
+                      {threePlanetsPersonality.emotionalFlow && (
                         <div className="personality-card">
-                          <h4 className="personality-title">👥 人間関係のスタイル</h4>
+                          <h4 className="personality-title">💭 建前と本音の違い</h4>
                           <div className="personality-content">
-                            <p>{threePlanetsPersonality.relationships}</p>
+                            <p>{threePlanetsPersonality.emotionalFlow}</p>
                           </div>
                         </div>
                       )}
                       
-                      {threePlanetsPersonality.work && (
+                      {threePlanetsPersonality.unconsciousChange && (
                         <div className="personality-card">
-                          <h4 className="personality-title">💼 仕事への取り組み方</h4>
+                          <h4 className="personality-title">🔮 無意識に現れる癖</h4>
                           <div className="personality-content">
-                            <p>{threePlanetsPersonality.work}</p>
+                            <p>{threePlanetsPersonality.unconsciousChange}</p>
                           </div>
                         </div>
                       )}
                       
-                      {threePlanetsPersonality.love && (
+                      {threePlanetsPersonality.honneBalance && (
                         <div className="personality-card">
-                          <h4 className="personality-title">💕 恋愛・パートナーシップ</h4>
+                          <h4 className="personality-title">⚖️ 本当の感情の動き</h4>
                           <div className="personality-content">
-                            <p>{threePlanetsPersonality.love}</p>
+                            <p>{threePlanetsPersonality.honneBalance}</p>
                           </div>
                         </div>
                       )}
                       
-                      {threePlanetsPersonality.growth && (
+                      {threePlanetsPersonality.soulGrowth && (
                         <div className="personality-card">
-                          <h4 className="personality-title">🌱 成長のポイント</h4>
+                          <h4 className="personality-title">🌱 内面的な成長課題</h4>
                           <div className="personality-content">
-                            <p>{threePlanetsPersonality.growth}</p>
+                            <p>{threePlanetsPersonality.soulGrowth}</p>
                           </div>
                         </div>
                       )}
                     </>
                   ) : (
                     <div className="personality-card">
-                      <h4 className="personality-title">🌟 3天体からみたあなた</h4>
+                      <h4 className="personality-title">💫 性格分析</h4>
                       <div className="personality-content">
-                        <p>分析結果の読み込み中にエラーが発生しました。</p>
+                        <p>性格分析が生成できませんでした。もう一度お試しください。</p>
                         <button 
                           className="retry-button"
-                          onClick={() => {
-                            setThreePlanetsPersonality(null);
-                            generateThreePlanetsPersonality();
-                          }}
+                          onClick={generateThreePlanetsPersonality}
                         >
-                          再度分析する
+                          再試行
                         </button>
                       </div>
                     </div>
@@ -1506,11 +1573,10 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
             </div>
           )}
           
-          {/* 分析が開始されていない場合の初期状態表示 */}
           {!threePlanetsPersonality && !isGeneratingThreePlanetsPersonality && (
             <div className="three-planets-analysis-results">
               <div className="personality-card">
-                <h4 className="personality-title">🌟 3天体からみたあなた</h4>
+                <h4 className="personality-title">🌟 隠れた自分の発見</h4>
                 <div className="personality-content">
                   <p>分析を開始する準備ができました。</p>
                   <button 
@@ -1561,7 +1627,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           
           {level2Fortune && !isGeneratingLevel2 && (
             <div className="five-fortunes-section">
-              <h3>🔮 3天体占い結果 - {getPeriodTitle()}</h3>
+              <h3>🔮 あなたの隠れた運勢 - {getPeriodTitle()}</h3>
               <div className="five-fortunes-grid">
                 {(() => {
                   const parseAIFortune = (fortuneText: string) => {
@@ -1569,11 +1635,11 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     debugLog('🔍 【占い結果解析開始】テキスト長:', fortuneText?.length || 0);
                     
                     const sections = {
-                      overall: '',
-                      love: '',
-                      work: '',
-                      health: '',
-                      money: '',
+                      innerChange: '',
+                      emotionalFlow: '',
+                      unconsciousChange: '',
+                      honneBalance: '',
+                      soulGrowth: '',
                       importantDays: ''
                     };
                     
@@ -1584,7 +1650,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     
                     lines.forEach((line, index) => {
                       // 絵文字を含む行とその次の行（説明文）を重要な日として抽出
-                      if (line.includes('��') || line.includes('⚠️')) {
+                      if (line.includes('🍀') || line.includes('⚠️')) {
                         importantDaysLines.push(line);
                         // 次の行が説明文の場合も含める
                         if (index + 1 < lines.length && !lines[index + 1].includes('🍀') && !lines[index + 1].includes('⚠️') && !lines[index + 1].includes('【')) {
@@ -1615,21 +1681,21 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     sectionMatches.forEach((section, index) => {
                       debugLog(`🔍 【セクション${index}】内容:`, section);
                       
-                      if (section.includes('全体運') || section.includes('全体的') || section.includes('総合運')) {
-                        sections.overall = section.replace(/【[^】]*】/, '').trim();
-                        debugLog('🔍 【全体運設定】:', sections.overall);
-                      } else if (section.includes('恋愛運') || section.includes('恋愛')) {
-                        sections.love = section.replace(/【[^】]*】/, '').trim();
-                        debugLog('🔍 【恋愛運設定】:', sections.love);
-                      } else if (section.includes('仕事運') || section.includes('仕事')) {
-                        sections.work = section.replace(/【[^】]*】/, '').trim();
-                        debugLog('🔍 【仕事運設定】:', sections.work);
-                      } else if (section.includes('健康運') || section.includes('健康')) {
-                        sections.health = section.replace(/【[^】]*】/, '').trim();
-                        debugLog('🔍 【健康運設定】:', sections.health);
-                      } else if (section.includes('金銭運') || section.includes('金運') || section.includes('財運')) {
-                        sections.money = section.replace(/【[^】]*】/, '').trim();
-                        debugLog('🔍 【金銭運設定】:', sections.money);
+                      if (section.includes('総合運') || section.includes('全体運') || section.includes('全体的')) {
+                        sections.innerChange = section.replace(/【[^】]*】/, '').trim();
+                        debugLog('🔍 【総合運設定】:', sections.innerChange);
+                      } else if (section.includes('金銭運') || section.includes('金運') || section.includes('財運') || section.includes('お金')) {
+                        sections.emotionalFlow = section.replace(/【[^】]*】/, '').trim();
+                        debugLog('🔍 【金銭運設定】:', sections.emotionalFlow);
+                      } else if (section.includes('恋愛運') || section.includes('恋愛') || section.includes('人間関係') || section.includes('愛情')) {
+                        sections.unconsciousChange = section.replace(/【[^】]*】/, '').trim();
+                        debugLog('🔍 【恋愛運設定】:', sections.unconsciousChange);
+                      } else if (section.includes('仕事運') || section.includes('仕事') || section.includes('キャリア') || section.includes('職業')) {
+                        sections.honneBalance = section.replace(/【[^】]*】/, '').trim();
+                        debugLog('🔍 【仕事運設定】:', sections.honneBalance);
+                      } else if (section.includes('成長運') || section.includes('成長') || section.includes('発展') || section.includes('向上')) {
+                        sections.soulGrowth = section.replace(/【[^】]*】/, '').trim();
+                        debugLog('🔍 【成長運設定】:', sections.soulGrowth);
                       } else if (section.includes('重要な日') || section.includes('重要日') || section.includes('重要な月') || section.includes('ラッキーデー') || section.includes('注意日') || section.includes('ラッキー月') || section.includes('注意月')) {
                         if (!sections.importantDays) {
                           sections.importantDays = section.replace(/【[^】]*】/, '').trim();
@@ -1644,25 +1710,72 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     markdownSections.forEach((section, index) => {
                       debugLog(`🔍 【### セクション${index}】内容:`, section);
                       
-                      if (section.includes('全体運') || section.includes('全体的') || section.includes('総合運')) {
-                        sections.overall = section.replace(/###[^#]*?運/, '').trim();
-                        debugLog('🔍 【### 全体運設定】:', sections.overall);
-                      } else if (section.includes('恋愛運') || section.includes('恋愛')) {
-                        sections.love = section.replace(/###[^#]*?運/, '').trim();
-                        debugLog('🔍 【### 恋愛運設定】:', sections.love);
-                      } else if (section.includes('仕事運') || section.includes('仕事')) {
-                        sections.work = section.replace(/###[^#]*?運/, '').trim();
-                        debugLog('🔍 【### 仕事運設定】:', sections.work);
-                      } else if (section.includes('健康運') || section.includes('健康')) {
-                        sections.health = section.replace(/###[^#]*?運/, '').trim();
-                        debugLog('🔍 【### 健康運設定】:', sections.health);
-                      } else if (section.includes('金銭運') || section.includes('金運') || section.includes('財運')) {
-                        sections.money = section.replace(/###[^#]*?運/, '').trim();
-                        debugLog('🔍 【### 金銭運設定】:', sections.money);
+                      if (section.includes('総合運') || section.includes('全体運') || section.includes('全体的')) {
+                        sections.innerChange = section.replace(/###[^#]*/, '').trim();
+                        debugLog('🔍 【### 総合運設定】:', sections.innerChange);
+                      } else if (section.includes('金銭運') || section.includes('金運') || section.includes('財運') || section.includes('お金')) {
+                        sections.emotionalFlow = section.replace(/###[^#]*/, '').trim();
+                        debugLog('🔍 【### 金銭運設定】:', sections.emotionalFlow);
+                      } else if (section.includes('恋愛運') || section.includes('恋愛') || section.includes('人間関係') || section.includes('愛情')) {
+                        sections.unconsciousChange = section.replace(/###[^#]*/, '').trim();
+                        debugLog('🔍 【### 恋愛運設定】:', sections.unconsciousChange);
+                      } else if (section.includes('仕事運') || section.includes('仕事') || section.includes('キャリア') || section.includes('職業')) {
+                        sections.honneBalance = section.replace(/###[^#]*/, '').trim();
+                        debugLog('🔍 【### 仕事運設定】:', sections.honneBalance);
+                      } else if (section.includes('成長運') || section.includes('成長') || section.includes('発展') || section.includes('向上')) {
+                        sections.soulGrowth = section.replace(/###[^#]*/, '').trim();
+                        debugLog('🔍 【### 成長運設定】:', sections.soulGrowth);
                       } else {
                         debugLog('🔍 【### 未分類セクション】:', section);
                       }
                     });
+                    
+                    // 【】記号がない場合のフォールバック処理
+                    if (sectionMatches.length === 0 && markdownSections.length === 0) {
+                      debugLog('🔍 【フォールバック処理】【】記号と###記号がないため、正規表現ベースでパース開始');
+                      
+                      // 正規表現で運勢項目の開始を正確に検出
+                      const fortunePatterns = [
+                        { key: 'innerChange', regex: /(^|\n\n?)(総合運|全体運)(として|については|では|に関しては|について|に関して|の場合|において)?[、\s]*(.*?)(?=\n\n?(金銭運|金運|恋愛運|仕事運|成長運)|$)/s },
+                        { key: 'emotionalFlow', regex: /(^|\n\n?)(金銭運|金運)(として|については|では|に関しては|について|に関して|の場合|において)?[、\s]*(.*?)(?=\n\n?(総合運|全体運|恋愛運|仕事運|成長運)|$)/s },
+                        { key: 'unconsciousChange', regex: /(^|\n\n?)(恋愛運)(として|については|では|に関しては|について|に関して|の場合|において)?[、\s]*(.*?)(?=\n\n?(総合運|全体運|金銭運|金運|仕事運|成長運)|$)/s },
+                        { key: 'honneBalance', regex: /(^|\n\n?)(仕事運)(として|については|では|に関しては|について|に関して|の場合|において)?[、\s]*(.*?)(?=\n\n?(総合運|全体運|金銭運|金運|恋愛運|成長運)|$)/s },
+                        { key: 'soulGrowth', regex: /(^|\n\n?)(成長運)(として|については|では|に関しては|について|に関して|の場合|において)?[、\s]*(.*?)(?=\n\n?(総合運|全体運|金銭運|金運|恋愛運|仕事運)|$)/s }
+                      ];
+                      
+                      fortunePatterns.forEach(({ key, regex }) => {
+                        const match = fortuneText.match(regex);
+                        if (match && match[4]) {
+                          const content = match[4].trim().replace(/^[、。\s]+/, '').trim();
+                          
+                          if (content.length > 10) {
+                            if (key === 'innerChange') sections.innerChange = content;
+                            else if (key === 'emotionalFlow') sections.emotionalFlow = content;
+                            else if (key === 'unconsciousChange') sections.unconsciousChange = content;
+                            else if (key === 'honneBalance') sections.honneBalance = content;
+                            else if (key === 'soulGrowth') sections.soulGrowth = content;
+                            
+                            debugLog(`🔍 【正規表現フォールバック】${key}設定:`, content);
+                          }
+                        }
+                      });
+                      
+                      // キーワードベースでも何も取得できない場合の最終フォールバック
+                      const hasAnyContent = Object.values(sections).some(value => value.length > 0);
+                      if (!hasAnyContent) {
+                        debugLog('🔍 【最終フォールバック】段落分割でセクション作成');
+                        const paragraphs = fortuneText.split(/\n\n+/).filter(p => p.trim().length > 20);
+                        
+                        if (paragraphs.length >= 3) {
+                          sections.innerChange = paragraphs[0]?.trim() || '';
+                          sections.emotionalFlow = paragraphs[1]?.trim() || '';
+                          sections.unconsciousChange = paragraphs[2]?.trim() || '';
+                          sections.honneBalance = paragraphs[3]?.trim() || '';
+                          sections.soulGrowth = paragraphs[4]?.trim() || '';
+                          debugLog('🔍 【最終フォールバック】段落分割完了');
+                        }
+                      }
+                    }
                     
                     debugLog('🔍 【最終解析結果】:', sections);
                     return sections;
@@ -1671,9 +1784,9 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                   const fortuneSections = parseAIFortune(level2Fortune);
                   
                   // セクションが空の場合のフォールバック表示
-                  const hasAnySections = fortuneSections.overall || fortuneSections.love || 
-                                       fortuneSections.work || fortuneSections.health || 
-                                       fortuneSections.money || fortuneSections.importantDays;
+                  const hasAnySections = fortuneSections.innerChange || fortuneSections.emotionalFlow || 
+                                       fortuneSections.unconsciousChange || fortuneSections.honneBalance || 
+                                       fortuneSections.soulGrowth || fortuneSections.importantDays;
                   
                   debugLog('🔍 【表示判定】セクション存在チェック:', hasAnySections);
                   
@@ -1691,47 +1804,47 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                   
                   return (
                     <>
-                      {fortuneSections.overall && (
+                      {fortuneSections.innerChange && (
                         <div className="fortune-card">
-                          <h4 className="fortune-title">🌟 全体運</h4>
+                          <h4 className="fortune-title">🌟 総合運</h4>
                           <div className="fortune-content">
-                            <p>{fortuneSections.overall}</p>
+                            <p>{fortuneSections.innerChange}</p>
                           </div>
                         </div>
                       )}
                       
-                      {fortuneSections.love && (
-                        <div className="fortune-card">
-                          <h4 className="fortune-title">💕 恋愛運</h4>
-                          <div className="fortune-content">
-                            <p>{fortuneSections.love}</p>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {fortuneSections.work && (
-                        <div className="fortune-card">
-                          <h4 className="fortune-title">💼 仕事運</h4>
-                          <div className="fortune-content">
-                            <p>{fortuneSections.work}</p>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {fortuneSections.health && (
-                        <div className="fortune-card">
-                          <h4 className="fortune-title">🏥 健康運</h4>
-                          <div className="fortune-content">
-                            <p>{fortuneSections.health}</p>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {fortuneSections.money && (
+                      {fortuneSections.emotionalFlow && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">💰 金銭運</h4>
                           <div className="fortune-content">
-                            <p>{fortuneSections.money}</p>
+                            <p>{fortuneSections.emotionalFlow}</p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {fortuneSections.unconsciousChange && (
+                        <div className="fortune-card">
+                          <h4 className="fortune-title">❤️ 恋愛運</h4>
+                          <div className="fortune-content">
+                            <p>{fortuneSections.unconsciousChange}</p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {fortuneSections.honneBalance && (
+                        <div className="fortune-card">
+                          <h4 className="fortune-title">💼 仕事運</h4>
+                          <div className="fortune-content">
+                            <p>{fortuneSections.honneBalance}</p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {fortuneSections.soulGrowth && (
+                        <div className="fortune-card">
+                          <h4 className="fortune-title">🌟 成長運</h4>
+                          <div className="fortune-content">
+                            <p>{fortuneSections.soulGrowth}</p>
                           </div>
                         </div>
                       )}
@@ -1751,7 +1864,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
               
               {/* AIチャット誘導ボタン */}
               <div className="ai-chat-guidance" style={{ textAlign: 'center', marginTop: '1.5rem', padding: '1rem', background: 'rgba(102, 126, 234, 0.1)', borderRadius: '12px', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
-                <p style={{ margin: '0 0 1rem 0', color: '#4a5568', fontSize: '0.95rem' }}>💬 3天体についてもっと詳しく聞きたいことがありますか？</p>
+                <p style={{ margin: '0 0 1rem 0', color: '#4a5568', fontSize: '0.95rem' }}>💬 ３つの天体についてもっと詳しく聞きたいことがありますか？</p>
                 <button 
                   onClick={() => window.location.href = '/ai-fortune'}
                   style={{
@@ -1777,39 +1890,39 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           )}
         </div>
 
-        {/* 10天体の完全占いの説明 */}
+        {/* まわりから見たあなた占いの説明 */}
         <div className="three-planets-introduction">
-          <h3 className="section-title">🌌 10天体の完全占いとは</h3>
+          <h3 className="section-title">🌌 まわりから見たあなた占いとは</h3>
           <div className="intro-overview">
             <p>
-              太陽・月・上昇星座だけでは分からない、あなたの深層心理、隠された才能、人生の使命まで完全に解明します。
-              恋愛・結婚運の詳細、仕事での成功法則、人間関係の傾向など、10天体すべての配置から導き出される
-              あなただけの人生攻略法が明らかになります。
+              ３つの天体だけでは分からない、あなたの外面的な振る舞いや行動パターンを大解剖！
+              話し方・恋愛・仕事での振る舞い方など、周りが見ている「いつものあなた」の癖や特徴が
+              10天体すべての配置から詳しく明らかになります。
             </p>
           </div>
           
           <div className="three-planets-preview">
             <div className="planet-preview">
-              <span className="planet-icon">🌟</span>
+              <span className="planet-icon">💬</span>
               <div className="planet-info">
-                <h4>基本的な性格（太陽・月・上昇星座）</h4>
-                <p>あなたの根本的な性格、内面の感情、周囲に与える第一印象</p>
+                <h4>話し方の癖</h4>
+                <p>水星などの影響で現れる、あなたの話し方や伝え方の特徴</p>
               </div>
             </div>
             
             <div className="planet-preview">
               <span className="planet-icon">💕</span>
               <div className="planet-info">
-                <h4>恋愛と行動力（金星・火星）</h4>
-                <p>恋愛での好みや美的センス、行動パターンやエネルギーの使い方</p>
+                <h4>恋愛での行動</h4>
+                <p>金星・火星などが示す、恋愛時の振る舞いや魅力の表現方法</p>
               </div>
             </div>
             
             <div className="planet-preview">
-              <span className="planet-icon">🧠</span>
+              <span className="planet-icon">💼</span>
               <div className="planet-info">
-                <h4>知性と成長（水星・木星・土星）</h4>
-                <p>コミュニケーション能力、学習方法、成長のチャンス、責任感や制限</p>
+                <h4>仕事での振る舞い</h4>
+                <p>土星・木星などが現れる、職場での立ち回りや責任感の示し方</p>
               </div>
             </div>
             
@@ -1831,7 +1944,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
             className="level-up-button"
             onClick={handleLevelUp}
           >
-            10天体の完全占いへ 🌌
+            まわりから見たあなた占いへ 🌌
           </button>
         </div>
 
@@ -2506,6 +2619,9 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     }
   }, [loading, error, showDataMissingMessage, horoscopeData, birthData, hasInitialScrolled]);
 
+  // 3天体性格分析の実行管理用フラグ
+  const [hasTriggeredGeneration, setHasTriggeredGeneration] = useState(false);
+  
   // コンポーネントの初期化時に3天体性格分析を自動実行（レベル2でのみ）
   useEffect(() => {
     debugLog('🔍 【3天体性格分析useEffect】実行条件チェック');
@@ -2514,22 +2630,44 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     debugLog('  birthData:', !!birthData);
     debugLog('  threePlanetsPersonality:', !!threePlanetsPersonality);
     debugLog('  isGeneratingThreePlanetsPersonality:', isGeneratingThreePlanetsPersonality);
+    debugLog('  hasTriggeredGeneration:', hasTriggeredGeneration);
     
-    if (currentLevel === 2 && horoscopeData && birthData && !threePlanetsPersonality && !isGeneratingThreePlanetsPersonality) {
+    if (currentLevel === 2 && horoscopeData && birthData && !isGeneratingThreePlanetsPersonality && !hasTriggeredGeneration) {
       debugLog('🔍 【3天体性格分析】レベル2で自動実行開始');
-      const saved = loadThreePlanetsPersonality();
-      if (saved) {
-        debugLog('🔍 【3天体性格分析】保存済みデータを使用');
-        setThreePlanetsPersonality(saved);
-      } else {
-        debugLog('🔍 【3天体性格分析】新規生成を開始');
-        // 保存されたデータがない場合は自動的に生成
+      setHasTriggeredGeneration(true);
+      
+      // 既存のthreePlanetsPersonalityが古い形式かチェック
+      if (threePlanetsPersonality && !threePlanetsPersonality.innerChange) {
+        debugLog('🔍 【古い形式検出】threePlanetsPersonalityを初期化して新形式で再生成');
+        setThreePlanetsPersonality(null);
+        // 古い形式のキャッシュを削除
+        const key = generateThreePlanetsKey(birthData, horoscopeData.planets);
+        localStorage.removeItem(key);
+        debugLog('🔍 【古いキャッシュ削除】キー:', key);
         generateThreePlanetsPersonality();
+        return;
+      }
+      
+      if (!threePlanetsPersonality) {
+        const saved = loadThreePlanetsPersonality();
+        if (saved && saved.innerChange) {
+          debugLog('🔍 【3天体性格分析】新形式の保存済みデータを使用');
+          setThreePlanetsPersonality(saved);
+        } else {
+          debugLog('🔍 【3天体性格分析】新規生成を開始');
+          // 古い形式のキャッシュを削除
+          if (saved && !saved.innerChange) {
+            const key = generateThreePlanetsKey(birthData, horoscopeData.planets);
+            localStorage.removeItem(key);
+            debugLog('🔍 【古いキャッシュ削除】キー:', key);
+          }
+          generateThreePlanetsPersonality();
+        }
       }
     } else {
       debugLog('🔍 【3天体性格分析】実行条件を満たしていません');
     }
-  }, [currentLevel, horoscopeData, birthData, threePlanetsPersonality, isGeneratingThreePlanetsPersonality]);
+  }, [currentLevel, horoscopeData, birthData]);
 
   // selectedModeが変更された時の処理
   useEffect(() => {
@@ -2538,6 +2676,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
       // 3天体性格分析をリセットして新しい分析を開始
       setThreePlanetsPersonality(null);
       setIsGeneratingThreePlanetsPersonality(false);
+      setHasTriggeredGeneration(false); // フラグもリセット
     }
   }, [selectedMode, currentLevel]);
 
