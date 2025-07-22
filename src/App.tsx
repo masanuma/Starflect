@@ -30,42 +30,18 @@ function App() {
             <p className="main-message">生まれた瞬間の星の配置から、もっと詳しいあなたを発見</p>
             <div className="comparison-box">
               <div className="comparison-item">
-                <span className="comparison-label">雑誌の星座占い</span>
-                <span className="comparison-desc">同じ誕生日 = 同じ結果</span>
+                <span className="comparison-label">普通の星座占い</span>
+                <span className="comparison-desc">12種類だけ</span>
               </div>
               <div className="comparison-arrow">→</div>
               <div className="comparison-item">
                 <span className="comparison-label">Starflect</span>
-                <span className="comparison-desc">時刻・場所も考慮 = あなただけの結果</span>
+                <span className="comparison-desc">数百万通りの精度</span>
               </div>
             </div>
             
-            {/* なぜ詳しくなるのかの説明 */}
-            <div className="detailed-explanation">
-              <h4 className="explanation-title">🌟 なぜこんなに詳しくなるの？</h4>
-              <div className="explanation-grid">
-                <div className="explanation-item">
-                  <span className="explanation-icon">🌙</span>
-                  <div className="explanation-content">
-                    <div className="explanation-fact">月は約2時間で星座が変わる</div>
-                    <div className="explanation-detail">同じ日でも朝と夜で月星座が違う</div>
-                  </div>
-                </div>
-                <div className="explanation-item">
-                  <span className="explanation-icon">🌅</span>
-                  <div className="explanation-content">
-                    <div className="explanation-fact">上昇星座は4分で1度変わる</div>
-                    <div className="explanation-detail">出生時刻で性格の印象が変わる</div>
-                  </div>
-                </div>
-                <div className="explanation-item">
-                  <span className="explanation-icon">🌌</span>
-                  <div className="explanation-content">
-                    <div className="explanation-fact">10天体で数百万通りの組み合わせ</div>
-                    <div className="explanation-detail">雑誌占いの12種類とは別次元の精度</div>
-                  </div>
-                </div>
-              </div>
+            <div className="simple-explanation">
+              <p className="precision-note">💫 なぜこんなに詳しいの？ チュートリアルで分かりやすく解説！</p>
             </div>
           </div>
         </header>

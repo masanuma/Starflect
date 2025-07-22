@@ -181,67 +181,23 @@ body {
   margin: 0 5px;
 }
 
-/* 詳細説明部分のスタイル */
-.detailed-explanation {
-  margin-top: 25px;
-}
-
-.explanation-title {
-  color: var(--text-white);
-  font-size: 1.1rem;
-  font-weight: 600;
+/* シンプルな説明部分のスタイル */
+.simple-explanation {
+  margin-top: 20px;
   text-align: center;
-  margin-bottom: 15px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.explanation-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 15px;
-  margin-top: 15px;
-}
-
-.explanation-item {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  padding: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  transition: all 0.3s ease;
-}
-
-.explanation-item:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-.explanation-icon {
-  font-size: 1.5rem;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.explanation-content {
-  flex: 1;
-}
-
-.explanation-fact {
-  color: var(--text-white);
+.precision-note {
+  color: rgba(255, 255, 255, 0.9);
   font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 4px;
+  margin: 0;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.explanation-detail {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 0.8rem;
-  line-height: 1.4;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  display: inline-block;
 }
 
 /* レスポンシブ対応 */
@@ -260,17 +216,9 @@ body {
     min-width: 200px;
   }
   
-  .explanation-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .explanation-item {
-    padding: 12px;
-  }
-  
-  .explanation-title {
-    font-size: 1rem;
+  .precision-note {
+    font-size: 0.85rem;
+    padding: 6px 12px;
   }
 }
 
