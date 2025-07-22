@@ -113,9 +113,30 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
         ))}
       </div>
       
+      {/* なぜ詳しいのかの簡潔な説明 */}
+      <div className="why-detailed-section">
+        <h3 className="why-title">💫 なぜこんなに詳しく占えるの？</h3>
+        <div className="why-content">
+          <div className="why-item">
+            <span className="why-step">1.</span>
+            <span className="why-text">普通の星座占い = 太陽星座のみ（12種類）</span>
+          </div>
+          <div className="why-item">
+            <span className="why-step">2.</span>
+            <span className="why-text">実は月星座・上昇星座もある（時刻・場所で変わる）</span>
+          </div>
+          <div className="why-item">
+            <span className="why-step">3.</span>
+            <span className="why-text">さらに10天体の組み合わせで数百万通りの精度</span>
+          </div>
+          <div className="why-item">
+            <span className="why-step">4.</span>
+            <span className="why-text">AIチャットでどんな質問でも深掘り可能</span>
+          </div>
+        </div>
+      </div>
 
-              
-        {/* 過去の占い結果をリセットボタン */}
+      {/* 過去の占い結果をリセットボタン */}
         <div className="reset-data-section">
           <button 
             className="reset-data-button"
