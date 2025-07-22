@@ -80,7 +80,7 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
           className="tutorial-button-banner"
           onClick={() => setShowTutorial(true)}
         >
-          📖 使い方や10天体についてはこちら
+          📖 なぜ数百万分の１なのか？使い方ガイド
         </button>
       </div>
       
