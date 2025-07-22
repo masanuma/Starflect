@@ -651,6 +651,25 @@ export const chatWithAIAstrologer = async (
     throw new Error('OpenAI APIキーが設定されていません。OPENAI_SETUP.mdを参照して設定してください。');
   }
 
+  // 🔧 Level1占い結果の読み込み（AIチャット引き継ぎ用）
+  const todayKey = `level1_fortune_${birthData.name}_${new Date().toISOString().split('T')[0]}`;
+  let recentFortuneInfo = '';
+  try {
+    const storedFortune = localStorage.getItem(todayKey);
+    if (storedFortune) {
+      const fortuneData = JSON.parse(storedFortune);
+      recentFortuneInfo = `
+【本日のお手軽12星座占い結果】
+星座: ${fortuneData.sunSign}
+期間: ${fortuneData.period === 'today' ? '今日' : fortuneData.period === 'tomorrow' ? '明日' : fortuneData.period}
+占い結果:
+${fortuneData.result}
+`;
+    }
+  } catch (error) {
+    console.warn('Level1占い結果の読み込みエラー:', error);
+  }
+
   // アスペクト情報の整理
   const aspectInfo = aspects && aspects.length > 0 
     ? aspects.filter(a => a.exactness >= 50)
@@ -681,7 +700,7 @@ ${aspectInfo}
 
 【特別なアスペクトパターン】
 ${patternInfo}
-
+${recentFortuneInfo}
 【会話のカテゴリ】${category}
 
 【これまでの会話履歴】
@@ -693,6 +712,7 @@ ${message}
 【重要な指示】
 - 占星術の専門知識（天体配置、アスペクト、パターン）を活用して回答してください
 - 天体間の関係性（アスペクト）を考慮した深い分析を含めてください
+${recentFortuneInfo ? '- 上記の「本日のお手軽12星座占い結果」がある場合は、その具体的な内容を踏まえて深掘りしてください' : ''}
 - 温かく親身になって答えてください
 - 具体的で実践的なアドバイスを含めてください
 - 希望と励ましを与える回答を心がけてください
@@ -707,7 +727,7 @@ ${message}
 - 可能な限り具体的な例を用いて表現すること
 
 クライアントの質問に対して、占星術師として必ずですます調で丁寧に回答してください。
-`;
+`
 
   const data = await callOpenAIWithRetry(
     contextPrompt,

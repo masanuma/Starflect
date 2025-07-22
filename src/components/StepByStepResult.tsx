@@ -202,39 +202,39 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
       const timeContext = getTimeContextForAI();
       const randomId = Math.random().toString(36).substring(2, 8);
       const analysisPrompt = `
-        あなたは経験豊富な占い師です。以下の条件で占いを行ってください：
-        - 星座: ${sunSign}
+        あなたは親しみやすい占い師です。12星座占いが初めての方でも安心して楽しめるよう、以下の条件で占いを行ってください：
+        - 12星座: ${sunSign}
         - 期間: ${periodOptions.level1.find(p => p.value === selectedPeriod)?.label}
         - ランダムID: ${randomId}
         
         ${timeContext}
         
         **重要な文章作成ルール（必ず守ること）**：
+        - 占い初心者でも安心して読めるよう、優しく親しみやすい表現で
+        - 専門用語や難しい言葉はできるだけ避けて、分かりやすく
         - ですます調で丁寧に記載すること
-        - 特徴と注意点をできるだけ記載すること
-        - 難しい言い回しや難しい熟語はできるだけ用いないこと
-        - 利用者ターゲットは30代であるが理解力は大学生レベルとすること
-        - 可能な限り具体的な例を用いて表現すること
-        - **重要**: 「アセンダント」という用語は絶対に使用せず、必ず「上昇星座」と記載すること
+        - 30代の方向けですが、誰でも理解できるような簡単な表現で
+        - 可能な限り具体的で身近な例を用いて表現すること
+        - **重要**: 「太陽星座」「アセンダント」「上昇星座」などの専門用語は使わず、「12星座」「あなたの星座」と記載すること
         
-        **重要**: 毎回新しい視点で分析を行い、異なる結果を提供してください。この分析は一度きりのものなので、創造性と多様性を重視してください。
+        **重要**: これは「お手軽12星座占い」として、まず占いに慣れ親しんでもらう内容です。親しみやすく、興味を持ってもらえるような占い結果にしてください。
         
-        以下の5つの運勢について簡潔にアドバイスしてください：
+        以下の5つの運勢について簡潔で分かりやすくアドバイスしてください：
         
         【全体運】
-        (この期間の全体的な運勢と注意点)
+        (この期間の全体的な運勢と、気をつけると良いポイント)
         
         【恋愛運】
-        (恋愛面での具体的なアドバイス)
+        (恋愛面での具体的で親しみやすいアドバイス)
         
         【仕事運】
-        (仕事面での具体的なアドバイス)
+        (仕事面での具体的で実用的なアドバイス)
         
         【健康運】
-        (健康面での具体的なアドバイス)
+        (健康面での具体的で身近なアドバイス)
         
         【金銭運】
-        (金銭面での具体的なアドバイス)
+        (金銭面での具体的で分かりやすいアドバイス)
         
         各項目は1-2文で簡潔に書いてください。読みやすさを重視し、要点を絞って記載してください。
       `;
@@ -248,8 +248,21 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
       
       if (aiResult && aiResult.trim()) {
         debugLog('🔍 【占い結果設定】有効な結果を受信:', aiResult.substring(0, 200) + '...');
+        
+        // Level1占い結果を設定
         setLevel1Fortune(aiResult);
-        debugLog('🔍 【占い結果設定】level1Fortuneに設定完了');
+        
+        // 🔧 AIチャット用にLevel1結果をローカルストレージに保存
+        const storageKey = `level1_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
+        const fortuneData = {
+          mode: 'sun-sign',
+          period: selectedPeriod,
+          result: aiResult,
+          timestamp: Date.now(),
+          sunSign: sunSign
+        };
+        localStorage.setItem(storageKey, JSON.stringify(fortuneData));
+        debugLog('🔍 【AIチャット用保存】Level1結果をローカルストレージに保存:', storageKey);
       } else {
         debugLog('🔍 【占いエラー】AIの応答が空またはnull');
         debugLog('🔍 【占いエラー】aiResult:', aiResult);
@@ -982,10 +995,10 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         </div>
         
         <div className="level-title">
-          <h2 className="level-title-text">☀️ 太陽星座の簡単占い</h2>
+          <h2 className="level-title-text">🌟 お手軽12星座占い</h2>
         </div>
 
-        {/* 広告表示1: 太陽星座タイトルと結果の間 */}
+        {/* 広告表示1: 12星座占いタイトルと結果の間 */}
         <AdBanner 
           position="level-transition" 
           size="medium" 
@@ -1001,9 +1014,9 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
           </div>
         </div>
         
-        {/* 星座から見たあなた */}
+        {/* 12星座から見たあなた */}
         <div className="personality-section">
-          <h3 className="section-title">🌟 星座から見たあなた</h3>
+          <h3 className="section-title">🌟 12星座から見たあなた</h3>
           <p className="personality-text">{signInfo.description}</p>
         </div>
 
@@ -1571,7 +1584,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     
                     lines.forEach((line, index) => {
                       // 絵文字を含む行とその次の行（説明文）を重要な日として抽出
-                      if (line.includes('🍀') || line.includes('⚠️')) {
+                      if (line.includes('��') || line.includes('⚠️')) {
                         importantDaysLines.push(line);
                         // 次の行が説明文の場合も含める
                         if (index + 1 < lines.length && !lines[index + 1].includes('🍀') && !lines[index + 1].includes('⚠️') && !lines[index + 1].includes('【')) {
