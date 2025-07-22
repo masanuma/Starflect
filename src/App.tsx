@@ -25,25 +25,7 @@ function App() {
         
         <header className="App-header" role="banner">
           <h1>✨ Starflect</h1>
-          <p>あなただけの星占い</p>
-          <div className="value-proposition">
-            <p className="main-message">生まれた瞬間の星の配置から、もっと詳しいあなたを発見</p>
-            <div className="comparison-box">
-              <div className="comparison-item">
-                <span className="comparison-label">普通の星座占い</span>
-                <span className="comparison-desc">12種類だけ</span>
-              </div>
-              <div className="comparison-arrow">→</div>
-              <div className="comparison-item">
-                <span className="comparison-label">Starflect</span>
-                <span className="comparison-desc">数百万通りの精度</span>
-              </div>
-            </div>
-            
-            <div className="simple-explanation">
-              <p className="precision-note">💫 なぜこんなに詳しいの？ チュートリアルで分かりやすく解説！</p>
-            </div>
-          </div>
+          <p className="subtitle">〜12星座から数百万分の１のあなただけの星占い〜</p>
         </header>
         
         <main id="main-content" role="main">
