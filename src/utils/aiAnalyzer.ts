@@ -670,6 +670,27 @@ ${fortuneData.result}
     console.warn('Level1占い結果の読み込みエラー:', error);
   }
 
+  // 🔧 Level2隠れた自分発見占い結果の読み込み（AIチャット引き継ぎ用）
+  const level2Key = `level2_fortune_${birthData.name}_${new Date().toISOString().split('T')[0]}`;
+  let hiddenSelfInfo = '';
+  try {
+    const storedLevel2Fortune = localStorage.getItem(level2Key);
+    if (storedLevel2Fortune) {
+      const fortuneData = JSON.parse(storedLevel2Fortune);
+      hiddenSelfInfo = `
+【本日の隠れた自分発見占い結果】
+表の自分: ${fortuneData.sunSign}
+裏の自分: ${fortuneData.moonSign}
+自然な行動: ${fortuneData.ascendantSign}
+期間: ${fortuneData.period === 'today' ? '今日' : fortuneData.period === 'tomorrow' ? '明日' : fortuneData.period}
+占い結果:
+${fortuneData.result}
+`;
+    }
+  } catch (error) {
+    console.warn('Level2占い結果の読み込みエラー:', error);
+  }
+
   // アスペクト情報の整理
   const aspectInfo = aspects && aspects.length > 0 
     ? aspects.filter(a => a.exactness >= 50)
@@ -701,6 +722,7 @@ ${aspectInfo}
 【特別なアスペクトパターン】
 ${patternInfo}
 ${recentFortuneInfo}
+${hiddenSelfInfo}
 【会話のカテゴリ】${category}
 
 【これまでの会話履歴】
@@ -713,6 +735,7 @@ ${message}
 - 占星術の専門知識（天体配置、アスペクト、パターン）を活用して回答してください
 - 天体間の関係性（アスペクト）を考慮した深い分析を含めてください
 ${recentFortuneInfo ? '- 上記の「本日のお手軽12星座占い結果」がある場合は、その具体的な内容を踏まえて深掘りしてください' : ''}
+${hiddenSelfInfo ? '- 上記の「本日の隠れた自分発見占い結果」がある場合は、その具体的な内容を踏まえて深掘りしてください' : ''}
 - 温かく親身になって答えてください
 - 具体的で実践的なアドバイスを含めてください
 - 希望と励ましを与える回答を心がけてください
