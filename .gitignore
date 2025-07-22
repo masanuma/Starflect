@@ -97,3 +97,5 @@ temp/
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*.env.backup
+*.env*
+.env.backup
