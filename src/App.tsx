@@ -25,7 +25,21 @@ function App() {
         
         <header className="App-header" role="banner">
           <h1>✨ Starflect</h1>
-          <p>あなただけの星占い<br />生まれた瞬間の星の配置から、もっと詳しいあなたを発見</p>
+          <p>あなただけの星占い</p>
+          <div className="value-proposition">
+            <p className="main-message">生まれた瞬間の星の配置から、もっと詳しいあなたを発見</p>
+            <div className="comparison-box">
+              <div className="comparison-item">
+                <span className="comparison-label">雑誌の星座占い</span>
+                <span className="comparison-desc">同じ誕生日 = 同じ結果</span>
+              </div>
+              <div className="comparison-arrow">→</div>
+              <div className="comparison-item">
+                <span className="comparison-label">Starflect</span>
+                <span className="comparison-desc">時刻・場所も考慮 = あなただけの結果</span>
+              </div>
+            </div>
+          </div>
         </header>
         
         <main id="main-content" role="main">

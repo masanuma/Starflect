@@ -219,7 +219,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         
         **重要**: 毎回新しい視点で分析を行い、異なる結果を提供してください。この分析は一度きりのものなので、創造性と多様性を重視してください。
         
-        以下の5つの運勢について具体的にアドバイスしてください：
+        以下の5つの運勢について簡潔にアドバイスしてください：
         
         【全体運】
         (この期間の全体的な運勢と注意点)
@@ -236,7 +236,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         【金銭運】
         (金銭面での具体的なアドバイス)
         
-        各項目は2-3文で具体的に書いてください。
+        各項目は1-2文で簡潔に書いてください。読みやすさを重視し、要点を絞って記載してください。
       `;
       
       debugLog('🔍 【AI占い呼び出し】プロンプト:', analysisPrompt);
@@ -408,22 +408,22 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         - 毎回新しい視点で分析を行い、異なる結果を提供してください
         - この分析は一度きりのものなので、創造性と多様性を重視してください
         
-        以下の項目について分析してください：
+        以下の項目について簡潔に分析してください：
         
         【全体運】
-        太陽の${sun?.sign}、月の${moon?.sign}、上昇星座の${ascendant?.sign}の影響を明記しながら、この期間の総合的な運勢と注意点を2-3文で記載。
+        太陽の${sun?.sign}、月の${moon?.sign}、上昇星座の${ascendant?.sign}の影響を明記しながら、この期間の総合的な運勢と注意点を1-2文で記載。
         
         【恋愛運】
-        太陽・月・上昇星座の影響を含めて、恋愛・パートナーシップの分析結果を踏まえた、この期間の恋愛運勢を2-3文で記載。
+        太陽・月・上昇星座の影響を含めて、恋愛・パートナーシップの分析結果を踏まえた、この期間の恋愛運勢を1-2文で記載。
         
         【仕事運】
-        3天体の影響を明記しながら、仕事への取り組み方の分析を基に、この期間の仕事運勢を2-3文で記載。
+        3天体の影響を明記しながら、仕事への取り組み方の分析を基に、この期間の仕事運勢を1-2文で記載。
         
         【健康運】
-        太陽・月・上昇星座の影響を考慮した、この期間の健康面での注意点とアドバイスを2-3文で記載。
+        太陽・月・上昇星座の影響を考慮した、この期間の健康面での注意点とアドバイスを1-2文で記載。
         
         【金銭運】
-        3天体の影響を含めて、性格分析結果から見える金銭管理の傾向を踏まえた、この期間の金銭運を2-3文で記載。`;
+        3天体の影響を含めて、性格分析結果から見える金銭管理の傾向を踏まえた、この期間の金銭運を1-2文で記載。`;
       
       // 今日の占い以外では重要な日/月を追加
       if (includeImportantDays) {
@@ -507,7 +507,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         - 天体の組み合わせによる特別な効果も考慮してください
         - 毎回新しい視点で分析を行い、異なる結果を提供してください
         
-        以下の5つの運勢について、10天体の配置を基に詳しく分析してください：
+        以下の5つの運勢について、10天体の配置を基に簡潔に分析してください：
         
         【全体運】
         10天体の総合的な配置から見たこの期間の全体的な運勢と注意点
@@ -533,7 +533,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
         - 例：${selectedPeriod === 'sixMonths' || selectedPeriod === 'oneYear' || selectedPeriod === 'twoYears' || selectedPeriod === 'threeYears' || selectedPeriod === 'fiveYears' ? '⚠️2025年6月 - 土星の影響で仕事で注意が必要' : '⚠️2025年2月10日 - 土星の影響で仕事で注意が必要'}
         ` : ''}
         
-        各項目は3-4文で具体的に書き、どの天体の影響かを明記してください。
+        各項目は1-2文で簡潔に書き、どの天体の影響かを明記してください。読みやすさを重視し、要点を絞って記載してください。
       `;
       
       debugLog('🔍 【Level3占い】AI占い師呼び出し開始');
@@ -1205,6 +1205,30 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                   );
                 })()}
               </div>
+              
+              {/* AIチャット誘導ボタン */}
+              <div className="ai-chat-guidance" style={{ textAlign: 'center', marginTop: '1.5rem', padding: '1rem', background: 'rgba(102, 126, 234, 0.1)', borderRadius: '12px', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
+                <p style={{ margin: '0 0 1rem 0', color: '#4a5568', fontSize: '0.95rem' }}>💬 もっと詳しく知りたいことがありますか？</p>
+                <button 
+                  onClick={() => window.location.href = '/ai-fortune'}
+                  style={{
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.7rem 1.5rem',
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseOver={(e) => (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)'}
+                  onMouseOut={(e) => (e.target as HTMLButtonElement).style.transform = 'translateY(0)'}
+                >
+                  🤖 AI占い師に相談する
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -1712,6 +1736,29 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                 })()}
               </div>
               
+              {/* AIチャット誘導ボタン */}
+              <div className="ai-chat-guidance" style={{ textAlign: 'center', marginTop: '1.5rem', padding: '1rem', background: 'rgba(102, 126, 234, 0.1)', borderRadius: '12px', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
+                <p style={{ margin: '0 0 1rem 0', color: '#4a5568', fontSize: '0.95rem' }}>💬 3天体についてもっと詳しく聞きたいことがありますか？</p>
+                <button 
+                  onClick={() => window.location.href = '/ai-fortune'}
+                  style={{
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.7rem 1.5rem',
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseOver={(e) => (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)'}
+                  onMouseOut={(e) => (e.target as HTMLButtonElement).style.transform = 'translateY(0)'}
+                >
+                  🤖 AI占い師に相談する
+                </button>
+              </div>
 
             </div>
           )}
@@ -2309,6 +2356,30 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
                     </>
                   );
                 })()}
+              </div>
+              
+              {/* AIチャット誘導ボタン */}
+              <div className="ai-chat-guidance" style={{ textAlign: 'center', marginTop: '1.5rem', padding: '1rem', background: 'rgba(102, 126, 234, 0.1)', borderRadius: '12px', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
+                <p style={{ margin: '0 0 1rem 0', color: '#4a5568', fontSize: '0.95rem' }}>💬 10天体についてさらに深く聞きたいことがありますか？</p>
+                <button 
+                  onClick={() => window.location.href = '/ai-fortune'}
+                  style={{
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.7rem 1.5rem',
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseOver={(e) => (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)'}
+                  onMouseOut={(e) => (e.target as HTMLButtonElement).style.transform = 'translateY(0)'}
+                >
+                  🤖 AI占い師に相談する
+                </button>
               </div>
             </div>
           )}
