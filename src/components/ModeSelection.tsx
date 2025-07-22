@@ -45,7 +45,7 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
       title: '詳しい星座占い',
       icon: '🌙✨',
       duration: '1分',
-      description: '時刻と場所も使って3倍詳しく！\n同じ誕生日でも結果が変わる精密占い',
+      description: '月は2時間、上昇星座は4分で変わる！\n時刻・場所でもっと詳しいあなたが判明',
       features: ['3つの星を分析', '詳細な性格分析', '時刻・場所で個別化'],
       gradient: 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)',
       required: '出生時刻・場所も必要'
@@ -55,7 +55,7 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
       title: 'プロ級星座占い',
       icon: '🌌⭐',
       duration: '2分',
-      description: '全部の星を使った最高精度の占い\nプロの占星術師レベルの詳細分析',
+      description: '10天体で数百万通りの組み合わせ\n雑誌占いの12種類とは別次元の精度',
       features: ['全10個の星分析', '最高精度', 'プロレベル占星術'],
       gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
       required: '出生時刻・場所も必要'
