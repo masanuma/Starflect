@@ -42,7 +42,7 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
     },
     {
       id: 'three-planets',
-      title: '隠れた運勢占い',
+      title: '星が伝える 隠れた自分診断',
       icon: '🌙✨',
       duration: '1分',
       description: '時刻・場所で隠れた運勢が分かる！\n総合・金銭・恋愛・仕事・成長運を発見',
@@ -52,11 +52,11 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
     },
     {
       id: 'ten-planets',
-      title: 'まわりから見たあなた占い',
+      title: '星が伝える あなたの印象診断',
       icon: '🌌⭐',
       duration: '2分',
-      description: '話し方・恋愛・仕事での振る舞い方！\n周りが見てる「いつものあなた」を大解剖',
-      features: ['話し方の癖', '恋愛での行動', '仕事での振る舞い'],
+      description: '10天体の完全運勢占い！\n総合・金銭・恋愛・仕事・成長の5つの運勢を詳しく分析',
+              features: ['総合運', '金銭運', '恋愛運', '仕事運', '成長運'],
       gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
       required: '出生時刻・場所も必要'
     },

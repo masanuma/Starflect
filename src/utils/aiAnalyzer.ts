@@ -142,9 +142,11 @@ export interface AIAnalysisResult {
     };
   };
   tenPlanetSummary?: {
-    planetaryInfluences: string;
-    lifeDesign: string;
-    practicalAdvice: string;
+    overallInfluence: string;
+    communicationStyle: string;
+    loveAndBehavior: string;
+    workBehavior: string;
+    transformationAndDepth: string;
   };
   aiPowered: boolean;
 }
@@ -206,7 +208,7 @@ ${new Date().toLocaleString('ja-JP')} - 分析ID: ${Math.random().toString(36).s
 
 {
   "personalityInsights": {
-    "corePersonality": "太陽星座から見たあなたの性格を200-250文字で、ですます調でやさしく詳しく解説してください。性格の特徴、行動パターン、価値観、強みを含めて包括的に説明し、特によいところと注意すべきところも明確に含めてください。",
+    "corePersonality": "太陽星座から見たあなたの性格を200-250文字で、ですます調でやさしく解説してください。性格の特徴、行動パターン、価値観、強みを含めて包括的に説明し、特によいところと注意すべきところも明確に含めてください。",
     "hiddenTraits": "内面の特徴を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
     "lifePhilosophy": "人生で大切にしていることを70-90文字で、ですます調で解説してください。よいところと注意すべきところも含めて説明してください。",
     "relationshipStyle": "人間関係の特徴を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
@@ -281,9 +283,11 @@ ${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('
     "personalGrowth": "成長運を120文字以上で、必ずですます調でやさしく解説してください。自己成長の方向性、学習すべきことを含めて説明し、よいところと注意すべきところも含めてください。"
   },
   "tenPlanetSummary": {
-    "planetaryInfluences": "10天体すべての総合的な影響について400文字以上で、必ずですます調でやさしく解説してください。太陽から冥王星までの全天体がどのように相互作用し、あなたの人生にどのような影響を与えているかを詳しく説明してください。",
-    "lifeDesign": "10天体から読み取れるあなたの人生設計図について350文字以上で、必ずですます調でやさしく解説してください。人生の使命、目標、進むべき方向性などを含めて詳しく説明してください。",
-    "practicalAdvice": "10天体の配置を活かすための実生活でのアドバイスについて350文字以上で、必ずですます調でやさしく解説してください。日常生活での具体的な行動指針や注意点を含めて詳しく説明してください。"
+    "overallInfluence": "総合的な影響について4行程度（約200文字）で、必ずですます調でやさしく解説してください。10天体の配置から見える、あなたの全体的な性格や人生への影響、周りから見えるあなたの大まかな印象について説明してください。",
+    "communicationStyle": "話し方の癖について4行程度（約200文字）で、必ずですます調でやさしく解説してください。水星などの影響から見える、あなたのコミュニケーションスタイル、話し方の特徴、人に伝える時の癖について具体的に説明してください。",
+    "loveAndBehavior": "恋愛や行動について4行程度（約200文字）で、必ずですます調でやさしく解説してください。金星・火星などの影響から見える、恋愛での行動パターン、魅力の表現方法、相手への接し方の特徴について具体的に説明してください。",
+    "workBehavior": "仕事での振る舞いについて4行程度（約200文字）で、必ずですます調でやさしく解説してください。太陽・土星などの影響から見える、職場での振る舞い方、責任の取り方、同僚との関わり方について具体的に説明してください。",
+    "transformationAndDepth": "変革と深層心理について4行程度（約200文字）で、必ずですます調でやさしく解説してください。冥王星・海王星・天王星などの影響から見える、人生の変化への対応、深層心理、隠れた可能性について説明してください。"
   }
 }
 
@@ -312,12 +316,14 @@ const callOpenAIAPI = async (prompt: string, maxTokens: number = 2500): Promise<
     const result = mapAIResponseToAIAnalysisResult(aiResultRaw);
     
     // tenPlanetSummaryの形式チェック＆フォールバック機能
-    if (result.tenPlanetSummary && (!result.tenPlanetSummary.planetaryInfluences || !result.tenPlanetSummary.lifeDesign || !result.tenPlanetSummary.practicalAdvice)) {
+    if (result.tenPlanetSummary && (!result.tenPlanetSummary.overallInfluence || !result.tenPlanetSummary.communicationStyle || !result.tenPlanetSummary.loveAndBehavior || !result.tenPlanetSummary.workBehavior || !result.tenPlanetSummary.transformationAndDepth)) {
       console.log('🚨 【tenPlanetSummary形式エラー】正しくない形式、フォールバック適用');
       result.tenPlanetSummary = {
-        planetaryInfluences: "10天体の配置から、あなたは安定感を重視しながらも革新的な変化を求める特質を持っています。太陽から冥王星まで、すべての天体があなたの多面的な性格を形作り、人生の様々な局面で影響を与えています。これらの天体の相互作用により、あなたは感情豊かでありながら理性的な判断ができる人です。",
-        lifeDesign: "あなたの人生は段階的な成長と変化を通じて発展していきます。10天体の配置が示すのは、創造性と実用性を両立させることの重要性です。人間関係において深いつながりを築きながら、同時に個人の自立も大切にする、バランスの取れた人生設計が描かれています。",
-        practicalAdvice: "日常生活では、10天体の影響を活かすため、感情と理性のバランスを意識することが大切です。直感を大切にしながらも論理的思考も活用し、人との関わりにおいては相手の立場を理解する努力を続けてください。また、定期的な自己反省の時間を設けることで、天体の恩恵をより深く受け取ることができるでしょう。"
+        overallInfluence: "10天体の配置から、あなたは安定感を重視しながらも革新的な変化を求める特質を持っています。太陽から冥王星まで、すべての天体があなたの多面的な性格を形作り、人生の様々な局面で影響を与えています。これらの天体の相互作用により、あなたは感情豊かでありながら理性的な判断ができる人です。周りの人からは、信頼できる存在として見られることが多いでしょう。",
+        communicationStyle: "あなたは話すときに相手の立場を考慮する優しさを持っています。言葉選びに気を遣い、相手が理解しやすいように説明する癖があります。時には遠回しな表現を使うことがありますが、これは相手を傷つけたくない思いやりの表れです。グループでの会話では、調和を重視し、全員が参加できるよう配慮します。",
+        loveAndBehavior: "恋愛においては、相手のことを深く理解したいという欲求が強く現れます。一目惚れよりも、時間をかけて関係を築いていくタイプです。愛情表現は控えめですが、行動で気持ちを示すことが多いでしょう。相手の好みや気持ちを察知する能力に優れ、さりげない心遣いで愛情を伝えます。",
+        workBehavior: "職場では責任感が強く、任された仕事は最後まで丁寧にやり遂げます。同僚との協調性を重視し、チーム全体の調和を保つことを大切にします。困っている人がいると、自然と手を差し伸べる優しさを持っています。計画的に物事を進めることを好み、着実に成果を積み上げていくタイプです。",
+        transformationAndDepth: "人生の変化に対しては慎重に対応しながらも、内面では常に成長を求めています。表面的には安定を好みますが、心の奥では新しい可能性を模索している複雑さがあります。困難な状況でも持ち前の粘り強さで乗り越え、そこから深い洞察を得ることができます。潜在的な力は非常に大きく、適切なタイミングで発揮されるでしょう。"
       };
     }
     
@@ -503,6 +509,31 @@ function generateFuturePredictionPrompt(
   planets: PlanetPosition[],
   timeframe: FutureTimeframe
 ): string {
+  // Level3の行動パターン分析結果を読み込み（占い機能用）
+  let behaviorPatternContext = '';
+  try {
+    const level3Key = `level3_analysis_result_${birthData.name}_${new Date().toISOString().split('T')[0]}`;
+    const storedLevel3Analysis = localStorage.getItem(level3Key);
+    if (storedLevel3Analysis) {
+      const analysisData = JSON.parse(storedLevel3Analysis);
+      if (analysisData.tenPlanetSummary) {
+        const summary = analysisData.tenPlanetSummary;
+        behaviorPatternContext = `
+
+【参考：星が伝えるあなたの印象診断分析】
+※以下の印象診断分析を参考に、より個人的で具体的な占いを提供してください
+
+🌟 総合的な影響: ${summary.overallInfluence}
+💬 話し方の癖: ${summary.communicationStyle}
+💕 恋愛や行動: ${summary.loveAndBehavior}
+💼 仕事での振る舞い: ${summary.workBehavior}
+🔮 変革と深層心理: ${summary.transformationAndDepth}
+`;
+      }
+    }
+  } catch (error) {
+    console.warn('Level3結果の読み込みエラー（占い用）:', error);
+  }
   // 短期かどうか判定
   const isShortTerm = ["今日", "明日", "今週", "来週"].includes(timeframe);
   
@@ -552,6 +583,11 @@ function generateFuturePredictionPrompt(
 
 【重要】毎回新しい視点で分析し、異なる角度からのアドバイスを提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。
 
+【特別指示】
+- 上記の「星が伝えるあなたの印象診断分析」がある場合は、その具体的な印象分析を踏まえて占いを作成してください
+- あなたの話し方、恋愛での行動、仕事での振る舞いなどの特徴を考慮した、よりパーソナライズされた占いを提供してください
+- 行動パターン分析の内容と矛盾しないよう注意しながら、その人らしい占いを心がけてください
+
 【クライアント情報】
 お名前: ${birthData.name}
 生年月日: ${birthData.birthDate.toLocaleDateString('ja-JP')}
@@ -560,7 +596,7 @@ function generateFuturePredictionPrompt(
 
 【天体配置】
 ${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('\n')}
-
+${behaviorPatternContext}
 【予測期間】
 ${timeframe} (${startDate.toLocaleDateString('ja-JP')} 〜 ${endDate.toLocaleDateString('ja-JP')})
 
@@ -670,7 +706,7 @@ ${fortuneData.result}
     console.warn('Level1占い結果の読み込みエラー:', error);
   }
 
-  // 🔧 Level2隠れた自分発見占い結果の読み込み（AIチャット引き継ぎ用）
+  // 🔧 Level2星が伝える隠れた自分診断結果の読み込み（AIチャット引き継ぎ用）
   const level2Key = `level2_fortune_${birthData.name}_${new Date().toISOString().split('T')[0]}`;
   let hiddenSelfInfo = '';
   try {
@@ -678,7 +714,7 @@ ${fortuneData.result}
     if (storedLevel2Fortune) {
       const fortuneData = JSON.parse(storedLevel2Fortune);
       hiddenSelfInfo = `
-【本日の隠れた自分発見占い結果】
+【本日の星が伝える隠れた自分診断結果】
 表の自分: ${fortuneData.sunSign}
 裏の自分: ${fortuneData.moonSign}
 自然な行動: ${fortuneData.ascendantSign}
@@ -689,6 +725,53 @@ ${fortuneData.result}
     }
   } catch (error) {
     console.warn('Level2占い結果の読み込みエラー:', error);
+  }
+
+  // 🔧 Level3星が伝えるあなたの印象診断結果の読み込み（AIチャット引き継ぎ用）
+  const level3Key = `level3_analysis_result_${birthData.name}_${new Date().toISOString().split('T')[0]}`;
+  let behaviorPatternInfo = '';
+  try {
+    const storedLevel3Analysis = localStorage.getItem(level3Key);
+    if (storedLevel3Analysis) {
+      const analysisData = JSON.parse(storedLevel3Analysis);
+      if (analysisData.tenPlanetSummary) {
+        const summary = analysisData.tenPlanetSummary;
+        behaviorPatternInfo = `
+【本日の星が伝えるあなたの印象診断結果（5つの項目）】
+期間: ${analysisData.period === 'today' ? '今日' : analysisData.period === 'tomorrow' ? '明日' : analysisData.period}
+
+🌟 総合的な影響:
+${summary.overallInfluence}
+
+💬 話し方の癖:
+${summary.communicationStyle}
+
+💕 恋愛や行動:
+${summary.loveAndBehavior}
+
+💼 仕事での振る舞い:
+${summary.workBehavior}
+
+🔮 変革と深層心理:
+${summary.transformationAndDepth}
+`;
+      }
+    } else {
+      // 古い形式のフォールバック
+      const oldKey = `level3_fortune_${birthData.name}_${new Date().toISOString().split('T')[0]}`;
+      const storedLevel3Fortune = localStorage.getItem(oldKey);
+      if (storedLevel3Fortune) {
+        const fortuneData = JSON.parse(storedLevel3Fortune);
+        behaviorPatternInfo = `
+【本日の星が伝えるあなたの印象診断結果】
+期間: ${fortuneData.period === 'today' ? '今日' : fortuneData.period === 'tomorrow' ? '明日' : fortuneData.period}
+占い結果:
+${fortuneData.result}
+`;
+      }
+    }
+  } catch (error) {
+    console.warn('Level3占い結果の読み込みエラー:', error);
   }
 
   // アスペクト情報の整理
@@ -723,6 +806,7 @@ ${aspectInfo}
 ${patternInfo}
 ${recentFortuneInfo}
 ${hiddenSelfInfo}
+${behaviorPatternInfo}
 【会話のカテゴリ】${category}
 
 【これまでの会話履歴】
@@ -735,7 +819,8 @@ ${message}
 - 占星術の専門知識（天体配置、アスペクト、パターン）を活用して回答してください
 - 天体間の関係性（アスペクト）を考慮した深い分析を含めてください
 ${recentFortuneInfo ? '- 上記の「本日のお手軽12星座占い結果」がある場合は、その具体的な内容を踏まえて深掘りしてください' : ''}
-${hiddenSelfInfo ? '- 上記の「本日の隠れた自分発見占い結果」がある場合は、その具体的な内容を踏まえて深掘りしてください' : ''}
+    ${hiddenSelfInfo ? '- 上記の「本日の星が伝える隠れた自分診断結果」がある場合は、その具体的な内容を踏まえて深掘りしてください' : ''}
+    ${behaviorPatternInfo ? '- 上記の「本日の星が伝えるあなたの印象診断結果」がある場合は、その具体的な内容を踏まえて深掘りしてください' : ''}
 - 温かく親身になって答えてください
 - 具体的で実践的なアドバイスを含めてください
 - 希望と励ましを与える回答を心がけてください
