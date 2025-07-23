@@ -1,15 +1,21 @@
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import './App.css'
 import ModeSelection from './components/ModeSelection'
 import InputForm from './components/InputForm'
 import StepByStepResult from './components/StepByStepResult'
 import AIChat from './components/AIChat'
 import AIFortuneChat from './components/AIFortuneChat'
-import './App.css'
+import { initializeDataManager } from './utils/dataManager';
 
 type FortuneMode = 'sun-sign' | 'three-planets' | 'ten-planets' | 'ai-chat';
 
 function App() {
+  // アプリ初期化時にデータバージョンチェックを実行
+  useEffect(() => {
+    initializeDataManager();
+  }, []);
+
   return (
     <Router
       future={{

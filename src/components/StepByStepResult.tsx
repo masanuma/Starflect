@@ -4,7 +4,7 @@ import { BirthData, HoroscopeData } from '../types';
 import { generateCompleteHoroscope } from '../utils/astronomyCalculator';
 import { chatWithAIAstrologer, generateAIAnalysis, AIAnalysisResult } from '../utils/aiAnalyzer';
 import { getTimeContextForAI } from '../utils/dateUtils';
-import { confirmAndClearData } from '../utils/dataManager';
+import { confirmAndClearResultsOnly } from '../utils/dataManager';
 import AdBanner from './AdBanner';
 import './StepByStepResult.css';
 
@@ -39,15 +39,15 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
 
   // 新しい占いを始めるための関数
   const startNewFortune = () => {
-    const confirmed = confirmAndClearData(
-      '「新しい占いを始める」をクリックしたら、登録しているお名前、生年月日、時刻、生まれた場所、これまでのあなたの分析結果が消去されます。よろしいですか？分析はもう一度実行することができます。'
+    const confirmed = confirmAndClearResultsOnly(
+      '新しい占いを始めますか？\n\n過去の占い結果はクリアされますが、お名前、生年月日、時刻、生まれた場所の情報は保持されます。\n同じ情報で新しい占いを実行できます。'
     );
     
     if (confirmed) {
       // ページトップに移動
       window.scrollTo(0, 0);
       
-      // 入力フォームページに遷移
+      // トップページに遷移（モード選択画面）
       navigate('/');
     }
   };
@@ -810,48 +810,94 @@ ${fortuneData.result}
         debugLog('🔍 【AIチャット用保存】Level3の5つの項目をローカルストレージに保存:', aiChatKey);
       }
     } catch (error) {
-      debugError('レベル3AI分析エラー:', error);
+      debugError('Level3 AI分析エラー:', error);
       debugError('エラーの詳細:', error instanceof Error ? error.message : String(error));
-      // エラーの場合はデフォルトの分析結果を設定（新しい5つの項目形式）
-      const defaultAnalysis = {
-        tenPlanetSummary: {
-          overallInfluence: "現在AI分析が利用できません。10天体の総合的な配置から見える、あなたの全体的な性格や人生への影響を確認してください。",
-          communicationStyle: "現在AI分析が利用できません。水星などの影響から見える、あなたのコミュニケーションスタイルや話し方の特徴を確認してください。",
-          loveAndBehavior: "現在AI分析が利用できません。金星・火星などの影響から見える、恋愛での行動パターンや魅力の表現方法を確認してください。",
-          workBehavior: "現在AI分析が利用できません。太陽・土星などの影響から見える、職場での振る舞い方や責任の取り方を確認してください。",
-          transformationAndDepth: "現在AI分析が利用できません。冥王星・海王星・天王星などの影響から見える、人生の変化への対応や深層心理を確認してください。"
-        },
-        personalityInsights: {
-          corePersonality: '現在AI分析が利用できません。',
-          hiddenTraits: '現在AI分析が利用できません。',
-          lifePhilosophy: '現在AI分析が利用できません。',
-          relationshipStyle: '現在AI分析が利用できません。',
-          careerTendencies: '現在AI分析が利用できません。'
-        },
-        detailedFortune: {
-          overallTrend: '現在AI分析が利用できません。',
-          loveLife: '現在AI分析が利用できません。',
-          careerPath: '現在AI分析が利用できません。',
-          healthWellness: '現在AI分析が利用できません。',
-          financialProspects: '現在AI分析が利用できません。',
-          personalGrowth: '現在AI分析が利用できません。'
-        },
-        lifePath: {
-          majorThemes: [],
-          challengesToOvercome: [],
-          opportunitiesToSeize: [],
-          spiritualJourney: '現在AI分析が利用できません。'
-        },
-        practicalAdvice: {
-          dailyHabits: [],
-          relationshipTips: [],
-          careerGuidance: [],
-          wellnessRecommendations: []
-        },
-        planetAnalysis: {},
-        aiPowered: false
-      };
-      setLevel3Analysis(defaultAnalysis);
+      
+      // タイムアウトエラーの特別処理
+      if (error instanceof Error && error.message.includes('タイムアウト')) {
+        console.error('🔥 Level3分析でタイムアウトが発生しました。複雑な分析のため時間がかかっています。');
+        const timeoutAnalysis = {
+          personalityInsights: {
+            corePersonality: 'AI分析の処理に時間がかかっています。少し時間を置いてから再度お試しください。',
+            hiddenTraits: 'ネットワークの状況により分析に時間がかかっています。',
+            lifePhilosophy: '分析を再実行してください。',
+            relationshipStyle: '分析処理中です。',
+            careerTendencies: '分析処理中です。'
+          },
+          detailedFortune: {
+            overallTrend: 'AI分析の処理に時間がかかっています。',
+            loveLife: '分析処理中です。',
+            careerPath: '分析処理中です。',
+            healthWellness: '分析処理中です。',
+            financialProspects: '分析処理中です。',
+            personalGrowth: '分析処理中です。'
+          },
+          tenPlanetSummary: {
+            overallInfluence: '🔄 AI分析の処理に時間がかかっています。ネットワークの状況やサーバーの負荷により、Level3の詳細分析は通常より時間がかかる場合があります。少し時間を置いてから「再試行」ボタンを押してください。',
+            communicationStyle: '分析処理中です。再試行ボタンをお試しください。',
+            loveAndBehavior: '分析処理中です。再試行ボタンをお試しください。',
+            workBehavior: '分析処理中です。再試行ボタンをお試しください。',
+            transformationAndDepth: '分析処理中です。再試行ボタンをお試しください。'
+          },
+          lifePath: {
+            majorThemes: [],
+            challengesToOvercome: [],
+            opportunitiesToSeize: [],
+            spiritualJourney: '分析処理中です。'
+          },
+          practicalAdvice: {
+            dailyHabits: [],
+            relationshipTips: [],
+            careerGuidance: [],
+            wellnessRecommendations: []
+          },
+          planetAnalysis: {},
+          aiPowered: false,
+          isTimeout: true // タイムアウトフラグを追加
+        };
+        setLevel3Analysis(timeoutAnalysis);
+      } else {
+        // その他のエラーの場合
+        const defaultAnalysis = {
+          personalityInsights: {
+            corePersonality: 'AI分析でエラーが発生しました。',
+            hiddenTraits: 'AI分析でエラーが発生しました。',
+            lifePhilosophy: 'AI分析でエラーが発生しました。',
+            relationshipStyle: 'AI分析でエラーが発生しました。',
+            careerTendencies: 'AI分析でエラーが発生しました。'
+          },
+          detailedFortune: {
+            overallTrend: 'AI分析でエラーが発生しました。',
+            loveLife: 'AI分析でエラーが発生しました。',
+            careerPath: 'AI分析でエラーが発生しました。',
+            healthWellness: 'AI分析でエラーが発生しました。',
+            financialProspects: 'AI分析でエラーが発生しました。',
+            personalGrowth: 'AI分析でエラーが発生しました。'
+          },
+          tenPlanetSummary: {
+            overallInfluence: 'AI分析でエラーが発生しました。再試行ボタンをお試しください。',
+            communicationStyle: 'AI分析でエラーが発生しました。',
+            loveAndBehavior: 'AI分析でエラーが発生しました。',
+            workBehavior: 'AI分析でエラーが発生しました。',
+            transformationAndDepth: 'AI分析でエラーが発生しました。'
+          },
+          lifePath: {
+            majorThemes: [],
+            challengesToOvercome: [],
+            opportunitiesToSeize: [],
+            spiritualJourney: 'AI分析でエラーが発生しました。'
+          },
+          practicalAdvice: {
+            dailyHabits: [],
+            relationshipTips: [],
+            careerGuidance: [],
+            wellnessRecommendations: []
+          },
+          planetAnalysis: {},
+          aiPowered: false
+        };
+        setLevel3Analysis(defaultAnalysis);
+      }
     } finally {
       setIsGeneratingLevel3Analysis(false);
     }
@@ -1230,8 +1276,8 @@ ${fortuneData.result}
           </button>
         </div>
         
-        <div className="level-title">
-          <h2 className="level-title-text">🌟 お手軽12星座占い</h2>
+        <div className="level1-header">
+          <h2 className="level-title-text">🌟 お手軽12星座占い　～12星座から見たあなた</h2>
         </div>
 
         {/* 広告表示1: 12星座占いタイトルと結果の間 */}
@@ -1258,7 +1304,7 @@ ${fortuneData.result}
 
         {/* 占い */}
         <div className="period-fortune-section">
-          <h3 className="section-title">🔮 占い</h3>
+          <h3 className="section-title">🔮 占い　～12星座から見たあなた</h3>
           
           <div className="fortune-selector">
             <div className="selector-row">
@@ -1484,10 +1530,13 @@ ${fortuneData.result}
 
         {/* 隠れた自分発見占いの説明 */}
         <div className="three-planets-introduction">
-                      <h3 className="section-title">🔮 星が伝える 隠れた自分診断とは</h3>
+                        <h3 className="section-title">🔮 星が伝える 隠れた自分診断とは</h3>
           <div className="intro-overview">
             <p>
-              普通の12星座占いでは分からない、あなたの隠れた一面を発見！太陽・月・上昇星座の3天体分析で、表面的な性格の奥に潜む本当のあなたを診断します。「同じ星座なのになぜ性格が違うの？」その謎を解き明かします。
+              普通の12星座占いでは分からない、あなたの隠れた一面を発見！
+              生まれた瞬間の太陽・月・上昇星座の3天体の位置から、表面的な性格の奥に潜む本当のあなたを診断します。
+              「同じ星座なのになぜ性格が違うの？」その謎を解き明かします。
+              出生時刻と場所が分かることで、月や上昇星座の正確な位置を計算し、より深い分析が可能になります。
             </p>
           </div>
           
@@ -1540,7 +1589,7 @@ ${fortuneData.result}
             className="level-up-button"
             onClick={handleLevelUp}
           >
-            星が伝える 隠れた自分診断へ 🔮
+                              星が伝える 隠れた自分診断へ 🔮
           </button>
         </div>
 
@@ -1591,7 +1640,7 @@ ${fortuneData.result}
         </div>
         
         <div className="level-title">
-          <h2 className="level-title-text">🔮 星が伝える 隠れた自分診断</h2>
+                      <h2 className="level-title-text">🔮 星が伝える 隠れた自分診断　～あなたの隠れた一面</h2>
         </div>
 
         {/* 広告表示3: 隠れた自分発見占いタイトルと結果の間 */}
@@ -1774,7 +1823,7 @@ ${fortuneData.result}
         </div>
 
         <div className="period-fortune-section">
-          <h3 className="section-title">🔮 占い</h3>
+          <h3 className="section-title">🔮 占い　～あなたの隠れた一面</h3>
           
           <div className="fortune-selector">
             <div className="selector-row">
@@ -2074,12 +2123,14 @@ ${fortuneData.result}
 
                   {/* 星が伝える あなたの印象診断の説明 */}
         <div className="three-planets-introduction">
-                      <h3 className="section-title">🌌 星が伝える あなたの印象診断とは</h3>
+                        <h3 className="section-title">🌌 星が伝える あなたの印象診断とは</h3>
           <div className="intro-overview">
             <p>
-              ３つの天体だけでは分からない、まわりから見たあなたの印象や振る舞いを大解剖！
-              10天体すべての配置から、話し方・恋愛・仕事での行動パターンなど、
+              3つの天体だけでは分からない、まわりから見たあなたの印象や振る舞いを大解剖！
+              生まれた瞬間の10天体すべての配置から、話し方・恋愛・仕事での行動パターンなど、
               周りが見ている「いつものあなた」の癖や特徴が詳しく明らかになります。
+              出生時刻と場所の情報により、10天体それぞれがどの星座の位置にあったかを正確に計算し、
+              より個人的で詳細な分析を行います。
             </p>
           </div>
           
@@ -2134,7 +2185,7 @@ ${fortuneData.result}
             className="level-up-button"
             onClick={handleLevelUp}
           >
-            星が伝える あなたの印象診断へ 🌌
+                              星が伝える あなたの印象診断へ 🌌
           </button>
         </div>
 
@@ -2182,7 +2233,7 @@ ${fortuneData.result}
         </div>
         
         <div className="level-title">
-          <h2 className="level-title-text">🌌 星が伝える あなたの印象診断</h2>
+                      <h2 className="level-title-text">🌌 星が伝える あなたの印象診断　～まわりから見たあなた</h2>
         </div>
 
         {/* 広告表示5: まわりから見たあなたタイトルと結果の間 */}
@@ -2370,7 +2421,7 @@ ${fortuneData.result}
           {/* AI分析が利用できない場合のメッセージ */}
           {!level3Analysis && !isGeneratingLevel3Analysis && (
             <div className="ai-analysis-error">
-              <p>AI分析データの読み込みに失敗しました。</p>
+              <p>🔄 まわりから見たあなたの分析データの読み込みに失敗しました。</p>
               <div className="error-actions">
                 <button 
                   className="retry-button"
@@ -2382,7 +2433,7 @@ ${fortuneData.result}
                   className="clear-cache-button"
                   onClick={() => {
                     if (birthData) {
-                      const cacheKey = `level3_analysis_v5_${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+                      const cacheKey = `level3_analysis_v7_${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
                       localStorage.removeItem(cacheKey);
                       handleGenerateLevel3Analysis();
                     }
@@ -2393,10 +2444,40 @@ ${fortuneData.result}
               </div>
             </div>
           )}
+          
+          {/* タイムアウト時の特別メッセージ */}
+          {level3Analysis && level3Analysis.isTimeout && (
+            <div className="timeout-message">
+              <h4>⏰ 分析処理について</h4>
+              <p>
+                Level3の「星が伝えるあなたの印象診断」は10天体すべてを使った高度な分析のため、
+                通常より処理に時間がかかる場合があります。<br/>
+                ネットワークの状況やサーバーの負荷により、一時的にタイムアウトが発生することがあります。
+              </p>
+              <div className="timeout-actions">
+                <button 
+                  className="retry-button primary"
+                  onClick={() => {
+                    // キャッシュをクリアしてから再試行
+                    if (birthData) {
+                      const cacheKey = `level3_analysis_v7_${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+                      localStorage.removeItem(cacheKey);
+                    }
+                    handleGenerateLevel3Analysis();
+                  }}
+                >
+                  🔄 もう一度分析する
+                </button>
+                <p className="timeout-note">
+                  ※ 再試行は1-2分間隔で行うことをお勧めします
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="period-fortune-section">
-          <h3 className="section-title">🔮 占い</h3>
+          <h3 className="section-title">🔮 占い　～まわりから見たあなた</h3>
           
           <div className="fortune-selector">
             <div className="selector-row">
@@ -2436,7 +2517,7 @@ ${fortuneData.result}
             return level3Fortune && !isGeneratingLevel3;
           })() && (
             <div className="five-fortunes-section">
-                              <h3>🔮 星が伝える あなたの印象診断 - {getPeriodTitle()}</h3>
+                              <h3>🌌 星が伝える あなたの印象診断　～まわりから見たあなた - {getPeriodTitle()}</h3>
               <div className="five-fortunes-grid">
                 {(() => {
                   debugLog('🔍 【Level3占い結果表示開始】====================');

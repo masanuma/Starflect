@@ -1,0 +1,8 @@
+# pack-refs with: peeled fully-peeled sorted 
+52a1a5448cd706a5a60ac301c3d10ca358456257 refs/heads/main
+8be4cadab50a5be0cf2faa43929122e88197eed7 refs/tags/v1.3.0-prod
+^09856f51dcaeb5610852c4d551ec1c3189b52372
+e317c62c4c49810aa648b3e8cd0ae0f96f8f3e94 refs/tags/v1.4.0-ios-picker
+^b30929602fb1f306d0dd959ad85bc15467daf162
+6e3c7197aece463db6cd01ba6172006c79d98f4e refs/tags/v1.5.0-enhanced-picker
+^24db940e5b1442b48432780c0f3d6d00001a8d49
