@@ -10,12 +10,12 @@ interface AdBannerProps {
 const AdBanner: React.FC<AdBannerProps> = ({ 
   position, 
   size = 'medium', 
-  demoMode = true  // 一時的に常にデモモードで動作
+  demoMode = false  // 本番モードで動作
 }) => {
   const adRef = useRef<HTMLDivElement>(null);
   
-  // 一時的に常にデモモードを強制
-  const forceDemoMode = true;
+  // 本番環境での実際の広告表示を有効化
+  const forceDemoMode = false;
 
   useEffect(() => {
     if (!forceDemoMode && !demoMode && adRef.current) {
