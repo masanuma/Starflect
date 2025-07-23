@@ -19,23 +19,35 @@ const AdBanner: React.FC<AdBannerProps> = ({
 
   useEffect(() => {
     if (!forceDemoMode && !demoMode && adRef.current) {
-      // Google AdSense初期化（実装時）
+      // Google AdSense初期化
       try {
-        // 要素が表示されているかチェック
-        const rect = adRef.current.getBoundingClientRect();
-        if (rect.width > 0 && rect.height > 0) {
-          // @ts-ignore
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } else {
-          console.log('AdSense: 要素が表示されていません');
+        // 要素の存在と基本的な表示チェック
+        const element = adRef.current;
+        if (element) {
+          // adsbygoogle要素を探す
+          const adElement = element.querySelector('.adsbygoogle');
+          if (adElement) {
+            // 少し遅延を入れてからAdSenseを初期化
+            setTimeout(() => {
+              try {
+                // @ts-ignore
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+                console.log('✅ AdSense初期化完了:', position);
+              } catch (error) {
+                console.log('🚨 AdSense初期化エラー:', error);
+              }
+            }, 100);
+          } else {
+            console.log('⚠️ AdSense要素が見つかりません:', position);
+          }
         }
       } catch (error) {
-        console.log('AdSense読み込みエラー:', error);
+        console.log('🚨 AdSense読み込みエラー:', error);
       }
     } else {
-      console.log('AdSense: デモモードで動作中');
+      console.log('🔄 AdSense: デモモードで動作中');
     }
-  }, [demoMode, forceDemoMode]);
+  }, [demoMode, forceDemoMode, position]);
 
   // サンプル用の広告コンテンツ
   const renderDemoAd = () => {

@@ -209,29 +209,74 @@
 
 /* AdSenseコンテナ（実装時用） */
 .adsense-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
+  display: block;
+  width: 100%;
+  max-width: 728px;
+  margin: 20px auto;
+  min-height: 90px;
+  text-align: center;
 }
 
 .adsense-container--level-transition {
-  margin: 30px 0;
+  margin: 30px auto;
   padding: 20px;
   background: rgba(102, 126, 234, 0.03);
   border-radius: 15px;
+  width: 100%;
+  max-width: 728px;
 }
 
 .adsense-container--result-bottom {
-  margin: 25px 0;
+  margin: 25px auto;
   border-top: 1px solid rgba(102, 126, 234, 0.1);
   padding-top: 25px;
+  width: 100%;
+  max-width: 728px;
 }
 
 .adsense-container--sidebar {
   position: sticky;
   top: 20px;
-  margin: 0;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 300px;
+}
+
+.adsense-container--chat-inline {
+  margin: 15px auto;
+  width: 100%;
+  max-width: 728px;
+}
+
+/* AdSense広告要素の設定 */
+.adsbygoogle {
+  display: block !important;
+  width: 100% !important;
+  min-width: 300px !important;
+  min-height: 90px !important;
+  margin: 0 auto !important;
+}
+
+/* 配置位置別のAdSense設定 */
+.adsense-container--level-transition .adsbygoogle {
+  max-width: 728px !important;
+  height: auto !important;
+}
+
+.adsense-container--result-bottom .adsbygoogle {
+  max-width: 728px !important;
+  height: auto !important;
+}
+
+.adsense-container--sidebar .adsbygoogle {
+  max-width: 300px !important;
+  width: 300px !important;
+  height: 250px !important;
+}
+
+.adsense-container--chat-inline .adsbygoogle {
+  max-width: 728px !important;
+  height: auto !important;
 }
 
 /* モバイル対応 */
@@ -271,6 +316,34 @@
   
   .ad-banner--sidebar {
     display: none; /* モバイルではサイドバー広告を非表示 */
+  }
+
+  /* モバイル用AdSense設定 */
+  .adsense-container {
+    max-width: 320px;
+    margin: 15px auto;
+  }
+  
+  .adsense-container--level-transition {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 15px;
+  }
+  
+  .adsense-container--result-bottom {
+    max-width: 100%;
+    margin: 20px auto;
+  }
+  
+  .adsbygoogle {
+    min-width: 300px !important;
+    max-width: 320px !important;
+  }
+  
+  .adsense-container--level-transition .adsbygoogle,
+  .adsense-container--result-bottom .adsbygoogle,
+  .adsense-container--chat-inline .adsbygoogle {
+    max-width: 320px !important;
   }
 }
 
