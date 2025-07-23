@@ -89,15 +89,36 @@ Starflect/
 
 ### AI分析システム
 - **OpenAI API**: GPT-4/3.5-turbo連携
+- **タイムアウト設定**:
+  - Level1/2: 30秒（軽量処理）
+  - Level3: 60秒（10天体詳細分析対応）
+  - 最大3回リトライ、指数バックオフ
 - **分析機能**:
   - 性格分析（personalityInsights）
   - 詳細運勢（detailedFortune）
   - 天体個別分析（planetAnalysis）
   - 未来予測（期間別予測）
   - 占い師チャット
+- **エラーハンドリング**:
+  - タイムアウト専用UI（リトライボタン付き）
+  - 詳細エラーログ
+  - フォールバック機能
 
 ### データ管理
 - **LocalStorage**: クライアントサイドデータ永続化
+- **バージョニングシステム（v2.0.0）**: 
+  - 自動データバージョンチェック
+  - 構造変更時の自動クリア（基本情報保持）
+  - 選択的データクリア機能（結果のみ/全データ）
+- **データ構造**:
+  ```typescript
+  starflect_data_version: '2.0.0'  // バージョン管理
+  birthData: { name, birthDate, birthTime, birthPlace }  // 基本情報
+  level1_fortune_*: { ... }  // Level1占い結果
+  level2_*: { ... }  // Level2分析結果  
+  level3_*: { ... }  // Level3分析結果
+  starflect_tutorial_completed: boolean  // チュートリアル状態
+  ```
 - **JSON**: データシリアライゼーション
 - **型安全**: TypeScriptインターフェース
 
