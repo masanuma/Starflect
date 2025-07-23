@@ -30,9 +30,28 @@ const AdBanner: React.FC<AdBannerProps> = ({
             // 少し遅延を入れてからAdSenseを初期化
             setTimeout(() => {
               try {
+                console.log('🔄 AdSense初期化開始:', position);
+                console.log('📊 広告要素情報:', {
+                  client: adElement.getAttribute('data-ad-client'),
+                  slot: adElement.getAttribute('data-ad-slot'),
+                  format: adElement.getAttribute('data-ad-format'),
+                  test: adElement.getAttribute('data-adtest')
+                });
+                
                 // @ts-ignore
                 (window.adsbygoogle = window.adsbygoogle || []).push({});
                 console.log('✅ AdSense初期化完了:', position);
+                
+                // 5秒後に広告表示状況をチェック
+                setTimeout(() => {
+                  const rect = adElement.getBoundingClientRect();
+                  console.log('📏 広告サイズ情報:', {
+                    position: position,
+                    width: rect.width,
+                    height: rect.height,
+                    hasContent: adElement.innerHTML.length > 100
+                  });
+                }, 5000);
               } catch (error) {
                 console.log('🚨 AdSense初期化エラー:', error);
               }
@@ -102,17 +121,42 @@ const AdBanner: React.FC<AdBannerProps> = ({
 
   // 実際のGoogle AdSense
   const renderRealAd = () => {
+    // 位置別の広告設定
+    const adConfig = {
+      'level-transition': {
+        style: { display: 'block', width: '100%', height: '90px' },
+        format: 'rectangle',
+        responsive: 'true'
+      },
+      'result-bottom': {
+        style: { display: 'block', width: '100%', height: '90px' },
+        format: 'rectangle', 
+        responsive: 'true'
+      },
+      'chat-inline': {
+        style: { display: 'block', width: '100%', height: '90px' },
+        format: 'rectangle',
+        responsive: 'true'
+      },
+      'sidebar': {
+        style: { display: 'inline-block', width: '300px', height: '250px' },
+        format: 'rectangle',
+        responsive: 'false'
+      }
+    };
+
+    const config = adConfig[position] || adConfig['level-transition'];
+
     return (
       <div className={`adsense-container adsense-container--${position}`}>
         <ins
           className="adsbygoogle"
-          style={{
-            display: 'block'
-          }}
+          style={config.style}
           data-ad-client="ca-pub-6954675352016304"
           data-ad-slot="5109454854"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
+          data-ad-format={config.format}
+          data-full-width-responsive={config.responsive}
+          data-adtest="on"
         />
       </div>
     );
