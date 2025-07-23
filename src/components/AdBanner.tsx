@@ -26,7 +26,7 @@ const AdBanner: React.FC<AdBannerProps> = ({
         const element = adRef.current;
         if (element) {
           const adElement = element.querySelector('.adsbygoogle');
-          if (adElement) {
+          if (adElement && !adElement.hasAttribute('data-adsbygoogle-status')) {
             console.log('📦 AdSense要素発見:', position);
             
             // 遅延を入れてからAdSenseを初期化
