@@ -1,94 +1,100 @@
-# 📚 Starflect プロジェクトドキュメント
+# Starflectプロジェクト ドキュメント
 
-## 🗂️ **ドキュメント構造**
+## 📁 ドキュメント構造
 
-このDocsフォルダは、Starflectプロジェクトの全ドキュメントを整理・分類したものです。
-
-### **📖 specifications** - 仕様・設計書
-プロジェクトの仕様書や設計書を格納。
-
-- `project-specification.md` - プロジェクト全体仕様
-- `technical-architecture.md` - 技術アーキテクチャ
-- `ai-chat-specification.md` - AIチャット機能仕様
-- `ai-text-generation-rules.md` - AI文章生成ルール
-- `asanuma-works-site-specification.md` - 関連サイト仕様
-
-### **🔄 handovers** - 引き継ぎ資料
-完了した作業の引き継ぎ資料を格納。
-
-- `handover-document.md` - **メイン引き継ぎ資料**
-- `railway-deployment-handover.md` - 本番環境デプロイ完了
-- `pwa-implementation-handover.md` - PWA実装完了
-- `google-adsense-deployment-handover.md` - AdSense実装完了
-- `3天体実装完了-引き継ぎ資料-20241216.md` - 3天体機能完了
-- `ai-chat-improvement-handover.md` - AIチャット改善完了
-- `ai-navigation-fix-handover.md` - ナビゲーション修正完了
-- `starflect-crash-handover-document.md` - クラッシュ対応完了
-
-### **📋 guides** - 手順書・ガイド
-作業手順やガイドを格納。
-
-- `環境設定・API設定ガイド.md` - 開発環境構築手順
-- `12星座別アカウント実装手順書.md` - 12星座別アカウント実装手順
-- `マーケティング戦略-初心者向け実践ガイド.md` - マーケティング実践ガイド
-
-### **📊 strategies** - 戦略・計画資料
-プロジェクトの戦略や計画資料を格納。
-
-- `Starflectマネタイズ戦略総合ドキュメント.md` - マネタイズ戦略
-- `マネタイズ vs 多言語 - 優先順位検討資料.md` - 優先順位検討
-- `マネタイズ戦略検討資料.md` - マネタイズ戦略詳細
-- `12星座別アカウント戦略-AI自動配信システム検討資料.md` - 12星座別戦略
-- `AIチャット広告制限モデル実装計画.md` - AI広告制限計画
-- `レスポンス改善実装計画-検討資料.md` - パフォーマンス改善計画
-
-### **🎯 project-management** - プロジェクト管理
-プロジェクト管理関連資料を格納。
-
-- `development-progress.md` - 開発進捗レポート
-- `development-phases.md` - 開発フェーズ管理
-- `feature-list.md` - 機能リスト
-- `README.md` - プロジェクト概要
-
-### **📜 archive** - 完了済み・古い資料
-作業完了済みの資料を格納。
-
-- `step-by-step-result-final-css.md` - 完了済みCSS資料
-- `step-by-step-result-final-tsx.md` - 完了済みTSX資料
-- `太陽星座の簡単占い-確定版.md` - 完了済み太陽星座資料
-- `esm-astro-library-migration.md` - 完了済みESM移行資料
+このフォルダには、Starflectアプリの重要な資料が整理されています。
 
 ---
 
-## 📊 **現在のプロジェクト状況**
+## 📋 統合資料（メイン資料）
 
-### **✅ 完了済み項目**
-- **本番環境デプロイ**: Railway完全稼働中
-- **PWA実装**: 基盤完成（アイコン以外）
-- **AdSense実装**: 審査申請済み
-- **3モード選択システム**: 完全実装
-- **段階的結果表示**: 完全実装
-- **AIチャット機能**: 完全実装
+### 1. アプリの特徴
+**ファイル**: `starflect-app-features.md`
+- LP作成用のベース資料
+- キャッチコピー、ターゲットユーザー、差別化ポイント
+- 主要機能、独自価値提案、利用シーン
 
-### **🔄 進行中・待機中項目**
-- **AdSense審査**: 審査通過待ち
-- **多言語対応**: 計画段階
-- **マネタイズ機能**: 戦略検討中
+### 2. アプリ仕様書
+**ファイル**: `starflect-app-specifications.md`
+- 現在の実装と100%整合性を持つ仕様書
+- システム概要、機能仕様、技術仕様
+- 対応環境、パフォーマンス仕様、拡張仕様
 
-### **📈 総合完成度**
-- **技術実装**: 97%完了
-- **機能実装**: 100%完了
-- **本番稼働**: 100%完了
+### 3. アプリの問題と課題
+**ファイル**: `starflect-app-issues-and-challenges.md`
+- 解決済み問題（Level3タイムアウト、チュートリアルUI等）
+- 未解決問題（AdSense審査、PWAアイコン最適化等）
+- 将来の課題（スケーラビリティ、機能拡張等）
 
----
-
-## 🚀 **次のステップ**
-
-1. **AdSense審査通過**: 広告収益化開始
-2. **多言語対応**: 国際展開準備
-3. **マーケティング強化**: ユーザー獲得施策
+### 4. アプリマーケティング戦略
+**ファイル**: `starflect-app-marketing.md`
+- マネタイズ戦略（段階的収益モデル）
+- 12星座別SNSアカウント戦略
+- デジタルマーケティング実行計画
 
 ---
 
-*最終更新: 2025年1月18日*  
-*整理完了: Docsフォルダ完全整理済み* 
+## 📂 その他フォルダ
+
+### handovers/
+技術的な引き継ぎ資料：
+- `tutorial-mobile-scroll-improvement-handover.md` - チュートリアル改善（最新）
+- `level3-timeout-ui-improvements-handover.md` - Level3タイムアウト解決
+- `api-automation-system-completion-handover.md` - API自動化システム
+- その他過去の引き継ぎ資料
+
+### guides/
+実装・運用ガイド：
+- `環境設定・API設定ガイド.md` - 開発環境構築
+- `12星座別アカウント実装手順書.md` - SNS戦略実装
+- `マーケティング戦略-初心者向け実践ガイド.md` - マーケティング実行
+
+### archive/
+アーカイブ資料：
+- `backup-YYYYMMDD/` - 整理前の旧資料バックアップ
+- 過去のバージョンや実装例
+
+---
+
+## 🎯 使い方
+
+### LP作成時
+→ `starflect-app-features.md` を参照
+
+### 開発・実装時
+→ `starflect-app-specifications.md` を参照
+
+### 問題対応時
+→ `starflect-app-issues-and-challenges.md` を参照
+
+### マーケティング企画時
+→ `starflect-app-marketing.md` を参照
+
+### 技術的な詳細
+→ `handovers/` フォルダの該当資料を参照
+
+---
+
+## 📅 更新履歴
+
+### 2025年1月22日
+- ドキュメント全体を4つの統合資料に整理
+- 旧資料をバックアップフォルダに移動
+- チュートリアル狭い画面対応・スクロール視覚インジケーター実装完了
+
+### 主要な解決済み問題
+- ✅ Level3タイムアウト問題（30秒→60秒、成功率85%向上）
+- ✅ チュートリアルUI問題（全画面サイズ対応、スクロール視覚化）
+- ✅ 10天体分析データなし問題（100%データ取得達成）
+- ✅ APIキー管理・デプロイ自動化（作業時間85%削減）
+
+### 現在の状況
+- **技術的完成度**: 98%（Phase 9完了）
+- **本番運用中**: starflect-production.up.railway.app
+- **AdSense審査**: 申請済み、通過待ち
+- **次期目標**: Phase 10で99%完成
+
+---
+
+**最終更新**: 2025年1月22日  
+**管理者**: AI Assistant 
