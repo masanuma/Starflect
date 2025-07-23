@@ -255,8 +255,8 @@
   min-width: 300px !important;
   min-height: 90px !important;
   margin: 0 auto !important;
-  background: rgba(255, 0, 0, 0.1) !important; /* テスト用：薄い赤背景 */
-  border: 2px solid #ff0000 !important; /* テスト用：赤い枠線 */
+  background: rgba(240, 240, 240, 0.05) !important; /* 薄いグレー背景 */
+  border: 1px solid rgba(200, 200, 200, 0.2) !important; /* 薄いグレー枠線 */
   position: relative !important;
   z-index: 1000 !important;
 }
