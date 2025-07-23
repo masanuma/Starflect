@@ -9,7 +9,13 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --host 0.0.0.0",
     "start": "vite preview --host 0.0.0.0",
-    "test": "vitest"
+    "test": "vitest",
+    "setup": "node scripts/setup-env.js",
+    "env:setup": "node scripts/setup-env.js",
+    "deploy": "node scripts/deploy.js",
+    "deploy:safe": "node scripts/deploy.js",
+    "deploy:prepare": "npm run build && echo 'Build completed successfully'",
+    "deploy:check": "npm run lint && npm run build"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.10",

@@ -624,32 +624,6 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         <div ref={messagesEndRef} />
       </div>
 
-      {/* 提案チップ */}
-      {suggestions.length > 0 && (
-        <div className="suggestions-container">
-          <h4>💡 こんな質問はいかがですか？</h4>
-          <div className="suggestion-chips">
-            {suggestions.map((suggestion) => (
-              <button
-                key={suggestion.id}
-                onClick={() => handleSuggestionClick(suggestion)}
-                className="suggestion-chip"
-              >
-                <span className="chip-icon">{suggestion.icon}</span>
-                <span className="chip-text">{suggestion.text}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* 広告表示8: フッターの上 */}
-      <AdBanner 
-        position="result-bottom" 
-        size="medium" 
-        demoMode={false} 
-      />
-
       {/* 入力エリア */}
       <div className="input-container">
         <div className="input-wrapper">
@@ -671,6 +645,32 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
           </button>
         </div>
       </div>
+
+      {/* 広告表示8: フッターの上 */}
+      <AdBanner 
+        position="result-bottom" 
+        size="medium" 
+        demoMode={false} 
+      />
+
+      {/* 提案チップ */}
+      {suggestions.length > 0 && (
+        <div className="suggestions-container">
+          <h4>💡 こんな質問はいかがですか？</h4>
+          <div className="suggestion-chips">
+            {suggestions.map((suggestion) => (
+              <button
+                key={suggestion.id}
+                onClick={() => handleSuggestionClick(suggestion)}
+                className="suggestion-chip"
+              >
+                <span className="chip-icon">{suggestion.icon}</span>
+                <span className="chip-text">{suggestion.text}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
