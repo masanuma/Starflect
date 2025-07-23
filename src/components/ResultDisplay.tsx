@@ -3,7 +3,6 @@ import { BirthData, HoroscopeData } from '../types';
 import { generateCompleteHoroscope } from '../utils/astronomyCalculator';
 import { generateAIAnalysis, AIAnalysisResult, getEnhancedTransitAnalysis, generateFuturePrediction, FuturePrediction, FutureTimeframe } from '../utils/aiAnalyzer';
 import { calculateAllAspects, getSpecificAspectDescription, getSpecificAspectDescriptionSync } from '../utils/aspectCalculator';
-import HoroscopeChart from './HoroscopeChart';
 import { useNavigate } from 'react-router-dom';
 
 const ResultDisplay: React.FC = React.memo(() => {
@@ -519,19 +518,11 @@ const ResultDisplay: React.FC = React.memo(() => {
             )}
 
             <div className="planet-list-item">
-              <div className="planet-list-title">📊 アスペクトチャート</div>
+              <div className="planet-list-title">📊 天体の関係性マトリックス</div>
               <div className="planet-list-analysis">
                 <div className="planet-list-section">
-                  <div className="chart-container">
-                    <HoroscopeChart 
-                      horoscopeData={horoscopeData} 
-                      size={400} 
-                      showAspects={true} 
-                    />
-                  </div>
-                  <p className="chart-note">
-                    ※ 線の太さは関係性の強さを表しています。
-                  </p>
+                  <p>あなたの10天体の関係性は上記の「💫 重要な天体の関係」で詳しく解説しています。
+                  それぞれの天体がどのような角度関係にあり、あなたの性格や才能にどう影響するかをご確認ください。</p>
                 </div>
               </div>
             </div>
