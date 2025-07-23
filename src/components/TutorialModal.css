@@ -110,6 +110,85 @@
   flex: 1;
   overflow-y: auto;
   min-height: 0;
+  position: relative;
+}
+
+/* スクロール可能エリアの下端フェードアウト効果 */
+.tutorial-content::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to bottom, 
+    transparent 0%, 
+    rgba(0, 0, 0, 0.05) 30%,
+    rgba(255, 255, 255, 0.8) 70%,
+    white 100%);
+  pointer-events: none;
+  opacity: 0 !important;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1;
+}
+
+/* スクロール矢印インジケーター */
+.tutorial-content::before {
+  content: '⬇️';
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  opacity: 0 !important;
+  visibility: hidden;
+  animation: none;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+@keyframes scrollArrowPulse {
+  0%, 100% { 
+    opacity: 0;
+    transform: translateX(-50%) translateY(0);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: translateX(-50%) translateY(-3px);
+  }
+}
+
+.tutorial-content.has-more-content::after {
+  opacity: 1 !important;
+  visibility: visible;
+}
+
+.tutorial-content.has-more-content::before {
+  opacity: 1 !important;
+  visibility: visible;
+  animation: scrollArrowPulse 2s infinite;
+}
+
+/* スクロールバーのスタイル調整 */
+.tutorial-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tutorial-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.tutorial-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.tutorial-content::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }
 
 .tutorial-image {
@@ -242,6 +321,17 @@
     padding: 2rem 1.5rem 1.5rem;
   }
   
+  /* モバイル用フェードアウト効果調整 */
+  .tutorial-content::after {
+    height: 30px;
+  }
+  
+  /* モバイル用スクロール矢印調整 */
+  .tutorial-content::before {
+    font-size: 14px;
+    bottom: 6px;
+  }
+
   .tutorial-icon {
     font-size: 4rem;
   }
@@ -269,6 +359,11 @@
     padding: 0.7rem 1.5rem;
     font-size: 0.9rem;
   }
+  
+  /* モバイル用スクロールバー調整 */
+  .tutorial-content::-webkit-scrollbar {
+    width: 6px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -288,6 +383,17 @@
   
   .tutorial-content {
     padding: 1.5rem 1rem 1rem;
+  }
+  
+  /* 小画面用フェードアウト効果調整 */
+  .tutorial-content::after {
+    height: 25px;
+  }
+  
+  /* 小画面用スクロール矢印調整 */
+  .tutorial-content::before {
+    font-size: 12px;
+    bottom: 5px;
   }
   
   .tutorial-icon {
@@ -325,6 +431,11 @@
   .dot {
     width: 10px;
     height: 10px;
+  }
+  
+  /* 小画面用スクロールバー調整 */
+  .tutorial-content::-webkit-scrollbar {
+    width: 4px;
   }
 }
 

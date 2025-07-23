@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './TutorialModal.css';
 
 interface TutorialModalProps {
@@ -8,6 +8,7 @@ interface TutorialModalProps {
 
 const TutorialModal: React.FC<TutorialModalProps> = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
   
   const tutorialSteps = [
     {
@@ -103,6 +104,59 @@ const TutorialModal: React.FC<TutorialModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  // スクロール位置監視でフェードアウト効果制御
+  useEffect(() => {
+    const contentElement = contentRef.current;
+    if (!contentElement) return;
+
+    // 初期状態で確実にクラスを削除
+    contentElement.classList.remove('has-more-content');
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = contentElement;
+      
+      // 実際のテキスト内容をチェック
+      const textContent = contentElement.textContent || '';
+      const hasActualContent = textContent.trim().length > 0;
+      
+      // スクロールが必要かどうかをより厳密にチェック
+      const isScrollable = scrollHeight > clientHeight + 2; // 2pxの余裕に変更
+      
+      // 現在のスクロール位置で下にまだコンテンツがあるか
+      const canScrollMore = scrollTop + clientHeight < scrollHeight - 5;
+      
+      // 全ての条件を満たす場合のみ表示
+      const hasMoreContent = hasActualContent && isScrollable && canScrollMore;
+      
+      if (hasMoreContent) {
+        contentElement.classList.add('has-more-content');
+      } else {
+        contentElement.classList.remove('has-more-content');
+      }
+    };
+
+    // 初期チェック（より長い遅延でレンダリング完了を確実に待つ）
+    setTimeout(handleScroll, 200);
+    
+    // スクロールイベントリスナー追加
+    contentElement.addEventListener('scroll', handleScroll);
+    
+    // リサイズイベントでも再チェック
+    const handleResize = () => {
+      setTimeout(() => {
+        contentElement.classList.remove('has-more-content');
+        handleScroll();
+      }, 200);
+    };
+    window.addEventListener('resize', handleResize);
+    
+    // クリーンアップ
+    return () => {
+      contentElement.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [currentStep]); // currentStepが変わったら再チェック
+
   if (!isOpen) return null;
 
   const currentTutorialStep = tutorialSteps[currentStep];
@@ -135,7 +189,7 @@ const TutorialModal: React.FC<TutorialModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* チュートリアル内容 */}
-        <div className="tutorial-content">
+        <div className="tutorial-content" ref={contentRef}>
           <div className="tutorial-image">
             <span className="tutorial-icon">{currentTutorialStep.image}</span>
           </div>
