@@ -255,6 +255,10 @@
   min-width: 300px !important;
   min-height: 90px !important;
   margin: 0 auto !important;
+  background: rgba(255, 0, 0, 0.1) !important; /* テスト用：薄い赤背景 */
+  border: 2px solid #ff0000 !important; /* テスト用：赤い枠線 */
+  position: relative !important;
+  z-index: 1000 !important;
 }
 
 /* 配置位置別のAdSense設定 */

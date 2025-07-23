@@ -45,12 +45,29 @@ const AdBanner: React.FC<AdBannerProps> = ({
                 // 5秒後に広告表示状況をチェック
                 setTimeout(() => {
                   const rect = adElement.getBoundingClientRect();
+                  const computedStyle = window.getComputedStyle(adElement);
                   console.log('📏 広告サイズ情報:', {
                     position: position,
                     width: rect.width,
                     height: rect.height,
-                    hasContent: adElement.innerHTML.length > 100
+                    hasContent: adElement.innerHTML.length > 100,
+                    visible: rect.width > 0 && rect.height > 0,
+                    display: computedStyle.display,
+                    visibility: computedStyle.visibility,
+                    opacity: computedStyle.opacity,
+                    overflow: computedStyle.overflow
                   });
+                  
+                  // 実際の広告内容をチェック
+                  const adContent = adElement.innerHTML;
+                  console.log('📄 広告内容プレビュー:', adContent.substring(0, 200) + '...');
+                  
+                  // 広告が見えるかの最終判定
+                  if (rect.width > 0 && rect.height > 0 && adContent.length > 100) {
+                    console.log('✅ 広告が正常に表示されています！', position);
+                  } else {
+                    console.log('⚠️ 広告が見えない可能性があります:', position);
+                  }
                 }, 5000);
               } catch (error) {
                 console.log('🚨 AdSense初期化エラー:', error);
@@ -156,7 +173,6 @@ const AdBanner: React.FC<AdBannerProps> = ({
           data-ad-slot="5109454854"
           data-ad-format={config.format}
           data-full-width-responsive={config.responsive}
-          data-adtest="on"
         />
       </div>
     );
