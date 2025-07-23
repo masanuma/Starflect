@@ -21,21 +21,22 @@ const AdBanner: React.FC<AdBannerProps> = ({
     if (!forceDemoMode && !demoMode && adRef.current) {
       // Google AdSense初期化
       try {
-        // 要素の存在と基本的な表示チェック
+        console.log('🔧 AdSense初期化プロセス開始:', position);
+        
         const element = adRef.current;
         if (element) {
-          // adsbygoogle要素を探す
           const adElement = element.querySelector('.adsbygoogle');
           if (adElement) {
-            // 少し遅延を入れてからAdSenseを初期化
+            console.log('📦 AdSense要素発見:', position);
+            
+            // 遅延を入れてからAdSenseを初期化
             setTimeout(() => {
               try {
                 console.log('🔄 AdSense初期化開始:', position);
                 console.log('📊 広告要素情報:', {
                   client: adElement.getAttribute('data-ad-client'),
                   slot: adElement.getAttribute('data-ad-slot'),
-                  format: adElement.getAttribute('data-ad-format'),
-                  test: adElement.getAttribute('data-adtest')
+                  format: adElement.getAttribute('data-ad-format')
                 });
                 
                 // @ts-ignore
@@ -46,23 +47,21 @@ const AdBanner: React.FC<AdBannerProps> = ({
                 setTimeout(() => {
                   const rect = adElement.getBoundingClientRect();
                   const computedStyle = window.getComputedStyle(adElement);
+                  const adContent = adElement.innerHTML;
+                  
                   console.log('📏 広告サイズ情報:', {
                     position: position,
                     width: rect.width,
                     height: rect.height,
-                    hasContent: adElement.innerHTML.length > 100,
+                    hasContent: adContent.length > 100,
                     visible: rect.width > 0 && rect.height > 0,
                     display: computedStyle.display,
                     visibility: computedStyle.visibility,
-                    opacity: computedStyle.opacity,
-                    overflow: computedStyle.overflow
+                    opacity: computedStyle.opacity
                   });
                   
-                  // 実際の広告内容をチェック
-                  const adContent = adElement.innerHTML;
                   console.log('📄 広告内容プレビュー:', adContent.substring(0, 200) + '...');
                   
-                  // 広告が見えるかの最終判定
                   if (rect.width > 0 && rect.height > 0 && adContent.length > 100) {
                     console.log('✅ 広告が正常に表示されています！', position);
                   } else {
@@ -72,7 +71,7 @@ const AdBanner: React.FC<AdBannerProps> = ({
               } catch (error) {
                 console.log('🚨 AdSense初期化エラー:', error);
               }
-            }, 100);
+            }, 500);
           } else {
             console.log('⚠️ AdSense要素が見つかりません:', position);
           }
@@ -169,11 +168,10 @@ const AdBanner: React.FC<AdBannerProps> = ({
         <ins
           className="adsbygoogle"
           style={config.style}
-          data-ad-client="ca-pub-6954675352016304"
-          data-ad-slot="5109454854"
+          data-ad-client="ca-pub-3940256099942544"
+          data-ad-slot="6300978111"
           data-ad-format={config.format}
           data-full-width-responsive={config.responsive}
-          data-adtest="on"
         />
       </div>
     );
