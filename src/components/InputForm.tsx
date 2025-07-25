@@ -12,6 +12,10 @@ interface InputFormProps {
 const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
   const navigate = useNavigate();
   const birthTimeRef = useRef<HTMLInputElement>(null);
+  
+  console.log('🚨 InputForm初期化 - 受け取ったmode:', mode);
+  console.log('🚨 InputForm初期化 - modeの型:', typeof mode);
+  
   const [formData, setFormData] = useState({
     name: '',
     birthDate: '',
@@ -131,6 +135,11 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
 
+    console.log('🔍 === validateForm実行開始 ===');
+    console.log('🔍 現在のmode:', mode);
+    console.log('🔍 formData:', formData);
+    console.log('🔍 locationData:', locationData);
+
     // お名前のバリデーション
     if (!formData.name.trim()) {
       newErrors.name = 'お名前を入力してください';
@@ -148,21 +157,47 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
 
     // 詳しい占いの場合のみ、出生時刻と出生地をバリデーション
     if (mode === 'three-planets' || mode === 'ten-planets') {
+      console.log('🔍 詳しい占いモード - 出生時刻・出生地をバリデーション');
+      
       // 出生時刻のバリデーション
       if (!formData.birthTime) {
+        console.log('🔍 出生時刻が空です');
         newErrors.birthTime = '出生時刻を入力してください';
       } else {
         const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
         if (!timeRegex.test(formData.birthTime)) {
+          console.log('🔍 出生時刻の形式が正しくありません:', formData.birthTime);
           newErrors.birthTime = '正しい時刻形式（HH:MM）で入力してください';
         }
       }
 
       // 出生地のバリデーション
-      if (!formData.birthPlace.trim() && !locationData) {
+      console.log('🔍 出生地バリデーション条件チェック:');
+      console.log('  formData.birthPlace.trim():', formData.birthPlace.trim());
+      console.log('  !formData.birthPlace.trim():', !formData.birthPlace.trim());
+      console.log('  locationData:', locationData);
+      console.log('  !locationData:', !locationData);
+      
+      // locationDataが存在するか、formData.birthPlaceが入力されている場合はOK
+      const hasLocationData = locationData && locationData.latitude && locationData.longitude;
+      const hasBirthPlace = formData.birthPlace.trim().length > 0;
+      
+      console.log('🔍 位置情報チェック:');
+      console.log('  hasLocationData:', hasLocationData);
+      console.log('  hasBirthPlace:', hasBirthPlace);
+      
+      if (!hasLocationData && !hasBirthPlace) {
+        console.log('🔍 出生地バリデーションエラー: 位置情報も入力テキストも不足');
         newErrors.birthPlace = '出生地を入力してください';
+      } else {
+        console.log('🔍 出生地バリデーション OK');
       }
+    } else {
+      console.log('🔍 簡単占いモード - 出生時刻・出生地のバリデーションをスキップ');
     }
+
+    console.log('🔍 バリデーション結果のエラー:', newErrors);
+    console.log('🔍 === validateForm実行終了 ===');
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -171,7 +206,11 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('🚨 handleSubmit開始 - 現在のmode:', mode);
+    console.log('🚨 handleSubmit開始 - modeの型:', typeof mode);
+    
     if (!validateForm()) {
+      console.log('🚨 バリデーション失敗により送信中止');
       return;
     }
 

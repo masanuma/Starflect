@@ -1199,13 +1199,15 @@ ${fortuneData.result}
           return;
         }
         
-        const missingBirthTime = !birthData.birthTime || birthData.birthTime === '12:00';
+        const missingBirthTime = !birthData.birthTime;
         const missingBirthPlace = !birthData.birthPlace || 
                                   !birthData.birthPlace.city || 
                                   birthData.birthPlace.city === '東京';
         
         debugLog('🔍 レベルアップ時のデータチェック:');
+        debugLog('  birthData.birthTime:', birthData.birthTime);
         debugLog('  missingBirthTime:', missingBirthTime);
+        debugLog('  birthData.birthPlace:', birthData.birthPlace);
         debugLog('  missingBirthPlace:', missingBirthPlace);
         
         if (missingBirthTime || missingBirthPlace) {
@@ -1304,7 +1306,7 @@ ${fortuneData.result}
 
         {/* 占い */}
         <div className="period-fortune-section">
-          <h3 className="section-title">🔮 占い　～12星座から見たあなた</h3>
+          <h3 className="section-title">�� 占い　～12星座から見たあなた</h3>
           
           <div className="fortune-selector">
             <div className="selector-row">
@@ -2763,14 +2765,18 @@ ${fortuneData.result}
           
           // 3天体または10天体モードの場合、出生時刻と出生場所をチェック
           if (selectedMode === 'three-planets' || selectedMode === 'ten-planets') {
-            const missingBirthTime = !parsed.birthTime || parsed.birthTime === '12:00';
+            // 出生時刻のチェック：実際に選択されたかをチェック
+            // 12:00は有効な時刻なので、単純に存在チェックのみ行う
+            const missingBirthTime = !parsed.birthTime;
             const missingBirthPlace = !parsed.birthPlace || 
                                       !parsed.birthPlace.city || 
                                       parsed.birthPlace.city === '東京';
             
             debugLog('🔍 StepByStepResult - データチェック:');
             debugLog('  selectedMode:', selectedMode);
+            debugLog('  parsed.birthTime:', parsed.birthTime);
             debugLog('  missingBirthTime:', missingBirthTime);
+            debugLog('  parsed.birthPlace:', parsed.birthPlace);
             debugLog('  missingBirthPlace:', missingBirthPlace);
             
             if (missingBirthTime || missingBirthPlace) {
@@ -2778,6 +2784,8 @@ ${fortuneData.result}
               setShowDataMissingMessage(true);
               setLoading(false);
               return;
+            } else {
+              debugLog('🔍 必要なデータは全て揃っています。');
             }
           }
           
