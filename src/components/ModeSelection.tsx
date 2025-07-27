@@ -118,38 +118,7 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
         ))}
       </div>
       
-      {/* なぜ詳しいのかの簡潔な説明 */}
-      <div className="why-detailed-section">
-        <h3 className="why-title">💫 なぜこんなに詳しく占えるの？</h3>
-        <div className="why-content">
-          <div className="why-item">
-            <span className="why-step">1.</span>
-            <span className="why-text">普通の星座占い = 太陽星座のみ（12種類）</span>
-          </div>
-          <div className="why-item">
-            <span className="why-step">2.</span>
-            <span className="why-text">実は月星座・上昇星座もある（時刻・場所で天体位置が変わる）</span>
-          </div>
-          <div className="why-item">
-            <span className="why-step">3.</span>
-            <span className="why-text">さらに10天体すべての組み合わせで数百万通りの精度</span>
-          </div>
-          <div className="why-item">
-            <span className="why-step">4.</span>
-            <span className="why-text">生まれた瞬間の星の配置があなただけの個性を作る</span>
-          </div>
-          <div className="why-item">
-            <span className="why-step">5.</span>
-            <span className="why-text">AIチャットでどんな質問でも深掘り可能</span>
-          </div>
-        </div>
-        <div className="why-note">
-          <p>
-            <strong>💡 重要：</strong>生まれた時刻と場所が分かることで、月や上昇星座、10天体すべての正確な位置を計算できます。
-            これにより「あなたがどこの星座の影響を受けているか」が精密に分析でき、より個人的で詳しい占い結果になるのです。
-          </p>
-        </div>
-      </div>
+
 
       {/* データクリア機能（2つのボタン） */}
       <div className="reset-data-section">

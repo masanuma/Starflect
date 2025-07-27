@@ -159,26 +159,7 @@ export interface AIAnalysisResult {
   isTimeout?: boolean; // タイムアウト時のフラグを追加
 }
 
-// 未来予測の型定義
-export type FutureTimeframe = "今日" | "明日" | "今週" | "来週" | "今月" | "来月" | "1ヶ月" | "3ヶ月" | "6ヶ月" | "1年";
-export interface FuturePrediction {
-  timeframe: FutureTimeframe;
-  predictions: {
-    love: string;
-    career: string;
-    health: string;
-    finance: string;
-    spiritual: string;
-  };
-  keyDates?: Array<{
-    date: string;
-    event: string;
-    advice: string;
-  }>;
-  overallMessage: string;
-  shortTermAdvice?: string;
-  transitInsights?: string;
-}
+
 
 // チャットメッセージの型定義
 export interface ChatMessage {
@@ -216,37 +197,35 @@ ${new Date().toLocaleString('ja-JP')} - 分析ID: ${Math.random().toString(36).s
 
 {
   "personalityInsights": {
-    "corePersonality": "太陽星座から見たあなたの性格を200-250文字で、ですます調でやさしく解説してください。性格の特徴、行動パターン、価値観、強みを含めて包括的に説明し、特によいところと注意すべきところも明確に含めてください。",
-    "hiddenTraits": "内面の特徴を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "lifePhilosophy": "人生で大切にしていることを70-90文字で、ですます調で解説してください。よいところと注意すべきところも含めて説明してください。",
-    "relationshipStyle": "人間関係の特徴を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "careerTendencies": "お仕事での特徴を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。"
+    "corePersonality": "太陽星座から見たあなたの基本性格を80-100文字で、ですます調で簡潔に。強みと注意点を含めて。",
+    "hiddenTraits": "内面の特徴を40-60文字で、ですます調で簡潔に。",
+    "lifePhilosophy": "人生で大切にしていることを40-60文字で、ですます調で簡潔に。",
+    "relationshipStyle": "人間関係の特徴を40-60文字で、ですます調で簡潔に。",
+    "careerTendencies": "お仕事での特徴を40-60文字で、ですます調で簡潔に。"
   },
   "detailedFortune": {
-    "overallTrend": "全体的な運勢を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "loveLife": "恋愛運を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "careerPath": "仕事運を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "healthWellness": "健康運を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "financialProspects": "金運を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "personalGrowth": "成長運を80-100文字で、ですます調でやさしく解説してください。よいところと注意すべきところも含めて説明してください。"
+    "overallTrend": "全体的な運勢を40-60文字で、ですます調で簡潔に。",
+    "loveLife": "恋愛運を40-60文字で、ですます調で簡潔に。",
+    "careerPath": "仕事運を40-60文字で、ですます調で簡潔に。",
+    "healthWellness": "健康運を40-60文字で、ですます調で簡潔に。",
+    "financialProspects": "金運を40-60文字で、ですます調で簡潔に。",
+    "personalGrowth": "成長運を40-60文字で、ですます調で簡潔に。"
   },
   "todaysFortune": {
-    "overallLuck": "今日の全体運を100-120文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "loveLuck": "今日の恋愛運を100-120文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "workLuck": "今日の仕事運を100-120文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "healthLuck": "今日の健康運を100-120文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "moneyLuck": "今日の金運を100-120文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。",
-    "todaysAdvice": "今日のアドバイスを120-150文字で、ですます調でやさしく詳しく解説してください。よいところと注意すべきところも含めて説明してください。"
+    "overallLuck": "今日の全体運を40-60文字で、ですます調で簡潔に。",
+    "loveLuck": "今日の恋愛運を40-60文字で、ですます調で簡潔に。",
+    "workLuck": "今日の仕事運を40-60文字で、ですます調で簡潔に。",
+    "healthLuck": "今日の健康運を40-60文字で、ですます調で簡潔に。",
+    "moneyLuck": "今日の金運を40-60文字で、ですます調で簡潔に。",
+    "todaysAdvice": "今日のアドバイスを40-60文字で、ですます調で簡潔に。"
   }
 }
 
 【厳守事項】
 - JSON以外のテキストは絶対に出力しないでください
-- 初心者の方でも理解しやすい、やさしい表現で書いてください
-- 文字数を守って詳しく説明してください
+- 指定文字数を守って簡潔に書いてください
 - 必ずですます調で統一してください
-- 必ずよいところと注意すべきところを含めて説明してください
-- わかりやすい表現で少し長めに書いてください
+- 必要最小限の情報で分かりやすく表現してください
 `;
 };
 
@@ -259,7 +238,9 @@ const generateEnhancedAnalysisPrompt = (
 【詳細占星術分析のご依頼】
 
 以下の出生データと天体配置をもとに、クライアント様の性格や運勢について、
-必ず丁寧語（「です・ます」調）で統一し、親しみやすく分かりやすく解説してください。
+必ず丁寧語（「です・ます」調）で統一し、簡潔で分かりやすく解説してください。
+
+【重要】毎回新しい視点で分析し、異なる角度からのアドバイスを提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。
 
 【クライアント情報】
 お名前: ${birthData.name}
@@ -275,68 +256,83 @@ ${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('
 
 {
   "personalityInsights": {
-    "corePersonality": "太陽星座の特徴を120文字以上で、必ずですます調で解説してください。性格の特徴、行動パターン、強みなどを含めて説明し、よいところと注意すべきところも含めてください。",
-    "hiddenTraits": "月星座の隠れた特性を120文字以上で、必ずですます調で解説してください。内面の感情、プライベートな面、本能的な反応などを含めて説明し、よいところと注意すべきところも含めてください。",
-    "lifePhilosophy": "人生哲学や価値観を100文字以上で、必ずですます調で解説してください。何を重視し、どのような生き方を理想とするのかを説明し、よいところと注意すべきところも含めてください。",
-    "relationshipStyle": "人間関係のスタイルを120文字以上で、必ずですます調で解説してください。友人関係、恋愛関係でのコミュニケーションスタイルを含めて説明し、よいところと注意すべきところも含めてください。",
-    "careerTendencies": "キャリア傾向を120文字以上で、必ずですます調で解説してください。適職、仕事への取り組み方、成功のポイントを含めて説明し、よいところと注意すべきところも含めてください。"
+    "corePersonality": "太陽星座の特徴を40-60文字で、必ずですます調で簡潔に。性格の特徴と強み・注意点を含めて。",
+    "hiddenTraits": "月星座の隠れた特性を40-60文字で、必ずですます調で簡潔に。内面の感情と特徴を含めて。",
+    "lifePhilosophy": "人生哲学や価値観を40-60文字で、必ずですます調で簡潔に。何を重視するかを含めて。",
+    "relationshipStyle": "人間関係のスタイルを40-60文字で、必ずですます調で簡潔に。コミュニケーションの特徴を含めて。",
+    "careerTendencies": "キャリア傾向を40-60文字で、必ずですます調で簡潔に。適職と成功のポイントを含めて。"
   },
   "detailedFortune": {
-    "overallTrend": "全体的な運勢傾向を100文字以上で、必ずですます調で解説してください。現在の運勢の流れと今後の展望を含めて説明し、よいところと注意すべきところも含めてください。",
-    "loveLife": "恋愛運を100文字以上で、必ずですます調で解説してください。恋愛の傾向、パートナーシップの可能性を含めて説明し、よいところと注意すべきところも含めてください。",
-    "careerPath": "仕事運を100文字以上で、必ずですます調で解説してください。仕事での成功のポイント、キャリアの方向性を含めて説明し、よいところと注意すべきところも含めてください。",
-    "healthWellness": "健康運を100文字以上で、必ずですます調で解説してください。体調管理のポイント、wellness向上のアドバイスを含めて説明し、よいところと注意すべきところも含めてください。",
-    "financialProspects": "金運を100文字以上で、必ずですます調で解説してください。収入の傾向、金銭管理のポイントを含めて説明し、よいところと注意すべきところも含めてください。",
-    "personalGrowth": "成長運を100文字以上で、必ずですます調で解説してください。自己成長の方向性、学習すべきことを含めて説明し、よいところと注意すべきところも含めてください。"
+    "overallTrend": "全体的な運勢傾向を40-60文字で、必ずですます調で簡潔に。",
+    "loveLife": "恋愛運を40-60文字で、必ずですます調で簡潔に。",
+    "careerPath": "仕事運を40-60文字で、必ずですます調で簡潔に。",
+    "healthWellness": "健康運を40-60文字で、必ずですます調で簡潔に。",
+    "financialProspects": "金運を40-60文字で、必ずですます調で簡潔に。",
+    "personalGrowth": "成長運を40-60文字で、必ずですます調で簡潔に。"
   },
   "tenPlanetSummary": {
-    "overallInfluence": "総合的な影響について約150文字で、必ずですます調で解説してください。10天体の配置から見える、あなたの全体的な性格や人生への影響、周りから見えるあなたの大まかな印象について説明してください。",
-    "communicationStyle": "話し方の癖について約150文字で、必ずですます調で解説してください。水星などの影響から見える、あなたのコミュニケーションスタイル、話し方の特徴、人に伝える時の癖について具体的に説明してください。",
-    "loveAndBehavior": "恋愛や行動について約150文字で、必ずですます調で解説してください。金星・火星などの影響から見える、恋愛での行動パターン、魅力の表現方法、相手への接し方の特徴について具体的に説明してください。",
-    "workBehavior": "仕事での振る舞いについて約150文字で、必ずですます調で解説してください。太陽・土星などの影響から見える、職場での振る舞い方、責任の取り方、同僚との関わり方について具体的に説明してください。",
-    "transformationAndDepth": "変革と深層心理について約150文字で、必ずですます調で解説してください。冥王星・海王星・天王星などの影響から見える、人生の変化への対応、深層心理、隠れた可能性について説明してください。"
+    "overallInfluence": "総合的な影響について45-55文字で（適度な詳しさで）、必ずですます調で記述。",
+    "communicationStyle": "話し方の癖について45-55文字で（適度な詳しさで）、必ずですます調で記述。",
+    "loveAndBehavior": "恋愛や行動について45-55文字で（適度な詳しさで）、必ずですます調で記述。",
+    "workBehavior": "仕事での振る舞いについて45-55文字で（適度な詳しさで）、必ずですます調で記述。",
+    "transformationAndDepth": "変革と深層心理について45-55文字で（適度な詳しさで）、必ずですます調で記述。"
   }
 }
 
 【厳守事項】
-- JSON以外のテキストや説明文は絶対に出力しないでください
-- JSONの前後に余計な文字や改行を入れないでください
-- 各項目を指定された文字数以上で、丁寧な日本語（です・ます調）で解説してください
-- 「あなたの太陽は○○座にあり」のような表現は絶対に使用しないでください
-- 必ずよいところと注意すべきところを含めて説明してください
-- わかりやすい表現で書いてください
-- 必ず上記のJSON形式のみでご回答ください
+- 必ずJSON形式のみで回答してください
+- 各項目を45-55文字程度で記述してください
+- 丁寧な日本語（です・ます調）で記述してください
+- 上記のJSON形式を守ってください
 `;
 };
 
 // 強化されたOpenAI API呼び出し関数
-const callOpenAIAPI = async (prompt: string, maxTokens: number = 2500): Promise<AIAnalysisResult> => {
+const callOpenAIAPI = async (prompt: string, maxTokens: number = 1500): Promise<AIAnalysisResult> => {
   try {
     const data = await callOpenAIWithRetry(
       prompt,
-      "指定されたJSONフォーマットを厳守してください。tenPlanetSummaryはplanetaryInfluences、lifeDesign、practicalAdviceの3つのキーのみ含めてください。sun、moon等の個別天体キーは使用しないでください。毎回異なる視点から創造的で多様な分析を提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。JSON以外のテキストや説明文は絶対に出力せず、必ずJSON形式のみで回答してください。わかりやすい表現で少し長めに書き、必ずよいところと注意すべきところを含めて説明してください。",
+      "必ずJSON形式のみで回答してください。各項目を45-55文字程度で記述し、読みやすい内容にしてください。",
       maxTokens
     );
     const content = data.choices[0].message.content;
+    console.log('🔍 【AI応答内容】:', content);
     
     const aiResultRaw = safeParseJSON(content);
+    console.log('🔍 【JSON解析結果】:', aiResultRaw);
     const result = mapAIResponseToAIAnalysisResult(aiResultRaw);
+    console.log('🔍 【最終マッピング結果】:', result);
     
-    // tenPlanetSummaryの形式チェック＆フォールバック機能
-    if (result.tenPlanetSummary && (!result.tenPlanetSummary.overallInfluence || !result.tenPlanetSummary.communicationStyle || !result.tenPlanetSummary.loveAndBehavior || !result.tenPlanetSummary.workBehavior || !result.tenPlanetSummary.transformationAndDepth)) {
-      console.log('🚨 【tenPlanetSummary形式エラー】正しくない形式、フォールバック適用');
-      result.tenPlanetSummary = {
-        overallInfluence: "10天体の配置から、あなたは安定感を重視しながらも革新的な変化を求める特質を持っています。太陽から冥王星まで、すべての天体があなたの多面的な性格を形作り、人生の様々な局面で影響を与えています。これらの天体の相互作用により、あなたは感情豊かでありながら理性的な判断ができる人です。周りの人からは、信頼できる存在として見られることが多いでしょう。",
-        communicationStyle: "あなたは話すときに相手の立場を考慮する優しさを持っています。言葉選びに気を遣い、相手が理解しやすいように説明する癖があります。時には遠回しな表現を使うことがありますが、これは相手を傷つけたくない思いやりの表れです。グループでの会話では、調和を重視し、全員が参加できるよう配慮します。",
-        loveAndBehavior: "恋愛においては、相手のことを深く理解したいという欲求が強く現れます。一目惚れよりも、時間をかけて関係を築いていくタイプです。愛情表現は控えめですが、行動で気持ちを示すことが多いでしょう。相手の好みや気持ちを察知する能力に優れ、さりげない心遣いで愛情を伝えます。",
-        workBehavior: "職場では責任感が強く、任された仕事は最後まで丁寧にやり遂げます。同僚との協調性を重視し、チーム全体の調和を保つことを大切にします。困っている人がいると、自然と手を差し伸べる優しさを持っています。計画的に物事を進めることを好み、着実に成果を積み上げていくタイプです。",
-        transformationAndDepth: "人生の変化に対しては慎重に対応しながらも、内面では常に成長を求めています。表面的には安定を好みますが、心の奥では新しい可能性を模索している複雑さがあります。困難な状況でも持ち前の粘り強さで乗り越え、そこから深い洞察を得ることができます。潜在的な力は非常に大きく、適切なタイミングで発揮されるでしょう。"
-      };
+    // tenPlanetSummaryの形式チェック＆フォールバック機能（緩和版）
+    if (result.tenPlanetSummary) {
+      console.log('🔍 【tenPlanetSummary確認】:', result.tenPlanetSummary);
+      
+      // 各フィールドが空でないかチェック（より緩やかに）
+      const hasValidFields = result.tenPlanetSummary.overallInfluence && 
+                           result.tenPlanetSummary.communicationStyle && 
+                           result.tenPlanetSummary.loveAndBehavior && 
+                           result.tenPlanetSummary.workBehavior && 
+                           result.tenPlanetSummary.transformationAndDepth &&
+                           result.tenPlanetSummary.overallInfluence.trim().length > 0;
+      
+      if (!hasValidFields) {
+        console.log('🚨 【tenPlanetSummary形式エラー】空フィールドあり、フォールバック適用');
+        result.tenPlanetSummary = {
+          overallInfluence: "バランス感覚に優れ、周りから信頼される安定した存在として見られ、多くの人に安心感を与えます。",
+          communicationStyle: "相手を思いやり、優しく丁寧な話し方で接する特徴があり、誰とでも調和を保てる人です。",
+          loveAndBehavior: "時間をかけて深い信頼関係を築き、誠実な愛情を示すタイプで、パートナーを大切にします。",
+          workBehavior: "責任感が強く、チームワークを大切にする協調性のある人で、職場の雰囲気作りも得意です。",
+          transformationAndDepth: "内面で常に成長を求める探究心と向上心を持ち、困難も前向きに乗り越えていきます。"
+        };
+      } else {
+        console.log('✅ 【tenPlanetSummary形式OK】AIの結果を使用');
+      }
     }
     
     return result;
   } catch (error) {
-    console.error('AI分析エラー:', error);
+    console.error('🚨 【AI分析エラー】:', error);
+    console.error('🚨 【エラー詳細】:', error instanceof Error ? error.message : error);
     
     // フォールバック処理：デフォルトの分析結果を返す
     const defaultResult: AIAnalysisResult = {
@@ -391,7 +387,7 @@ const generatePlanetAnalysisPrompt = (
   return `
 【天体分析依頼】
 
-以下の出生データと天体情報をもとに、必ずですます調で要点のみ簡潔に分析してください。
+以下の出生データと天体情報をもとに、必ずですます調で簡潔に分析してください。
 ※重要：すべての文章は「です」「ます」「でしょう」「されます」などの丁寧語で終わらせてください。
 
 【クライアント情報】
@@ -406,15 +402,15 @@ ${planet.planet}: ${planet.sign}座 ${planet.degree.toFixed(1)}度
 【出力形式】
 必ず以下のJSON形式のみで回答してください。キーは英語、値は日本語（必ずですます調）で記述してください。
 {
-  "signCharacteristics": "${planet.planet}星座の特徴を100文字以上で詳しく、必ずですます調で記述",
-  "personalImpact": "あなたへの影響を100文字以上で詳しく、必ずですます調で記述",
-  "advice": "具体的なアドバイスを100文字以上で詳しく、必ずですます調で記述"
+  "signCharacteristics": "${planet.planet}星座の特徴を40-60文字で簡潔に、必ずですます調で記述",
+  "personalImpact": "あなたへの影響を40-60文字で簡潔に、必ずですます調で記述",
+  "advice": "具体的なアドバイスを40-60文字で簡潔に、必ずですます調で記述"
 }
 
 【厳守事項】
 - JSON以外のテキストや説明文は絶対に出力しないでください
 - JSONの前後に余計な文字や改行を入れないでください
-- 各項目を100文字以上で詳しく記述してください
+- 各項目を50-70文字で簡潔に記述してください
 - 「あなたの太陽は○○座にあり」のような表現は絶対に使用しないでください
 - 必ず上記のJSON形式のみで回答してください
 `;
@@ -467,6 +463,8 @@ export const generateAIAnalysis = async (
   planets: PlanetPosition[],
   mode: 'simple' | 'detailed' = 'detailed'
 ): Promise<AIAnalysisResult> => {
+  console.log('🔍 【generateAIAnalysis開始】モード:', mode, 'プラネット数:', planets.length);
+  
   if (!OPENAI_API_KEY) {
     throw new Error('OpenAI APIキーが設定されていません。OPENAI_SETUP.mdを参照して設定してください。');
   }
@@ -502,6 +500,7 @@ export const generateAIAnalysis = async (
     // planetAnalysisは天体ごとに分割API呼び出し
     const planetAnalysis = await generatePlanetAnalysisAll(birthData, planets);
 
+    console.log('🔍 【generateAIAnalysis成功】結果:', baseResult);
     return {
       ...baseResult,
       planetAnalysis,
@@ -510,175 +509,9 @@ export const generateAIAnalysis = async (
   }
 };
 
-// 未来予測プロンプト生成関数（期間を柔軟に対応）
-function generateFuturePredictionPrompt(
-  birthData: BirthData,
-  planets: PlanetPosition[],
-  timeframe: FutureTimeframe
-): string {
-  // Level3の行動パターン分析結果を読み込み（占い機能用）
-  let behaviorPatternContext = '';
-  try {
-    const level3Key = `level3_analysis_result_${birthData.name}_${new Date().toISOString().split('T')[0]}`;
-    const storedLevel3Analysis = localStorage.getItem(level3Key);
-    if (storedLevel3Analysis) {
-      const analysisData = JSON.parse(storedLevel3Analysis);
-      if (analysisData.tenPlanetSummary) {
-        const summary = analysisData.tenPlanetSummary;
-        behaviorPatternContext = `
 
-【参考：星が伝えるあなたの印象診断分析】
-※以下の印象診断分析を参考に、より個人的で具体的な占いを提供してください
 
-🌟 総合的な影響: ${summary.overallInfluence}
-💬 話し方の癖: ${summary.communicationStyle}
-💕 恋愛や行動: ${summary.loveAndBehavior}
-💼 仕事での振る舞い: ${summary.workBehavior}
-🔮 変革と深層心理: ${summary.transformationAndDepth}
-`;
-      }
-    }
-  } catch (error) {
-    console.warn('Level3結果の読み込みエラー（占い用）:', error);
-  }
-  // 短期かどうか判定
-  const isShortTerm = ["今日", "明日", "今週", "来週"].includes(timeframe);
-  
-  // 期間に応じた日付範囲を計算
-  const startDate = new Date();
-  let endDate = new Date();
-  
-  switch (timeframe) {
-    case '今日':
-      endDate = new Date();
-      break;
-    case '明日':
-      endDate.setDate(endDate.getDate() + 1);
-      break;
-    case '今週':
-      endDate.setDate(endDate.getDate() + 7);
-      break;
-    case '来週':
-      startDate.setDate(startDate.getDate() + 7);
-      endDate.setDate(endDate.getDate() + 14);
-      break;
-    case '今月':
-      endDate.setMonth(endDate.getMonth() + 1);
-      break;
-    case '来月':
-      startDate.setMonth(startDate.getMonth() + 1);
-      endDate.setMonth(endDate.getMonth() + 2);
-      break;
-    case '1ヶ月':
-      endDate.setMonth(endDate.getMonth() + 1);
-      break;
-    case '3ヶ月':
-      endDate.setMonth(endDate.getMonth() + 3);
-      break;
-    case '6ヶ月':
-      endDate.setMonth(endDate.getMonth() + 6);
-      break;
-    case '1年':
-      endDate.setFullYear(endDate.getFullYear() + 1);
-      break;
-  }
-  
-  return `
-【未来予測依頼】
 
-以下の出生データと天体配置をもとに、${timeframe}の運勢・アドバイスを、各分野200文字以上の丁寧な日本語で、できるだけ具体的に解説してください。
-
-【重要】毎回新しい視点で分析し、異なる角度からのアドバイスを提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。
-
-【特別指示】
-- 上記の「星が伝えるあなたの印象診断分析」がある場合は、その具体的な印象分析を踏まえて占いを作成してください
-- あなたの話し方、恋愛での行動、仕事での振る舞いなどの特徴を考慮した、よりパーソナライズされた占いを提供してください
-- 行動パターン分析の内容と矛盾しないよう注意しながら、その人らしい占いを心がけてください
-
-【クライアント情報】
-お名前: ${birthData.name}
-生年月日: ${birthData.birthDate.toLocaleDateString('ja-JP')}
-出生時刻: ${birthData.birthTime}
-出生地: ${birthData.birthPlace.city}
-
-【天体配置】
-${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('\n')}
-${behaviorPatternContext}
-【予測期間】
-${timeframe} (${startDate.toLocaleDateString('ja-JP')} 〜 ${endDate.toLocaleDateString('ja-JP')})
-
-【分析実行時刻】
-${new Date().toLocaleString('ja-JP')} - 分析ID: ${Math.random().toString(36).substr(2, 9)}
-
-【出力形式】
-必ず以下のJSON形式のみでご回答ください。キーは英語、値は日本語（敬語・丁寧語）で記述してください。
-
-{
-  "timeframe": "${timeframe}",
-  "predictions": {
-    "love": "恋愛・人間関係の運勢を200文字以上で丁寧に具体的に",
-    "career": "仕事・キャリアの運勢を200文字以上で丁寧に具体的に",
-    "health": "健康・ウェルネスの運勢を200文字以上で丁寧に具体的に",
-    "finance": "金運・財運の運勢を200文字以上で丁寧に具体的に",
-    "spiritual": "スピリチュアル成長の運勢を200文字以上で丁寧に具体的に"
-  },
-  ${isShortTerm ? `"shortTermAdvice": "${timeframe}の過ごし方や注意点・ポイントを200文字以上で丁寧に具体的に"` : `"keyDates": [
-    { "date": "期間内の日付（YYYY/MM/DD形式）", "event": "イベント内容", "advice": "アドバイス" }
-  ]`},
-  "overallMessage": "全体的なメッセージを200文字以上で丁寧に具体的に"
-}
-
-【最重要制約】
-- keyDatesの日付は必ず${startDate.toLocaleDateString('ja-JP')}から${endDate.toLocaleDateString('ja-JP')}の期間内にしてください
-- 期間外の日付は絶対に含めないでください
-- 日付形式は「YYYY/MM/DD」または「MM月DD日」で正確に記述してください
-- 存在しない日付（例：2月30日）は使用しないでください
-- JSON以外のテキストや説明文は絶対に出力しないでください
-- JSONの前後に余計な文字や改行を入れないでください
-- 各項目を200文字以上で、丁寧な日本語（です・ます調、敬語）でやさしく具体的に解説してください
-- 必ず上記のJSON形式のみでご回答ください
-`;
-}
-
-// 未来予測生成関数
-export const generateFuturePrediction = async (
-  birthData: BirthData,
-  planets: PlanetPosition[],
-  timeframe: FutureTimeframe
-): Promise<FuturePrediction> => {
-  const prompt = generateFuturePredictionPrompt(birthData, planets, timeframe);
-  const data = await callOpenAIWithRetry(
-    prompt,
-    "あなたは経験豊富な占星術師です。毎回異なる視点から創造的で多様な分析を提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。必ずfuturePredictionキーをルートに持つ英語キーのJSON形式のみで回答してください。JSON以外のテキストや説明文は絶対に出力しないでください。",
-    4000
-  );
-
-  const content = data.choices[0].message.content;
-  try {
-    // JSON部分を抽出し、末尾カンマも除去
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      let jsonStr = jsonMatch[0]
-        .replace(/,\s*}/g, '}')
-        .replace(/,\s*]/g, ']');
-      let aiResult = JSON.parse(jsonStr);
-      // futurePredictionキーがなければラップ
-      if (!('futurePrediction' in aiResult)) {
-        aiResult = { futurePrediction: aiResult };
-      }
-      return {
-        timeframe,
-        ...aiResult.futurePrediction
-      };
-    } else {
-      throw new Error('Valid JSON not found in response');
-    }
-  } catch (error) {
-    console.error('JSON parsing error:', error);
-    console.error('Raw content:', content);
-    throw new Error('未来予測の解析に失敗しました。再度お試しください。');
-  }
-};
 
 // AI占い師チャット機能（アスペクト情報追加版）
 export const chatWithAIAstrologer = async (
@@ -824,30 +657,29 @@ ${message}
 
 【重要な指示】
 - 占星術の専門知識（天体配置、アスペクト、パターン）を活用して回答してください
-- 天体間の関係性（アスペクト）を考慮した深い分析を含めてください
+- 天体間の関係性（アスペクト）を考慮した分析を含めてください
 ${recentFortuneInfo ? '- 上記の「本日のお手軽12星座占い結果」がある場合は、その具体的な内容を踏まえて深掘りしてください' : ''}
     ${hiddenSelfInfo ? '- 上記の「本日の星が伝える隠れた自分診断結果」がある場合は、その具体的な内容を踏まえて深掘りしてください' : ''}
     ${behaviorPatternInfo ? '- 上記の「本日の星が伝えるあなたの印象診断結果」がある場合は、その具体的な内容を踏まえて深掘りしてください' : ''}
 - 温かく親身になって答えてください
 - 具体的で実践的なアドバイスを含めてください
 - 希望と励ましを与える回答を心がけてください
-- 200-400文字程度で、親しみやすい語調で答えてください
+- 60-100文字程度で、親しみやすい語調で簡潔に答えてください
 - 「あなたの太陽は○○座にあり」のような表現は避けてください
 
 【文章作成ルール（必ず守ること）】
 - ですます調で丁寧に記載すること
-- 特徴と注意点をできるだけ記載すること
-- 難しい言い回しや難しい熟語はできるだけ用いないこと
-- 利用者ターゲットは30代であるが理解力は大学生レベルとすること
-- 可能な限り具体的な例を用いて表現すること
+- 簡潔に要点を絞って記載すること
+- チャットらしい親しみやすい表現を用いること
+- 2-3文で適度な情報量を含めること
 
 クライアントの質問に対して、占星術師として必ずですます調で丁寧に回答してください。
 `
 
   const data = await callOpenAIWithRetry(
     contextPrompt,
-    "あなたは経験豊富な占星術師です。天体配置とアスペクト分析を活用して、親身で具体的なアドバイスを提供してください。十分な文字数で詳しく分析してください。",
-    1500
+    "あなたは経験豊富な占星術師です。天体配置とアスペクト分析を活用して、親身で具体的なアドバイスを60-100文字で簡潔に提供してください。",
+                600
   );
 
   return data.choices[0].message.content;
@@ -937,376 +769,6 @@ export async function analyzePlanetSignWithAI(planet: string, sign: string): Pro
     throw new Error('天体分析の解析に失敗しました。再度お試しください。');
   }
 }
-
-// トランジット情報を含む未来予測
-export const generateTransitBasedPrediction = async (
-  birthData: BirthData,
-  natalPlanets: PlanetPosition[],
-  timeframe: FutureTimeframe,
-  transitData?: any[]
-): Promise<FuturePrediction> => {
-  try {
-    // 期間に応じた日付範囲を計算
-    const startDate = new Date();
-    let endDate = new Date();
-    
-    switch (timeframe) {
-      case '今日':
-        endDate = new Date();
-        break;
-      case '明日':
-        endDate.setDate(endDate.getDate() + 1);
-        break;
-      case '今週':
-        endDate.setDate(endDate.getDate() + 7);
-        break;
-      case '来週':
-        startDate.setDate(startDate.getDate() + 7);
-        endDate.setDate(endDate.getDate() + 14);
-        break;
-      case '今月':
-        endDate.setMonth(endDate.getMonth() + 1);
-        break;
-      case '来月':
-        startDate.setMonth(startDate.getMonth() + 1);
-        endDate.setMonth(endDate.getMonth() + 2);
-        break;
-      case '1ヶ月':
-        endDate.setMonth(endDate.getMonth() + 1);
-        break;
-      case '3ヶ月':
-        endDate.setMonth(endDate.getMonth() + 3);
-        break;
-      case '6ヶ月':
-        endDate.setMonth(endDate.getMonth() + 6);
-        break;
-      case '1年':
-        endDate.setFullYear(endDate.getFullYear() + 1);
-        break;
-    }
-
-    const prompt = `
-あなたは経験豊富な占星術師です。以下の情報を基に、${timeframe}の詳細な運勢予測を行ってください。
-
-【基本情報】
-- 出生データ: ${birthData.name}様
-- 出生日: ${birthData.birthDate.toLocaleDateString('ja-JP')}
-- 出生時刻: ${birthData.birthTime}
-- 出生地: ${birthData.birthPlace.city}
-
-【出生チャート（天体配置）】
-${natalPlanets.map(planet => 
-  `- ${planet.planet}: ${planet.sign} ${planet.degree}度 (ハウス${planet.house})${planet.retrograde ? ' (逆行中)' : ''}`
-).join('\n')}
-
-${transitData && transitData.length > 0 ? `
-【トランジット情報（${timeframe}期間中の重要な星の動き）】
-${transitData.map(transit => 
-  `- ${transit.date.toLocaleDateString('ja-JP')}: ${transit.natalPlanet}と${transit.transitPlanet}が${transit.aspectType}アスペクト（強度${Math.round(transit.strength)}%）`
-).join('\n')}
-` : ''}
-
-【予測期間】
-${timeframe} (${startDate.toLocaleDateString('ja-JP')} 〜 ${endDate.toLocaleDateString('ja-JP')})
-
-【出力形式】
-以下のJSON形式で回答してください：
-
-{
-  "timeframe": "${timeframe}",
-  "overallMessage": "全体メッセージ（100文字程度）",
-  "predictions": {
-    "love": "恋愛運（150文字程度）",
-    "career": "仕事運（150文字程度）", 
-    "health": "健康運（150文字程度）",
-    "finance": "金運（150文字程度）",
-    "spiritual": "スピリチュアル運（150文字程度）"
-  },
-  ${["今日", "明日", "今週", "来週"].includes(timeframe) ? `
-  "shortTermAdvice": "具体的なアドバイス（200文字程度）",
-  ` : `
-  "keyDates": [
-    {
-      "date": "期間内の日付（YYYY/MM/DD形式）",
-      "event": "その日に起こりそうな出来事",
-      "advice": "その日へのアドバイス"
-    }
-  ],
-  `}
-  "transitInsights": "トランジットからの洞察（200文字程度）"
-}
-
-【最重要制約】
-- keyDatesの日付は必ず${startDate.toLocaleDateString('ja-JP')}から${endDate.toLocaleDateString('ja-JP')}の期間内にしてください
-- 期間外の日付は絶対に含めないでください
-- 日付形式は「YYYY/MM/DD」または「MM月DD日」で正確に記述してください
-- 存在しない日付（例：2月30日）は使用しないでください
-トランジット情報がある場合は、それを重視した予測を行ってください。ない場合は、出生チャートの特徴を基にした一般的な予測を行ってください。
-`;
-
-    const response = await callOpenAIWithRetry(
-      prompt,
-      "あなたは経験豊富な占星術師です。必ずfuturePredictionキーをルートに持つ英語キーのJSON形式のみで回答してください。JSON以外のテキストや説明文は絶対に出力しないでください。",
-      4000
-    );
-    
-    if (!response) {
-      throw new Error('AI応答が取得できませんでした');
-    }
-
-    const prediction: FuturePrediction = JSON.parse(response.choices[0].message.content);
-    
-    // トランジット情報を追加
-    if (transitData && transitData.length > 0) {
-      prediction.transitInsights = prediction.transitInsights || 'トランジット情報を基にした予測です。';
-    }
-
-    return prediction;
-  } catch (error) {
-    console.error('トランジット予測生成エラー:', error);
-    throw new Error('トランジット予測の生成に失敗しました');
-  }
-};
-
-// AIチャット用のトランジット情報取得
-export const getTransitInfoForChat = async (
-  birthData: BirthData,
-  targetDate: Date
-): Promise<string> => {
-  try {
-    const { calculateTransitPositions } = await import('./astronomyCalculator');
-    const transitPlanets = await calculateTransitPositions(birthData, targetDate);
-    
-    const transitInfo = transitPlanets.map(planet => 
-      `${planet.planet}: ${planet.sign} ${planet.degree}度${planet.retrograde ? ' (逆行中)' : ''}`
-    ).join(', ');
-    
-    return `【${targetDate.toLocaleDateString('ja-JP')}のトランジット情報】\n${transitInfo}`;
-  } catch (error) {
-    console.error('トランジット情報取得エラー:', error);
-    return 'トランジット情報の取得に失敗しました。';
-  }
-};
-
-// チャット履歴にトランジット情報を追加
-export const addTransitContextToChat = (
-  messages: ChatMessage[],
-  birthData: BirthData,
-  currentDate: Date = new Date()
-): ChatMessage[] => {
-  try {
-    // 最新のメッセージにトランジット情報を追加
-    const updatedMessages = [...messages];
-    
-    if (updatedMessages.length > 0) {
-      // ユーザーメッセージとしてトランジット情報を追加
-      const transitContextMessage: ChatMessage = {
-        id: `transit-${Date.now()}`,
-        role: 'user',
-        content: `現在の日付: ${currentDate.toLocaleDateString('ja-JP')}\n出生データ: ${birthData.name}様 (${birthData.birthDate.toLocaleDateString('ja-JP')} ${birthData.birthTime} ${birthData.birthPlace.city})`,
-        timestamp: new Date()
-      };
-      
-      updatedMessages.splice(-1, 0, transitContextMessage);
-    }
-    
-    return updatedMessages;
-  } catch (error) {
-    console.error('チャットコンテキスト追加エラー:', error);
-    return messages;
-  }
-};
-
-// 強化されたトランジット分析機能
-export const getEnhancedTransitAnalysis = async (
-  birthData: BirthData,
-  targetDate: Date,
-  analysisDepth: 'basic' | 'detailed' = 'detailed'
-): Promise<{
-  transitPlanets: PlanetPosition[];
-  transitAspects: any[];
-  keyInsights: string[];
-  dailyGuidance: string;
-}> => {
-  try {
-    const { calculateTransitPositions, calculateTransitAspects } = await import('./astronomyCalculator');
-    const { generateCompleteHoroscope } = await import('./astronomyCalculator');
-    
-    // 出生チャートの取得
-    const natalChart = await generateCompleteHoroscope(birthData);
-    
-    // トランジット天体位置の計算
-    const transitPlanets = await calculateTransitPositions(birthData, targetDate);
-    
-    // トランジットアスペクトの計算
-    const transitAspects = calculateTransitAspects(natalChart.planets, transitPlanets);
-    
-    // 重要なトランジットアスペクトのフィルタリング
-    const significantTransits = transitAspects.filter(t => t.exactness >= 60);
-    
-    // キーインサイトの生成
-    const keyInsights = await generateTransitInsights(significantTransits, analysisDepth);
-    
-    // 日々のガイダンス生成
-    const dailyGuidance = await generateDailyGuidance(birthData, significantTransits, targetDate);
-    
-    return {
-      transitPlanets,
-      transitAspects: significantTransits,
-      keyInsights,
-      dailyGuidance
-    };
-    
-  } catch (error) {
-    console.error('強化トランジット分析エラー:', error);
-    throw new Error('トランジット分析に失敗しました。');
-  }
-};
-
-// トランジットインサイト生成（AI動的生成対応）
-const generateTransitInsights = async (
-  transitAspects: any[],
-  depth: 'basic' | 'detailed'
-): Promise<string[]> => {
-  const insights: string[] = [];
-  
-  for (const transit of transitAspects.slice(0, depth === 'detailed' ? 5 : 3)) {
-    try {
-      const aspectMeaning = await getTransitAspectMeaning(transit);
-      insights.push(`【${transit.natalPlanet}×${transit.transitPlanet}】${aspectMeaning}`);
-    } catch (error) {
-      console.error('トランジットインサイト生成エラー:', error);
-      insights.push(`【${transit.natalPlanet}×${transit.transitPlanet}】星からの特別なメッセージがあります。`);
-    }
-  }
-  
-  return insights;
-};
-
-// 星と星の関係の意味解釈（AI動的生成対応）
-const getTransitAspectMeaning = async (transit: any): Promise<string> => {
-  try {
-    // AI動的生成でアスペクト説明を作成
-    const description = await generateTransitAspectDescription(
-      transit.natalPlanet || '天体',
-      transit.transitPlanet || '天体',
-      transit.aspectType
-    );
-    return description;
-  } catch (error) {
-    console.error('トランジットアスペクト説明AI生成エラー:', error);
-    
-    // フォールバック：基本的な説明を返す
-    const meanings: { [key: string]: string } = {
-      'conjunction': '新しいことを始めるのにぴったりな時期。星からの特別なエネルギーを受けています。',
-      'opposition': '自分自身を見つめ直すタイミング。バランスを取ることで成長できます。',
-      'trine': '何をやってもうまくいきやすい幸運な時期。自然な流れに身を任せましょう。',
-      'square': '少し頑張りが必要な時期ですが、その分成長できるチャンスです。',
-      'sextile': 'チャンスを掴みやすい時期。積極的に行動すると良い結果が期待できます。'
-    };
-    
-    return meanings[transit.aspectType] || '星があなたに特別なメッセージを送っています。';
-  }
-};
-
-// トランジットアスペクト説明をAI動的生成する新機能
-export const generateTransitAspectDescription = async (
-  natalPlanet: string,
-  transitPlanet: string,
-  aspectType: string
-): Promise<string> => {
-  try {
-    const prompt = `
-以下のトランジットアスペクトについて、その時期の運勢や行動指針を60文字以上80文字以内で、親しみやすい日本語で説明してください。
-
-【出生天体】: ${natalPlanet}
-【トランジット天体】: ${transitPlanet}
-【アスペクト】: ${aspectType}
-
-【回答形式】
-- 親しみやすく前向きな表現を使用
-- 具体的で実践的な内容
-- 60文字以上80文字以内
-- 「〜です。〜ます。」調で記述
-- 天体名は含めず、その時期の傾向のみを記述
-
-【アスペクト別の方向性】
-- conjunction: 新しいスタート、統合、エネルギーの集中
-- opposition: バランス、見直し、対立からの学び
-- trine: 幸運、自然な流れ、才能の開花
-- square: 挑戦、成長、努力の必要性
-- sextile: チャンス、協力、積極的行動
-
-上記を参考に${aspectType}の時期について説明してください。`;
-
-    const data = await callOpenAIWithRetry(
-      prompt,
-      "あなたは30年以上の経験を持つ世界最高の占星術師です。トランジットアスペクトがその時期に与える影響を、親しみやすく具体的に説明してください。",
-      150
-    );
-
-    const description = data.choices[0].message.content.trim();
-    
-    // AIの回答から不要な部分を除去
-    const cleanDescription = description
-      .replace(/^.*?:/, '') // コロンより前を削除
-      .replace(/【.*?】.*/, '') // 【】付きの説明を削除
-      .replace(/^[「『]/, '') // 開始の括弧を削除
-      .replace(/[」』]$/, '') // 終了の括弧を削除
-      .trim();
-    
-    return cleanDescription || 'この時期は星からの特別なエネルギーを受けています。前向きに過ごすことで良い結果が期待できます。';
-    
-  } catch (error) {
-    console.error('AIトランジットアスペクト説明生成エラー:', error);
-    
-    // フォールバック：基本的な説明を返す
-    const meanings: { [key: string]: string } = {
-      'conjunction': '新しいことを始めるのにぴったりな時期です。',
-      'opposition': 'バランスを取ることが大切な時期です。',
-      'trine': '何をやってもうまくいきやすい幸運な時期です。',
-      'square': '努力が実る成長の時期です。',
-      'sextile': 'チャンスを掴みやすい時期です。'
-    };
-    
-    return meanings[aspectType] || '星があなたに特別なメッセージを送っています。';
-  }
-};
-
-// 日々のガイダンス生成
-const generateDailyGuidance = async (
-  birthData: BirthData,
-  transitAspects: any[],
-  targetDate: Date
-): Promise<string> => {
-  const prompt = `
-【日々のガイダンス生成依頼】
-
-以下の情報から、${targetDate.toLocaleDateString('ja-JP')}の具体的なアドバイスを150文字程度で生成してください。
-
-【クライアント】${birthData.name}様
-【重要なトランジット】
-${transitAspects.map(t => 
-  `${t.natalPlanet}×${t.transitPlanet}: ${t.aspectType} (強度${Math.round(t.exactness)}%)`
-).join('\n')}
-
-【出力】
-親しみやすい語調で、具体的で実践的なアドバイスを150文字程度で記述してください。
-`;
-
-  try {
-    const data = await callOpenAIWithRetry(
-      prompt,
-      "あなたは親身な占星術師です。具体的で実践的なアドバイスを簡潔に提供してください。",
-      200
-    );
-    
-    return data.choices[0].message.content;
-  } catch (error) {
-    console.error('日々のガイダンス生成エラー:', error);
-    return `${targetDate.toLocaleDateString('ja-JP')}は、あなたの内なる力を信じて前向きに過ごしてください。小さな行動が大きな変化を生み出す日です。`;
-  }
-};
 
 // 個別の天体組み合わせとアスペクトに基づいた説明をAIで生成
 export const generateSpecificAspectDescription = async (
@@ -1415,149 +877,6 @@ export const generateAspectPatternDescription = async (
     
     // フォールバック：基本的な説明を返す
     return `${patternName}のパターンにより、あなたには特別な才能や特徴があります。この組み合わせを理解し活用することで、より充実した人生を送ることができます。`;
-  }
-};
-
-// 運勢傾向をAI動的生成する新機能
-export const generateTransitTrendDescription = async (
-  harmoniousCount: number,
-  challengingCount: number,
-  period: string = '現在の期間'
-): Promise<string> => {
-  try {
-    const prompt = `
-以下の情報を基に、${period}の全体的な運勢傾向を50文字以上100文字以内で、親しみやすい日本語で説明してください。
-
-【調和的なトランジット数】: ${harmoniousCount}個
-【挑戦的なトランジット数】: ${challengingCount}個
-
-【回答形式】
-- 親しみやすく前向きな表現を使用
-- 具体的で実践的な内容
-- 50文字以上100文字以内
-- 「〜です。〜ます。」調で記述
-
-【傾向の判断基準】
-- 調和的が挑戦的の2倍以上：非常に良い時期
-- 調和的が挑戦的より多い：比較的良い時期  
-- 挑戦的が調和的の2倍以上：挑戦的な時期
-- 挑戦的が調和的より多い：やや困難だが成長の時期
-- 同程度：バランスの取れた時期
-
-上記を参考に運勢傾向を説明してください。`;
-
-    const data = await callOpenAIWithRetry(
-      prompt,
-      "あなたは30年以上の経験を持つ世界最高の占星術師です。トランジット分析に基づいて、親しみやすく具体的な運勢傾向を説明してください。",
-      150
-    );
-
-    const description = data.choices[0].message.content.trim();
-    
-    // AIの回答から不要な部分を除去
-    const cleanDescription = description
-      .replace(/^.*?:/, '') // コロンより前を削除
-      .replace(/【.*?】.*/, '') // 【】付きの説明を削除
-      .replace(/^[「『]/, '') // 開始の括弧を削除
-      .replace(/[」』]$/, '') // 終了の括弧を削除
-      .trim();
-    
-    return cleanDescription || `${period}は星の配置がバランス良く、安定した行動が推奨される時期です。`;
-    
-  } catch (error) {
-    console.error('AI運勢傾向説明生成エラー:', error);
-    
-    // フォールバック：基本的な説明を返す
-    if (harmoniousCount > challengingCount * 2) {
-      return '非常に良い運勢の時期です。新しいことに挑戦するのに適しています。';
-    } else if (harmoniousCount > challengingCount) {
-      return '比較的良い運勢の時期です。前向きに行動すると良い結果が期待できます。';
-    } else {
-      return 'バランスの取れた時期です。安定した行動を心がけましょう。';
-    }
-  }
-};
-
-// 運勢推奨事項をAI動的生成する新機能
-export const generateTransitRecommendations = async (
-  harmoniousCount: number,
-  challengingCount: number,
-  totalTransits: number
-): Promise<string[]> => {
-  try {
-    const prompt = `
-以下の情報を基に、具体的な行動推奨事項を3つ以内で、親しみやすい日本語で生成してください。
-
-【調和的なトランジット数】: ${harmoniousCount}個
-【挑戦的なトランジット数】: ${challengingCount}個
-【総トランジット数】: ${totalTransits}個
-
-【回答形式】
-- 絵文字から始める（🌟、💪、📅、✨、🎯など）
-- 具体的で実践的なアドバイス
-- 各項目30文字以上60文字以内
-- 親しみやすい表現を使用
-- 配列形式で3つ以内の項目を出力
-
-【推奨事項の方向性】
-- 調和的トランジットが多い場合：チャレンジ、新しい取り組み、積極的行動
-- 挑戦的トランジットが多い場合：成長機会、粘り強さ、困難への対処
-- トランジットが少ない場合：安定した行動、基盤作り、準備期間
-
-JSON配列形式で出力してください（例：["🌟 項目1", "💪 項目2", "📅 項目3"]）`;
-
-    const data = await callOpenAIWithRetry(
-      prompt,
-      "あなたは30年以上の経験を持つ世界最高の占星術師です。トランジット分析に基づいて、具体的で実践的な推奨事項を生成してください。",
-      200
-    );
-
-    const response = data.choices[0].message.content.trim();
-    
-    try {
-      // JSON配列として解析を試行
-      const recommendations = JSON.parse(response);
-      if (Array.isArray(recommendations)) {
-        return recommendations.slice(0, 3); // 最大3つまで
-      }
-    } catch (parseError) {
-      console.warn('JSON解析失敗、テキスト解析を試行:', parseError);
-    }
-    
-    // JSON解析失敗時はテキストから推奨事項を抽出
-    const lines = response.split('\n').filter((line: string) => line.trim().length > 0);
-    const recommendations = lines
-      .map((line: string) => line.replace(/^[-•*]\s*/, '').trim())
-      .filter((line: string) => line.length > 10)
-      .slice(0, 3);
-    
-    return recommendations.length > 0 ? recommendations : [
-      '🌟 今日は新しいことにチャレンジしてみましょう',
-      '💪 困難があっても諦めず、成長の機会として活用しましょう',
-      '📅 計画的な行動で安定した結果を目指しましょう'
-    ];
-    
-  } catch (error) {
-    console.error('AI運勢推奨事項生成エラー:', error);
-    
-    // フォールバック：基本的な推奨事項を返す
-    const fallbackRecommendations = [];
-    
-    if (harmoniousCount > 0) {
-      fallbackRecommendations.push('🌟 良い星の影響を受けている時期です。積極的に行動しましょう。');
-    }
-    
-    if (challengingCount > 0) {
-      fallbackRecommendations.push('💪 困難な配置もありますが、成長の機会として活用しましょう。');
-    }
-    
-    if (totalTransits === 0) {
-      fallbackRecommendations.push('📅 安定した時期です。基盤作りに集中しましょう。');
-    }
-    
-    return fallbackRecommendations.length > 0 ? fallbackRecommendations : [
-      '✨ 星の導きを信じて、前向きに過ごしましょう。'
-    ];
   }
 };
  

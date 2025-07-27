@@ -265,7 +265,27 @@ ${fortuneData.result}
       
       debugLog('🔍 【AI占い呼び出し】プロンプト:', analysisPrompt);
       
-      const aiResult = await chatWithAIAstrologer(analysisPrompt, birthData!, horoscopeData!.planets);
+      // 新しいgenerateAIAnalysis関数を使用（簡潔な文字数設定が適用される）
+      const aiAnalysisResult = await generateAIAnalysis(birthData!, horoscopeData!.planets, 'simple');
+      
+      // Level1用のフォーマットに変換
+      const aiResult = `【全体運】
+${aiAnalysisResult.detailedFortune.overallTrend}
+
+【恋愛運】  
+${aiAnalysisResult.detailedFortune.loveLife}
+
+【仕事運】
+${aiAnalysisResult.detailedFortune.careerPath}
+
+【健康運】
+${aiAnalysisResult.detailedFortune.healthWellness}
+
+【金銭運】
+${aiAnalysisResult.detailedFortune.financialProspects}
+
+【今日のアドバイス】
+${aiAnalysisResult.todaysFortune?.todaysAdvice || aiAnalysisResult.detailedFortune.personalGrowth}`;
       
       debugLog('🔍 【AI占い結果】aiResult:', aiResult);
       debugLog('🔍 【AI占い結果】文字数:', aiResult?.length || 0);
@@ -500,8 +520,31 @@ ${fortuneData.result}
         注意：マークダウン記号（**、-など）は使用せず、全体的な感想やまとめ文は記載しないでください。`;
       }
       
-      debugLog('🔍 【3天体占いAI呼び出し】プロンプト:', analysisPrompt);
-      const aiResult = await chatWithAIAstrologer(analysisPrompt, birthData, horoscopeData.planets);
+      debugLog('🔍 【3天体占いAI呼び出し】新しいgenerateAIAnalysis使用');
+      // 新しいgenerateAIAnalysis関数を使用（詳細モード、簡潔な文字数設定が適用される）
+      const aiAnalysisResult = await generateAIAnalysis(birthData, horoscopeData.planets, 'detailed');
+      
+      // Level2用のフォーマットに変換（表示処理が期待する形式に合わせる）
+      const aiResult = `【総合運】
+${aiAnalysisResult.detailedFortune.overallTrend}
+
+【金銭運】
+${aiAnalysisResult.detailedFortune.financialProspects}
+
+【恋愛運】
+${aiAnalysisResult.detailedFortune.loveLife}
+
+【仕事運】
+${aiAnalysisResult.detailedFortune.careerPath}
+
+【成長運】
+${aiAnalysisResult.detailedFortune.personalGrowth}
+
+【3天体の影響】
+表の自分（太陽：${sun?.sign}）：${aiAnalysisResult.personalityInsights.corePersonality}
+裏の自分（月：${moon?.sign}）：${aiAnalysisResult.personalityInsights.hiddenTraits}
+自然な行動（上昇星座：${ascendant?.sign}）：${aiAnalysisResult.tenPlanetSummary?.overallInfluence || aiAnalysisResult.personalityInsights.relationshipStyle}`;
+      
       debugLog('🔍 【3天体占いAI応答】結果:', aiResult);
       debugLog('🔍 【3天体占いAI応答】文字数:', aiResult?.length || 0);
       
@@ -700,12 +743,30 @@ ${fortuneData.result}
         注意：マークダウン記号（**、-など）は使用せず、全体的な感想やまとめ文は記載しないでください。`;
       }
       
-      debugLog('🔍 【Level3占い】AI占い師呼び出し開始');
-      debugLog('🔍 【Level3占い】analysisPrompt:', analysisPrompt);
+      debugLog('🔍 【Level3占い】新しいgenerateAIAnalysis使用');
       
-      const aiResult = await chatWithAIAstrologer(analysisPrompt, birthData!, horoscopeData!.planets);
+      // 新しいgenerateAIAnalysis関数を使用（詳細モード、簡潔な文字数設定が適用される）
+      const aiAnalysisResult = await generateAIAnalysis(birthData!, horoscopeData!.planets, 'detailed');
       
-      debugLog('🔍 【Level3占い】AI占い師結果:', aiResult);
+      // Level3用のフォーマットに変換（parseAIFortune関数と互換性のある形式）
+      const aiResult = `【星が伝えるあなたの印象診断】
+
+【総合運】
+${aiAnalysisResult.tenPlanetSummary?.overallInfluence || aiAnalysisResult.personalityInsights.corePersonality}
+
+【コミュニケーション】
+${aiAnalysisResult.tenPlanetSummary?.communicationStyle || aiAnalysisResult.personalityInsights.relationshipStyle}
+
+【恋愛運】
+${aiAnalysisResult.tenPlanetSummary?.loveAndBehavior || aiAnalysisResult.detailedFortune.loveLife}
+
+【仕事運】
+${aiAnalysisResult.tenPlanetSummary?.workBehavior || aiAnalysisResult.detailedFortune.careerPath}
+
+【成長運】
+${aiAnalysisResult.tenPlanetSummary?.transformationAndDepth || aiAnalysisResult.detailedFortune.personalGrowth}`;
+      
+      debugLog('🔍 【Level3占い】新しい形式の結果:', aiResult);
       debugLog('🔍 【Level3占い】結果文字数:', aiResult?.length || 0);
       
       if (aiResult && aiResult.trim()) {
@@ -1263,7 +1324,7 @@ ${fortuneData.result}
     if (!signInfo) return null;
 
     return (
-      <div className="level-1">
+      <div className="level-1" id="level1-section">
         {/* 占いモード選択に戻るボタン */}
         <div className="back-button-container">
           <button 
@@ -1626,7 +1687,7 @@ ${fortuneData.result}
           const ascendant = horoscopeData.planets.find(p => p.planet === '上昇星座');
 
     return (
-      <div className="level-2">
+      <div className="level-2" id="level2-section">
         {/* 占いモード選択に戻るボタン */}
         <div className="back-button-container">
           <button 
@@ -2219,7 +2280,7 @@ ${fortuneData.result}
     if (!horoscopeData) return null;
 
     return (
-      <div className="level-3">
+      <div className="level-3" id="level3-section">
         {/* 占いモード選択に戻るボタン */}
         <div className="back-button-container">
           <button 
@@ -2452,7 +2513,7 @@ ${fortuneData.result}
             <div className="timeout-message">
               <h4>⏰ 分析処理について</h4>
               <p>
-                Level3の「星が伝えるあなたの印象診断」は10天体すべてを使った高度な分析のため、
+                Level3の「星が伝えるあなたの印象診断」は10天体すべてを使った高度な運勢分析のため、
                 通常より処理に時間がかかる場合があります。<br/>
                 ネットワークの状況やサーバーの負荷により、一時的にタイムアウトが発生することがあります。
               </p>
