@@ -543,12 +543,6 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ onLocationSelect, initi
         </div>
       )}
       
-      {/* デバッグ情報 */}
-      {process.env.NODE_ENV === 'development' && (
-        <div style={{ marginTop: '8px', fontSize: '12px', color: '#666' }}>
-          デバッグ: showMap={showMap ? 'true' : 'false'}, isGoogleMapsLoaded={isGoogleMapsLoaded ? 'true' : 'false'}
-        </div>
-      )}
     </div>
   );
 };

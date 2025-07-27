@@ -20,6 +20,8 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
     name: '',
     birthDate: '',
     birthTime: '',
+    timeType: 'exact' as 'exact' | 'approximate',
+    timeRange: 'morning' as 'morning' | 'afternoon' | 'evening' | 'midnight',
     birthPlace: ''
   });
   const [locationData, setLocationData] = useState<{
@@ -45,6 +47,17 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
   const getSelectedMonth = () => {
     if (!formData.birthDate) return 1;
     return new Date(formData.birthDate).getMonth() + 1;
+  };
+
+  // 時間帯から代表時刻に変換するヘルパー関数
+  const getApproximateTime = (timeRange: string): string => {
+    switch (timeRange) {
+      case 'morning':   return '09:00';  // 朝の代表時刻
+      case 'afternoon': return '15:00';  // 昼の代表時刻  
+      case 'evening':   return '21:00';  // 夜の代表時刻
+      case 'midnight':  return '03:00';  // 深夜の代表時刻
+      default:          return '12:00';  // デフォルト
+    }
   };
 
   // 年のオプション配列を作成
@@ -90,6 +103,8 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
             name: birthData.name || '',
             birthDate: birthData.birthDate ? new Date(birthData.birthDate).toISOString().split('T')[0] : '',
             birthTime: '',
+            timeType: 'exact' as 'exact' | 'approximate',
+            timeRange: 'morning' as 'morning' | 'afternoon' | 'evening' | 'midnight',
             birthPlace: ''
           };
           
@@ -160,16 +175,20 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
       console.log('🔍 詳しい占いモード - 出生時刻・出生地をバリデーション');
       
       // 出生時刻のバリデーション
-      if (!formData.birthTime) {
-        console.log('🔍 出生時刻が空です');
-        newErrors.birthTime = '出生時刻を入力してください';
-      } else {
-        const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-        if (!timeRegex.test(formData.birthTime)) {
-          console.log('🔍 出生時刻の形式が正しくありません:', formData.birthTime);
-          newErrors.birthTime = '正しい時刻形式（HH:MM）で入力してください';
+      if (formData.timeType === 'exact') {
+        // 正確な時刻の場合：時刻入力が必須
+        if (!formData.birthTime) {
+          console.log('🔍 出生時刻が空です');
+          newErrors.birthTime = '出生時刻を入力してください';
+        } else {
+          const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+          if (!timeRegex.test(formData.birthTime)) {
+            console.log('🔍 出生時刻の形式が正しくありません:', formData.birthTime);
+            newErrors.birthTime = '正しい時刻形式（HH:MM）で入力してください';
+          }
         }
       }
+      // 大体の時刻の場合：時間帯が選択されていればOK（timeRangeは必ず設定されているのでチェック不要）
 
       // 出生地のバリデーション
       console.log('🔍 出生地バリデーション条件チェック:');
@@ -217,12 +236,23 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
     setIsLoading(true);
 
     try {
+      // 時刻の計算（正確な時刻 or 大体の時刻）
+      let finalBirthTime = '12:00'; // デフォルト
+      if (mode === 'three-planets' || mode === 'ten-planets') {
+        if (formData.timeType === 'exact') {
+          finalBirthTime = formData.birthTime;
+        } else {
+          finalBirthTime = getApproximateTime(formData.timeRange);
+        }
+      }
+
       // 位置データを使用して正確な座標を設定
       const birthData: BirthData = {
         name: formData.name || undefined,
         birthDate: new Date(formData.birthDate),
-        // 簡単占いの場合は正午をデフォルト値として使用
-        birthTime: (mode === 'three-planets' || mode === 'ten-planets') ? formData.birthTime : '12:00',
+        birthTime: finalBirthTime,
+        timeType: (mode === 'three-planets' || mode === 'ten-planets') ? formData.timeType : undefined,
+        timeRange: (mode === 'three-planets' || mode === 'ten-planets' && formData.timeType === 'approximate') ? formData.timeRange : undefined,
         birthPlace: {
           city: (mode === 'three-planets' || mode === 'ten-planets') ? (locationData?.city || formData.birthPlace) : '東京',
           latitude: (mode === 'three-planets' || mode === 'ten-planets') ? (locationData?.latitude || 35.6762) : 35.6762,
@@ -293,6 +323,8 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
       name: '',
       birthDate: '',
       birthTime: '',
+      timeType: 'exact' as 'exact' | 'approximate',
+      timeRange: 'morning' as 'morning' | 'afternoon' | 'evening' | 'midnight',
       birthPlace: ''
     };
     setFormData(emptyFormData);
@@ -432,21 +464,65 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
 
           {/* 詳しい占いの場合のみ出生時刻を表示 */}
           {(mode === 'three-planets' || mode === 'ten-planets') && (
-            <div className="input-group">
+            <div className="input-group birth-time-input-group">
               <label htmlFor="birthTime">出生時刻 *</label>
-              <input
-                id="birthTime"
-                ref={birthTimeRef}
-                type="time"
-                value={formData.birthTime}
-                onChange={(e) => handleInputChange('birthTime', e.target.value)}
-                className={`form-input ${errors.birthTime ? 'error' : ''}`}
-                required
-                aria-label="出生時刻を入力してください（必須項目）"
-                aria-describedby={errors.birthTime ? "birthTime-error" : "birthTime-hint"}
-                aria-invalid={errors.birthTime ? 'true' : 'false'}
-                tabIndex={5}
-              />
+              
+              {/* 時刻精度の選択 */}
+              <div className="time-precision-selector">
+                <label className={`precision-option ${formData.timeType === 'exact' ? 'selected' : ''}`}>
+                  <input
+                    type="radio"
+                    name="timePrecision"
+                    value="exact"
+                    checked={formData.timeType === 'exact'}
+                    onChange={(e) => handleInputChange('timeType', e.target.value)}
+                  />
+                  正確な時刻がわかる
+                </label>
+                <label className={`precision-option ${formData.timeType === 'approximate' ? 'selected' : ''}`}>
+                  <input
+                    type="radio"
+                    name="timePrecision"
+                    value="approximate"
+                    checked={formData.timeType === 'approximate'}
+                    onChange={(e) => handleInputChange('timeType', e.target.value)}
+                  />
+                  大体の時刻
+                </label>
+              </div>
+
+              {/* 正確な時刻の場合 */}
+              {formData.timeType === 'exact' && (
+                <input
+                  id="birthTime"
+                  ref={birthTimeRef}
+                  type="time"
+                  value={formData.birthTime}
+                  onChange={(e) => handleInputChange('birthTime', e.target.value)}
+                  className={`form-input ${errors.birthTime ? 'error' : ''}`}
+                  required
+                  aria-label="出生時刻を入力してください（必須項目）"
+                  aria-describedby={errors.birthTime ? "birthTime-error" : "birthTime-hint"}
+                  aria-invalid={errors.birthTime ? 'true' : 'false'}
+                  tabIndex={5}
+                />
+              )}
+
+              {/* 大体の時刻の場合 */}
+              {formData.timeType === 'approximate' && (
+                <select
+                  value={formData.timeRange}
+                  onChange={(e) => handleInputChange('timeRange', e.target.value)}
+                  className="form-input"
+                  tabIndex={5}
+                >
+                  <option value="morning">☀️ 朝生まれ（6:00-12:00）</option>
+                  <option value="afternoon">🌞 昼生まれ（12:00-18:00）</option>
+                  <option value="evening">🌙 夕方・夜生まれ（18:00-24:00）</option>
+                  <option value="midnight">🌌 深夜・明け方生まれ（0:00-6:00）</option>
+                </select>
+              )}
+              
               <small id="birthTime-hint" className="input-hint">
                 💡 出生時刻が分かると、月星座や上昇星座も占えます
               </small>
@@ -465,7 +541,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
 
           {/* 詳しい占いの場合のみ出生地を表示 */}
           {(mode === 'three-planets' || mode === 'ten-planets') && (
-            <div className="input-group">
+            <div className="input-group birth-place-input-group">
               <label htmlFor="birthPlace">出生地 *</label>
               <div 
                 role="group" 
@@ -478,7 +554,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
                 />
               </div>
               <small id="birthPlace-hint" className="input-hint">
-                💡 出生地により、より正確な星の配置が分かります
+                💡 正確な住所がわからない場合は、都道府県や市区町村でも占えます
               </small>
               {errors.birthPlace && (
                 <span 
