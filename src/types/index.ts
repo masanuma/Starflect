@@ -4,6 +4,8 @@ export interface BirthData {
   name?: string;
   birthDate: Date;
   birthTime: string; // "HH:MM"
+  timeType?: 'exact' | 'approximate'; // 時刻の精度
+  timeRange?: 'morning' | 'afternoon' | 'evening' | 'midnight'; // 大体の時刻の場合の時間帯
   birthPlace: {
     city: string;
     latitude: number;

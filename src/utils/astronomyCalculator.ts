@@ -762,6 +762,8 @@ export const detectImportantTransits = (
 };
 
 // 特定の期間の運勢傾向を分析（AI動的生成対応）
+// 注意: 現在未使用の機能のためコメントアウト中
+/*
 export const analyzeTransitTrends = async (
   transitData: TransitData[]
 ): Promise<{
@@ -833,4 +835,5 @@ export const analyzeTransitTrends = async (
     keyTransits: importantTransits,
     recommendations
   };
-}; 
+};
+*/ 

@@ -694,7 +694,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         </div>
       </div>
 
-      {/* 占い結果に戻るボタンエリア */}
+      {/* 元のモードに戻るボタンエリア */}
       <div className="bottom-navigation single">
         <button 
           onClick={() => {
@@ -736,7 +736,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
           className="bottom-back-button single"
           type="button"
         >
-          🔙 占い結果に戻る
+          🔙 元のモードに戻る
         </button>
       </div>
 

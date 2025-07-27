@@ -239,6 +239,18 @@ main {
   margin-bottom: 25px;
 }
 
+/* 時刻入力セクション後の余白調整（より確実な方法） */
+.birth-time-input-group {
+  margin-bottom: 40px !important;
+}
+
+/* 出生地セクションの上部余白 */
+.birth-place-input-group {
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
 .input-group label {
   display: block;
   margin-bottom: 8px;
@@ -285,6 +297,111 @@ main {
   padding: 8px;
   background-color: white;
   color: #2d3748;
+}
+
+/* === 時刻精度選択 === */
+.time-precision-selector {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.precision-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  min-width: 0;
+  flex: 1;
+  justify-content: center;
+  font-weight: 500;
+}
+
+.precision-option:hover {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.precision-option.selected {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  font-weight: 600;
+}
+
+.precision-option input[type="radio"] {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+/* 時刻選択エリアのスペーシング調整 */
+.time-precision-selector + .form-input,
+.time-precision-selector + select.form-input {
+  margin-top: 0.5rem;
+  margin-bottom: 2rem; /* 時間帯選択後の余白を大きく */
+  position: relative;
+  z-index: 10; /* ドロップダウンが他要素より前面に */
+}
+
+/* selectボックスのドロップダウン調整 */
+select.form-input {
+  position: relative;
+  z-index: 100;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  min-height: 48px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  margin-bottom: 1.5rem; /* selectボックス下部の余白 */
+}
+
+select.form-input:focus {
+  z-index: 200;
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* selectボックスのoption要素 */
+select.form-input option {
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  background-color: white;
+  color: #2d3748;
+}
+
+select.form-input option:hover {
+  background-color: rgba(102, 126, 234, 0.05);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .time-precision-selector {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .precision-option {
+    flex: none;
+    justify-content: flex-start;
+  }
+  
+  .time-precision-selector + .form-input,
+  .time-precision-selector + select.form-input {
+    margin-bottom: 2.5rem; /* モバイルではさらに余白を増やす */
+  }
 }
 
 /* === 日付選択ボックス === */
