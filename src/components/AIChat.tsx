@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BirthData, PlanetPosition } from '../types';
-import { chatWithAIAstrologer, getTransitInfoForChat, addTransitContextToChat, ChatMessage } from '../utils/aiAnalyzer';
+import { chatWithAIAstrologer, ChatMessage } from '../utils/aiAnalyzer';
 import { getTimeContextForAI } from '../utils/dateUtils';
 import { calculateAllAspects, detectAspectPatterns } from '../utils/aspectCalculator';
 
@@ -147,24 +147,12 @@ const AIChat: React.FC<Props> = React.memo(({ birthData, planets }) => {
     setLoading(true);
 
     try {
-      // トランジット情報を取得
-      const transitInfo = await getTransitInfoForChat(birthData, new Date());
-      
-      // トランジット情報を含むメッセージ履歴を作成
-      const messagesWithTransit = addTransitContextToChat(messages, birthData);
-      
-      // 最新のメッセージにトランジット情報を追加
-      const enhancedUserMessage = {
-        ...userMessage,
-        content: `${userMessage.content}\n\n${transitInfo}`
-      };
-      
       // アスペクト情報とパターンを追加してAI呼び出し
       const response = await chatWithAIAstrologer(
-        enhancedUserMessage.content,
+        userMessage.content,
         birthData,
         planets,
-        messagesWithTransit,
+        messages,
         selectedCategory,
         aspectsAndPatterns.aspects, // アスペクト情報を追加
         aspectsAndPatterns.patterns  // アスペクトパターンを追加

@@ -28,9 +28,25 @@ const AIFortuneChat: React.FC = () => {
   const [suggestions, setSuggestions] = useState<SuggestionChip[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [birthData, setBirthData] = useState<BirthData | null>(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const latestMessageRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // コンポーネントマウント時に画面の一番上にスクロール
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // ウィンドウサイズ変更監視
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // 出生データを取得
   useEffect(() => {
@@ -416,12 +432,13 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
   useEffect(() => {
     setMessages([getInitialMessage()]);
     setSuggestions(getRandomSuggestions());
-    scrollToBottom();
+    // 画面の一番上にスクロール
+    window.scrollTo(0, 0);
   }, [birthData]);
 
-  // メッセージが更新されたら自動スクロール（初期表示のみ）
+  // メッセージが追加されたら最新メッセージにスクロール（初期表示は除く）
   useEffect(() => {
-    if (messages.length <= 1) {
+    if (messages.length > 1) {
       scrollToBottom();
     }
   }, [messages]);
@@ -545,27 +562,58 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
 
   return (
     <div className="ai-fortune-container">
-      {/* ヘッダー */}
+            {/* ヘッダー */}
       <div className="ai-chat-header">
+        {/* 占いモード選択に戻るボタン */}
         <div className="back-button-container">
           <button 
+            className="back-button"
             onClick={() => {
-              // selectedModeをリセットして占いモード選択画面に戻る
               localStorage.removeItem('selectedMode');
               window.scrollTo(0, 0);
               navigate('/');
             }}
-            className="back-button"
             type="button"
           >
             ← 占いモード選択に戻る
           </button>
         </div>
+ 
         <div className="ai-info">
           <div className="ai-avatar">🔮</div>
           <div className="ai-details">
             <h1>AI占い師 ステラ</h1>
             <p>星々の導きであなたをサポート</p>
+            {/* 現在のレベル表示 */}
+            {(() => {
+              const userName = birthData?.name || 'user';
+              const today = new Date().toISOString().split('T')[0];
+              const level3Key = `level3_fortune_${userName}_${today}`;
+              const level2Key = `level2_fortune_${userName}_${today}`;
+              const level1Key = `level1_fortune_${userName}_${today}`;
+              
+              let currentLevel = '';
+              if (localStorage.getItem(level3Key)) {
+                currentLevel = 'Level3: 星が伝える印象診断';
+              } else if (localStorage.getItem(level2Key)) {
+                currentLevel = 'Level2: 隠れた自分発見占い';
+              } else if (localStorage.getItem(level1Key)) {
+                currentLevel = 'Level1: 太陽星座の今日の運勢';
+              }
+              
+              return currentLevel ? (
+                <p style={{ 
+                  fontSize: isMobile ? '0.75rem' : '0.8rem', 
+                  color: '#6b7280', 
+                  marginTop: '0.25rem',
+                  fontWeight: '500',
+                  lineHeight: '1.3',
+                  wordBreak: 'break-all'
+                }}>
+                  📊 {currentLevel} の相談
+                </p>
+              ) : null;
+            })()}
           </div>
         </div>
       </div>
@@ -644,6 +692,52 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
             {isLoading ? '✨' : '🚀'}
           </button>
         </div>
+      </div>
+
+      {/* 占い結果に戻るボタンエリア */}
+      <div className="bottom-navigation single">
+        <button 
+          onClick={() => {
+            // 最新の占い結果レベルを判定して適切な画面に戻る
+            const userName = birthData?.name || 'user';
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Level3 → Level2 → Level1の順で確認
+            const level3Key = `level3_fortune_${userName}_${today}`;
+            const level2Key = `level2_fortune_${userName}_${today}`;
+            const level1Key = `level1_fortune_${userName}_${today}`;
+            
+            let targetLevel = '';
+            
+            if (localStorage.getItem(level3Key)) {
+              targetLevel = 'level3';
+            } else if (localStorage.getItem(level2Key)) {
+              targetLevel = 'level2';
+            } else if (localStorage.getItem(level1Key)) {
+              targetLevel = 'level1';
+            }
+            
+            if (targetLevel) {
+              // 占い結果画面に戻り、指定されたレベルまでスクロール
+              navigate('/result');
+              setTimeout(() => {
+                const element = document.getElementById(`${targetLevel}-section`);
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }, 100);
+            } else {
+              // フォールバック: 占いモード選択に戻る
+              localStorage.removeItem('selectedMode');
+              window.scrollTo(0, 0);
+              navigate('/');
+            }
+          }}
+          className="bottom-back-button single"
+          type="button"
+        >
+          🔙 占い結果に戻る
+        </button>
       </div>
 
       {/* 広告表示8: フッターの上 */}

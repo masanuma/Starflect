@@ -1,10 +1,15 @@
 // safeParseJSON: AI応答のJSON文字列を安全にパース
 export function safeParseJSON(raw: string): any {
+  console.log('🔍 【JSON解析開始】入力データ:', raw.substring(0, 100) + '...');
   try {
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('AI応答が途中で切れました。再試行してください。');
+    if (!jsonMatch) {
+      console.error('🚨 【JSON抽出失敗】JSONパターンが見つかりません');
+      throw new Error('AI応答が途中で切れました。再試行してください。');
+    }
     
     let jsonStr = jsonMatch[0];
+    console.log('🔍 【JSON抽出成功】抽出されたJSON:', jsonStr.substring(0, 100) + '...');
     
     // 不完全なJSONを修復する処理
     // 1. 途中で切れた文字列を検出・修復
@@ -38,11 +43,14 @@ export function safeParseJSON(raw: string): any {
       .replace(/([,:])\s*(["\[])/g, '$1$2')  // 不要な空白を削除
       .replace(/(["}])\s*([,}])/g, '$1$2');  // 不要な空白を削除
     
-    console.log('修復後JSON:', jsonStr.substring(0, 200) + '...');
-    return JSON.parse(jsonStr);
+    console.log('🔍 【修復後JSON】:', jsonStr.substring(0, 200) + '...');
+    const parsed = JSON.parse(jsonStr);
+    console.log('🔍 【JSON解析成功】:', parsed);
+    return parsed;
   } catch (error) {
-    console.error('JSON解析エラー:', error);
-    console.error('生のレスポンス:', raw);
+    console.error('🚨 【JSON解析エラー】:', error);
+    console.error('🚨 【生のレスポンス】:', raw);
+    console.error('🚨 【エラー詳細】:', error instanceof Error ? error.message : error);
     
     // フォールバック処理：基本的なデータ構造を返す
     return {

@@ -2,7 +2,7 @@
  * ローカルストレージのバージョン管理
  */
 const DATA_VERSION_KEY = 'starflect_data_version';
-const CURRENT_DATA_VERSION = '2.0.0'; // ローカルDBの現在のバージョン
+const CURRENT_DATA_VERSION = '2.1.3'; // ローカルDBの現在のバージョン（Level3表示形式修正対応）
 
 /**
  * ローカルDBの構造が変わったかチェックし、必要に応じて古いデータをクリア
@@ -21,7 +21,7 @@ export const checkAndClearOldData = (): boolean => {
     // 新しいバージョンを保存
     localStorage.setItem(DATA_VERSION_KEY, CURRENT_DATA_VERSION);
     
-    console.log('🔍 【バージョンアップ】古い占い結果をクリアしました。基本情報は保持されています。');
+    console.log('🔍 【バージョンアップ v2.1.3】Level3表示形式修正により古い占い結果をクリアしました。基本情報は保持されています。');
     return true;
   }
   
