@@ -2085,6 +2085,7 @@ ${fortuneData.result}
 
   // レベルアップ処理
   const handleLevelUp = () => {
+    debugLog('🔍 【handleLevelUp】関数が呼ばれました', { currentLevel });
     if (currentLevel < 3) {
       // 3天体の本格占い（レベル2）に進む場合、データ不足チェック
       if (currentLevel === 1) {
@@ -2107,24 +2108,52 @@ ${fortuneData.result}
         
         if (missingBirthTime || missingBirthPlace) {
           debugLog('🔍 3天体の本格占いに必要なデータが不足しています。');
+          debugLog('🚨 【handleLevelUp】データ不足のため関数を終了します');
           setShowDataMissingMessage(true);
           return;
         }
+        
+        debugLog('🔍 【handleLevelUp】データチェック完了、処理を続行します');
       }
       
       const nextLevel = (currentLevel + 1) as DisplayLevel;
+      debugLog('🔍 【handleLevelUp】nextLevelが決定されました', { currentLevel, nextLevel });
       setCurrentLevel(nextLevel);
       setSelectedPeriod('today'); // 期間をリセット
       
       // レベル2（3天体）に上がる時、3天体性格分析をリセット
+      debugLog('🔍 【handleLevelUp】Level2条件分岐をチェック', { nextLevel });
       if (nextLevel === 2) {
-        debugLog('🔍 【レベルアップ】3天体性格分析をリセット');
-        setThreePlanetsPersonality(null);
-        setIsGeneratingThreePlanetsPersonality(false);
+        console.log('🔍【STEP 1】Level2条件分岐に入りました！');
+        
+        try {
+          console.log('🔍【STEP 2】3天体性格分析をリセット開始');
+          setThreePlanetsPersonality(null);
+          console.log('🔍【STEP 3】setThreePlanetsPersonality完了');
+          
+          setIsGeneratingThreePlanetsPersonality(false);
+          console.log('🔍【STEP 4】setIsGeneratingThreePlanetsPersonality完了');
+          
+          // 🔧 【重要修正】selectedModeをthree-planetsに更新
+          console.log('🔍【STEP 5】selectedMode更新開始');
+          localStorage.setItem('selectedMode', 'three-planets');
+          console.log('🔍【STEP 6】selectedMode更新完了！');
+          
+        } catch (error) {
+          console.error('🚨【エラー発生】Level2処理中にエラー:', error);
+        }
+      }
+      
+      // レベル3（10天体）に上がる時、selectedModeをten-planetsに更新
+      if (nextLevel === 3) {
+        localStorage.setItem('selectedMode', 'ten-planets');
+        debugLog('🔍 【レベルアップ】selectedModeをten-planetsに更新');
       }
       
       // ページトップに移動
       window.scrollTo(0, 0);
+      
+      debugLog('🔍 【handleLevelUp】関数の実行が完了しました');
     }
   };
 
@@ -2174,7 +2203,7 @@ ${fortuneData.result}
         </div>
         
         <div className="level1-header">
-          <h2 className="level-title-text">🌟 お手軽12星座占い　～12星座から見たあなた</h2>
+          <h2 className="level-title-text">⭐⭐ お手軽12星座占い　～12星座から見たあなた</h2>
         </div>
 
         {/* 広告表示1: 12星座占いタイトルと結果の間 */}
@@ -2195,7 +2224,7 @@ ${fortuneData.result}
         
         {/* 12星座から見たあなた */}
         <div className="personality-section">
-          <h3 className="section-title">🌟 12星座から見たあなた</h3>
+          <h3 className="section-title">⭐ 12星座から見たあなた</h3>
           <p className="personality-text">{signInfo.description}</p>
         </div>
 
@@ -2733,7 +2762,14 @@ ${fortuneData.result}
               <div className="ai-chat-guidance" style={{ textAlign: 'center', marginTop: '1.5rem', padding: '1rem', background: 'rgba(102, 126, 234, 0.1)', borderRadius: '12px', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
                 <p style={{ margin: '0 0 1rem 0', color: '#4a5568', fontSize: '0.95rem' }}>💬 もっと詳しく知りたいことがありますか？</p>
                 <button 
-                  onClick={() => window.location.href = '/ai-fortune'}
+                  onClick={() => {
+                    // 現在のモードをpreviousModeとして保存
+                    if (selectedMode) {
+                      localStorage.setItem('previousMode', selectedMode);
+                      console.log('🔍 Level1: previousModeを保存:', selectedMode);
+                    }
+                    navigate('/ai-fortune');
+                  }}
                   style={{
                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     color: 'white',
@@ -2830,9 +2866,19 @@ ${fortuneData.result}
 
         {/* アクションボタン */}
         <div className="action-buttons">
-          <a href="/ai-fortune" className="ai-chat-button">
+          <button 
+            className="ai-chat-button"
+            onClick={() => {
+              // 現在のモードをpreviousModeとして保存
+              if (selectedMode) {
+                localStorage.setItem('previousMode', selectedMode);
+                console.log('🔍 Level1 ActionButton: previousModeを保存:', selectedMode);
+              }
+              navigate('/ai-fortune');
+            }}
+          >
             🤖 AI占い師に相談する
-          </a>
+          </button>
           <button 
             className="new-fortune-button"
             onClick={startNewFortune}
@@ -3543,7 +3589,16 @@ ${fortuneData.result}
               <div className="ai-chat-guidance" style={{ textAlign: 'center', marginTop: '1.5rem', padding: '1rem', background: 'rgba(102, 126, 234, 0.1)', borderRadius: '12px', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
                 <p style={{ margin: '0 0 1rem 0', color: '#4a5568', fontSize: '0.95rem' }}>💬 ３つの天体についてもっと詳しく聞きたいことがありますか？</p>
                 <button 
-                  onClick={() => window.location.href = '/ai-fortune'}
+                  onClick={() => {
+                    // 🔧 【修正】localStorageから最新のselectedModeを取得
+                    const currentMode = localStorage.getItem('selectedMode') || selectedMode;
+                    if (currentMode) {
+                      localStorage.setItem('previousMode', currentMode);
+                      console.log('🔍 Level2: previousModeを保存:', currentMode);
+                      console.log('🔍 Level2: (参考)propsのselectedMode:', selectedMode);
+                    }
+                    navigate('/ai-fortune');
+                  }}
                   style={{
                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     color: 'white',
@@ -3644,9 +3699,19 @@ ${fortuneData.result}
 
         {/* アクションボタン */}
         <div className="action-buttons">
-          <a href="/ai-fortune" className="ai-chat-button">
+          <button 
+            className="ai-chat-button"
+            onClick={() => {
+              // 現在のモードをpreviousModeとして保存
+              if (selectedMode) {
+                localStorage.setItem('previousMode', selectedMode);
+                console.log('🔍 Level2 ActionButton: previousModeを保存:', selectedMode);
+              }
+              navigate('/ai-fortune');
+            }}
+          >
             🤖 AI占い師に相談する
-          </a>
+          </button>
           <button 
             className="new-fortune-button"
             onClick={startNewFortune}
@@ -4401,7 +4466,16 @@ ${fortuneData.result}
               <div className="ai-chat-guidance" style={{ textAlign: 'center', marginTop: '1.5rem', padding: '1rem', background: 'rgba(102, 126, 234, 0.1)', borderRadius: '12px', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
                 <p style={{ margin: '0 0 1rem 0', color: '#4a5568', fontSize: '0.95rem' }}>💬 まわりから見たあなたについてさらに深く聞きたいことがありますか？</p>
                 <button 
-                  onClick={() => window.location.href = '/ai-fortune'}
+                  onClick={() => {
+                    // 🔧 【修正】localStorageから最新のselectedModeを取得
+                    const currentMode = localStorage.getItem('selectedMode') || selectedMode;
+                    if (currentMode) {
+                      localStorage.setItem('previousMode', currentMode);
+                      console.log('🔍 Level3: previousModeを保存:', currentMode);
+                      console.log('🔍 Level3: (参考)propsのselectedMode:', selectedMode);
+                    }
+                    navigate('/ai-fortune');
+                  }}
                   style={{
                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     color: 'white',
@@ -4433,9 +4507,21 @@ ${fortuneData.result}
 
         {/* アクションボタン */}
         <div className="action-buttons">
-          <a href="/ai-fortune" className="ai-chat-button">
+          <button 
+            className="ai-chat-button"
+            onClick={() => {
+              // 🔧 【修正】localStorageから最新のselectedModeを取得
+              const currentMode = localStorage.getItem('selectedMode') || selectedMode;
+              if (currentMode) {
+                localStorage.setItem('previousMode', currentMode);
+                console.log('🔍 Level3 ActionButton: previousModeを保存:', currentMode);
+                console.log('🔍 Level3 ActionButton: (参考)propsのselectedMode:', selectedMode);
+              }
+              navigate('/ai-fortune');
+            }}
+          >
             🤖 AI占い師に相談する
-          </a>
+          </button>
           <button 
             className="new-fortune-button"
             onClick={startNewFortune}
@@ -4494,6 +4580,63 @@ ${fortuneData.result}
           // 出生データから天体計算を実行
           const horoscope = await generateCompleteHoroscope(parsed);
           setHoroscopeData(horoscope);
+          
+          // 既存の占い結果をlocalStorageから復元
+          const today = new Date().toISOString().split('T')[0];
+          const userName = parsed.name || 'user';
+          
+          // Level1占い結果の復元
+          try {
+            const level1Key = `level1_fortune_${userName}_${today}`;
+            const storedLevel1 = localStorage.getItem(level1Key);
+            if (storedLevel1) {
+              const fortuneData = JSON.parse(storedLevel1);
+              setLevel1Fortune(fortuneData.result);
+              setFortunePeriod(fortuneData.period || 'today');
+              console.log('🔍 Level1占い結果を復元しました:', fortuneData.period);
+            }
+          } catch (error) {
+            console.warn('Level1占い結果の復元エラー:', error);
+          }
+          
+          // Level2占い結果の復元
+          try {
+            const level2Key = `level2_fortune_${userName}_${today}`;
+            const storedLevel2 = localStorage.getItem(level2Key);
+            if (storedLevel2) {
+              const fortuneData = JSON.parse(storedLevel2);
+              setLevel2Fortune(fortuneData.result);
+              console.log('🔍 Level2占い結果を復元しました');
+            }
+          } catch (error) {
+            console.warn('Level2占い結果の復元エラー:', error);
+          }
+          
+          // Level3占い結果の復元
+          try {
+            const level3Key = `level3_fortune_${userName}_${today}`;
+            const storedLevel3 = localStorage.getItem(level3Key);
+            if (storedLevel3) {
+              const fortuneData = JSON.parse(storedLevel3);
+              setLevel3Fortune(fortuneData.result);
+              console.log('🔍 Level3占い結果を復元しました');
+            }
+          } catch (error) {
+            console.warn('Level3占い結果の復元エラー:', error);
+          }
+          
+          // 復元されたselectedModeに基づいてcurrentLevelを更新
+          const restoredSelectedMode = localStorage.getItem('selectedMode');
+          if (restoredSelectedMode) {
+            let newLevel: DisplayLevel = 1;
+            if (restoredSelectedMode === 'three-planets') {
+              newLevel = 2;
+            } else if (restoredSelectedMode === 'ten-planets') {
+              newLevel = 3;
+            }
+            console.log('🔍 復元されたselectedModeに基づいてcurrentLevelを設定:', restoredSelectedMode, '->', newLevel);
+            setCurrentLevel(newLevel);
+          }
           
           setLoading(false);
         } catch (error) {

@@ -569,7 +569,9 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
           <button 
             className="back-button"
             onClick={() => {
+              // previousModeとselectedModeをクリア
               localStorage.removeItem('selectedMode');
+              localStorage.removeItem('previousMode');
               window.scrollTo(0, 0);
               navigate('/');
             }}
@@ -698,6 +700,19 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
       <div className="bottom-navigation single">
         <button 
           onClick={() => {
+            // previousModeを復元
+            const previousMode = localStorage.getItem('previousMode');
+            console.log('🔍 【戻り処理開始】previousMode:', previousMode);
+            if (previousMode) {
+              localStorage.setItem('selectedMode', previousMode);
+              localStorage.removeItem('previousMode');
+              console.log('🔍 【selectedMode復元】:', previousMode);
+            }
+            
+            // 復元されたselectedModeを確認
+            const currentSelectedMode = localStorage.getItem('selectedMode');
+            console.log('🔍 【復元後selectedMode確認】:', currentSelectedMode);
+            
             // 最新の占い結果レベルを判定して適切な画面に戻る
             const userName = birthData?.name || 'user';
             const today = new Date().toISOString().split('T')[0];
@@ -706,6 +721,20 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
             const level3Key = `level3_fortune_${userName}_${today}`;
             const level2Key = `level2_fortune_${userName}_${today}`;
             const level1Key = `level1_fortune_${userName}_${today}`;
+            
+            console.log('🔍 【レベル判定チェック】');
+            console.log('  level3Key:', level3Key, '→', !!localStorage.getItem(level3Key));
+            console.log('  level2Key:', level2Key, '→', !!localStorage.getItem(level2Key));
+            console.log('  level1Key:', level1Key, '→', !!localStorage.getItem(level1Key));
+            
+            // LocalStorageの内容を詳しく確認
+            console.log('🔍 【localStorage詳細確認】');
+            const allKeys = Object.keys(localStorage);
+            const fortuneKeys = allKeys.filter(key => key.includes('fortune'));
+            console.log('  全fortune関連キー:', fortuneKeys);
+            fortuneKeys.forEach(key => {
+              console.log(`  ${key}:`, !!localStorage.getItem(key));
+            });
             
             let targetLevel = '';
             
@@ -717,17 +746,24 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
               targetLevel = 'level1';
             }
             
+            console.log('🔍 【決定されたtargetLevel】:', targetLevel);
+            
             if (targetLevel) {
               // 占い結果画面に戻り、指定されたレベルまでスクロール
+              console.log('🔍 【navigate実行】/result へ遷移');
               navigate('/result');
               setTimeout(() => {
                 const element = document.getElementById(`${targetLevel}-section`);
                 if (element) {
+                  console.log('🔍 【スクロール実行】', targetLevel + '-section');
                   element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                  console.warn('🔍 【スクロール失敗】要素が見つかりません:', targetLevel + '-section');
                 }
               }, 100);
             } else {
               // フォールバック: 占いモード選択に戻る
+              console.log('🔍 【フォールバック】占いモード選択に戻る');
               localStorage.removeItem('selectedMode');
               window.scrollTo(0, 0);
               navigate('/');

@@ -38,7 +38,7 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
     {
       id: 'sun-sign',
       title: 'お手軽12星座占い',
-      icon: '🌟',
+      icon: '⭐',
       duration: '30秒',
       description: '占い初心者でも安心！\n生まれた日の太陽の位置から基本的な性格を分析\n気になることはAI占い師に相談',
       features: ['太陽星座による基本分析', 'AI占い師に相談'],
