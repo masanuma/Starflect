@@ -234,7 +234,7 @@ function HomeWrapper() {
           <div className="mode-explanation">
             {selectedMode === 'sun-sign' && (
               <div className="mode-info simple">
-                <h3>🌟 太陽星座の簡単占い</h3>
+                <h3>⭐ お手軽12星座占い　～12星座から見たあなた</h3>
                 <p>生年月日を入力するだけで、あなたの基本的な性格や運勢を占います。</p>
               </div>
             )}
@@ -290,9 +290,10 @@ function StepByStepResultWrapper() {
   const birthDataRaw = localStorage.getItem('birthData');
   let mode: 'simple' | 'detailed' = 'detailed';
   
-  console.log('🔍 StepByStepResultWrapper - デバッグ情報:');
+  console.log('🔍 【StepByStepResultWrapper】- デバッグ情報:');
   console.log('  selectedMode:', selectedMode);
   console.log('  birthDataRaw:', birthDataRaw);
+  console.log('  localStorage全体:', Object.keys(localStorage));
   
   // データ不足チェックはStepByStepResultコンポーネント内で行うため、ここでは削除
   
@@ -330,7 +331,8 @@ function StepByStepResultWrapper() {
     }
   }
   
-  console.log('🔍 最終的なmode:', mode);
+  console.log('🔍 【StepByStepResultWrapper】最終的なmode:', mode);
+  console.log('🔍 【StepByStepResultWrapper】propsとして渡すselectedMode:', selectedMode);
   
   return <StepByStepResult mode={mode} selectedMode={selectedMode as 'sun-sign' | 'three-planets' | 'ten-planets'} />;
 }
