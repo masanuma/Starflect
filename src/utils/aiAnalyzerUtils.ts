@@ -70,9 +70,11 @@ export function safeParseJSON(raw: string): any {
         personalGrowth: "AI分析データの読み込みに失敗しました。"
       },
       tenPlanetSummary: {
-        planetaryInfluences: "AI分析データの読み込みに失敗しました。",
-        lifeDesign: "AI分析データの読み込みに失敗しました。",
-        practicalAdvice: "AI分析データの読み込みに失敗しました。"
+        overallInfluence: "AI分析データの読み込みに失敗しました。",
+        communicationStyle: "AI分析データの読み込みに失敗しました。", 
+        loveAndBehavior: "AI分析データの読み込みに失敗しました。",
+        workBehavior: "AI分析データの読み込みに失敗しました。",
+        transformationAndDepth: "AI分析データの読み込みに失敗しました。"
       },
       planetAnalysis: {}
     };
@@ -114,9 +116,11 @@ export function mapAIResponseToAIAnalysisResult(raw: any): any {
       ])
     ),
     tenPlanetSummary: {
-      planetaryInfluences: tenPlanetSummary.planetaryInfluences || "データなし",
-      lifeDesign: tenPlanetSummary.lifeDesign || "データなし",
-      practicalAdvice: tenPlanetSummary.practicalAdvice || "データなし"
+      overallInfluence: tenPlanetSummary.overallInfluence || "データなし",
+      communicationStyle: tenPlanetSummary.communicationStyle || "データなし", 
+      loveAndBehavior: tenPlanetSummary.loveAndBehavior || "データなし",
+      workBehavior: tenPlanetSummary.workBehavior || "データなし",
+      transformationAndDepth: tenPlanetSummary.transformationAndDepth || "データなし"
     },
     aiPowered: true
   };
