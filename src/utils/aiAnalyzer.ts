@@ -229,6 +229,64 @@ ${new Date().toLocaleString('ja-JP')} - 分析ID: ${Math.random().toString(36).s
 `;
 };
 
+// プロンプト生成関数（Level3詳細分析専用）
+const generateLevel3DetailedAnalysisPrompt = (
+  birthData: BirthData,
+  planets: PlanetPosition[]
+): string => {
+  return `
+【Level3: 星が伝えるあなたの印象診断 - 詳細分析】
+
+あなたは30年以上の経験を持つ世界最高の占星術師です。10天体すべての配置を使って、クライアントの印象・行動パターンを深く分析してください。
+
+【クライアント情報】
+名前: ${birthData.name}
+生年月日: ${birthData.birthDate.toLocaleDateString('ja-JP')}
+出生時刻: ${birthData.birthTime}
+出生地: ${birthData.birthPlace.city}
+
+【天体配置】
+${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('\n')}
+
+【出力形式】
+必ず以下のJSON形式のみでご回答ください。キーは英語、値は日本語（必ずですます調）で記述してください。
+
+{
+  "personalityInsights": {
+    "corePersonality": "太陽星座の特徴を80-120文字で詳しく、必ずですます調で記述。性格の特徴と強み・注意点を含めて。",
+    "hiddenTraits": "月星座の隠れた特性を80-120文字で詳しく、必ずですます調で記述。内面の感情と特徴を含めて。",
+    "lifePhilosophy": "人生哲学や価値観を80-120文字で詳しく、必ずですます調で記述。何を重視するかを含めて。",
+    "relationshipStyle": "人間関係のスタイルを80-120文字で詳しく、必ずですます調で記述。コミュニケーションの特徴を含めて。",
+    "careerTendencies": "キャリア傾向を80-120文字で詳しく、必ずですます調で記述。適職と成功のポイントを含めて。"
+  },
+  "detailedFortune": {
+    "overallTrend": "全体的な運勢傾向を80-120文字で詳しく、必ずですます調で記述。天体配置の影響を含めて。",
+    "loveLife": "恋愛運を80-120文字で詳しく、必ずですます調で記述。金星・火星の影響を含めて。",
+    "careerPath": "仕事運を80-120文字で詳しく、必ずですます調で記述。MC・太陽の影響を含めて。",
+    "healthWellness": "健康運を80-120文字で詳しく、必ずですます調で記述。",
+    "financialProspects": "金運を80-120文字で詳しく、必ずですます調で記述。",
+    "personalGrowth": "成長運を80-120文字で詳しく、必ずですます調で記述。"
+  },
+  "tenPlanetSummary": {
+    "overallInfluence": "10天体の総合的な影響について100-140文字で詳細に、必ずですます調で記述。主要な天体配置の特徴と性格への影響を具体的に。",
+    "communicationStyle": "話し方の癖・表現方法について100-140文字で詳細に、必ずですます調で記述。水星・上昇星座の影響を含めて具体的に。",
+    "loveAndBehavior": "恋愛での行動パターンについて100-140文字で詳細に、必ずですます調で記述。金星・火星・月の配置から見た愛情表現を具体的に。",
+    "workBehavior": "仕事での振る舞い・行動様式について100-140文字で詳細に、必ずですます調で記述。太陽・MC・土星の影響を含めて具体的に。",
+    "transformationAndDepth": "変革への姿勢・深層心理について100-140文字で詳細に、必ずですます調で記述。冥王星・天王星・海王星の影響を含めて具体的に。"
+  }
+}
+
+【厳守事項】
+- 必ずJSON形式のみで回答してください
+- Level3詳細分析として、各項目を100-140文字程度で詳しく記述してください
+- 占星術の専門知識を活用して、天体配置の具体的な影響を説明してください
+- 丁寧な日本語（です・ます調）で記述してください
+- 「あなたの太陽は○○座にあり」のような表現は避けてください
+- まわりから見たあなたの印象・行動パターンに焦点を当ててください
+- 上記のJSON形式を厳密に守ってください
+`;
+};
+
 // プロンプト生成関数（簡単占いモード対応）
 const generateEnhancedAnalysisPrompt = (
   birthData: BirthData,
@@ -461,7 +519,7 @@ async function generatePlanetAnalysisAll(birthData: BirthData, planets: PlanetPo
 export const generateAIAnalysis = async (
   birthData: BirthData,
   planets: PlanetPosition[],
-  mode: 'simple' | 'detailed' = 'detailed'
+  mode: 'simple' | 'detailed' | 'level3' = 'detailed'
 ): Promise<AIAnalysisResult> => {
   console.log('🔍 【generateAIAnalysis開始】モード:', mode, 'プラネット数:', planets.length);
   
@@ -487,6 +545,20 @@ export const generateAIAnalysis = async (
       ? await generatePlanetAnalysisAll(birthData, mainPlanets.slice(0, 2)) // 太陽・月のみ
       : {};
 
+    return {
+      ...baseResult,
+      planetAnalysis,
+      aiPowered: true
+    };
+  } else if (mode === 'level3') {
+    // Level3詳細分析: 印象診断専用の詳細プロンプト
+    const level3Prompt = generateLevel3DetailedAnalysisPrompt(birthData, planets);
+    baseResult = await callOpenAIAPI(level3Prompt, 3000); // より多くのトークン数
+
+    // planetAnalysisは天体ごとに分割API呼び出し
+    const planetAnalysis = await generatePlanetAnalysisAll(birthData, planets);
+
+    console.log('🔍 【Level3詳細分析完了】結果:', baseResult);
     return {
       ...baseResult,
       planetAnalysis,

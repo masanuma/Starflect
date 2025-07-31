@@ -48,6 +48,73 @@
   color: #6b46c1;
 }
 
+/* 星評価スタイル */
+.star-rating {
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.fortune-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .star-rating {
+    font-size: 1rem;
+  }
+  
+  .fortune-title {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* 重要な日のスタイル */
+.important-days-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lucky-day, .caution-day {
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.lucky-day {
+  background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+  border-left: 4px solid #68d391;
+}
+
+.caution-day {
+  background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+  border-left: 4px solid #fc8181;
+}
+
+.day-description {
+  padding: 4px 0;
+  color: #666;
+  font-size: 0.9rem;
+  margin-left: 20px;
+}
+
+.day-content {
+  font-weight: 500;
+  line-height: 1.4;
+}
+
 .card-secondary {
   background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
   border: 1px solid #e2e8f0;
