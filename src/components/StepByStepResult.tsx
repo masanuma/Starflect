@@ -2156,33 +2156,14 @@ ${fortuneData.result}
         debugLog('🔍 【handleLevelUp】データチェック完了、処理を続行します');
       }
       
-      const nextLevel = (currentLevel + 1) as DisplayLevel;
+      // Level1の場合はLevel3に直接遷移（Level2はスキップ）
+      const nextLevel = (currentLevel === 1 ? 3 : currentLevel + 1) as DisplayLevel;
       debugLog('🔍 【handleLevelUp】nextLevelが決定されました', { currentLevel, nextLevel });
       setCurrentLevel(nextLevel);
       setSelectedPeriod('today'); // 期間をリセット
       
-      // レベル2（3天体）に上がる時、3天体性格分析をリセット
-      debugLog('🔍 【handleLevelUp】Level2条件分岐をチェック', { nextLevel });
-      if (nextLevel === 2) {
-        console.log('🔍【STEP 1】Level2条件分岐に入りました！');
-        
-        try {
-          console.log('🔍【STEP 2】3天体性格分析をリセット開始');
-          setThreePlanetsPersonality(null);
-          console.log('🔍【STEP 3】setThreePlanetsPersonality完了');
-          
-          setIsGeneratingThreePlanetsPersonality(false);
-          console.log('🔍【STEP 4】setIsGeneratingThreePlanetsPersonality完了');
-          
-          // 🔧 【重要修正】selectedModeをthree-planetsに更新
-          console.log('🔍【STEP 5】selectedMode更新開始');
-          localStorage.setItem('selectedMode', 'three-planets');
-          console.log('🔍【STEP 6】selectedMode更新完了！');
-          
-        } catch (error) {
-          console.error('🚨【エラー発生】Level2処理中にエラー:', error);
-        }
-      }
+      // ⚠️ Level2は削除済み - Level1から直接Level3に遷移
+      debugLog('🔍 【handleLevelUp】Level2はスキップされます', { nextLevel });
       
       // レベル3（10天体）に上がる時、selectedModeをten-planetsに更新
       if (nextLevel === 3) {
@@ -2199,8 +2180,9 @@ ${fortuneData.result}
 
   // 期間タイトルの取得
   const getPeriodTitle = () => {
+    // ⚠️ Level2削除のため、currentLevel===2はperiodOptions.level3を使用
     const optionsList = currentLevel === 1 ? periodOptions.level1 : 
-                       currentLevel === 2 ? periodOptions.level2 : 
+                       /* currentLevel === 2 ? periodOptions.level2 :  // DISABLED */
                        periodOptions.level3;
     const option = optionsList.find(opt => opt.value === selectedPeriod);
     return option ? `${option.label}の占い` : '占い';
@@ -2212,7 +2194,8 @@ ${fortuneData.result}
       case 1:
         return renderLevel1();
       case 2:
-        return renderLevel2();
+        // ⚠️ Level2は削除済み - Level3を表示
+        return renderLevel3();
       case 3:
         return renderLevel3();
       default:
@@ -2832,56 +2815,56 @@ ${fortuneData.result}
           )}
         </div>
 
-        {/* 隠れた自分発見占いの説明 */}
+        {/* あなたの印象診断の説明 */}
         <div className="three-planets-introduction">
-                        <h3 className="section-title">🔮 星が伝える 隠れた自分診断とは</h3>
+          <h3 className="section-title">🌌 星が伝える あなたの印象診断とは</h3>
           <div className="intro-overview">
             <p>
-              普通の12星座占いでは分からない、あなたの隠れた一面を発見！
-              生まれた瞬間の太陽・月・上昇星座の3天体の位置から、表面的な性格の奥に潜む本当のあなたを診断します。
-              「同じ星座なのになぜ性格が違うの？」その謎を解き明かします。
-              出生時刻と場所が分かることで、月や上昇星座の正確な位置を計算し、より深い分析が可能になります。
+              10天体すべての位置から、あなたの完全な性格・印象・行動パターンを徹底分析！
+              太陽・月・水星・金星・火星・木星・土星・天王星・海王星・冥王星の全てが
+              「あなたがどんな人に見えるか」「どんな印象を与えるか」を詳しく解き明かします。
+              出生時刻と場所から正確な天体位置を計算し、他の人があなたに感じる印象を完全解析します。
             </p>
           </div>
           
           <div className="three-planets-preview">
             <div className="planet-preview">
-              <span className="planet-icon">🧠</span>
+              <span className="planet-icon">👥</span>
               <div className="planet-info">
-                <h4>心の奥底にある性格</h4>
-                <p>太陽・月・上昇星座から見える深層の性格</p>
+                <h4>他人があなたに感じる印象</h4>
+                <p>10天体から見える総合的な人物像</p>
               </div>
             </div>
             
             <div className="planet-preview">
-              <span className="planet-icon">💭</span>
+              <span className="planet-icon">💬</span>
               <div className="planet-info">
-                <h4>建前と本音の違い</h4>
-                <p>表の顔と裏の顔のギャップを分析</p>
+                <h4>話し方・コミュニケーション</h4>
+                <p>水星の位置から分かる話し方の特徴</p>
               </div>
             </div>
             
             <div className="planet-preview">
-              <span className="planet-icon">🔮</span>
+              <span className="planet-icon">⭐</span>
               <div className="planet-info">
-                <h4>無意識に現れる癖</h4>
-                <p>気づかないうちに出てしまう行動パターン</p>
+                <h4>第一印象・見た目の雰囲気</h4>
+                <p>上昇星座が作り出すオーラや印象</p>
               </div>
             </div>
             
             <div className="planet-preview">
-              <span className="planet-icon">⚖️</span>
+              <span className="planet-icon">🎯</span>
               <div className="planet-info">
-                <h4>本当の感情の動き</h4>
-                <p>表面化しない内側の感情の流れ</p>
+                <h4>行動パターン・エネルギー</h4>
+                <p>火星から見える積極性や行動の特徴</p>
               </div>
             </div>
             
             <div className="planet-preview">
-              <span className="planet-icon">🌱</span>
+              <span className="planet-icon">💎</span>
               <div className="planet-info">
-                <h4>内面的な成長課題</h4>
-                <p>隠れた自分を受け入れるための成長ポイント</p>
+                <h4>価値観・美的センス</h4>
+                <p>金星が示すあなたの好みと魅力</p>
               </div>
             </div>
           </div>
@@ -2893,7 +2876,7 @@ ${fortuneData.result}
             className="level-up-button"
             onClick={handleLevelUp}
           >
-                              星が伝える 隠れた自分診断へ 🔮
+            星が伝える あなたの印象診断へ 🌌
           </button>
         </div>
 

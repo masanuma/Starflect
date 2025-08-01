@@ -4,7 +4,7 @@ import { confirmAndClearData, confirmAndClearResultsOnly } from '../utils/dataMa
 import './ModeSelection.css';
 
 interface ModeSelectionProps {
-  onSelectMode: (mode: 'sun-sign' | 'three-planets' | 'ten-planets' | 'ai-chat') => void;
+  onSelectMode: (mode: 'sun-sign' | 'ten-planets' | 'ai-chat') => void;
 }
 
 const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
@@ -46,16 +46,6 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
       required: '生年月日のみ'
     },
     {
-      id: 'three-planets',
-      title: '星が伝える 隠れた自分診断',
-      icon: '🌙✨',
-      duration: '1分',
-      description: '時刻・場所で隠れた内面が分かる！\n太陽・月・上昇星座の3天体で本当の自分を発見\n生まれた瞬間の星の位置があなたの深層心理を明かします',
-      features: ['月星座で隠れた感情', '上昇星座で第一印象', '3天体の複合診断'],
-      gradient: 'linear-gradient(135deg, #4a5568 0%, #2d3748 100%)',
-      required: '出生時刻・場所も必要'
-    },
-    {
       id: 'ten-planets',
       title: '星が伝える あなたの印象診断',
       icon: '🌌⭐',
@@ -95,7 +85,7 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
             key={mode.id}
             className="mode-card"
             style={{ background: mode.gradient }}
-            onClick={() => onSelectMode(mode.id as 'sun-sign' | 'three-planets' | 'ten-planets' | 'ai-chat')}
+            onClick={() => onSelectMode(mode.id as 'sun-sign' | 'ten-planets' | 'ai-chat')}
           >
             <div className="mode-card-content">
               <div className="mode-icon">{mode.icon}</div>
