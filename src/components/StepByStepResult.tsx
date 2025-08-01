@@ -6,6 +6,7 @@ import { chatWithAIAstrologer, generateAIAnalysis, AIAnalysisResult } from '../u
 import { getSunSignFortuneContext } from '../utils/sunSignTraits';
 import { getTimeContextForAI } from '../utils/dateUtils';
 import { confirmAndClearResultsOnly } from '../utils/dataManager';
+import { getPlanetSignDetailWithMeaning } from '../utils/planetSignTraits';
 import AdBanner from './AdBanner';
 import './StepByStepResult.css';
 
@@ -113,6 +114,11 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   const [threePlanetsPersonality, setThreePlanetsPersonality] = useState<any>(null);
   const [isGeneratingThreePlanetsPersonality, setIsGeneratingThreePlanetsPersonality] = useState(false);
   const [showDataMissingMessage, setShowDataMissingMessage] = useState(false);
+  
+  // 🌟 個別天体詳細表示用の状態（定型文データベース使用）
+  const [selectedPlanet, setSelectedPlanet] = useState<{planet: string, sign: string} | null>(null);
+  const [planetDetailVisible, setPlanetDetailVisible] = useState<string | null>(null);
+  const [planetDetail, setPlanetDetail] = useState<string>('');
 
 
   // 星座情報
@@ -1628,6 +1634,40 @@ ${fortuneData.result}
       setLevel3Fortune('星が伝える あなたの印象診断の分析中にエラーが発生しました。しばらくしてから再度お試しください。');
     } finally {
       setIsGeneratingLevel3(false);
+    }
+  };
+
+  // 🌟 個別天体詳細取得関数（定型文データベース使用）
+  const generatePlanetDetail = (planetName: string, sign: string): string => {
+    debugLog('🌟 個別天体詳細取得開始:', planetName, sign);
+    
+    // 天体の基本説明 + 組み合わせ特徴を取得
+    const detail = getPlanetSignDetailWithMeaning(planetName, sign);
+    
+    setPlanetDetail(detail);
+    debugLog('🌟 個別天体詳細取得完了:', detail.substring(0, 100) + '...');
+    
+    return detail;
+  };
+
+  // 個別天体をクリックした時の処理
+  const handlePlanetClick = (planetName: string, sign: string) => {
+    const planetKey = `${planetName}-${sign}`;
+    
+    debugLog('🌟 個別天体クリック:', planetName, sign, planetKey);
+    
+    if (planetDetailVisible === planetKey) {
+      // 既に開いている場合は閉じる
+      setPlanetDetailVisible(null);
+      setSelectedPlanet(null);
+      setPlanetDetail('');
+    } else {
+      // 新しく開く
+      setPlanetDetailVisible(planetKey);
+      setSelectedPlanet({planet: planetName, sign: sign});
+      
+      // 詳細情報を即座取得（定型文なのでローディング不要）
+      generatePlanetDetail(planetName, sign);
     }
   };
 
@@ -3773,14 +3813,38 @@ ${fortuneData.result}
                     return planetEmojis[planetName] || '⭐';
                   };
 
+                  const planetKey = `${planet.planet}-${planet.sign}`;
+                  const isDetailVisible = planetDetailVisible === planetKey;
+
                   return (
                     <div key={index} className="planet-item">
-                      <div className="planet-title-line">
+                      <div 
+                        className="planet-title-line clickable-planet" 
+                        onClick={() => handlePlanetClick(planet.planet, planet.sign)}
+                        style={{ cursor: 'pointer' }}
+                      >
                         <span className="planet-emoji">{getPlanetEmoji(planet.planet)}</span>
                         <span className="planet-name">{planet.planet}</span>
                         <span className="zodiac-emoji">{zodiacInfo[planet.sign]?.icon}</span>
                         <span className="zodiac-name">{planet.sign}</span>
+                        <span className="detail-toggle" style={{ marginLeft: '8px', fontSize: '12px' }}>
+                          {isDetailVisible ? '▲' : '▼'}
+                        </span>
                       </div>
+                      
+                      {/* 🌟 個別天体詳細表示（アコーディオン形式）*/}
+                      {isDetailVisible && (
+                        <div className="planet-detail-accordion">
+                          <div className="planet-detail-content">
+                            <h5>🌟 {planet.planet}×{planet.sign}座の特徴</h5>
+                            <div className="planet-detail-text">
+                              {planetDetail.split('\n\n').map((paragraph, index) => (
+                                <p key={index}>{paragraph}</p>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -3801,14 +3865,38 @@ ${fortuneData.result}
                     return planetEmojis[planetName] || '⭐';
                   };
 
+                  const planetKey = `${planet.planet}-${planet.sign}`;
+                  const isDetailVisible = planetDetailVisible === planetKey;
+
                   return (
                     <div key={index} className="planet-item">
-                      <div className="planet-title-line">
+                      <div 
+                        className="planet-title-line clickable-planet" 
+                        onClick={() => handlePlanetClick(planet.planet, planet.sign)}
+                        style={{ cursor: 'pointer' }}
+                      >
                         <span className="planet-emoji">{getPlanetEmoji(planet.planet)}</span>
                         <span className="planet-name">{planet.planet}</span>
                         <span className="zodiac-emoji">{zodiacInfo[planet.sign]?.icon}</span>
                         <span className="zodiac-name">{planet.sign}</span>
+                        <span className="detail-toggle" style={{ marginLeft: '8px', fontSize: '12px' }}>
+                          {isDetailVisible ? '▲' : '▼'}
+                        </span>
                       </div>
+                      
+                      {/* 🌟 個別天体詳細表示（アコーディオン形式）*/}
+                      {isDetailVisible && (
+                        <div className="planet-detail-accordion">
+                          <div className="planet-detail-content">
+                            <h5>🌟 {planet.planet}×{planet.sign}座の特徴</h5>
+                            <div className="planet-detail-text">
+                              {planetDetail.split('\n\n').map((paragraph, index) => (
+                                <p key={index}>{paragraph}</p>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -3830,14 +3918,38 @@ ${fortuneData.result}
                     return planetEmojis[planetName] || '⭐';
                   };
 
+                  const planetKey = `${planet.planet}-${planet.sign}`;
+                  const isDetailVisible = planetDetailVisible === planetKey;
+
                   return (
                     <div key={index} className="planet-item">
-                      <div className="planet-title-line">
+                      <div 
+                        className="planet-title-line clickable-planet" 
+                        onClick={() => handlePlanetClick(planet.planet, planet.sign)}
+                        style={{ cursor: 'pointer' }}
+                      >
                         <span className="planet-emoji">{getPlanetEmoji(planet.planet)}</span>
                         <span className="planet-name">{planet.planet}</span>
                         <span className="zodiac-emoji">{zodiacInfo[planet.sign]?.icon}</span>
                         <span className="zodiac-name">{planet.sign}</span>
+                        <span className="detail-toggle" style={{ marginLeft: '8px', fontSize: '12px' }}>
+                          {isDetailVisible ? '▲' : '▼'}
+                        </span>
                       </div>
+                      
+                      {/* 🌟 個別天体詳細表示（アコーディオン形式）*/}
+                      {isDetailVisible && (
+                        <div className="planet-detail-accordion">
+                          <div className="planet-detail-content">
+                            <h5>🌟 {planet.planet}×{planet.sign}座の特徴</h5>
+                            <div className="planet-detail-text">
+                              {planetDetail.split('\n\n').map((paragraph, index) => (
+                                <p key={index}>{paragraph}</p>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -3859,14 +3971,38 @@ ${fortuneData.result}
                     return planetEmojis[planetName] || '⭐';
                   };
 
+                  const planetKey = `${planet.planet}-${planet.sign}`;
+                  const isDetailVisible = planetDetailVisible === planetKey;
+
                   return (
                     <div key={index} className="planet-item">
-                      <div className="planet-title-line">
+                      <div 
+                        className="planet-title-line clickable-planet" 
+                        onClick={() => handlePlanetClick(planet.planet, planet.sign)}
+                        style={{ cursor: 'pointer' }}
+                      >
                         <span className="planet-emoji">{getPlanetEmoji(planet.planet)}</span>
                         <span className="planet-name">{planet.planet}</span>
                         <span className="zodiac-emoji">{zodiacInfo[planet.sign]?.icon}</span>
                         <span className="zodiac-name">{planet.sign}</span>
+                        <span className="detail-toggle" style={{ marginLeft: '8px', fontSize: '12px' }}>
+                          {isDetailVisible ? '▲' : '▼'}
+                        </span>
                       </div>
+                      
+                      {/* 🌟 個別天体詳細表示（アコーディオン形式）*/}
+                      {isDetailVisible && (
+                        <div className="planet-detail-accordion">
+                          <div className="planet-detail-content">
+                            <h5>🌟 {planet.planet}×{planet.sign}座の特徴</h5>
+                            <div className="planet-detail-text">
+                              {planetDetail.split('\n\n').map((paragraph, index) => (
+                                <p key={index}>{paragraph}</p>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
