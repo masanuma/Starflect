@@ -48,6 +48,20 @@ const AIFortuneChat: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Level1結果に基づく提案質問の初期化
+  useEffect(() => {
+    if (birthData) {
+      // Level1の深掘り質問を優先的に表示
+      const level1Suggestions = getLevel1FortuneSuggestions();
+      if (level1Suggestions.length > 0) {
+        setSuggestions(level1Suggestions);
+      } else {
+        // Level1結果がない場合はランダム質問を表示
+        setSuggestions(getRandomSuggestions());
+      }
+    }
+  }, [birthData]);
+
   // 出生データを取得
   useEffect(() => {
     const birthDataRaw = localStorage.getItem('birthData');
@@ -321,7 +335,91 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
     { id: '25', text: '子供の教育で注意すべき点は？', icon: '👶', category: 'general' },
   ];
 
-  // ランダムに5つの質問を選択
+  // Level1占い結果に基づく深掘り質問を生成
+  const getLevel1FortuneSuggestions = (): SuggestionChip[] => {
+    if (!birthData) return [];
+    
+    const today = new Date().toISOString().split('T')[0];
+    const level1Key = `level1_fortune_${birthData.name}_${today}`;
+    
+    try {
+      const storedLevel1 = localStorage.getItem(level1Key);
+      if (!storedLevel1) return [];
+      
+      const fortuneData = JSON.parse(storedLevel1);
+      const suggestions: SuggestionChip[] = [];
+      
+      // 各運勢の深掘り質問を生成
+      if (fortuneData.result) {
+        // 全体運の深掘り
+        if (fortuneData.result.includes('全体運') || fortuneData.result.includes('総合運')) {
+          suggestions.push({
+            id: 'level1-overall',
+            text: '今日の全体運について具体的なアドバイスを教えて',
+            icon: '🌟',
+            category: 'fortune'
+          });
+        }
+        
+        // 恋愛運の深掘り
+        if (fortuneData.result.includes('恋愛運') || fortuneData.result.includes('恋愛')) {
+          suggestions.push({
+            id: 'level1-love',
+            text: '恋愛運をもっと詳しく！具体的な行動も知りたい',
+            icon: '❤️',
+            category: 'love'
+          });
+        }
+        
+        // 仕事運の深掘り
+        if (fortuneData.result.includes('仕事運') || fortuneData.result.includes('仕事')) {
+          suggestions.push({
+            id: 'level1-work',
+            text: '仕事運の詳細と成功のコツを教えて',
+            icon: '💼',
+            category: 'career'
+          });
+        }
+        
+        // 健康運の深掘り
+        if (fortuneData.result.includes('健康運') || fortuneData.result.includes('健康')) {
+          suggestions.push({
+            id: 'level1-health',
+            text: '健康運について注意点やケア方法を詳しく',
+            icon: '💪',
+            category: 'health'
+          });
+        }
+        
+        // 金運の深掘り
+        if (fortuneData.result.includes('金運') || fortuneData.result.includes('金銭運') || fortuneData.result.includes('財運')) {
+          suggestions.push({
+            id: 'level1-money',
+            text: '金運アップの具体的な方法を教えて',
+            icon: '💰',
+            category: 'fortune'
+          });
+        }
+        
+        // 重要な日の深掘り
+        if (fortuneData.result.includes('重要な日') || fortuneData.result.includes('ラッキーデー') || fortuneData.result.includes('注意日')) {
+          suggestions.push({
+            id: 'level1-important-days',
+            text: 'ラッキーデーと注意日の活用法を教えて',
+            icon: '📅',
+            category: 'fortune'
+          });
+        }
+      }
+      
+      return suggestions.slice(0, 6); // 最大6個まで
+    } catch (error) {
+      console.warn('Level1占い結果の読み込みエラー:', error);
+      return [];
+    }
+  };
+
+  // ランダムに5つの質問を選択（Level1結果がない場合のフォールバック）
   const getRandomSuggestions = () => {
     const shuffled = [...allSuggestionChips].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 5);
@@ -548,7 +646,28 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
 
   // 提案チップクリック
   const handleSuggestionClick = (suggestion: SuggestionChip) => {
-    handleSendMessage(suggestion.text);
+    // Level1の深掘り質問の場合は、占い結果の文脈を含めて送信
+    if (suggestion.id.startsWith('level1-') && birthData) {
+      const today = new Date().toISOString().split('T')[0];
+      const level1Key = `level1_fortune_${birthData.name}_${today}`;
+      
+      try {
+        const storedLevel1 = localStorage.getItem(level1Key);
+        if (storedLevel1) {
+          const fortuneData = JSON.parse(storedLevel1);
+          const contextualMessage = `今日の占い結果：「${fortuneData.result}」\n\nこの結果について、${suggestion.text}`;
+          handleSendMessage(contextualMessage);
+        } else {
+          handleSendMessage(suggestion.text);
+        }
+      } catch (error) {
+        console.warn('Level1結果の読み込みエラー:', error);
+        handleSendMessage(suggestion.text);
+      }
+    } else {
+      handleSendMessage(suggestion.text);
+    }
+    
     setSuggestions(prev => prev.filter(s => s.id !== suggestion.id));
   };
 
@@ -779,7 +898,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
       {/* 提案チップ */}
       {suggestions.length > 0 && (
         <div className="suggestions-container">
-          <h4>💡 こんな質問はいかがですか？</h4>
+          <h4>💡 {getLevel1FortuneSuggestions().length > 0 ? '占い結果についてさらに詳しく聞いてみませんか？' : 'こんな質問はいかがですか？'}</h4>
           <div className="suggestion-chips">
             {suggestions.map((suggestion) => (
               <button
