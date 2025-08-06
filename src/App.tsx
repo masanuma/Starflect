@@ -8,7 +8,7 @@ import AIChat from './components/AIChat'
 import AIFortuneChat from './components/AIFortuneChat'
 import { initializeDataManager } from './utils/dataManager';
 
-type FortuneMode = 'sun-sign' | 'three-planets' | 'ten-planets' | 'ai-chat';
+type FortuneMode = 'sun-sign' | 'ten-planets' | 'ai-chat';
 
 function App() {
   // アプリ初期化時にデータバージョンチェックを実行
@@ -84,11 +84,7 @@ function HomeWrapper() {
       console.log('🔍 データ不足により自動モード選択:', missingDataMode);
       return missingDataMode as FortuneMode;
     }
-    // レベルアップから3天体モードでの入力が必要な場合は自動的に3天体モードに設定
-    if (needThreePlanetsInput) {
-      console.log('🔍 レベルアップフラグが見つかりました。3天体モードに設定します。');
-      return 'three-planets';
-    }
+    // Level2削除により、3天体モードは無効
     console.log('🔍 通常の初期化 - モード選択画面を表示');
     return null;
   });
@@ -166,7 +162,7 @@ function HomeWrapper() {
             canSkipInput = birthData.name && birthData.birthDate;
             console.log('🔍 簡単占い - スキップ可能:', canSkipInput);
             break;
-          case 'three-planets':
+          // case 'three-planets': // Level2削除済み
             // 3天体占い：名前、生年月日、出生時刻、出生地があればOK
             canSkipInput = birthData.name && birthData.birthDate && 
                           birthData.birthTime && birthData.birthPlace && 
@@ -238,7 +234,7 @@ function HomeWrapper() {
                 <p>生年月日を入力するだけで、あなたの基本的な性格や運勢を占います。</p>
               </div>
             )}
-            {selectedMode === 'three-planets' && (
+            {false && ( // Level2削除により無効化
               <div className="mode-info detailed">
                 <h3>🌙✨ 3天体の本格占い</h3>
                 {isFromLevelUp ? (
@@ -303,9 +299,9 @@ function StepByStepResultWrapper() {
     if (selectedMode === 'sun-sign') {
       mode = 'simple';
       console.log('🔍 sun-signのため簡単占いモードに設定');
-    } else if (selectedMode === 'three-planets' || selectedMode === 'ten-planets') {
+          } else if (selectedMode === 'ten-planets') {
       mode = 'detailed';
-      console.log('🔍 three-planets/ten-planetsのため詳細占いモードに設定');
+              console.log('🔍 ten-planetsのため詳細占いモードに設定');
     }
   } else {
     console.log('🔍 selectedModeがないため、フォールバック処理を実行');
@@ -334,7 +330,7 @@ function StepByStepResultWrapper() {
   console.log('🔍 【StepByStepResultWrapper】最終的なmode:', mode);
   console.log('🔍 【StepByStepResultWrapper】propsとして渡すselectedMode:', selectedMode);
   
-  return <StepByStepResult mode={mode} selectedMode={selectedMode as 'sun-sign' | 'three-planets' | 'ten-planets'} />;
+      return <StepByStepResult mode={mode} selectedMode={selectedMode as 'sun-sign' | 'ten-planets'} />;
 }
 
 // 既存のAIチャットのラッパー（既存機能用）
