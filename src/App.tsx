@@ -69,14 +69,8 @@ function App() {
 function HomeWrapper() {
   const navigate = useNavigate();
   
-  // レベルアップフラグを先にチェック（削除しない）
-  const needThreePlanetsInput = localStorage.getItem('starflect_need_three_planets_input') === 'true';
   // データ不足によるモード選択フラグをチェック
   const missingDataMode = localStorage.getItem('starflect_missing_data_mode');
-  
-  console.log('🔍 HomeWrapper - フラグチェック:');
-  console.log('  needThreePlanetsInput:', needThreePlanetsInput);
-  console.log('  missingDataMode:', missingDataMode);
   
   const [selectedMode, setSelectedMode] = useState<FortuneMode | null>(() => {
     // データ不足によるモード選択が優先
@@ -90,7 +84,7 @@ function HomeWrapper() {
   });
 
   // レベルアップから来たかどうかを記録
-  const [isFromLevelUp] = useState(needThreePlanetsInput);
+  const [isFromLevelUp] = useState(false); // Level2削除により常にfalse
   // データ不足から来たかどうかを記録
   const [isFromMissingData] = useState(!!missingDataMode);
   

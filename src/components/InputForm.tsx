@@ -82,13 +82,8 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
   useEffect(() => {
     console.log('🔍 InputForm - 初期化処理開始, mode:', mode);
     
-    // レベルアップフラグをチェック
-    const needThreePlanetsInput = localStorage.getItem('starflect_need_three_planets_input') === 'true';
     // データ不足フラグをチェック
     const missingDataMode = localStorage.getItem('starflect_missing_data_mode');
-    
-    console.log('🔍 レベルアップフラグ:', needThreePlanetsInput);
-    console.log('🔍 データ不足フラグ:', missingDataMode);
     
     if (false) { // Level2削除により無効化
       // レベルアップフロー: 既存のbirthDataから名前と生年月日を復元
