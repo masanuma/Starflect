@@ -23,7 +23,26 @@ const debugError = (...args: any[]) => {
   }
 };
 
-// 星評価を表示用に変換するヘルパー関数
+// 運勢別アイコンマッピング
+const fortuneIcons = {
+  overall: '🌟',    // 全体運
+  love: '❤️',       // 恋愛運
+  work: '💼',       // 仕事運
+  health: '💪',     // 健康運
+  money: '💰',      // 金運
+  growth: '🌱',     // 成長運
+  default: '⭐'     // デフォルト
+};
+
+// 運勢別評価を表示用に変換するヘルパー関数
+const renderFortuneRating = (rating: number, fortuneType: keyof typeof fortuneIcons = 'default'): string => {
+  const icon = fortuneIcons[fortuneType];
+  const filledIcons = icon.repeat(Math.max(0, Math.min(rating, 5)));
+  const emptyStars = '☆'.repeat(Math.max(0, 5 - rating));
+  return filledIcons + emptyStars;
+};
+
+// 従来の星評価（後方互換性のため残す）
 const renderStars = (rating: number): string => {
   const filledStars = '⭐'.repeat(Math.max(0, Math.min(rating, 5)));
   const emptyStars = '☆'.repeat(Math.max(0, 5 - rating));
@@ -2253,7 +2272,7 @@ ${fortuneData.result}
 
         {/* 占い */}
         <div className="period-fortune-section">
-          <h3 className="section-title">�� 占い　～12星座から見たあなた</h3>
+          <h3 className="section-title">🔮 占い　～12星座から見たあなた</h3>
           
           <div className="fortune-selector">
             <div className="selector-row">
@@ -2287,7 +2306,7 @@ ${fortuneData.result}
           )}
           
           {(() => {
-            debugLog('�� 【占い表示条件】level1Fortune:', !!level1Fortune, 'isGeneratingLevel1:', isGeneratingLevel1);
+            debugLog('🔮 【占い表示条件】level1Fortune:', !!level1Fortune, 'isGeneratingLevel1:', isGeneratingLevel1);
             debugLog('🔍 【占い表示条件】level1Fortune内容:', level1Fortune?.substring(0, 200) + '...');
             return level1Fortune && !isGeneratingLevel1;
           })() && (
@@ -2658,7 +2677,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor(fortuneSections.overallStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars(fortuneSections.overallStars || 3)}
+                              {renderFortuneRating(fortuneSections.overallStars || 3, 'overall')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -2670,12 +2689,12 @@ ${fortuneData.result}
                       {fortuneSections.love && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            💕 恋愛運
+                            ❤️ 恋愛運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor(fortuneSections.loveStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars(fortuneSections.loveStars || 3)}
+                              {renderFortuneRating(fortuneSections.loveStars || 3, 'love')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -2692,7 +2711,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor(fortuneSections.workStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars(fortuneSections.workStars || 3)}
+                              {renderFortuneRating(fortuneSections.workStars || 3, 'work')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -2704,12 +2723,12 @@ ${fortuneData.result}
                       {fortuneSections.health && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            🌿 健康運
+                            💪 健康運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor(fortuneSections.healthStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars(fortuneSections.healthStars || 3)}
+                              {renderFortuneRating(fortuneSections.healthStars || 3, 'health')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -2726,7 +2745,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor(fortuneSections.moneyStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars(fortuneSections.moneyStars || 3)}
+                              {renderFortuneRating(fortuneSections.moneyStars || 3, 'money')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -3495,7 +3514,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).innerChangeStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars((fortuneSections as any).innerChangeStars || 3)}
+                              {renderFortuneRating((fortuneSections as any).innerChangeStars || 3, 'overall')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -3512,7 +3531,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).emotionalFlowStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars((fortuneSections as any).emotionalFlowStars || 3)}
+                              {renderFortuneRating((fortuneSections as any).emotionalFlowStars || 3, 'money')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -3529,7 +3548,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).unconsciousChangeStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars((fortuneSections as any).unconsciousChangeStars || 3)}
+                              {renderFortuneRating((fortuneSections as any).unconsciousChangeStars || 3, 'love')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -3546,7 +3565,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).honneBalanceStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars((fortuneSections as any).honneBalanceStars || 3)}
+                              {renderFortuneRating((fortuneSections as any).honneBalanceStars || 3, 'work')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -3563,7 +3582,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).soulGrowthStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars((fortuneSections as any).soulGrowthStars || 3)}
+                              {renderFortuneRating((fortuneSections as any).soulGrowthStars || 3, 'growth')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -4457,7 +4476,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).overallStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars((fortuneSections as any).overallStars || 3)}
+                              {renderFortuneRating((fortuneSections as any).overallStars || 3, 'overall')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -4474,7 +4493,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).moneyStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars((fortuneSections as any).moneyStars || 3)}
+                              {renderFortuneRating((fortuneSections as any).moneyStars || 3, 'money')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -4491,7 +4510,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).loveStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars((fortuneSections as any).loveStars || 3)}
+                              {renderFortuneRating((fortuneSections as any).loveStars || 3, 'love')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -4508,7 +4527,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).workStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars((fortuneSections as any).workStars || 3)}
+                              {renderFortuneRating((fortuneSections as any).workStars || 3, 'work')}
                             </span>
                           </h4>
                           <div className="fortune-content">
@@ -4525,7 +4544,7 @@ ${fortuneData.result}
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).growthStars || 3), marginLeft: '10px' }}
                             >
-                              {renderStars((fortuneSections as any).growthStars || 3)}
+                              {renderFortuneRating((fortuneSections as any).growthStars || 3, 'growth')}
                             </span>
                           </h4>
                           <div className="fortune-content">
