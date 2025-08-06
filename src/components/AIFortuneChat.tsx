@@ -295,44 +295,44 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
     return generalResponses[responseIndex] + `\n\n【相談時刻: ${timestamp}】`;
   };
 
-  // 提案チップの定義（より詳細な質問）
+  // 提案チップの定義（一般的な質問）
   const allSuggestionChips: SuggestionChip[] = [
     // 恋愛運関連
-    { id: '1', text: '今の恋愛で気をつけることは？', icon: '💕', category: 'love' },
-    { id: '2', text: '運命の人にいつ出会える？', icon: '💖', category: 'love' },
-    { id: '3', text: '元カレとの復縁はうまくいく？', icon: '💔', category: 'love' },
-    { id: '4', text: '告白するタイミングは？', icon: '💌', category: 'love' },
-    { id: '5', text: '結婚に向いている時期は？', icon: '💍', category: 'love' },
+    { id: '1', text: '恋愛について', icon: '💕', category: 'love' },
+    { id: '2', text: '出会いについて', icon: '💖', category: 'love' },
+    { id: '3', text: '復縁について', icon: '💔', category: 'love' },
+    { id: '4', text: '告白について', icon: '💌', category: 'love' },
+    { id: '5', text: '結婚について', icon: '💍', category: 'love' },
     
     // 仕事運関連
-    { id: '6', text: '今の職場で昇進できる？', icon: '📈', category: 'career' },
-    { id: '7', text: '転職のベストタイミングは？', icon: '🚀', category: 'career' },
-    { id: '8', text: '起業のチャンスはある？', icon: '💡', category: 'career' },
-    { id: '9', text: '上司との関係を改善するには？', icon: '👔', category: 'career' },
-    { id: '10', text: '副業を始めるべき？', icon: '💻', category: 'career' },
+    { id: '6', text: '昇進について', icon: '📈', category: 'career' },
+    { id: '7', text: '転職について', icon: '🚀', category: 'career' },
+    { id: '8', text: '起業について', icon: '💡', category: 'career' },
+    { id: '9', text: '職場の人間関係について', icon: '👔', category: 'career' },
+    { id: '10', text: '副業について', icon: '💻', category: 'career' },
     
     // 健康運関連
-    { id: '11', text: '今の体調で気をつけることは？', icon: '🍃', category: 'health' },
-    { id: '12', text: 'ストレス解消法を教えて', icon: '🧘', category: 'health' },
-    { id: '13', text: '運動を始めるタイミングは？', icon: '🏃', category: 'health' },
-    { id: '14', text: '体調不良の原因は？', icon: '🤒', category: 'health' },
+    { id: '11', text: '健康について', icon: '🍃', category: 'health' },
+    { id: '12', text: 'ストレスについて', icon: '🧘', category: 'health' },
+    { id: '13', text: '運動について', icon: '🏃', category: 'health' },
+    { id: '14', text: '体調について', icon: '🤒', category: 'health' },
     
     // 全体運関連
-    { id: '15', text: '今年の運勢のポイントは？', icon: '🌟', category: 'fortune' },
-    { id: '16', text: '今月気をつけるべき日は？', icon: '⚠️', category: 'fortune' },
-    { id: '17', text: '今週のラッキーアイテムは？', icon: '🍀', category: 'fortune' },
-    { id: '18', text: '人間関係で注意すべき点は？', icon: '👥', category: 'general' },
-    { id: '19', text: '引っ越しのタイミングは？', icon: '🏠', category: 'general' },
-    { id: '20', text: '新しいことを始めるべき時期は？', icon: '🌱', category: 'general' },
+    { id: '15', text: '今年の運勢について', icon: '🌟', category: 'fortune' },
+    { id: '16', text: '注意すべき時期について', icon: '⚠️', category: 'fortune' },
+    { id: '17', text: 'ラッキーアイテムについて', icon: '🍀', category: 'fortune' },
+    { id: '18', text: '人間関係について', icon: '👥', category: 'general' },
+    { id: '19', text: '引っ越しについて', icon: '🏠', category: 'general' },
+    { id: '20', text: '新しいことについて', icon: '🌱', category: 'general' },
     
     // 金運関連
-    { id: '21', text: '今年の金運はどう？', icon: '💰', category: 'fortune' },
-    { id: '22', text: '投資を始めるタイミングは？', icon: '📊', category: 'fortune' },
-    { id: '23', text: '宝くじを買うべき日は？', icon: '🎰', category: 'fortune' },
+    { id: '21', text: '金運について', icon: '💰', category: 'fortune' },
+    { id: '22', text: '投資について', icon: '📊', category: 'fortune' },
+    { id: '23', text: '宝くじについて', icon: '🎰', category: 'fortune' },
     
     // 家族関連
-    { id: '24', text: '家族との関係を改善するには？', icon: '👨‍👩‍👧‍👦', category: 'general' },
-    { id: '25', text: '子供の教育で注意すべき点は？', icon: '👶', category: 'general' },
+    { id: '24', text: '家族関係について', icon: '👨‍👩‍👧‍👦', category: 'general' },
+    { id: '25', text: '子育てについて', icon: '👶', category: 'general' },
   ];
 
   // Level1占い結果に基づく深掘り質問を生成
