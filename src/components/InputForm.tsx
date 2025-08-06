@@ -84,8 +84,9 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
     
     // データ不足フラグをチェック
     const missingDataMode = localStorage.getItem('starflect_missing_data_mode');
+    console.log('🔍 missingDataMode:', missingDataMode);
     
-    if (false) { // Level2削除により無効化
+    if (missingDataMode === 'ten-planets') {
       // レベルアップフロー: 既存のbirthDataから名前と生年月日を復元
       console.log('🔍 レベルアップフロー: 既存データを復元');
       const existingBirthData = localStorage.getItem('birthData');
@@ -132,7 +133,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
     }
     
     // データ不足から来た場合、出生時刻にフォーカスを当てる
-    if (missingDataMode && mode === 'ten-planets') {
+    if (missingDataMode === 'ten-planets' && mode === 'ten-planets') {
       console.log('🔍 データ不足からの遷移のため、出生時刻にフォーカスを当てます');
       setTimeout(() => {
         if (birthTimeRef.current) {
@@ -271,6 +272,9 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
       console.log('🔍 保存後のlocalStorage確認:');
       console.log('  selectedMode:', localStorage.getItem('selectedMode'));
       console.log('  birthData keys:', Object.keys(JSON.parse(localStorage.getItem('birthData') || '{}')));
+      
+      // フラグをクリア
+      localStorage.removeItem('starflect_missing_data_mode');
       
       // 結果画面に遷移
       // ページトップに移動

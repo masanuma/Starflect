@@ -146,8 +146,23 @@
   border: 4px solid #e2e8f0;
   border-top: 4px solid #667eea;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  -webkit-animation: basic-spinner-rotation 1s linear infinite;
+  -moz-animation: basic-spinner-rotation 1s linear infinite;
+  animation: basic-spinner-rotation 1s linear infinite;
   margin: 0 auto 2rem;
+  will-change: transform;
+  -webkit-will-change: transform;
+}
+
+@keyframes basic-spinner-rotation {
+  0% { 
+    transform: rotate(0deg); 
+    -webkit-transform: rotate(0deg);
+  }
+  100% { 
+    transform: rotate(360deg); 
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 @keyframes spin {
@@ -1280,7 +1295,39 @@
   border: 3px solid #e2e8f0;
   border-top: 3px solid #667eea;
   border-radius: 50%;
-  animation: generating-spin 1s linear infinite !important;
+}
+
+@keyframes level3-spinner-rotation {
+  0% { 
+    transform: rotate(0deg); 
+    -webkit-transform: rotate(0deg);
+  }
+  100% { 
+    transform: rotate(360deg); 
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes level3-spinner-rotation {
+  0% { 
+    transform: rotate(0deg); 
+    -webkit-transform: rotate(0deg);
+  }
+  100% { 
+    transform: rotate(360deg); 
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes level3-spinner-rotation {
+  0% { 
+    transform: rotate(0deg); 
+    -webkit-transform: rotate(0deg);
+  }
+  100% { 
+    transform: rotate(360deg); 
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 .generating-message p {
@@ -3798,9 +3845,70 @@ div.action-buttons,
   }
 }
 
-.loading-spinner {
-  animation: spinGlow 2s linear infinite !important;
-  will-change: transform, filter !important;
+/* 一般的なローディングスピナー */
+.loading-section .loading-spinner,
+.loading .loading-spinner {
+  -webkit-animation: basic-spinner-rotation 1s linear infinite !important;
+  -moz-animation: basic-spinner-rotation 1s linear infinite !important;
+  animation: basic-spinner-rotation 1s linear infinite !important;
+  will-change: transform !important;
+  -webkit-will-change: transform !important;
+}
+
+/* generating-message内のスピナーは独自のアニメーション */
+.generating-message .loading-spinner {
+  -webkit-animation: simple-spin 1s linear infinite !important;
+  -moz-animation: simple-spin 1s linear infinite !important;
+  animation: simple-spin 1s linear infinite !important;
+  will-change: transform !important;
+  -webkit-will-change: transform !important;
+}
+
+/* シンプルで確実なスピンアニメーション */
+@keyframes simple-spin {
+  0% { 
+    transform: rotate(0deg); 
+    background-color: #667eea;
+  }
+  25% { 
+    transform: rotate(90deg); 
+    background-color: #764ba2;
+  }
+  50% { 
+    transform: rotate(180deg); 
+    background-color: #667eea;
+  }
+  75% { 
+    transform: rotate(270deg); 
+    background-color: #764ba2;
+  }
+  100% { 
+    transform: rotate(360deg); 
+    background-color: #667eea;
+  }
+}
+
+@-webkit-keyframes simple-spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@-moz-keyframes simple-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* デバッグ用：強制アニメーション */
+.generating-message .loading-spinner {
+  animation: simple-spin 2s linear infinite !important;
+  -webkit-animation: simple-spin 2s linear infinite !important;
+  -moz-animation: simple-spin 2s linear infinite !important;
+  border: 5px solid #e2e8f0 !important;
+  border-top: 5px solid #667eea !important;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  display: block !important;
 }
 
 /* フェードインアニメーションの改善 */

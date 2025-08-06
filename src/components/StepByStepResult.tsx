@@ -8,6 +8,9 @@ import { getTimeContextForAI } from '../utils/dateUtils';
 import { confirmAndClearResultsOnly } from '../utils/dataManager';
 import { getPlanetSignDetailWithMeaning } from '../utils/planetSignTraits';
 import AdBanner from './AdBanner';
+import LoadingSpinner from './LoadingSpinner';
+
+
 import './StepByStepResult.css';
 
 // 🔥 パフォーマンス最適化: デバッグ出力の制御
@@ -239,6 +242,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
     
     setFortunePeriod(selectedPeriod); // 占い実行時の期間を保存
     setIsGeneratingLevel1(true);
+
     
     try {
       // 過去のLevel1占い結果を読み込み（占い機能引き継ぎ用）
@@ -726,6 +730,7 @@ ${fortuneData.result}
     
     setFortunePeriod(selectedPeriod); // 占い実行時の期間を保存
     setIsGeneratingLevel2(true);
+
     
     try {
       // 過去のLevel2占い結果を読み込み（占い機能引き継ぎ用）
@@ -1155,6 +1160,7 @@ ${fortuneData.result}
     debugLog('🔍 【Level3占い生成】処理開始');
     setFortunePeriod(selectedPeriod); // 占い実行時の期間を保存
     setIsGeneratingLevel3(true);
+
     
     try {
       // 過去のLevel3占い結果を読み込み（占い機能引き継ぎ用）
@@ -1734,6 +1740,7 @@ ${fortuneData.result}
     }
     
     setIsGeneratingLevel3Analysis(true);
+
     
     try {
       debugLog('🔍 【AI分析開始】generateAIAnalysisを呼び出します');
@@ -1969,6 +1976,7 @@ ${fortuneData.result}
     
     debugLog('🔍 【AI生成開始】3天体性格分析を新規生成します');
     setIsGeneratingThreePlanetsPersonality(true);
+
     
           try {
         const sun = horoscopeData.planets.find(p => p.planet === '太陽');
@@ -2166,9 +2174,11 @@ ${fortuneData.result}
         debugLog('  missingBirthPlace:', missingBirthPlace);
         
         if (missingBirthTime || missingBirthPlace) {
-          debugLog('🔍 3天体の本格占いに必要なデータが不足しています。');
-          debugLog('🚨 【handleLevelUp】データ不足のため関数を終了します');
-          setShowDataMissingMessage(true);
+          debugLog('🔍 10天体の印象診断に必要なデータが不足しています。入力画面に遷移します。');
+          debugLog('🔍 【handleLevelUp】入力画面への遷移を実行します');
+          // 不足データを示すフラグを設定して入力画面に遷移
+          localStorage.setItem('starflect_missing_data_mode', 'ten-planets');
+          navigate('/');
           return;
         }
         
@@ -2300,7 +2310,7 @@ ${fortuneData.result}
           
           {isGeneratingLevel1 && (
             <div className="generating-message">
-              <div className="loading-spinner"></div>
+              <LoadingSpinner size={50} color="#667eea" />
               <p>占っています...お待ちください</p>
             </div>
           )}
@@ -3039,7 +3049,7 @@ ${fortuneData.result}
           {/* 分析生成中 */}
           {isGeneratingThreePlanetsPersonality && (
             <div className="generating-message">
-              <div className="loading-spinner"></div>
+              <LoadingSpinner size={50} color="#667eea" />
               <p>占い中です...お待ちください</p>
             </div>
           )}
@@ -3181,7 +3191,7 @@ ${fortuneData.result}
           
           {isGeneratingLevel2 && (
             <div className="generating-message">
-              <div className="loading-spinner"></div>
+              <LoadingSpinner size={50} color="#667eea" />
               <p>占い中です...お待ちください</p>
             </div>
           )}
@@ -4027,7 +4037,7 @@ ${fortuneData.result}
           {/* 自動分析中の表示 */}
           {isGeneratingLevel3Analysis && (
             <div className="generating-message">
-              <div className="loading-spinner"></div>
+              <LoadingSpinner size={50} color="#667eea" />
               <p>まわりから見たあなたの分析を生成中...お待ちください</p>
             </div>
           )}
@@ -4154,8 +4164,8 @@ ${fortuneData.result}
           
           {isGeneratingLevel3 && (
             <div className="generating-message">
-              <div className="loading-spinner"></div>
-                              <p>まわりから見たあなたを分析中...お待ちください</p>
+              <LoadingSpinner size={50} color="#667eea" />
+              <p>まわりから見たあなたを分析中...お待ちください</p>
             </div>
           )}
           

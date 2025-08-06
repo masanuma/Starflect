@@ -48,17 +48,43 @@ const AIFortuneChat: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Level1結果に基づく提案質問の初期化
+  // 前回のモードに基づく提案質問の初期化
   useEffect(() => {
-    if (birthData) {
-      // Level1の深掘り質問を優先的に表示
-      const level1Suggestions = getLevel1FortuneSuggestions();
-      if (level1Suggestions.length > 0) {
-        setSuggestions(level1Suggestions);
-      } else {
-        // Level1結果がない場合はランダム質問を表示
-        setSuggestions(getRandomSuggestions());
+    console.log('🔍 提案質問useEffect実行: birthData =', birthData ? '存在します' : '存在しません');
+    
+    // previousModeを確認して適切な提案質問を表示
+    const previousMode = localStorage.getItem('previousMode');
+    console.log('🔍 提案質問useEffect: previousMode =', previousMode);
+    
+    let suggestions: SuggestionChip[] = [];
+    
+    if (previousMode === 'behavior-pattern-analysis') {
+      // Level3からの遷移の場合
+      const level3Suggestions = getLevel3FortuneSuggestions();
+      console.log('🔍 提案質問useEffect: Level3提案数 =', level3Suggestions.length);
+      if (level3Suggestions.length > 0) {
+        console.log('🔍 提案質問useEffect: Level3提案を設定します');
+        console.log('🔍 設定するLevel3提案:', level3Suggestions);
+        suggestions = level3Suggestions;
       }
+    } else {
+      // Level1からの遷移またはその他の場合
+      const level1Suggestions = getLevel1FortuneSuggestions();
+      console.log('🔍 提案質問useEffect: Level1提案数 =', level1Suggestions.length);
+      if (level1Suggestions.length > 0) {
+        console.log('🔍 提案質問useEffect: Level1提案を設定します');
+        console.log('🔍 設定するLevel1提案:', level1Suggestions);
+        suggestions = level1Suggestions;
+      }
+    }
+    
+    if (suggestions.length > 0) {
+      setSuggestions(suggestions);
+      console.log('🔍 setSuggestions実行完了');
+    } else {
+      console.log('🔍 提案質問useEffect: ランダム提案を設定します');
+      // どちらの結果もない場合はランダム質問を表示
+      setSuggestions(getRandomSuggestions());
     }
   }, [birthData]);
 
@@ -93,6 +119,9 @@ const AIFortuneChat: React.FC = () => {
       // 占星術分析データを取得
       const astrologyData = getAstrologyData();
       
+      // 質問に関連する占い結果を取得
+      const fortuneContext = getFortuneContext(question);
+      
       // プロンプトを構築
       let prompt = `あなたは経験豊富で心温かい占い師です。相談者に寄り添い、丁寧で思いやりのある回答をしてください。
 
@@ -105,6 +134,11 @@ ${getTimeContextForAI()}
 分析ID: ${Math.random().toString(36).substr(2, 9)}
 
 `;
+
+      // 占い結果の文脈がある場合は追加
+      if (fortuneContext) {
+        prompt += `【今日の占い結果（詳細参考情報）】\n${fortuneContext}\n\n【重要】上記の占い結果を基に、質問に対してより具体的で詳しい解釈とアドバイスを提供してください。占い結果の内容を深く掘り下げ、実践的な指針を含めてください。\n\n`;
+      }
 
       // 占星術データがある場合は追加情報として付記
       if (astrologyData && birthData) {
@@ -131,11 +165,23 @@ ${getTimeContextForAI()}
 
       prompt += `【回答方針】
 - 相談者の気持ちに寄り添い、共感を示してください
-- 具体的で実践的なアドバイスを含めてください  
+- 具体的で実践的なアドバイスを詳しく含めてください（例：「今日の午後2-4時頃に重要な連絡があるかもしれません」など）
 - 希望と前向きな視点を提供してください
-- 占星術的な観点を適度に織り交ぜてください
+- 占星術的な観点を詳しく織り交ぜてください（星座の特徴、惑星の影響など）
 - 丁寧で温かい言葉遣いを心がけてください
 - 前回とは異なる視点や新しい観点を必ず含めてください
+- 質問に対してより詳しく、具体的に回答してください
+- 文章の長さは300-500文字程度で、十分に詳しい内容にしてください
+- 抽象的な表現ではなく、具体的な行動や状況を含めてください
+- 「なぜそうなるのか」という理由や背景も説明してください
+- 実際の生活で活用できる具体的なアドバイスを複数提供してください
+
+【回答の構成例】
+1. 占い結果の詳しい解釈
+2. なぜそのような結果になるのかの理由
+3. 具体的な行動アドバイス（2-3個）
+4. 注意すべきポイント
+5. 前向きなメッセージ
 
 回答:`;
 
@@ -337,16 +383,22 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
 
   // Level1占い結果に基づく深掘り質問を生成
   const getLevel1FortuneSuggestions = (): SuggestionChip[] => {
-    if (!birthData) return [];
+    if (!birthData) {
+      console.log('🔍 Level1深掘り質問: birthDataがありません');
+      return [];
+    }
     
     const today = new Date().toISOString().split('T')[0];
     const level1Key = `level1_fortune_${birthData.name}_${today}`;
+    console.log('🔍 Level1深掘り質問: キー =', level1Key);
     
     try {
       const storedLevel1 = localStorage.getItem(level1Key);
+      console.log('🔍 Level1深掘り質問: 保存データ =', storedLevel1 ? '見つかりました' : '見つかりません');
       if (!storedLevel1) return [];
       
       const fortuneData = JSON.parse(storedLevel1);
+      console.log('🔍 Level1深掘り質問: 占い結果 =', fortuneData.result ? '存在します' : '存在しません');
       const suggestions: SuggestionChip[] = [];
       
       // 各運勢の深掘り質問を生成
@@ -412,9 +464,230 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         }
       }
       
+      console.log('🔍 Level1深掘り質問: 生成された提案数 =', suggestions.length);
+      console.log('🔍 Level1深掘り質問: 提案内容 =', suggestions.map(s => s.text));
       return suggestions.slice(0, 6); // 最大6個まで
     } catch (error) {
       console.warn('Level1占い結果の読み込みエラー:', error);
+      return [];
+    }
+  };
+
+  // 質問に関連する占い結果の文脈を取得する関数
+  const getFortuneContext = (question: string): string | null => {
+    if (!birthData) return null;
+    
+    const today = new Date().toISOString().split('T')[0];
+    
+    // previousModeに基づいて適切な占い結果を取得
+    const previousMode = localStorage.getItem('previousMode');
+    
+    if (previousMode === 'behavior-pattern-analysis') {
+      // Level3からの遷移の場合
+      const level3Key = `level3_analysis_result_${birthData.name}_${today}`;
+      try {
+        const storedLevel3 = localStorage.getItem(level3Key);
+        if (storedLevel3) {
+          const analysisData = JSON.parse(storedLevel3);
+          if (analysisData.tenPlanetSummary) {
+            const summary = analysisData.tenPlanetSummary;
+            
+            // 質問内容に応じて関連する分析結果を詳しく返す
+            if (question.includes('総合的な影響') || question.includes('総合')) {
+              let context = `総合的な影響: ${summary.overallInfluence}`;
+              // 関連する他の項目も参考として含める
+              context += `\n\n関連情報：\n- 話し方の癖: ${summary.communicationStyle.substring(0, 150)}...\n- 恋愛や行動: ${summary.loveAndBehavior.substring(0, 150)}...`;
+              return context;
+            } else if (question.includes('話し方') || question.includes('コミュニケーション')) {
+              let context = `話し方の癖: ${summary.communicationStyle}`;
+              // 総合的な影響も参考として含める
+              context += `\n\n総合的な影響（参考）: ${summary.overallInfluence.substring(0, 200)}...`;
+              return context;
+            } else if (question.includes('恋愛') || question.includes('行動')) {
+              let context = `恋愛や行動: ${summary.loveAndBehavior}`;
+              // 総合的な影響も参考として含める
+              context += `\n\n総合的な影響（参考）: ${summary.overallInfluence.substring(0, 200)}...`;
+              return context;
+            } else if (question.includes('仕事') || question.includes('振る舞い')) {
+              let context = `仕事での振る舞い: ${summary.workBehavior}`;
+              // 総合的な影響も参考として含める
+              context += `\n\n総合的な影響（参考）: ${summary.overallInfluence.substring(0, 200)}...`;
+              return context;
+            } else if (question.includes('変革') || question.includes('深層心理')) {
+              let context = `変革と深層心理: ${summary.transformationAndDepth}`;
+              // 総合的な影響も参考として含める
+              context += `\n\n総合的な影響（参考）: ${summary.overallInfluence.substring(0, 200)}...`;
+              return context;
+            } else {
+              // 全体的な文脈を詳しく提供
+              return `あなたの印象診断結果（詳細）:\n\n- 総合的な影響: ${summary.overallInfluence}\n\n- 話し方の癖: ${summary.communicationStyle}\n\n- 恋愛や行動: ${summary.loveAndBehavior}\n\n- 仕事での振る舞い: ${summary.workBehavior}\n\n- 変革と深層心理: ${summary.transformationAndDepth}`;
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Level3結果の読み込みエラー:', error);
+      }
+    } else {
+      // Level1からの遷移の場合
+      const level1Key = `level1_fortune_${birthData.name}_${today}`;
+      try {
+        const storedLevel1 = localStorage.getItem(level1Key);
+        if (storedLevel1) {
+          const fortuneData = JSON.parse(storedLevel1);
+          if (fortuneData.result) {
+            // 質問内容に応じて関連する運勢を詳しく抽出
+            if (question.includes('全体運') || question.includes('総合運')) {
+              const match = fortuneData.result.match(/【全体運】[^【]*/);
+              const baseContent = match ? match[0] : `今日の全体運について詳しくお答えします。`;
+              // 関連する他の運勢も少し含める
+              const loveMatch = fortuneData.result.match(/【恋愛運】[^【]*/);
+              const workMatch = fortuneData.result.match(/【仕事運】[^【]*/);
+              let context = baseContent;
+              if (loveMatch) context += `\n\n参考：${loveMatch[0].substring(0, 100)}...`;
+              if (workMatch) context += `\n\n参考：${workMatch[0].substring(0, 100)}...`;
+              return context;
+            } else if (question.includes('恋愛運') || question.includes('恋愛')) {
+              const match = fortuneData.result.match(/【恋愛運】[^【]*/);
+              const baseContent = match ? match[0] : `今日の恋愛運について詳しくお答えします。`;
+              // 全体運も参考として含める
+              const overallMatch = fortuneData.result.match(/【全体運】[^【]*/);
+              let context = baseContent;
+              if (overallMatch) context += `\n\n全体運の参考：${overallMatch[0].substring(0, 100)}...`;
+              return context;
+            } else if (question.includes('仕事運') || question.includes('仕事')) {
+              const match = fortuneData.result.match(/【仕事運】[^【]*/);
+              const baseContent = match ? match[0] : `今日の仕事運について詳しくお答えします。`;
+              // 全体運も参考として含める
+              const overallMatch = fortuneData.result.match(/【全体運】[^【]*/);
+              let context = baseContent;
+              if (overallMatch) context += `\n\n全体運の参考：${overallMatch[0].substring(0, 100)}...`;
+              return context;
+            } else if (question.includes('健康運') || question.includes('健康')) {
+              const match = fortuneData.result.match(/【健康運】[^【]*/);
+              const baseContent = match ? match[0] : `今日の健康運について詳しくお答えします。`;
+              // 全体運も参考として含める
+              const overallMatch = fortuneData.result.match(/【全体運】[^【]*/);
+              let context = baseContent;
+              if (overallMatch) context += `\n\n全体運の参考：${overallMatch[0].substring(0, 100)}...`;
+              return context;
+            } else if (question.includes('金運') || question.includes('金銭運')) {
+              const match = fortuneData.result.match(/【金運】[^【]*/);
+              const baseContent = match ? match[0] : `今日の金運について詳しくお答えします。`;
+              // 全体運も参考として含める
+              const overallMatch = fortuneData.result.match(/【全体運】[^【]*/);
+              let context = baseContent;
+              if (overallMatch) context += `\n\n全体運の参考：${overallMatch[0].substring(0, 100)}...`;
+              return context;
+            } else if (question.includes('重要な日') || question.includes('ラッキーデー')) {
+              const match = fortuneData.result.match(/【重要な日】[^【]*/);
+              const baseContent = match ? match[0] : `重要な日について詳しくお答えします。`;
+              // 全体運も参考として含める
+              const overallMatch = fortuneData.result.match(/【全体運】[^【]*/);
+              let context = baseContent;
+              if (overallMatch) context += `\n\n全体運の参考：${overallMatch[0].substring(0, 100)}...`;
+              return context;
+            } else {
+              // 全体的な文脈を詳しく提供（文字数制限を緩和）
+              return fortuneData.result.substring(0, 800) + (fortuneData.result.length > 800 ? '...' : '');
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Level1結果の読み込みエラー:', error);
+      }
+    }
+    
+    return null;
+  };
+
+  // Level3の深掘り質問を生成する関数
+  const getLevel3FortuneSuggestions = (): SuggestionChip[] => {
+    if (!birthData) {
+      console.log('🔍 Level3深掘り質問: birthDataがありません');
+      return [];
+    }
+    
+    const today = new Date().toISOString().split('T')[0];
+    const level3Key = `level3_analysis_result_${birthData.name}_${today}`;
+    console.log('🔍 Level3深掘り質問: キー =', level3Key);
+    
+    try {
+      const storedLevel3 = localStorage.getItem(level3Key);
+      console.log('🔍 Level3深掘り質問: 保存データ =', storedLevel3 ? '見つかりました' : '見つかりません');
+      if (!storedLevel3) return [];
+      
+      const analysisData = JSON.parse(storedLevel3);
+      console.log('🔍 Level3深掘り質問: 分析結果 =', analysisData.tenPlanetSummary ? '存在します' : '存在しません');
+      const suggestions: SuggestionChip[] = [];
+      
+      // Level3の5つの分析項目に基づく深掘り質問を生成
+      if (analysisData.tenPlanetSummary) {
+        const summary = analysisData.tenPlanetSummary;
+        
+        // 総合的な影響の深掘り
+        if (summary.overallInfluence) {
+          suggestions.push({
+            id: 'level3-overall-influence',
+            text: '総合的な影響をもっと詳しく',
+            icon: '🌟',
+            category: 'fortune'
+          });
+        }
+        
+        // 話し方の癖の深掘り
+        if (summary.communicationStyle) {
+          suggestions.push({
+            id: 'level3-communication',
+            text: '話し方の癖をもっと詳しく',
+            icon: '💬',
+            category: 'general'
+          });
+        }
+        
+        // 恋愛や行動の深掘り
+        if (summary.loveAndBehavior) {
+          suggestions.push({
+            id: 'level3-love-behavior',
+            text: '恋愛や行動をもっと詳しく',
+            icon: '💕',
+            category: 'love'
+          });
+        }
+        
+        // 仕事での振る舞いの深掘り
+        if (summary.workBehavior) {
+          suggestions.push({
+            id: 'level3-work-behavior',
+            text: '仕事での振る舞いをもっと詳しく',
+            icon: '💼',
+            category: 'career'
+          });
+        }
+        
+        // 変革と深層心理の深掘り
+        if (summary.transformationAndDepth) {
+          suggestions.push({
+            id: 'level3-transformation',
+            text: '変革と深層心理をもっと詳しく',
+            icon: '🔮',
+            category: 'general'
+          });
+        }
+        
+        // Level3特有の追加質問
+        suggestions.push({
+          id: 'level3-personality-analysis',
+          text: '性格分析をさらに深く',
+          icon: '🧠',
+          category: 'general'
+        });
+      }
+      
+      console.log('🔍 Level3深掘り質問: 生成された提案数 =', suggestions.length);
+      console.log('🔍 Level3深掘り質問: 提案内容 =', suggestions.map(s => s.text));
+      return suggestions.slice(0, 6); // 最大6個まで
+    } catch (error) {
+      console.warn('Level3分析結果の読み込みエラー:', error);
       return [];
     }
   };
@@ -529,7 +802,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
   // 初期化
   useEffect(() => {
     setMessages([getInitialMessage()]);
-    setSuggestions(getRandomSuggestions());
+    // 提案質問は別のuseEffectで設定されるため、ここでは設定しない
     // 画面の一番上にスクロール
     window.scrollTo(0, 0);
   }, [birthData]);
@@ -615,6 +888,33 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
 
   // 提案チップの更新
   const updateSuggestions = (lastQuestion: string) => {
+    // AI応答後も占い結果に基づく提案質問を優先的に表示
+    const previousMode = localStorage.getItem('previousMode');
+    let fortuneBasedSuggestions: SuggestionChip[] = [];
+    
+    if (previousMode === 'behavior-pattern-analysis') {
+      // Level3からの遷移の場合
+      fortuneBasedSuggestions = getLevel3FortuneSuggestions();
+    } else {
+      // Level1からの遷移の場合
+      fortuneBasedSuggestions = getLevel1FortuneSuggestions();
+    }
+    
+    if (fortuneBasedSuggestions.length > 0) {
+      // 占い結果に基づく提案質問がある場合は、それを使用
+      // ただし、既に使用済みの提案は除外
+      const currentSuggestionIds = suggestions.map(s => s.id);
+      const unusedFortuneSuggestions = fortuneBasedSuggestions.filter(
+        s => !currentSuggestionIds.includes(s.id)
+      );
+      
+      if (unusedFortuneSuggestions.length > 0) {
+        setSuggestions(unusedFortuneSuggestions.slice(0, 5));
+        return;
+      }
+    }
+    
+    // 占い結果に基づく提案がない場合は、質問カテゴリに基づく提案を表示
     const category = detectQuestionCategory(lastQuestion);
     const filteredSuggestions = allSuggestionChips.filter((chip: SuggestionChip) => 
       chip.category === category || chip.category === 'general'
@@ -646,28 +946,11 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
 
   // 提案チップクリック
   const handleSuggestionClick = (suggestion: SuggestionChip) => {
-    // Level1の深掘り質問の場合は、占い結果の文脈を含めて送信
-    if (suggestion.id.startsWith('level1-') && birthData) {
-      const today = new Date().toISOString().split('T')[0];
-      const level1Key = `level1_fortune_${birthData.name}_${today}`;
-      
-      try {
-        const storedLevel1 = localStorage.getItem(level1Key);
-        if (storedLevel1) {
-          const fortuneData = JSON.parse(storedLevel1);
-          const contextualMessage = `今日の占い結果：「${fortuneData.result}」\n\nこの結果について、${suggestion.text}`;
-          handleSendMessage(contextualMessage);
-        } else {
-          handleSendMessage(suggestion.text);
-        }
-      } catch (error) {
-        console.warn('Level1結果の読み込みエラー:', error);
-        handleSendMessage(suggestion.text);
-      }
-    } else {
-      handleSendMessage(suggestion.text);
-    }
+    // 提案質問をクリックしたときは、簡潔な質問文のみを表示
+    // （占い結果の詳細は内部的にAIに渡すが、ユーザーには表示しない）
+    handleSendMessage(suggestion.text);
     
+    // クリックされた提案を削除（一度使用した提案は非表示にする）
     setSuggestions(prev => prev.filter(s => s.id !== suggestion.id));
   };
 
@@ -898,7 +1181,8 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
       {/* 提案チップ */}
       {suggestions.length > 0 && (
         <div className="suggestions-container">
-          <h4>💡 {getLevel1FortuneSuggestions().length > 0 ? 'どの占い結果を詳しく知りたいですか' : 'こんな質問はいかがですか？'}</h4>
+          {(() => { console.log('🔍 レンダリング時のsuggestions:', suggestions.map(s => s.text)); return null; })()}
+          <h4>💡 {suggestions.some(s => s.id.startsWith('level1-')) ? 'どの占い結果を詳しく知りたいですか' : 'こんな質問はいかがですか？'}</h4>
           <div className="suggestion-chips">
             {suggestions.map((suggestion) => (
               <button
