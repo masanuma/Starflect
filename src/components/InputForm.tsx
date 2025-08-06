@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BirthData } from '../types';
 import LocationPicker from './LocationPicker';
-type FortuneMode = 'sun-sign' | 'three-planets' | 'ten-planets' | 'ai-chat';
+type FortuneMode = 'sun-sign' | 'ten-planets' | 'ai-chat';
 
 interface InputFormProps {
   mode?: FortuneMode;
@@ -90,13 +90,13 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
     console.log('🔍 レベルアップフラグ:', needThreePlanetsInput);
     console.log('🔍 データ不足フラグ:', missingDataMode);
     
-    if (needThreePlanetsInput && mode === 'three-planets') {
+    if (false) { // Level2削除により無効化
       // レベルアップフロー: 既存のbirthDataから名前と生年月日を復元
       console.log('🔍 レベルアップフロー: 既存データを復元');
       const existingBirthData = localStorage.getItem('birthData');
       if (existingBirthData) {
         try {
-          const birthData = JSON.parse(existingBirthData);
+          const birthData = JSON.parse(existingBirthData!);
           console.log('🔍 既存の出生データ:', birthData);
           
           const restoredFormData = {
@@ -137,7 +137,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
     }
     
     // データ不足から来た場合、出生時刻にフォーカスを当てる
-    if (missingDataMode && (mode === 'three-planets' || mode === 'ten-planets')) {
+    if (missingDataMode && mode === 'ten-planets') {
       console.log('🔍 データ不足からの遷移のため、出生時刻にフォーカスを当てます');
       setTimeout(() => {
         if (birthTimeRef.current) {
@@ -171,7 +171,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
     }
 
     // 詳しい占いの場合のみ、出生時刻と出生地をバリデーション
-    if (mode === 'three-planets' || mode === 'ten-planets') {
+    if (mode === 'ten-planets') {
       console.log('🔍 詳しい占いモード - 出生時刻・出生地をバリデーション');
       
       // 出生時刻のバリデーション
@@ -238,7 +238,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
     try {
       // 時刻の計算（正確な時刻 or 大体の時刻）
       let finalBirthTime = '12:00'; // デフォルト
-      if (mode === 'three-planets' || mode === 'ten-planets') {
+      if (mode === 'ten-planets') {
         if (formData.timeType === 'exact') {
           finalBirthTime = formData.birthTime;
         } else {
@@ -251,12 +251,12 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
         name: formData.name || undefined,
         birthDate: new Date(formData.birthDate),
         birthTime: finalBirthTime,
-        timeType: (mode === 'three-planets' || mode === 'ten-planets') ? formData.timeType : undefined,
-        timeRange: (mode === 'three-planets' || mode === 'ten-planets' && formData.timeType === 'approximate') ? formData.timeRange : undefined,
+        timeType: mode === 'ten-planets' ? formData.timeType : undefined,
+        timeRange: (mode === 'ten-planets' && formData.timeType === 'approximate') ? formData.timeRange : undefined,
         birthPlace: {
-          city: (mode === 'three-planets' || mode === 'ten-planets') ? (locationData?.city || formData.birthPlace) : '東京',
-          latitude: (mode === 'three-planets' || mode === 'ten-planets') ? (locationData?.latitude || 35.6762) : 35.6762,
-          longitude: (mode === 'three-planets' || mode === 'ten-planets') ? (locationData?.longitude || 139.6503) : 139.6503,
+          city: mode === 'ten-planets' ? (locationData?.city || formData.birthPlace) : '東京',
+          latitude: mode === 'ten-planets' ? (locationData?.latitude || 35.6762) : 35.6762,
+          longitude: mode === 'ten-planets' ? (locationData?.longitude || 139.6503) : 139.6503,
           timezone: 'Asia/Tokyo'
         }
       };
@@ -463,7 +463,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
           </div>
 
           {/* 詳しい占いの場合のみ出生時刻を表示 */}
-          {(mode === 'three-planets' || mode === 'ten-planets') && (
+          {mode === 'ten-planets' && (
             <div className="input-group birth-time-input-group">
               <label htmlFor="birthTime">出生時刻 *</label>
               
@@ -540,7 +540,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
           )}
 
           {/* 詳しい占いの場合のみ出生地を表示 */}
-          {(mode === 'three-planets' || mode === 'ten-planets') && (
+          {mode === 'ten-planets' && (
             <div className="input-group birth-place-input-group">
               <label htmlFor="birthPlace">出生地 *</label>
               <div 

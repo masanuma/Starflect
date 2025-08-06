@@ -79,7 +79,7 @@ export const clearResultDataOnly = (): string[] => {
         key.startsWith('level-2-fortune-') ||
         key.startsWith('level-3-fortune-') ||
         key.startsWith('level1_fortune_') ||
-        key.startsWith('level2_fortune_') ||
+
         key.startsWith('transit-analysis-') ||
         key.startsWith('astrology-chat-') ||
         key.startsWith('ai_chat_history_') ||
@@ -131,7 +131,7 @@ export const clearAllFortuneData = (): string[] => {
                key.startsWith('level-2-fortune-') ||
                key.startsWith('level-3-fortune-') ||
                key.startsWith('level1_fortune_') ||
-               key.startsWith('level2_fortune_') ||
+
                key.startsWith('transit-analysis-') ||
                key.startsWith('astrology-chat-') ||
                key.startsWith('ai_chat_history_') ||
