@@ -45,7 +45,7 @@ type PeriodSelection = 'today' | 'tomorrow' | 'thisWeek' | 'nextWeek' | 'thisMon
 
 interface StepByStepResultProps {
   mode?: 'simple' | 'detailed';
-  selectedMode?: 'sun-sign' | 'three-planets' | 'ten-planets';
+  selectedMode?: 'sun-sign' | 'ten-planets'; // Level2削除済み
 }
 
 const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => {
@@ -74,7 +74,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   // selectedModeに基づいて初期レベルを設定
   const getInitialLevel = useCallback((): DisplayLevel => {
     debugLog('🔍 getInitialLevel - selectedMode:', selectedMode);
-    if (selectedMode === 'three-planets') {
+    if (false) { // Level2削除: selectedMode === 'three-planets'
       debugLog('🔍 3天体モードのため、レベル2に設定');
       return 2;
     } else if (selectedMode === 'ten-planets') {
@@ -88,7 +88,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   
   const [currentLevel, setCurrentLevel] = useState<DisplayLevel>(() => {
     debugLog('🔍 初期レベル設定 - selectedMode:', selectedMode);
-    if (selectedMode === 'three-planets') {
+    if (false) { // Level2削除: selectedMode === 'three-planets'
       debugLog('🔍 3天体モードのため、レベル2に設定');
       return 2;
     } else if (selectedMode === 'ten-planets') {
@@ -4843,7 +4843,7 @@ ${fortuneData.result}
     debugLog('  isGeneratingThreePlanetsPersonality:', isGeneratingThreePlanetsPersonality);
     debugLog('  hasTriggeredGeneration:', hasTriggeredGeneration);
     
-    if (currentLevel === 2 && selectedMode === 'three-planets' && horoscopeData && birthData && !isGeneratingThreePlanetsPersonality && !hasTriggeredGeneration) {
+    if (false) { // Level2削除: currentLevel === 2 && selectedMode === 'three-planets'
       debugLog('🔍 【3天体性格分析】レベル2（3天体モード）で自動実行開始');
       setHasTriggeredGeneration(true);
       
@@ -4852,7 +4852,7 @@ ${fortuneData.result}
         debugLog('🔍 【古い形式検出】threePlanetsPersonalityを初期化して新形式で再生成');
         setThreePlanetsPersonality(null);
         // 古い形式のキャッシュを削除
-        const key = generateThreePlanetsKey(birthData, horoscopeData.planets);
+        const key = generateThreePlanetsKey(birthData!, horoscopeData!.planets);
         localStorage.removeItem(key);
         debugLog('🔍 【古いキャッシュ削除】キー:', key);
         generateThreePlanetsPersonality();
@@ -4868,7 +4868,7 @@ ${fortuneData.result}
           debugLog('🔍 【3天体性格分析】新規生成を開始');
           // 古い形式のキャッシュを削除
           if (saved && !saved.innerChange) {
-            const key = generateThreePlanetsKey(birthData, horoscopeData.planets);
+            const key = generateThreePlanetsKey(birthData!, horoscopeData!.planets);
             localStorage.removeItem(key);
             debugLog('🔍 【古いキャッシュ削除】キー:', key);
           }
@@ -4882,7 +4882,7 @@ ${fortuneData.result}
 
   // selectedModeが変更された時の処理
   useEffect(() => {
-    if (selectedMode === 'three-planets' && currentLevel === 2) {
+    if (false) { // Level2削除: selectedMode === 'three-planets'
       debugLog('🔍 【selectedMode変更】3天体モードに変更されました');
       // 3天体性格分析をリセットして新しい分析を開始
       setThreePlanetsPersonality(null);
