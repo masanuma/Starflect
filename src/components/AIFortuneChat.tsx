@@ -591,14 +591,11 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
               const userName = birthData?.name || 'user';
               const today = new Date().toISOString().split('T')[0];
               const level3Key = `level3_fortune_${userName}_${today}`;
-              const level2Key = `level2_fortune_${userName}_${today}`;
               const level1Key = `level1_fortune_${userName}_${today}`;
               
               let currentLevel = '';
               if (localStorage.getItem(level3Key)) {
                 currentLevel = 'Level3: 星が伝える印象診断';
-              } else if (localStorage.getItem(level2Key)) {
-                currentLevel = 'Level2: 隠れた自分発見占い';
               } else if (localStorage.getItem(level1Key)) {
                 currentLevel = 'Level1: 太陽星座の今日の運勢';
               }
@@ -717,14 +714,12 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
             const userName = birthData?.name || 'user';
             const today = new Date().toISOString().split('T')[0];
             
-            // Level3 → Level2 → Level1の順で確認
+            // Level3 → Level1の順で確認（Level2削除済み）
             const level3Key = `level3_fortune_${userName}_${today}`;
-            const level2Key = `level2_fortune_${userName}_${today}`;
             const level1Key = `level1_fortune_${userName}_${today}`;
             
             console.log('🔍 【レベル判定チェック】');
             console.log('  level3Key:', level3Key, '→', !!localStorage.getItem(level3Key));
-            console.log('  level2Key:', level2Key, '→', !!localStorage.getItem(level2Key));
             console.log('  level1Key:', level1Key, '→', !!localStorage.getItem(level1Key));
             
             // LocalStorageの内容を詳しく確認
@@ -740,8 +735,6 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
             
             if (localStorage.getItem(level3Key)) {
               targetLevel = 'level3';
-            } else if (localStorage.getItem(level2Key)) {
-              targetLevel = 'level2';
             } else if (localStorage.getItem(level1Key)) {
               targetLevel = 'level1';
             }
