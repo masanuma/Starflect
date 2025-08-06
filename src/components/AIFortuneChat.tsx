@@ -355,7 +355,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         if (fortuneData.result.includes('全体運') || fortuneData.result.includes('総合運')) {
           suggestions.push({
             id: 'level1-overall',
-            text: '今日の全体運について具体的なアドバイスを教えて',
+            text: '全体運をもっと詳しく',
             icon: '🌟',
             category: 'fortune'
           });
@@ -365,7 +365,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         if (fortuneData.result.includes('恋愛運') || fortuneData.result.includes('恋愛')) {
           suggestions.push({
             id: 'level1-love',
-            text: '恋愛運をもっと詳しく！具体的な行動も知りたい',
+            text: '恋愛運をもっと詳しく',
             icon: '❤️',
             category: 'love'
           });
@@ -375,7 +375,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         if (fortuneData.result.includes('仕事運') || fortuneData.result.includes('仕事')) {
           suggestions.push({
             id: 'level1-work',
-            text: '仕事運の詳細と成功のコツを教えて',
+            text: '仕事運をもっと詳しく',
             icon: '💼',
             category: 'career'
           });
@@ -385,7 +385,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         if (fortuneData.result.includes('健康運') || fortuneData.result.includes('健康')) {
           suggestions.push({
             id: 'level1-health',
-            text: '健康運について注意点やケア方法を詳しく',
+            text: '健康運をもっと詳しく',
             icon: '💪',
             category: 'health'
           });
@@ -395,7 +395,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         if (fortuneData.result.includes('金運') || fortuneData.result.includes('金銭運') || fortuneData.result.includes('財運')) {
           suggestions.push({
             id: 'level1-money',
-            text: '金運アップの具体的な方法を教えて',
+            text: '金銭運をもっと詳しく',
             icon: '💰',
             category: 'fortune'
           });
@@ -405,7 +405,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         if (fortuneData.result.includes('重要な日') || fortuneData.result.includes('ラッキーデー') || fortuneData.result.includes('注意日')) {
           suggestions.push({
             id: 'level1-important-days',
-            text: 'ラッキーデーと注意日の活用法を教えて',
+            text: '重要な日をもっと詳しく',
             icon: '📅',
             category: 'fortune'
           });
