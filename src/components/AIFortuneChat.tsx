@@ -898,7 +898,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
       {/* 提案チップ */}
       {suggestions.length > 0 && (
         <div className="suggestions-container">
-          <h4>💡 {getLevel1FortuneSuggestions().length > 0 ? '占い結果についてさらに詳しく聞いてみませんか？' : 'こんな質問はいかがですか？'}</h4>
+          <h4>💡 {getLevel1FortuneSuggestions().length > 0 ? '全体運をもっと詳しく、恋愛運をもっと詳しく...' : 'こんな質問はいかがですか？'}</h4>
           <div className="suggestion-chips">
             {suggestions.map((suggestion) => (
               <button
