@@ -58,7 +58,7 @@ const AIFortuneChat: React.FC = () => {
     
     let suggestions: SuggestionChip[] = [];
     
-    if (previousMode === 'behavior-pattern-analysis') {
+    if (previousMode === 'ten-planets') {
       // Level3からの遷移の場合
       const level3Suggestions = getLevel3FortuneSuggestions();
       console.log('🔍 提案質問useEffect: Level3提案数 =', level3Suggestions.length);
@@ -68,7 +68,7 @@ const AIFortuneChat: React.FC = () => {
         suggestions = level3Suggestions;
       }
     } else {
-      // Level1からの遷移またはその他の場合
+      // Level1からの遷移またはその他の場合 (sun-sign等)
       const level1Suggestions = getLevel1FortuneSuggestions();
       console.log('🔍 提案質問useEffect: Level1提案数 =', level1Suggestions.length);
       if (level1Suggestions.length > 0) {
@@ -137,7 +137,12 @@ ${getTimeContextForAI()}
 
       // 占い結果の文脈がある場合は追加
       if (fortuneContext) {
-        prompt += `【今日の占い結果（詳細参考情報）】\n${fortuneContext}\n\n【重要】上記の占い結果を基に、質問に対してより具体的で詳しい解釈とアドバイスを提供してください。占い結果の内容を深く掘り下げ、実践的な指針を含めてください。\n\n`;
+        prompt += `【今日の占い結果（詳細参考情報）】\n${fortuneContext}\n\n【重要な指示】上記の占い結果を基に、質問に対してより具体的で詳しい解釈とアドバイスを提供してください。
+- 占い結果の内容を深く掘り下げて分析してください
+- なぜそのような運勢になるのか占星術的な理由を詳しく説明してください  
+- 占い結果に書かれている内容を更に具体化して、実生活でどう活用するかを詳しく説明してください
+- 時間帯、場所、方法、注意点など具体的な要素を複数含めてください
+- 占い結果では触れられていない新しい視点や深い洞察も追加してください\n\n`;
       }
 
       // 占星術データがある場合は追加情報として付記
@@ -165,23 +170,30 @@ ${getTimeContextForAI()}
 
       prompt += `【回答方針】
 - 相談者の気持ちに寄り添い、共感を示してください
-- 具体的で実践的なアドバイスを詳しく含めてください（例：「今日の午後2-4時頃に重要な連絡があるかもしれません」など）
-- 希望と前向きな視点を提供してください
-- 占星術的な観点を詳しく織り交ぜてください（星座の特徴、惑星の影響など）
-- 丁寧で温かい言葉遣いを心がけてください
+- 占い結果を深く分析し、なぜそのような運勢になるのか詳細に説明してください
+- 具体的で実践的なアドバイスを複数提供してください（例：「今日の午後2-4時頃」「明日の朝一番に」など時間帯も含む）
+- 占星術的な観点を詳しく織り交ぜてください（天体の配置、星座の特徴、アスペクトの影響など）
 - 前回とは異なる視点や新しい観点を必ず含めてください
-- 質問に対してより詳しく、具体的に回答してください
-- 文章の長さは300-500文字程度で、十分に詳しい内容にしてください
-- 抽象的な表現ではなく、具体的な行動や状況を含めてください
-- 「なぜそうなるのか」という理由や背景も説明してください
-- 実際の生活で活用できる具体的なアドバイスを複数提供してください
+- 抽象的な表現を避け、具体的な行動や状況を詳しく説明してください
+- 文章の長さは400-600文字程度で、深掘りした詳しい内容にしてください
+- 「なぜそうなるのか」という占星術的な理由や背景を詳しく説明してください
+- 実際の生活で活用できる具体的なアドバイスを3-4個提供してください
+- 数字や具体的な期間、時間帯、場所なども含めてください
+- ユーザーが「なるほど！」と納得できる深い洞察を提供してください
 
-【回答の構成例】
-1. 占い結果の詳しい解釈
-2. なぜそのような結果になるのかの理由
-3. 具体的な行動アドバイス（2-3個）
-4. 注意すべきポイント
-5. 前向きなメッセージ
+【必須の深掘り要素】
+- 占星術的な根拠（惑星の位置、星座の影響、アスペクトなど）
+- 具体的な時間帯や期間の指定
+- 実践的な行動指針（3-4個）
+- 注意すべき具体的なポイント
+- 期待できる具体的な結果や変化
+
+【回答の構成】
+1. 占い結果の深い解釈と占星術的根拠
+2. なぜそのような結果になるのかの詳細な理由
+3. 具体的な行動アドバイス（時間帯・場所・方法を含む）
+4. 注意すべき具体的なポイントと対策
+5. 期待できる変化と前向きなメッセージ
 
 回答:`;
 
@@ -482,7 +494,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
     // previousModeに基づいて適切な占い結果を取得
     const previousMode = localStorage.getItem('previousMode');
     
-    if (previousMode === 'behavior-pattern-analysis') {
+    if (previousMode === 'ten-planets') {
       // Level3からの遷移の場合
       const level3Key = `level3_analysis_result_${birthData.name}_${today}`;
       try {
@@ -527,7 +539,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
       } catch (error) {
         console.warn('Level3結果の読み込みエラー:', error);
       }
-    } else {
+    } else if (previousMode === 'sun-sign') {
       // Level1からの遷移の場合
       const level1Key = `level1_fortune_${birthData.name}_${today}`;
       try {
@@ -892,10 +904,10 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
     const previousMode = localStorage.getItem('previousMode');
     let fortuneBasedSuggestions: SuggestionChip[] = [];
     
-    if (previousMode === 'behavior-pattern-analysis') {
+    if (previousMode === 'ten-planets') {
       // Level3からの遷移の場合
       fortuneBasedSuggestions = getLevel3FortuneSuggestions();
-    } else {
+    } else if (previousMode === 'sun-sign') {
       // Level1からの遷移の場合
       fortuneBasedSuggestions = getLevel1FortuneSuggestions();
     }
@@ -910,6 +922,11 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
       
       if (unusedFortuneSuggestions.length > 0) {
         setSuggestions(unusedFortuneSuggestions.slice(0, 5));
+        return;
+      } else {
+        // 🔧 占い結果の提案質問がすべて使い切られた場合は、提案チップを非表示にする
+        // 占い結果に基づく会話を継続するため、一般的な質問には切り替えない
+        setSuggestions([]);
         return;
       }
     }
@@ -927,6 +944,12 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
   // 質問カテゴリの検出
   const detectQuestionCategory = (question: string): SuggestionChip['category'] => {
     const lowerQuestion = question.toLowerCase();
+    
+    // 🔧 占い結果に関連する質問の場合は、占い結果ベースの提案を継続
+    if (lowerQuestion.includes('全体運') || lowerQuestion.includes('詳しく') || 
+        lowerQuestion.includes('もっと') || lowerQuestion.includes('さらに')) {
+      return 'fortune';
+    }
     
     if (lowerQuestion.includes('恋愛') || lowerQuestion.includes('恋') || lowerQuestion.includes('愛') || lowerQuestion.includes('相性')) {
       return 'love';
@@ -1182,7 +1205,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
       {suggestions.length > 0 && (
         <div className="suggestions-container">
           {(() => { console.log('🔍 レンダリング時のsuggestions:', suggestions.map(s => s.text)); return null; })()}
-          <h4>💡 {suggestions.some(s => s.id.startsWith('level1-')) ? 'どの占い結果を詳しく知りたいですか' : 'こんな質問はいかがですか？'}</h4>
+          <h4>💡 {suggestions.some(s => s.id.startsWith('level1-') || s.id.startsWith('level3-')) ? 'どの占い結果を詳しく知りたいですか？' : 'こんな質問はいかがですか？'}</h4>
           <div className="suggestion-chips">
             {suggestions.map((suggestion) => (
               <button
