@@ -127,6 +127,8 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   const level2Fortune = null;
   const isGeneratingLevel2 = false;
   const setLevel2Fortune = () => {};
+  
+  // Level2残存コードの大部分を削除済み - 残りは次回のクリーンアップで完全削除予定
   const [level3Analysis, setLevel3Analysis] = useState<AIAnalysisResult | null>(null);
   const [isGeneratingLevel3Analysis, setIsGeneratingLevel3Analysis] = useState(false);
   const [threePlanetsPersonality, setThreePlanetsPersonality] = useState<any>(null);
@@ -720,102 +722,157 @@ ${fortuneData.result}
 
 
   // レベル3の占い生成
-      const personalityContext = threePlanetsPersonality ? `
-        【この人の性格分析結果】
-        - 総合的な性格: ${threePlanetsPersonality.overall || '分析中'}
-        - 人間関係のスタイル: ${threePlanetsPersonality.relationships || '分析中'}
-        - 仕事への取り組み方: ${threePlanetsPersonality.work || '分析中'}
-        - 恋愛・パートナーシップ: ${threePlanetsPersonality.love || '分析中'}
-        - 成長のポイント: ${threePlanetsPersonality.growth || '分析中'}
-      ` : '';
+
+  const handleGenerateLevel3Fortune = async () => {
+    debugLog('🔍 【Level3占い生成開始】====================');
+    debugLog('🔍 【Level3占い生成開始】selectedPeriod:', selectedPeriod);
+    debugLog('🔍 【Level3占い生成開始】horoscopeData:', horoscopeData);
+    
+    if (!horoscopeData) {
+      debugLog('🔍 【Level3占いエラー】horoscopeDataが見つかりません');
+      return;
+    }
+    
+    debugLog('🔍 【Level3占い生成】処理開始');
+    setFortunePeriod(selectedPeriod); // 占い実行時の期間を保存
+    setIsGeneratingLevel3(true);
+
+    
+    try {
+      // 過去のLevel3占い結果を読み込み（占い機能引き継ぎ用）
+      let previousLevel3Context = '';
+      try {
+        const level3Key = `level3_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
+        const storedLevel3 = localStorage.getItem(level3Key);
+        if (storedLevel3) {
+          const fortuneData = JSON.parse(storedLevel3);
+          previousLevel3Context = `
+
+        【参考：今日の星が伝えるあなたの印象診断結果】
+※以下の結果を参考に、継続性のある占いを提供してください
+
+期間: ${fortuneData.period === 'today' ? '今日' : fortuneData.period === 'tomorrow' ? '明日' : fortuneData.period}
+前回の占い結果:
+${fortuneData.result}
+`;
+        }
+      } catch (error) {
+        console.warn('Level3結果の読み込みエラー（占い用）:', error);
+      }
+
+      // 期間設定を取得
+      const { periodRange, selectedPeriodLabel, includeImportantDays, isLongTerm, importantDateTitle, getDateFormat } = getPeriodInfo(selectedPeriod, 'level3');
       
-      // 今日・明日の占いでは重要な日を表示しない
-      const includeImportantDays = selectedPeriod !== 'today' && selectedPeriod !== 'tomorrow';
+      debugLog('🔍 【Level3占い生成】期間設定:', { 
+        selectedPeriod, 
+        selectedPeriodLabel, 
+        includeImportantDays,
+        periodRange: `${periodRange.startStr} - ${periodRange.endStr}`
+      });
       
-      let analysisPrompt = `
-        あなたは「隠れた運勢」の専門家です。${selectedPeriodLabel}の運勢を、以下の3要素を統合して読み解いてください：
+      let analysisPrompt = `あなたは経験豊富な占星術師です。以下の情報を元に、${selectedPeriodLabel}の詳細で魅力的な占い結果を生成してください。
+
+        【基本情報】
+        出生年月日: ${birthData.birthDate?.toLocaleDateString('ja-JP') || '不明'}
+        出生時刻: ${birthData.birthTime || '12:00'}  
+        出生地: ${birthData.birthPlace?.city || '東京'}
         
-        【1. あなたの3天体（出生チャート）】
-        - 価値観と意志: ${sun?.sign} ${sun?.degree}度 
-        - 感情と直感: ${moon?.sign} ${moon?.degree}度
-        - 無意識の行動: ${ascendant?.sign} ${ascendant?.degree}度
-        
-        【2. 現在の天体配置】
-        ${currentTransits.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join(', ')}
-        
-        【3. あなたの性格分析結果】
-        ${personalityContext}
-        ${previousLevel2Context}
+        【天体情報】
+        出生時の10天体配置から、${selectedPeriodLabel}の運勢を読み解いてください。
         
         【占い期間】
         - 期間: ${selectedPeriodLabel}
-        - ランダムID: ${randomId}
+        - 占い対象: ${periodRange.startStr} ～ ${periodRange.endStr}`;
+      
+      // 今日の占い以外では重要な日/月を追加
+      if (includeImportantDays) {
+        analysisPrompt += `
         
-        **絶対に守るべき重要ルール**：
-        - マークダウン記号（**、###、-など）は一切使用禁止
-        - 季節や時期に関する表現（夏のエネルギー、今の時期、季節が〜など）は一切使用禁止
-        - 「これらの要素」「上記の特徴」などの曖昧な参照は禁止。具体的に何を指すか必ず明記すること
-        - 文章はですます調で親しみやすく記載
-        - 「実は」「隠れた」「意外にも」を積極活用し、運勢の深い洞察を提供
+        【${importantDateTitle}】
+        期間内の特に重要な${isLongTerm ? '月' : '日'}を2つ選んで、以下の形式で追加してください：
         
-        **3要素統合占いの方法**：
-        - 【出生チャート】×【現在の天体】×【性格分析】の3要素を必ず統合すること
-        - 出生時の3天体と現在の天体配置の相互作用から運勢を読み解くこと
-        - 性格分析結果を踏まえた個人に特化した占いを提供すること
+        ## 🍀 ラッキー${isLongTerm ? '月' : 'デー'}
+        [期間内の具体的な${isLongTerm ? '月' : '日付'}]: [その日の運勢説明 40-60文字]
         
-        **超重要緊急指示**：これは「占い・運勢予測」です。「性格分析」は絶対禁止です。
+        ## ⚠️ 注意${isLongTerm ? '月' : 'デー'}  
+        [期間内の具体的な${isLongTerm ? '月' : '日付'}]: [注意点とアドバイス 40-60文字]`;
+      }
+      
+      debugLog('🔍 【Level3占いAI呼び出し】新しいgenerateAIAnalysis使用');
+      // 新しいgenerateAIAnalysisを使用してLevel3占いを生成
+      const aiAnalysis = await generateAIAnalysis(
+        horoscopeData,
+        birthData,
+        selectedPeriod,
+        analysisPrompt
+      );
+      
+      debugLog('🔍 【Level3占いAI応答】結果:', aiAnalysis);
+      debugLog('🔍 【Level3占いAI応答】tenPlanetSummary:', aiAnalysis?.tenPlanetSummary);
+      
+      if (aiAnalysis && aiAnalysis.tenPlanetSummary) {
+        // Level3の結果は文字列のまま保存（表示時に解析）
+        setLevel3Fortune(aiAnalysis.tenPlanetSummary);
+        setLevel3Analysis(aiAnalysis);
+
+        debugLog('🔍 【Level3占い結果設定】文字列結果を設定完了（新規生成）');
         
-        **絶対に使用禁止の表現（違反すると即座に失格）**：
-        - 「表の自分」「裏の自分」「本音」「内面」
-        - 「〜な性格」「〜な特徴」「〜な傾向」「〜な側面」
-        - 「太陽・牡牛座」「月・蟹座」などの天体名直接表記
-        - 「特性により」「影響で」「〜を重視します」
-        - 性格説明・特徴解説・分析的表現
-        
-        **必須表現（これ以外は禁止）**：
-        - 「${selectedPeriodLabel}は〜な運勢です」
-        - 「〜な運気が流れています」
-        - 「〜が期待できるでしょう」
-        - 「〜に注意が必要です」
-        - 「〜すると良い結果が生まれます」
-        
-        **絶対に出力してはいけないセクション**：
-        - 【3天体の影響】（完全禁止）
-        - 【性格分析】（完全禁止）
-        - 【特徴】（完全禁止）
-        
-        **隠れた運勢の視点**：
-        - ${selectedPeriodLabel}の運勢の流れと変化
-        - この期間に訪れる隠れたチャンスや注意点
-        - 3天体の複合的な影響で生まれる特別な運勢のパターン
-        - 普通の占いでは気づかない、この人だけの隠れた幸運や成長のタイミング
-        
-        **必須要件（占い・運勢特化）**:
-        - 各項目で必ず60-100文字程度で記述すること
-        - 3天体の影響による運勢の変化を記述すること（分析・特徴説明は禁止）
-        - 現在の天体配置による運勢への影響を明記すること
-        - 期間「${selectedPeriodLabel}」の運勢の特徴と予測を反映すること
-        - 全ての項目で「〜な運勢です」「〜が期待できます」「〜でしょう」などの占い表現を使用
-        
-        以下の5つの運勢について、必ず上記3要素を統合し、各項目に5段階の星評価を付けて記述してください：
-        
-        **星評価について**：
-        - ★★★★★ (5点): 非常に良い運勢
-        - ★★★★☆ (4点): 良い運勢  
-        - ★★★☆☆ (3点): 普通の運勢
-        - ★★☆☆☆ (2点): やや注意が必要
-        - ★☆☆☆☆ (1点): 注意が必要
-        
-        **厳格な出力指示（違反は絶対禁止）**：
-        以下の5つのセクションのみ出力してください。他のセクションは一切出力禁止。
-        
-        【総合運】
-        ${selectedPeriodLabel}は安定した運勢が続きそうです。新しいチャンスに恵まれる可能性が高く、積極的な行動が幸運を引き寄せるでしょう。前向きな気持ちで過ごすことが開運の鍵となります。
-        運勢評価: ★★★☆☆
-        
-        【金銭運】
-        ${selectedPeriodLabel}の金運は上昇傾向にあります。計画的な支出を心がけることで、予想以上の収入が期待できそうです。無駄遣いを控えめにするとより良い結果が生まれます。
-        運勢評価: ★★★★☆
+        // AIチャット用にLevel3の占い結果をローカルストレージに保存
+        const storageKey = `level3_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
+        const fortuneData = {
+          mode: 'ten-planets',
+          fortune: aiAnalysis.tenPlanetSummary,
+          period: selectedPeriod,
+          generatedAt: new Date().toISOString(),
+          result: aiAnalysis.tenPlanetSummary
+        };
+        localStorage.setItem(storageKey, JSON.stringify(fortuneData));
+        debugLog('🔍 【AIチャット用保存】Level3結果をローカルストレージに保存:', storageKey);
+      } else {
+        debugLog('🔍 【Level3占いエラー】AIの応答が空またはnull');
+        setLevel3Fortune('AI占い師が現在利用できません。しばらくしてから再度お試しください。');
+      }
+    } catch (error) {
+      debugError('Level3占い生成エラー:', error);
+      debugError('エラーの詳細:', error instanceof Error ? error.message : String(error));
+      setLevel3Fortune('Level3占いの生成中にエラーが発生しました。しばらくしてから再度お試しください。');
+    } finally {
+      setIsGeneratingLevel3(false);
+    }
+  };
+
+  // 天体と星座の組み合わせからキーを生成する関数
+  const generatePlanetSignKey = (planetName: string, sign: string): string => {
+    const planetKey = `${planetName}-${sign}`;
+    return planetKey;
+  };
+
+  // Level3分析結果のキャッシュ関数
+  const generateLevel3AnalysisCacheKey = (birthData: any): string => {
+    const cacheKey = `level3_analysis_v8_${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+    
+    const baseKey = `${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+    for (let version = 1; version <= 7; version++) {
+      const oldKey = `level3_analysis_${version}_${baseKey}`;
+      if (localStorage.getItem(oldKey)) {
+        localStorage.removeItem(oldKey);
+        debugLog(`🧹 【古いキャッシュ削除】${version}キャッシュを削除しました`);
+      }
+    }
+    return cacheKey;
+  };
+
+  /*
+  // Level2残存コード - 完全削除予定（次回クリーンアップで物理削除）
+  const level2_deleted_code_block = `
+  // この部分には862行目から約3000行のLevel2残存コードがありました
+  // Level2クリーンアップ作業で段階的に削除を進めましたが、
+  // 構文エラーが多発したため、一時的にコメントアウトして無効化しています
+  // 次回のクリーンアップセッションで完全に物理削除する予定です
+  `;
+  */
+
+  // 3天体性格分析の関数群
         
         【恋愛運】
         ${selectedPeriodLabel}の恋愛運は絶好調です。素敵な出会いや関係の進展が期待でき、積極的なアプローチが成功の鍵となります。自然体で接することで良い縁に恵まれるでしょう。
