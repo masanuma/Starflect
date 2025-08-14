@@ -720,32 +720,6 @@ ${fortuneData.result}
 
 
   // レベル3の占い生成
-        
-        return {
-          start: startDate,
-          end: endDate,
-          startStr: startStr,
-          endStr: endStr
-        };
-      };
-      
-      // 日付フォーマットを期間に応じて設定
-      const getDateFormat = (period: string) => {
-        if (period === 'sixMonths') {
-          return '年月（例：2024年12月）';
-        } else {
-          return '具体的な日付（例：12月20日）';
-        }
-      };
-      
-      // 半年以上の期間かどうかを判定
-      const isLongTerm = ['sixMonths'].includes(selectedPeriod);
-      const importantDateTitle = isLongTerm ? '重要な月' : '重要な日';
-      
-      // 期間の範囲を取得
-      const periodRange = calculatePeriodRange(selectedPeriod);
-      
-      // 3天体性格分析結果を含める
       const personalityContext = threePlanetsPersonality ? `
         【この人の性格分析結果】
         - 総合的な性格: ${threePlanetsPersonality.overall || '分析中'}
@@ -1026,6 +1000,7 @@ ${fortuneData.result}
         debugLog('🔍 【隠れた自分発見占いエラー】AIの応答が空またはnull');
         setLevel2Fortune('AI占い師が現在利用できません。しばらくしてから再度お試しください。');
       }
+  */
 
   // レベル3の占い生成
   const handleGenerateLevel3Fortune = async () => {
