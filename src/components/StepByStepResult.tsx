@@ -718,62 +718,8 @@ ${fortuneData.result}
 
 
 
-      
-      // 期間の範囲を計算する関数
-      const calculatePeriodRange = (period: string) => {
-        const today = new Date();
-        let startDate = new Date(today);
-        let endDate = new Date(today);
-        
-        switch (period) {
-          case 'today':
-            startDate = new Date(today);
-            endDate = new Date(today);
-            break;
-          case 'tomorrow':
-            startDate = new Date(today);
-            startDate.setDate(today.getDate() + 1);
-            endDate = new Date(startDate);
-            break;
-          case 'thisWeek':
-            startDate = new Date(today);
-            endDate = new Date(today);
-            endDate.setDate(today.getDate() + (6 - today.getDay()));
-            break;
-          case 'nextWeek':
-            startDate = new Date(today);
-            startDate.setDate(today.getDate() + (7 - today.getDay()));
-            endDate = new Date(startDate);
-            endDate.setDate(startDate.getDate() + 6);
-            break;
-          case 'thisMonth':
-            startDate = new Date(today);
-            endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            break;
-          case 'nextMonth':
-            startDate = new Date(today.getFullYear(), today.getMonth() + 1, 1);
-            endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0);
-            break;
-          case 'threeMonths':
-            startDate = new Date(today);
-            endDate = new Date(today);
-            endDate.setMonth(today.getMonth() + 3);
-            break;
-          case 'sixMonths':
-            startDate = new Date(today);
-            endDate = new Date(today);
-            endDate.setMonth(today.getMonth() + 6);
-            break;
-        }
-        
-        // 6か月の場合は年月で表示
-        const isLongTermPeriod = period === 'sixMonths';
-        const startStr = isLongTermPeriod 
-          ? startDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long' })
-          : startDate.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric' });
-        const endStr = isLongTermPeriod
-          ? endDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long' })
-          : endDate.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric' });
+
+  // レベル3の占い生成
         
         return {
           start: startDate,
