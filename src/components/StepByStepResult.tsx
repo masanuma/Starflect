@@ -67,7 +67,7 @@ type PeriodSelection = 'today' | 'tomorrow' | 'thisWeek' | 'nextWeek' | 'thisMon
 
 interface StepByStepResultProps {
   mode?: 'simple' | 'detailed';
-  selectedMode?: 'sun-sign' | 'ten-planets'; // Level2削除済み
+  selectedMode?: 'sun-sign' | 'ten-planets';
 }
 
 const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => {
@@ -96,10 +96,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   // selectedModeに基づいて初期レベルを設定
   const getInitialLevel = useCallback((): DisplayLevel => {
     debugLog('🔍 getInitialLevel - selectedMode:', selectedMode);
-    if (false) { // Level2削除: selectedMode === 'three-planets'
-      debugLog('🔍 3天体モードのため、レベル2に設定');
-      return 2;
-    } else if (selectedMode === 'ten-planets') {
+    if (selectedMode === 'ten-planets') {
       debugLog('🔍 10天体モードのため、レベル3に設定');
       return 3;
     } else {
@@ -110,10 +107,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   
   const [currentLevel, setCurrentLevel] = useState<DisplayLevel>(() => {
     debugLog('🔍 初期レベル設定 - selectedMode:', selectedMode);
-    if (false) { // Level2削除: selectedMode === 'three-planets'
-      debugLog('🔍 3天体モードのため、レベル2に設定');
-      return 2;
-    } else if (selectedMode === 'ten-planets') {
+    if (selectedMode === 'ten-planets') {
       debugLog('🔍 10天体モードのため、レベル3に設定');
       return 3;
     } else {
@@ -126,10 +120,8 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [level1Fortune, setLevel1Fortune] = useState<string | null>(null);
-  const [level2Fortune, setLevel2Fortune] = useState<string | null>(null);
   const [level3Fortune, setLevel3Fortune] = useState<string | null>(null);
   const [isGeneratingLevel1, setIsGeneratingLevel1] = useState(false);
-  const [isGeneratingLevel2, setIsGeneratingLevel2] = useState(false);
   const [isGeneratingLevel3, setIsGeneratingLevel3] = useState(false);
   const [level3Analysis, setLevel3Analysis] = useState<AIAnalysisResult | null>(null);
   const [isGeneratingLevel3Analysis, setIsGeneratingLevel3Analysis] = useState(false);
@@ -716,25 +708,8 @@ ${fortuneData.result}
     }
   };
 
-  // レベル2の占い生成（3天体本格占い）
-  const handleGenerateLevel2Fortune = async () => {
-    debugLog('🔍 【Level2占い生成開始】====================');
-    debugLog('🔍 【Level2占い生成開始】horoscopeData:', !!horoscopeData);
-    debugLog('🔍 【Level2占い生成開始】birthData:', !!birthData);
-    debugLog('🔍 【Level2占い生成開始】selectedPeriod:', selectedPeriod);
-    
-    if (!horoscopeData || !birthData) {
-      debugLog('🔍 【Level2占い生成】必要なデータが不足しています');
-      return;
-    }
-    
-    setFortunePeriod(selectedPeriod); // 占い実行時の期間を保存
-    setIsGeneratingLevel2(true);
 
-    
-    try {
-      // 過去のLevel2占い結果を読み込み（占い機能引き継ぎ用）
-      let previousLevel2Context = '';
+
       try {
         const level2Key = `level2_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
         const storedLevel2 = localStorage.getItem(level2Key);
@@ -2185,14 +2160,13 @@ ${fortuneData.result}
         debugLog('🔍 【handleLevelUp】データチェック完了、処理を続行します');
       }
       
-      // Level1の場合はLevel3に直接遷移（Level2はスキップ）
+      // Level1の場合はLevel3に直接遷移
       const nextLevel = (currentLevel === 1 ? 3 : currentLevel + 1) as DisplayLevel;
       debugLog('🔍 【handleLevelUp】nextLevelが決定されました', { currentLevel, nextLevel });
       setCurrentLevel(nextLevel);
       setSelectedPeriod('today'); // 期間をリセット
       
-      // ⚠️ Level2は削除済み - Level1から直接Level3に遷移
-      debugLog('🔍 【handleLevelUp】Level2はスキップされます', { nextLevel });
+      debugLog('🔍 【handleLevelUp】Level1からLevel3に直接遷移します', { nextLevel });
       
       // レベル3（10天体）に上がる時、selectedModeをten-planetsに更新
       if (nextLevel === 3) {
@@ -2209,10 +2183,7 @@ ${fortuneData.result}
 
   // 期間タイトルの取得
   const getPeriodTitle = () => {
-    // ⚠️ Level2削除のため、currentLevel===2はperiodOptions.level3を使用
-    const optionsList = currentLevel === 1 ? periodOptions.level1 : 
-                       /* currentLevel === 2 ? periodOptions.level2 :  // DISABLED */
-                       periodOptions.level3;
+    const optionsList = currentLevel === 1 ? periodOptions.level1 : periodOptions.level3;
     const option = optionsList.find(opt => opt.value === selectedPeriod);
     return option ? `${option.label}の占い` : '占い';
   };
@@ -2223,7 +2194,6 @@ ${fortuneData.result}
       case 1:
         return renderLevel1();
       case 2:
-        // ⚠️ Level2は削除済み - Level3を表示
         return renderLevel3();
       case 3:
         return renderLevel3();
