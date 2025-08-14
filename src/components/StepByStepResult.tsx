@@ -123,6 +123,10 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
   const [level3Fortune, setLevel3Fortune] = useState<string | null>(null);
   const [isGeneratingLevel1, setIsGeneratingLevel1] = useState(false);
   const [isGeneratingLevel3, setIsGeneratingLevel3] = useState(false);
+  // Level2削除済み - 互換性のため一時的に定義
+  const level2Fortune = null;
+  const isGeneratingLevel2 = false;
+  const setLevel2Fortune = () => {};
   const [level3Analysis, setLevel3Analysis] = useState<AIAnalysisResult | null>(null);
   const [isGeneratingLevel3Analysis, setIsGeneratingLevel3Analysis] = useState(false);
   const [threePlanetsPersonality, setThreePlanetsPersonality] = useState<any>(null);
@@ -710,46 +714,10 @@ ${fortuneData.result}
 
 
 
-      try {
-        const level2Key = `level2_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
-        const storedLevel2 = localStorage.getItem(level2Key);
-        if (storedLevel2) {
-          const fortuneData = JSON.parse(storedLevel2);
-          previousLevel2Context = `
 
-        【参考：今日の星が伝える隠れた自分診断結果】
-※以下の結果を参考に、継続性のある占いを提供してください
 
-表の自分: ${fortuneData.sunSign}
-裏の自分: ${fortuneData.moonSign}
-自然な行動: ${fortuneData.ascendantSign}
-期間: ${fortuneData.period === 'today' ? '今日' : fortuneData.period === 'tomorrow' ? '明日' : fortuneData.period}
-前回の占い結果:
-${fortuneData.result}
-`;
-        }
-      } catch (error) {
-        console.warn('Level2結果の読み込みエラー（占い用）:', error);
-      }
 
-      const sun = horoscopeData.planets.find(p => p.planet === '太陽');
-      const moon = horoscopeData.planets.find(p => p.planet === '月');
-      const ascendant = horoscopeData.planets.find(p => p.planet === '上昇星座');
-      
-      // 【追加】現在の天体位置を取得（3要素統合）
-      const currentTransits = await calculateTransitPositions(
-        {
-          birthDate: new Date(),
-          birthTime: '12:00',
-          birthPlace: { city: '東京', latitude: 35.6762, longitude: 139.6503, timezone: 'Asia/Tokyo' }
-        },
-        new Date()
-      );
-      
-      const currentDate = new Date();
-      const timeContext = getTimeContextForAI();
-      const randomId = Math.random().toString(36).substring(2, 8);
-      const selectedPeriodLabel = periodOptions.level2.find(p => p.value === selectedPeriod)?.label;
+
       
       // 期間の範囲を計算する関数
       const calculatePeriodRange = (period: string) => {
@@ -1112,14 +1080,6 @@ ${fortuneData.result}
         debugLog('🔍 【隠れた自分発見占いエラー】AIの応答が空またはnull');
         setLevel2Fortune('AI占い師が現在利用できません。しばらくしてから再度お試しください。');
       }
-    } catch (error) {
-      debugError('3天体占い生成エラー:', error);
-      debugError('エラーの詳細:', error instanceof Error ? error.message : String(error));
-      setLevel2Fortune('3天体の占い中にエラーが発生しました。しばらくしてから再度お試しください。');
-    } finally {
-      setIsGeneratingLevel2(false);
-    }
-  };
 
   // レベル3の占い生成
   const handleGenerateLevel3Fortune = async () => {
@@ -3150,7 +3110,7 @@ ${fortuneData.result}
                   debugLog('🔍 【Level2占いボタンクリック】isGeneratingLevel2:', isGeneratingLevel2);
                   debugLog('🔍 【Level2占いボタンクリック】horoscopeData:', !!horoscopeData);
                   debugLog('🔍 【Level2占いボタンクリック】birthData:', !!birthData);
-                  handleGenerateLevel2Fortune();
+                  // handleGenerateLevel2Fortune(); // Level2削除済み
                 }}
                 disabled={isGeneratingLevel2}
               >
@@ -4723,7 +4683,7 @@ ${fortuneData.result}
             const storedLevel2 = localStorage.getItem(level2Key);
             if (storedLevel2) {
               const fortuneData = JSON.parse(storedLevel2);
-              setLevel2Fortune(fortuneData.result);
+              // setLevel2Fortune(fortuneData.result); // Level2削除済み
               console.log('🔍 Level2占い結果を復元しました');
             }
           } catch (error) {
