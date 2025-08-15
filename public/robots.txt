@@ -10,4 +10,4 @@ Allow: /
 User-agent: AdsBot-Google
 Allow: /
 
-Sitemap: https://starflect-production.up.railway.app/sitemap.xml 
+Sitemap: https://starflect.asanuma.works/sitemap.xml 
