@@ -1,7 +1,7 @@
 {
-  "name": "Starflect - あなただけの星占い",
+  "name": "Starflect - 無料星占い・天体占い",
   "short_name": "Starflect",
-  "description": "生まれた瞬間の星の配置から、もっと詳しいあなたを発見。AI搭載の本格占星術アプリ",
+  "description": "【無料】生年月日・出生時刻から占う本格占星術。12星座・太陽月上昇星座の詳細分析で恋愛・仕事・性格を完全解明。AI搭載の本格占い",
   "theme_color": "#667eea",
   "background_color": "#1a1a2e",
   "display": "standalone",
@@ -11,7 +11,7 @@
   "id": "starflect-pwa",
   "lang": "ja",
   "dir": "ltr",
-  "categories": ["lifestyle", "entertainment", "personalization"],
+  "categories": ["lifestyle", "entertainment", "personalization", "astrology", "fortune"],
 
   "icons": [
     {
