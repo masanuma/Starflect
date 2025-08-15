@@ -40,6 +40,9 @@ function App() {
             <Route path="/result" element={<StepByStepResultWrapper />} />
             <Route path="/chat" element={<AIChatWrapper />} />
             <Route path="/ai-fortune" element={<AIFortuneWrapper />} />
+            {/* 将来的なSEOコンテンツページのルーティング */}
+            <Route path="/zodiac/:sign" element={<ZodiacPageWrapper />} />
+            <Route path="/guide/:topic" element={<GuidePageWrapper />} />
           </Routes>
         </main>
         
@@ -57,6 +60,13 @@ function App() {
             <div className="footer-note">
               <p>✨ Starflect - あなただけの星占い</p>
               <p className="disclaimer">※ 当サービスは娯楽目的です。重要な決定には専門家にご相談ください。</p>
+              <div className="footer-seo-content" style={{ fontSize: '0.8rem', color: '#999', marginTop: '1rem', lineHeight: '1.4' }}>
+                <p>
+                  【関連キーワード】星占い | 占い | 天体占い | 占星術 | 12星座 | ホロスコープ | 星座占い | 無料占い | 
+                  恋愛占い | 相性占い | 性格診断 | 太陽星座 | 月星座 | 上昇星座 | AI占い | 
+                  牡羊座 | 牡牛座 | 双子座 | 蟹座 | 獅子座 | 乙女座 | 天秤座 | 蠍座 | 射手座 | 山羊座 | 水瓶座 | 魚座
+                </p>
+              </div>
             </div>
           </div>
         </footer>
@@ -325,6 +335,35 @@ function StepByStepResultWrapper() {
   console.log('🔍 【StepByStepResultWrapper】propsとして渡すselectedMode:', selectedMode);
   
       return <StepByStepResult mode={mode} selectedMode={selectedMode as 'sun-sign' | 'ten-planets'} />;
+}
+
+// 将来的なSEOコンテンツページのプレースホルダー
+function ZodiacPageWrapper() {
+  const navigate = useNavigate();
+  
+  return (
+    <div style={{ textAlign: 'center', padding: '2rem' }}>
+      <h2>🌟 星座別詳細ページ</h2>
+      <p>将来的に各星座の詳細情報を掲載予定です。</p>
+      <button onClick={() => navigate('/')} style={{ marginTop: '1rem', padding: '0.5rem 1rem' }}>
+        ← ホームに戻る
+      </button>
+    </div>
+  );
+}
+
+function GuidePageWrapper() {
+  const navigate = useNavigate();
+  
+  return (
+    <div style={{ textAlign: 'center', padding: '2rem' }}>
+      <h2>📖 占い解説ページ</h2>
+      <p>将来的に占星術の詳細解説を掲載予定です。</p>
+      <button onClick={() => navigate('/')} style={{ marginTop: '1rem', padding: '0.5rem 1rem' }}>
+        ← ホームに戻る
+      </button>
+    </div>
+  );
 }
 
 // 既存のAIチャットのラッパー（既存機能用）
