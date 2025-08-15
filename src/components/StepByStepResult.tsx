@@ -246,20 +246,11 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode }) => 
       // 過去のLevel1占い結果を読み込み（占い機能引き継ぎ用）
       let previousLevel1Context = '';
       try {
-        const level1Key = `level1_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
+        const level1Key = 'level1_fortune_' + (birthData?.name || 'user') + '_' + new Date().toISOString().split('T')[0];
         const storedLevel1 = localStorage.getItem(level1Key);
         if (storedLevel1) {
           const fortuneData = JSON.parse(storedLevel1);
-          previousLevel1Context = `
-
-【参考：今日の12星座占い結果】
-※以下の結果を参考に、継続性のある占いを提供してください
-
-星座: ${fortuneData.sunSign}
-期間: ${fortuneData.period === 'today' ? '今日' : fortuneData.period === 'tomorrow' ? '明日' : fortuneData.period}
-前回の占い結果:
-${fortuneData.result}
-`;
+          previousLevel1Context = '\n\n【参考：今日の12星座占い結果】\n※以下の結果を参考に、継続性のある占いを提供してください\n\n星座: ' + fortuneData.sunSign + '\n期間: ' + (fortuneData.period === 'today' ? '今日' : fortuneData.period === 'tomorrow' ? '明日' : fortuneData.period) + '\n前回の占い結果:\n' + fortuneData.result + '\n';
         }
       } catch (error) {
         console.warn('Level1結果の読み込みエラー（占い用）:', error);
@@ -688,7 +679,7 @@ ${fortuneData.result}
         setLevel1Fortune(aiResult);
         
         // 🔧 AIチャット用にLevel1結果をローカルストレージに保存
-        const storageKey = `level1_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
+        const storageKey = 'level1_fortune_' + (birthData?.name || 'user') + '_' + new Date().toISOString().split('T')[0];
         const fortuneData = {
           mode: 'sun-sign',
           period: selectedPeriod,
@@ -742,19 +733,11 @@ ${fortuneData.result}
       // 過去のLevel3占い結果を読み込み（占い機能引き継ぎ用）
       let previousLevel3Context = '';
       try {
-        const level3Key = `level3_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
+        const level3Key = 'level3_fortune_' + (birthData?.name || 'user') + '_' + new Date().toISOString().split('T')[0];
         const storedLevel3 = localStorage.getItem(level3Key);
         if (storedLevel3) {
           const fortuneData = JSON.parse(storedLevel3);
-          previousLevel3Context = `
-
-        【参考：今日の星が伝えるあなたの印象診断結果】
-※以下の結果を参考に、継続性のある占いを提供してください
-
-期間: ${fortuneData.period === 'today' ? '今日' : fortuneData.period === 'tomorrow' ? '明日' : fortuneData.period}
-前回の占い結果:
-${fortuneData.result}
-`;
+          previousLevel3Context = '\n\n【参考：過去のLevel3占い結果】\n※以下の結果を参考に、継続性のある占いを提供してください\n\n期間: ' + (fortuneData.period === 'today' ? '今日' : fortuneData.period === 'tomorrow' ? '明日' : fortuneData.period) + '\n前回の占い結果:\n' + fortuneData.result + '\n\n---\n';
         }
       } catch (error) {
         console.warn('Level3結果の読み込みエラー（占い用）:', error);
@@ -767,35 +750,14 @@ ${fortuneData.result}
         selectedPeriod, 
         selectedPeriodLabel, 
         includeImportantDays,
-        periodRange: `${periodRange.startStr} - ${periodRange.endStr}`
+        periodRange: periodRange.startStr + ' - ' + periodRange.endStr
       });
       
-      let analysisPrompt = `あなたは経験豊富な占星術師です。以下の情報を元に、${selectedPeriodLabel}の詳細で魅力的な占い結果を生成してください。
-
-        【基本情報】
-        出生年月日: ${birthData.birthDate?.toLocaleDateString('ja-JP') || '不明'}
-        出生時刻: ${birthData.birthTime || '12:00'}  
-        出生地: ${birthData.birthPlace?.city || '東京'}
-        
-        【天体情報】
-        出生時の10天体配置から、${selectedPeriodLabel}の運勢を読み解いてください。
-        
-        【占い期間】
-        - 期間: ${selectedPeriodLabel}
-        - 占い対象: ${periodRange.startStr} ～ ${periodRange.endStr}`;
+      let analysisPrompt = 'あなたは経験豊富な占星術師です。以下の情報を元に、' + selectedPeriodLabel + 'の詳細で魅力的な占い結果を生成してください。\n\n        【基本情報】\n        出生年月日: ' + (birthData.birthDate?.toLocaleDateString('ja-JP') || '不明') + '\n        出生時刻: ' + (birthData.birthTime || '12:00') + '\n        出生地: ' + (birthData.birthPlace?.city || '東京') + '\n        \n        【天体情報】\n        出生時の10天体配置から、' + selectedPeriodLabel + 'の運勢を読み解いてください。\n        \n        【占い期間】\n        - 期間: ' + selectedPeriodLabel + '\n        - 占い対象: ' + periodRange.startStr + ' ～ ' + periodRange.endStr;
       
       // 今日の占い以外では重要な日/月を追加
       if (includeImportantDays) {
-        analysisPrompt += `
-        
-        【${importantDateTitle}】
-        期間内の特に重要な${isLongTerm ? '月' : '日'}を2つ選んで、以下の形式で追加してください：
-        
-        ## 🍀 ラッキー${isLongTerm ? '月' : 'デー'}
-        [期間内の具体的な${isLongTerm ? '月' : '日付'}]: [その日の運勢説明 40-60文字]
-        
-        ## ⚠️ 注意${isLongTerm ? '月' : 'デー'}  
-        [期間内の具体的な${isLongTerm ? '月' : '日付'}]: [注意点とアドバイス 40-60文字]`;
+        analysisPrompt += '\n        \n        【' + importantDateTitle + '】\n        期間内の特に重要な' + (isLongTerm ? '月' : '日') + 'を2つ選んで、以下の形式で追加してください：\n        \n        ## 🍀 ラッキー' + (isLongTerm ? '月' : 'デー') + '\n        [期間内の具体的な' + (isLongTerm ? '月' : '日付') + ']: [その日の運勢説明 40-60文字]\n        \n        ## ⚠️ 注意' + (isLongTerm ? '月' : 'デー') + '\n        [期間内の具体的な' + (isLongTerm ? '月' : '日付') + ']: [注意点とアドバイス 40-60文字]';
       }
       
       debugLog('🔍 【Level3占いAI呼び出し】新しいgenerateAIAnalysis使用');
@@ -818,7 +780,7 @@ ${fortuneData.result}
         debugLog('🔍 【Level3占い結果設定】文字列結果を設定完了（新規生成）');
         
         // AIチャット用にLevel3の占い結果をローカルストレージに保存
-        const storageKey = `level3_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
+        const storageKey = 'level3_fortune_' + (birthData?.name || 'user') + '_' + new Date().toISOString().split('T')[0];
         const fortuneData = {
           mode: 'ten-planets',
           fortune: aiAnalysis.tenPlanetSummary,
@@ -843,17 +805,17 @@ ${fortuneData.result}
 
   // 天体と星座の組み合わせからキーを生成する関数
   const generatePlanetSignKey = (planetName: string, sign: string): string => {
-    const planetKey = `${planetName}-${sign}`;
+    const planetKey = planetName + '-' + sign;
     return planetKey;
   };
 
   // Level3分析結果のキャッシュ関数
   const generateLevel3AnalysisCacheKey = (birthData: any): string => {
-    const cacheKey = `level3_analysis_v8_${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+    const cacheKey = 'level3_analysis_v8_' + birthData.name + '_' + (birthData.birthDate?.toISOString().split('T')[0] || '');
     
-    const baseKey = `${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+    const baseKey = birthData.name + '_' + (birthData.birthDate?.toISOString().split('T')[0] || '');
     for (let version = 1; version <= 7; version++) {
-      const oldKey = `level3_analysis_${version}_${baseKey}`;
+      const oldKey = 'level3_analysis_' + version + '_' + baseKey;
       if (localStorage.getItem(oldKey)) {
         localStorage.removeItem(oldKey);
         debugLog(`🧹 【古いキャッシュ削除】${version}キャッシュを削除しました`);
@@ -1041,7 +1003,7 @@ ${fortuneData.result}
         debugLog('🔍 【Level2占い結果設定】文字列結果を設定完了（新規生成）');
         
         // AIチャット用にLevel2の占い結果をローカルストレージに保存
-        const storageKey = `level2_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
+        const storageKey = 'level2_fortune_' + (birthData?.name || 'user') + '_' + new Date().toISOString().split('T')[0];
         const fortuneData = {
           mode: 'hidden-self-discovery',
           period: selectedPeriod,
@@ -1079,7 +1041,7 @@ ${fortuneData.result}
       // 過去のLevel3占い結果を読み込み（占い機能引き継ぎ用）
       let previousLevel3Context = '';
       try {
-        const level3Key = `level3_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
+        const level3Key = 'level3_fortune_' + (birthData?.name || 'user') + '_' + new Date().toISOString().split('T')[0];
         const storedLevel3 = localStorage.getItem(level3Key);
         if (storedLevel3) {
           const fortuneData = JSON.parse(storedLevel3);
@@ -1553,7 +1515,7 @@ ${fortuneData.result}
         debugLog('🔍 【Level3占い】level3Fortuneに設定完了');
         
         // AIチャット用にLevel3の占い結果をローカルストレージに保存
-        const storageKey = `level3_fortune_${birthData?.name || 'user'}_${new Date().toISOString().split('T')[0]}`;
+        const storageKey = 'level3_fortune_' + (birthData?.name || 'user') + '_' + new Date().toISOString().split('T')[0];
         const fortuneData = {
           mode: 'behavior-pattern-analysis',
           period: selectedPeriod,
@@ -1590,7 +1552,7 @@ ${fortuneData.result}
 
   // 個別天体をクリックした時の処理
   const handlePlanetClick = (planetName: string, sign: string) => {
-    const planetKey = `${planetName}-${sign}`;
+    const planetKey = planetName + '-' + sign;
     
     debugLog('🌟 個別天体クリック:', planetName, sign, planetKey);
     
@@ -1614,12 +1576,12 @@ ${fortuneData.result}
     if (!horoscopeData || !birthData) return;
     
     // キャッシュキーを生成（v8: Level3専用詳細分析プロンプト対応・100-140文字詳細設定）
-    const cacheKey = `level3_analysis_v8_${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+    const cacheKey = 'level3_analysis_v8_' + birthData.name + '_' + (birthData.birthDate?.toISOString().split('T')[0] || '');
     
     // 古いバージョンのキャッシュを削除（既存ユーザー対応）
-    const baseKey = `${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+    const baseKey = birthData.name + '_' + (birthData.birthDate?.toISOString().split('T')[0] || '');
     ['v2', 'v3', 'v4', 'v5', 'v6', 'v7'].forEach(version => {
-      const oldKey = `level3_analysis_${version}_${baseKey}`;
+      const oldKey = 'level3_analysis_' + version + '_' + baseKey;
       if (localStorage.getItem(oldKey)) {
         localStorage.removeItem(oldKey);
         debugLog(`🧹 【古いキャッシュ削除】${version}キャッシュを削除しました`);
@@ -1784,7 +1746,7 @@ ${fortuneData.result}
     const ascendant = planets.find(p => p.planet === '上昇星座');
     
     // 🔥 キャッシュ最適化: 期間情報を含めてより効率的なキャッシュ管理
-    return `three_planets_personality_v2_${sun?.sign}_${moon?.sign}_${ascendant?.sign}`;
+    return 'three_planets_personality_v2_' + (sun?.sign || '') + '_' + (moon?.sign || '') + '_' + (ascendant?.sign || '');
   };
 
   // ローカルストレージから3天体性格分析を読み込み
@@ -4643,7 +4605,7 @@ ${fortuneData.result}
           
           // Level1占い結果の復元
           try {
-            const level1Key = `level1_fortune_${userName}_${today}`;
+            const level1Key = 'level1_fortune_' + userName + '_' + today;
             const storedLevel1 = localStorage.getItem(level1Key);
             if (storedLevel1) {
               const fortuneData = JSON.parse(storedLevel1);
@@ -4657,7 +4619,7 @@ ${fortuneData.result}
           
           // Level2占い結果の復元
           try {
-            const level2Key = `level2_fortune_${userName}_${today}`;
+            const level2Key = 'level2_fortune_' + userName + '_' + today;
             const storedLevel2 = localStorage.getItem(level2Key);
             if (storedLevel2) {
               const fortuneData = JSON.parse(storedLevel2);
@@ -4670,7 +4632,7 @@ ${fortuneData.result}
           
           // Level3占い結果の復元
           try {
-            const level3Key = `level3_fortune_${userName}_${today}`;
+            const level3Key = 'level3_fortune_' + userName + '_' + today;
             const storedLevel3 = localStorage.getItem(level3Key);
             if (storedLevel3) {
               const fortuneData = JSON.parse(storedLevel3);
@@ -4730,9 +4692,9 @@ ${fortuneData.result}
       setLevel3Analysis(null);
       // 古いキャッシュも削除
       if (birthData) {
-        const baseKey = `${birthData.name}_${birthData.birthDate?.toISOString().split('T')[0]}`;
+        const baseKey = birthData.name + '_' + (birthData.birthDate?.toISOString().split('T')[0] || '');
         ['v2', 'v3', 'v4', 'v5'].forEach(version => {
-          const oldKey = `level3_analysis_${version}_${baseKey}`;
+          const oldKey = 'level3_analysis_' + version + '_' + baseKey;
           if (localStorage.getItem(oldKey)) {
             localStorage.removeItem(oldKey);
             debugLog(`🧹 【古いキャッシュ削除】${oldKey}を削除しました`);
