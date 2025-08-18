@@ -69,17 +69,7 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
 
   return (
     <div className="mode-selection-container">
-      {/* SEO対策: 検索キーワード対応のヘッダー情報 */}
-      <div className="seo-content">
-        <h2 style={{ textAlign: 'center', marginBottom: '1rem', color: '#667eea' }}>
-          🌟 無料星占い・天体占い｜12星座からあなただけの占い結果
-        </h2>
-        <div style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '0.9rem', color: '#666', lineHeight: '1.6' }}>
-          <p>生年月日・出生時刻から占う本格占星術。太陽星座・月星座・上昇星座の詳細分析で恋愛・仕事・性格を完全解明。</p>
-          <p>牡羊座・牡牛座・双子座・蟹座・獅子座・乙女座・天秤座・蠍座・射手座・山羊座・水瓶座・魚座の12星座占いから、</p>
-          <p>ホロスコープ・10天体の完全分析まで。AIが生成するあなただけの占い結果をお楽しみください。</p>
-        </div>
-      </div>
+
       
       {/* チュートリアルボタンを太陽星座の簡単占いの上に配置 */}
       <div className="tutorial-info-box">
