@@ -11,11 +11,14 @@
     "start": "vite preview --host 0.0.0.0",
     "test": "vitest",
     "setup": "node scripts/setup-env.cjs",
+    "setup:dev": "node scripts/setup-env-dev.cjs",
     "env:setup": "node scripts/setup-env.cjs",
     "deploy": "node scripts/deploy.cjs",
     "deploy:safe": "node scripts/deploy.cjs",
     "deploy:prepare": "npm run build && echo 'Build completed successfully'",
-    "deploy:check": "npm run lint && npm run build"
+    "deploy:check": "npm run lint && npm run build",
+    "security:check": "node scripts/security-check.cjs",
+    "security:scan": "npm run security:check"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.10",

@@ -98,10 +98,11 @@ temp/
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Environment variables (SECURITY CRITICAL)
+# Environment variables (SECURITY CRITICAL - 強化版)
 .env
 .env.*
 .env.local
+.env.development
 .env.development.local
 .env.test.local
 .env.production.local
@@ -110,3 +111,14 @@ vite.config.ts.timestamp-*
 *.key
 *.secret
 api-keys.txt
+config/secrets.json
+secrets/
+# API Keys (追加保護)
+*api*key*
+*secret*
+*token*
+# バックアップファイル (漏洩防止)
+*.backup
+*.bak
+*.old
+temp-env*
