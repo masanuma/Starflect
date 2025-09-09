@@ -1,8 +1,8 @@
 import { BirthData, PlanetPosition } from "../types";
 import { safeParseJSON, mapAIResponseToAIAnalysisResult } from './aiAnalyzerUtils';
 
-// OpenAI APIプロキシエンドポイント（セキュア）
-const OPENAI_PROXY_URL = '/api/openai-proxy';
+// OpenAI API設定（Railway環境変数から取得）
+const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY || null;
 
 // エラーハンドリング用の設定
 const API_CONFIG = {
@@ -39,11 +39,12 @@ const callOpenAIWithRetry = async (prompt: string, systemMessage: string, maxTok
   for (let attempt = 1; attempt <= API_CONFIG.maxRetries; attempt++) {
     try {
       const response = await fetchWithTimeout(
-        OPENAI_PROXY_URL,
+        "https://api.openai.com/v1/chat/completions",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${OPENAI_API_KEY}`
           },
           body: JSON.stringify({
             model: "gpt-4o-mini",
@@ -522,7 +523,9 @@ export const generateAIAnalysis = async (
 ): Promise<AIAnalysisResult> => {
   console.log('🔍 【generateAIAnalysis開始】モード:', mode, 'プラネット数:', planets.length);
   
-  // プロキシAPIを使用するため、APIキーチェックは不要
+  if (!OPENAI_API_KEY) {
+    throw new Error('OpenAI APIキーが設定されていません。環境変数OPENAI_API_KEYを設定してください。');
+  }
 
   let baseResult: AIAnalysisResult;
 
@@ -592,7 +595,9 @@ export const chatWithAIAstrologer = async (
   aspects?: any[],
   aspectPatterns?: string[]
 ): Promise<string> => {
-  // プロキシAPIを使用するため、APIキーチェックは不要
+  if (!OPENAI_API_KEY) {
+    throw new Error('OpenAI APIキーが設定されていません。環境変数OPENAI_API_KEYを設定してください。');
+  }
 
   // 🔧 Level1占い結果の読み込み（AIチャット引き継ぎ用）
   const todayKey = `level1_fortune_${birthData.name}_${new Date().toISOString().split('T')[0]}`;
@@ -777,7 +782,9 @@ const callPlanetCalculationAPI = async (prompt: string): Promise<PlanetPosition[
 
 // AI経由の天体計算関数
 export const calculatePlanetsWithAI = async (birthData: BirthData): Promise<PlanetPosition[]> => {
-  // プロキシAPIを使用するため、APIキーチェックは不要
+  if (!OPENAI_API_KEY) {
+    throw new Error('OpenAI APIキーが設定されていません。環境変数OPENAI_API_KEYを設定してください。');
+  }
 
   const prompt = generatePlanetCalculationPrompt(birthData);
   return await callPlanetCalculationAPI(prompt);

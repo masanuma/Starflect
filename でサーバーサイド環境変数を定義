@@ -1,0 +1,25 @@
+[33mcommit 39e1ca2eb06db0840bdbc322a3a2b9c38bdc7c93[m
+Author: Masanuma <asanuma.dev@gmail.com>
+Date:   Tue Jul 22 17:55:29 2025 +0900
+
+    fix: APIキーを含む.env.backupをgitignoreに追加して削除
+
+[1mdiff --git a/.env.backup b/.env.backup[m
+[1mdeleted file mode 100644[m
+[1mindex 0e68d6c..0000000[m
+[1m--- a/.env.backup[m
+[1m+++ /dev/null[m
+[36m@@ -1,2 +0,0 @@[m
+[31m-VITE_OPENAI_API_KEY=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[m
+[31m-VITE_GOOGLE_MAPS_API_KEY=AIzaSyCBQRE8qUDjNyxKqd7z0PuGlFIF3NT2yOw[m
+\ No newline at end of file[m
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mindex 8fd8fa2..97084dd 100644[m
+[1m--- a/.gitignore[m
+[1m+++ b/.gitignore[m
+[36m@@ -97,3 +97,5 @@[m [mtemp/[m
+ # Vite[m
+ vite.config.js.timestamp-*[m
+ vite.config.ts.timestamp-*.env.backup[m
+[32m+[m[32m*.env*[m
+[32m+[m[32m.env.backup[m
