@@ -26,8 +26,8 @@ StarflectアプリにOpenAI GPT-4o-miniを使用したAI機能が追加されま
 プロジェクトのルートディレクトリに`.env`ファイルを作成：
 
 ```bash
-# .env ファイル
-VITE_OPENAI_API_KEY=your_openai_api_key_here
+# .env ファイル (セキュア版 - サーバーサイドのみ)
+OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 **重要**: `.env`ファイルは`.gitignore`に含まれているため、GitHubにはアップロードされません。
@@ -35,8 +35,10 @@ VITE_OPENAI_API_KEY=your_openai_api_key_here
 #### 本番環境（Vercel等）の場合
 
 デプロイ先の環境変数設定で以下を追加：
-- **Variable Name**: `VITE_OPENAI_API_KEY`
+- **Variable Name**: `OPENAI_API_KEY` (VITE_プレフィックス削除でセキュア)
 - **Value**: あなたのOpenAI APIキー
+
+⚠️ **重要**: VITE_プレフィックスは使用しません。これによりAPIキーがクライアントサイドに露出することを防ぎます。
 
 ### 3. 動作確認
 

@@ -642,18 +642,13 @@ ${fortuneData.result}
       
       debugLog('🔍 【AI占い呼び出し】プロンプト:', analysisPrompt);
       
-      // Level1用に直接OpenAI APIを呼び出し（3要素統合プロンプトを使用）
-      const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-      
-      if (!OPENAI_API_KEY) {
-        throw new Error('OpenAI APIキーが設定されていません。');
-      }
+      // Level1用にセキュアなプロキシAPIを使用
+      const OPENAI_PROXY_URL = '/api/openai-proxy';
 
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const response = await fetch(OPENAI_PROXY_URL, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${OPENAI_API_KEY}`
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",
@@ -1085,11 +1080,10 @@ ${fortuneData.result}
       // Level1同様にOpenAI APIを直接呼び出し（プロンプトが確実に使われるように）
       debugLog('🔍 【Level2占い生成】OpenAI API直接呼び出し開始');
       
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch(OPENAI_PROXY_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           model: 'gpt-4o-mini',
@@ -1603,11 +1597,10 @@ ${fortuneData.result}
       debugLog('🔍 【Level3占い生成】selectedPeriod:', selectedPeriod);
       
       // Level1・Level2同様にOpenAI APIを直接呼び出し（プロンプトが確実に使用されるように）
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch(OPENAI_PROXY_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           model: 'gpt-4o-mini',

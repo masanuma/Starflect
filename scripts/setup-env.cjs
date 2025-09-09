@@ -35,8 +35,8 @@ async function setupEnvironment() {
   let envContent = `# Starflect Environment Variables
 # 自動生成日時: ${new Date().toISOString()}
 
-# OpenAI API Configuration
-VITE_OPENAI_API_KEY=${openaiKey}
+# OpenAI API Configuration (Server-side only, secure)
+OPENAI_API_KEY=${openaiKey}
 
 # Google Maps API Configuration
 ${googleMapsKey ? `VITE_GOOGLE_MAPS_API_KEY=${googleMapsKey}` : '# VITE_GOOGLE_MAPS_API_KEY=your_google_maps_key'}

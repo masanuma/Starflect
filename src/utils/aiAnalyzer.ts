@@ -1,8 +1,8 @@
 import { BirthData, PlanetPosition } from "../types";
 import { safeParseJSON, mapAIResponseToAIAnalysisResult } from './aiAnalyzerUtils';
 
-// OpenAI API設定
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || null;
+// OpenAI APIプロキシエンドポイント（セキュア）
+const OPENAI_PROXY_URL = '/api/openai-proxy';
 
 // エラーハンドリング用の設定
 const API_CONFIG = {
@@ -39,12 +39,11 @@ const callOpenAIWithRetry = async (prompt: string, systemMessage: string, maxTok
   for (let attempt = 1; attempt <= API_CONFIG.maxRetries; attempt++) {
     try {
       const response = await fetchWithTimeout(
-        "https://api.openai.com/v1/chat/completions",
+        OPENAI_PROXY_URL,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${OPENAI_API_KEY}`
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
             model: "gpt-4o-mini",
@@ -523,9 +522,7 @@ export const generateAIAnalysis = async (
 ): Promise<AIAnalysisResult> => {
   console.log('🔍 【generateAIAnalysis開始】モード:', mode, 'プラネット数:', planets.length);
   
-  if (!OPENAI_API_KEY) {
-    throw new Error('OpenAI APIキーが設定されていません。OPENAI_SETUP.mdを参照して設定してください。');
-  }
+  // プロキシAPIを使用するため、APIキーチェックは不要
 
   let baseResult: AIAnalysisResult;
 
@@ -595,9 +592,7 @@ export const chatWithAIAstrologer = async (
   aspects?: any[],
   aspectPatterns?: string[]
 ): Promise<string> => {
-  if (!OPENAI_API_KEY) {
-    throw new Error('OpenAI APIキーが設定されていません。OPENAI_SETUP.mdを参照して設定してください。');
-  }
+  // プロキシAPIを使用するため、APIキーチェックは不要
 
   // 🔧 Level1占い結果の読み込み（AIチャット引き継ぎ用）
   const todayKey = `level1_fortune_${birthData.name}_${new Date().toISOString().split('T')[0]}`;
@@ -782,9 +777,7 @@ const callPlanetCalculationAPI = async (prompt: string): Promise<PlanetPosition[
 
 // AI経由の天体計算関数
 export const calculatePlanetsWithAI = async (birthData: BirthData): Promise<PlanetPosition[]> => {
-  if (!OPENAI_API_KEY) {
-    throw new Error('OpenAI APIキーが設定されていません。OPENAI_SETUP.mdを参照して設定してください。');
-  }
+  // プロキシAPIを使用するため、APIキーチェックは不要
 
   const prompt = generatePlanetCalculationPrompt(birthData);
   return await callPlanetCalculationAPI(prompt);

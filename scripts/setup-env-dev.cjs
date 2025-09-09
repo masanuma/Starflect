@@ -45,8 +45,8 @@ async function setupDevelopmentEnvironment() {
 # 自動生成日時: ${new Date().toISOString()}
 # 環境: DEVELOPMENT ONLY
 
-# OpenAI API Configuration (開発用)
-VITE_OPENAI_API_KEY=${openaiKey}
+# OpenAI API Configuration (Server-side only, secure)
+OPENAI_API_KEY=${openaiKey}
 
 # Google Maps API Configuration (開発用)
 ${googleMapsKey ? `VITE_GOOGLE_MAPS_API_KEY=${googleMapsKey}` : '# VITE_GOOGLE_MAPS_API_KEY=your_development_google_maps_key'}
