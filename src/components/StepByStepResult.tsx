@@ -652,11 +652,10 @@ ${fortuneData.result}
       
       const OPENAI_API_KEY = getOpenAIApiKey();
 
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const response = await fetch("/api/openai-proxy", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${OPENAI_API_KEY}`
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",
@@ -1088,7 +1087,7 @@ ${fortuneData.result}
       // Level1同様にOpenAI APIを直接呼び出し（プロンプトが確実に使われるように）
       debugLog('🔍 【Level2占い生成】OpenAI API直接呼び出し開始');
       
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const response = await fetch("/api/openai-proxy", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -1605,7 +1604,7 @@ ${fortuneData.result}
       debugLog('🔍 【Level3占い生成】selectedPeriod:', selectedPeriod);
       
       // Level1・Level2同様にOpenAI APIを直接呼び出し（プロンプトが確実に使用されるように）
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const response = await fetch("/api/openai-proxy", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

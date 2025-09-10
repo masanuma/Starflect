@@ -40,12 +40,11 @@ const callOpenAIWithRetry = async (prompt: string, systemMessage: string, maxTok
   for (let attempt = 1; attempt <= API_CONFIG.maxRetries; attempt++) {
     try {
       const response = await fetchWithTimeout(
-        "https://api.openai.com/v1/chat/completions",
+        "/api/openai-proxy",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${getApiKey()}`
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
             model: "gpt-4o-mini",
