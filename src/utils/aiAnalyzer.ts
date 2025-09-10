@@ -1,9 +1,9 @@
 import { BirthData, PlanetPosition } from "../types";
 import { safeParseJSON, mapAIResponseToAIAnalysisResult } from './aiAnalyzerUtils';
-import { getOpenAIProxyUrl, isSecureMode, debugEnvConfig } from '../config/env';
+import { getOpenAIApiKey, isApiKeyAvailable, debugEnvConfig } from '../config/env';
 
-// セキュアなAPIプロキシ設定
-const getProxyUrl = () => getOpenAIProxyUrl();
+// Railway対応のAPI設定
+const getApiKey = () => getOpenAIApiKey();
 
 // エラーハンドリング用の設定
 const API_CONFIG = {
@@ -40,11 +40,12 @@ const callOpenAIWithRetry = async (prompt: string, systemMessage: string, maxTok
   for (let attempt = 1; attempt <= API_CONFIG.maxRetries; attempt++) {
     try {
       const response = await fetchWithTimeout(
-        getProxyUrl(),
+        "https://api.openai.com/v1/chat/completions",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${getApiKey()}`
           },
           body: JSON.stringify({
             model: "gpt-4o-mini",
@@ -523,9 +524,9 @@ export const generateAIAnalysis = async (
 ): Promise<AIAnalysisResult> => {
   console.log('🔍 【generateAIAnalysis開始】モード:', mode, 'プラネット数:', planets.length);
   
-  if (!isSecureMode()) {
+  if (!isApiKeyAvailable()) {
     debugEnvConfig();
-    throw new Error('セキュアモードが有効ではありません。');
+    throw new Error('OpenAI APIキーが設定されていません。環境変数を確認してください。');
   }
 
   let baseResult: AIAnalysisResult;
@@ -596,9 +597,9 @@ export const chatWithAIAstrologer = async (
   aspects?: any[],
   aspectPatterns?: string[]
 ): Promise<string> => {
-  if (!isSecureMode()) {
+  if (!isApiKeyAvailable()) {
     debugEnvConfig();
-    throw new Error('セキュアモードが有効ではありません。');
+    throw new Error('OpenAI APIキーが設定されていません。環境変数を確認してください。');
   }
 
   // 🔧 Level1占い結果の読み込み（AIチャット引き継ぎ用）
@@ -784,9 +785,9 @@ const callPlanetCalculationAPI = async (prompt: string): Promise<PlanetPosition[
 
 // AI経由の天体計算関数
 export const calculatePlanetsWithAI = async (birthData: BirthData): Promise<PlanetPosition[]> => {
-  if (!isSecureMode()) {
+  if (!isApiKeyAvailable()) {
     debugEnvConfig();
-    throw new Error('セキュアモードが有効ではありません。');
+    throw new Error('OpenAI APIキーが設定されていません。環境変数を確認してください。');
   }
 
   const prompt = generatePlanetCalculationPrompt(birthData);

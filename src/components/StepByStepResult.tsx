@@ -642,12 +642,15 @@ ${fortuneData.result}
       
       debugLog('🔍 【AI占い呼び出し】プロンプト:', analysisPrompt);
       
-      // Level1用にOpenAI APIを直接使用（環境変数から取得）
-      const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY;
+      // Level1用にRailway環境変数を使用
+      const { getOpenAIApiKey, isApiKeyAvailable, debugEnvConfig } = await import('../config/env');
       
-      if (!OPENAI_API_KEY) {
+      if (!isApiKeyAvailable()) {
+        debugEnvConfig();
         throw new Error('OpenAI APIキーが設定されていません。');
       }
+      
+      const OPENAI_API_KEY = getOpenAIApiKey();
 
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",

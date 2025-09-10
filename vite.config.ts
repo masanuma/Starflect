@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   define: {
-    // サーバーサイド環境変数をクライアントサイドで使用可能にする
+    // Railway環境変数をビルド時に埋め込み
     'import.meta.env.OPENAI_API_KEY': JSON.stringify(process.env.OPENAI_API_KEY)
   },
   server: {

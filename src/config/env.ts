@@ -1,25 +1,19 @@
-// セキュアなAPIプロキシエンドポイント設定
-export const getOpenAIProxyUrl = (): string => {
-  // 本番環境ではNetlify Functionsを使用
-  if (import.meta.env.PROD) {
-    return '/.netlify/functions/openai-proxy';
-  }
-  
-  // 開発環境では開発サーバーのプロキシを使用
-  return '/api/openai-proxy';
+// Railway対応の緊急修正: 一時的に直接API呼び出し
+export const getOpenAIApiKey = (): string | null => {
+  // Railway環境変数から取得（ビルド時に埋め込まれる）
+  return import.meta.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY || null;
 };
 
-// セキュリティ確認: APIキーは使用しない
-export const isSecureMode = (): boolean => {
-  return true; // 常にセキュアモード（APIキーはサーバーサイドのみ）
+export const isApiKeyAvailable = (): boolean => {
+  return !!getOpenAIApiKey();
 };
 
 // デバッグ用ログ
 export const debugEnvConfig = () => {
-  console.log('🔒 Secure API Proxy Mode:', {
+  console.log('🔧 Railway API Configuration:', {
     isDev: import.meta.env.DEV,
-    proxyUrl: getOpenAIProxyUrl(),
-    secureMode: isSecureMode(),
-    note: 'APIキーはサーバーサイドでのみ管理'
+    hasApiKey: isApiKeyAvailable(),
+    keyLength: getOpenAIApiKey()?.length || 0,
+    note: 'Railway環境変数から取得'
   });
 };
