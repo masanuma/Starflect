@@ -39,6 +39,7 @@ const callOpenAIWithRetry = async (prompt: string, systemMessage: string, maxTok
   
   for (let attempt = 1; attempt <= API_CONFIG.maxRetries; attempt++) {
     try {
+      // Viteプロキシ経由でセキュアに呼び出し
       const response = await fetchWithTimeout(
         "/api/openai-proxy",
         {
@@ -260,12 +261,12 @@ ${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('
     "careerTendencies": "キャリア傾向を80-120文字で詳しく、必ずですます調で記述。適職と成功のポイントを含めて。"
   },
   "detailedFortune": {
-    "overallTrend": "全体的な運勢傾向を80-120文字で詳しく、必ずですます調で記述。天体配置の影響を含めて。",
-    "loveLife": "恋愛運を80-120文字で詳しく、必ずですます調で記述。金星・火星の影響を含めて。",
-    "careerPath": "仕事運を80-120文字で詳しく、必ずですます調で記述。MC・太陽の影響を含めて。",
-    "healthWellness": "健康運を80-120文字で詳しく、必ずですます調で記述。",
-    "financialProspects": "金運を80-120文字で詳しく、必ずですます調で記述。",
-    "personalGrowth": "成長運を80-120文字で詳しく、必ずですます調で記述。"
+    "overallTrend": "全体的な運勢傾向を120-160文字で詳しく、必ずですます調で記述。天体配置の具体的な影響を含めて。",
+    "loveLife": "恋愛運を120-160文字で詳しく、必ずですます調で記述。金星・火星の影響を具体的に含めて。",
+    "careerPath": "仕事運を120-160文字で詳しく、必ずですます調で記述。MC・太陽の影響を具体的に含めて。",
+    "healthWellness": "健康運を120-160文字で詳しく、必ずですます調で記述。体調管理のポイントを含めて。",
+    "financialProspects": "金運を120-160文字で詳しく、必ずですます調で記述。金銭管理のアドバイスを含めて。",
+    "personalGrowth": "成長運を120-160文字で詳しく、必ずですます調で記述。成長のための具体的なアドバイスを含めて。"
   },
   "tenPlanetSummary": {
     "overallInfluence": "10天体の総合的な影響について100-140文字で詳細に、必ずですます調で記述。主要な天体配置の特徴と性格への影響を具体的に。",
@@ -278,11 +279,12 @@ ${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('
 
 【厳守事項】
 - 必ずJSON形式のみで回答してください
-- Level3詳細分析として、各項目を100-140文字程度で詳しく記述してください
+- Level3詳細分析として、各項目を120-160文字程度でより詳しく記述してください
 - 占星術の専門知識を活用して、天体配置の具体的な影響を説明してください
 - 丁寧な日本語（です・ます調）で記述してください
 - 「あなたの太陽は○○座にあり」のような表現は避けてください
 - まわりから見たあなたの印象・行動パターンに焦点を当ててください
+- 実用的で具体的なアドバイスを含めてください
 - 上記のJSON形式を厳密に守ってください
 `;
 };

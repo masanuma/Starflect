@@ -4362,23 +4362,23 @@ ${fortuneData.result}
                       } else if (section.includes('総合運') || section.includes('総合的な運') || section.includes('全体運') || section.includes('総合的な配置')) {
                         const cleanText = section.replace(/【[^】]*】/, '').trim();
                         sections.overallStars = extractStarRating(cleanText);
-                        sections.overall = cleanText.replace(/運勢評価:.*?[★☆]+/g, '').replace(/[★☆]+/g, '').trim();
+                        sections.overall = cleanText.replace(/運勢評価[:：].*?[★☆]+/g, '').replace(/[★☆]+/g, '').replace(/運勢評価[:：]/g, '').trim();
                       } else if (section.includes('金銭運') || section.includes('金運') || section.includes('財運') || section.includes('金銭面')) {
                         const cleanText = section.replace(/【[^】]*】/, '').trim();
                         sections.moneyStars = extractStarRating(cleanText);
-                        sections.money = cleanText.replace(/運勢評価:.*?[★☆]+/g, '').replace(/[★☆]+/g, '').trim();
+                        sections.money = cleanText.replace(/運勢評価[:：].*?[★☆]+/g, '').replace(/[★☆]+/g, '').replace(/運勢評価[:：]/g, '').trim();
                       } else if (section.includes('恋愛運') || section.includes('恋愛・人間関係') || section.includes('恋愛') && section.includes('運')) {
                         const cleanText = section.replace(/【[^】]*】/, '').trim();
                         sections.loveStars = extractStarRating(cleanText);
-                        sections.love = cleanText.replace(/運勢評価:.*?[★☆]+/g, '').replace(/[★☆]+/g, '').trim();
+                        sections.love = cleanText.replace(/運勢評価[:：].*?[★☆]+/g, '').replace(/[★☆]+/g, '').replace(/運勢評価[:：]/g, '').trim();
                       } else if (section.includes('仕事運') || section.includes('キャリア') || section.includes('仕事面')) {
                         const cleanText = section.replace(/【[^】]*】/, '').trim();
                         sections.workStars = extractStarRating(cleanText);
-                        sections.work = cleanText.replace(/運勢評価:.*?[★☆]+/g, '').replace(/[★☆]+/g, '').trim();
+                        sections.work = cleanText.replace(/運勢評価[:：].*?[★☆]+/g, '').replace(/[★☆]+/g, '').replace(/運勢評価[:：]/g, '').trim();
                       } else if (section.includes('成長運') || section.includes('成長チャンス') || section.includes('自己発展')) {
                         const cleanText = section.replace(/【[^】]*】/, '').trim();
                         sections.growthStars = extractStarRating(cleanText);
-                        sections.growth = cleanText.replace(/運勢評価:.*?[★☆]+/g, '').replace(/[★☆]+/g, '').trim();
+                        sections.growth = cleanText.replace(/運勢評価[:：].*?[★☆]+/g, '').replace(/[★☆]+/g, '').replace(/運勢評価[:：]/g, '').trim();
                       }
                     });
                     
@@ -4481,7 +4481,7 @@ ${fortuneData.result}
                       {fortuneSections.overall && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            🌟 総合運
+                            総合運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).overallStars || 3), marginLeft: '10px' }}
@@ -4498,7 +4498,7 @@ ${fortuneData.result}
                       {fortuneSections.money && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            💰 金銭運
+                            金銭運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).moneyStars || 3), marginLeft: '10px' }}
@@ -4515,7 +4515,7 @@ ${fortuneData.result}
                       {fortuneSections.love && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            💕 恋愛運
+                            恋愛運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).loveStars || 3), marginLeft: '10px' }}
@@ -4532,7 +4532,7 @@ ${fortuneData.result}
                       {fortuneSections.work && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            💼 仕事運
+                            仕事運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).workStars || 3), marginLeft: '10px' }}
@@ -4549,7 +4549,7 @@ ${fortuneData.result}
                       {fortuneSections.growth && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            🌱 成長運
+                            成長運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor((fortuneSections as any).growthStars || 3), marginLeft: '10px' }}
