@@ -65,7 +65,7 @@ app.use('/api', async (req, res, next) => {
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // SPAのフォールバック
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
