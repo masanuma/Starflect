@@ -37,19 +37,31 @@ const fortuneIcons = {
   default: '⭐'     // デフォルト
 };
 
-// 運勢別評価を表示用に変換するヘルパー関数
-const renderFortuneRating = (rating: number, fortuneType: keyof typeof fortuneIcons = 'default'): string => {
+// 運勢別評価を表示用に変換するヘルパー関数（JSX形式で返す）
+const renderFortuneRating = (rating: number, fortuneType: keyof typeof fortuneIcons = 'default') => {
   const icon = fortuneIcons[fortuneType];
   const filledIcons = icon.repeat(Math.max(0, Math.min(rating, 5)));
   const emptyDashes = '－'.repeat(Math.max(0, 5 - rating));
-  return filledIcons + emptyDashes;
+  
+  return (
+    <span>
+      <span style={{ color: getStarColor(rating) }}>{filledIcons}</span>
+      <span style={{ color: '#000000' }}>{emptyDashes}</span>
+    </span>
+  );
 };
 
-// 従来の星評価（後方互換性のため残す）
-const renderStars = (rating: number): string => {
+// 従来の星評価（後方互換性のため残す・JSX形式）
+const renderStars = (rating: number) => {
   const filledStars = '⭐'.repeat(Math.max(0, Math.min(rating, 5)));
   const emptyDashes = '－'.repeat(Math.max(0, 5 - rating));
-  return filledStars + emptyDashes;
+  
+  return (
+    <span>
+      <span style={{ color: getStarColor(rating) }}>{filledStars}</span>
+      <span style={{ color: '#000000' }}>{emptyDashes}</span>
+    </span>
+  );
 };
 
 // 星評価の色分けを取得

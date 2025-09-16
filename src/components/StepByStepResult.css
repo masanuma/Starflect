@@ -56,6 +56,12 @@
   letter-spacing: 1px;
   display: inline-block;
   vertical-align: middle;
+  color: #000000; /* ダッシュを黒色に設定 */
+}
+
+/* 星評価内のダッシュ部分のスタイル */
+.star-rating .dash {
+  color: #000000 !important;
 }
 
 .fortune-title {
