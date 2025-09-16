@@ -41,15 +41,15 @@ const fortuneIcons = {
 const renderFortuneRating = (rating: number, fortuneType: keyof typeof fortuneIcons = 'default'): string => {
   const icon = fortuneIcons[fortuneType];
   const filledIcons = icon.repeat(Math.max(0, Math.min(rating, 5)));
-  const emptyStars = '☆'.repeat(Math.max(0, 5 - rating));
-  return filledIcons + emptyStars;
+  const emptyDashes = '－'.repeat(Math.max(0, 5 - rating));
+  return filledIcons + emptyDashes;
 };
 
 // 従来の星評価（後方互換性のため残す）
 const renderStars = (rating: number): string => {
   const filledStars = '⭐'.repeat(Math.max(0, Math.min(rating, 5)));
-  const emptyStars = '☆'.repeat(Math.max(0, 5 - rating));
-  return filledStars + emptyStars;
+  const emptyDashes = '－'.repeat(Math.max(0, 5 - rating));
+  return filledStars + emptyDashes;
 };
 
 // 星評価の色分けを取得
@@ -2682,7 +2682,7 @@ ${fortuneData.result}
                       {fortuneSections.overall && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            🌟 全体運
+                            全体運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor(fortuneSections.overallStars || 3), marginLeft: '10px' }}
@@ -2699,7 +2699,7 @@ ${fortuneData.result}
                       {fortuneSections.love && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            ❤️ 恋愛運
+                            恋愛運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor(fortuneSections.loveStars || 3), marginLeft: '10px' }}
@@ -2716,7 +2716,7 @@ ${fortuneData.result}
                       {fortuneSections.work && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            💼 仕事運
+                            仕事運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor(fortuneSections.workStars || 3), marginLeft: '10px' }}
@@ -2733,7 +2733,7 @@ ${fortuneData.result}
                       {fortuneSections.health && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            💪 健康運
+                            健康運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor(fortuneSections.healthStars || 3), marginLeft: '10px' }}
@@ -2750,7 +2750,7 @@ ${fortuneData.result}
                       {fortuneSections.money && (
                         <div className="fortune-card">
                           <h4 className="fortune-title">
-                            💰 金銭運
+                            金銭運
                             <span 
                               className="star-rating" 
                               style={{ color: getStarColor(fortuneSections.moneyStars || 3), marginLeft: '10px' }}
