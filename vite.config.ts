@@ -10,33 +10,20 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     define: {
       // Railway環境変数をビルド時に埋め込み
-      'import.meta.env.OPENAI_API_KEY': JSON.stringify(env.OPENAI_API_KEY)
+      'import.meta.env.OPENAI_API_KEY': JSON.stringify(env.OPENAI_API_KEY),
+      'import.meta.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
     },
     server: {
       host: true,
       port: 3500,
-      proxy: {
-        '/api/openai-proxy': {
-          target: 'https://api.openai.com',
-          changeOrigin: true,
-          rewrite: (path) => '/v1/chat/completions',
-          configure: (proxy, options) => {
-            proxy.on('proxyReq', (proxyReq, req, res) => {
-              // APIキーを安全にヘッダーに追加
-              const apiKey = env.OPENAI_API_KEY;
-              if (apiKey) {
-                proxyReq.setHeader('Authorization', `Bearer ${apiKey}`);
-              }
-              proxyReq.setHeader('Content-Type', 'application/json');
-              console.log('🔐 プロキシリクエスト:', {
-                url: req.url,
-                hasApiKey: !!apiKey,
-                keyPrefix: apiKey ? apiKey.substring(0, 7) + '...' : 'なし'
-              });
-            });
-          }
-        }
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path // /api をそのままバックエンドへ渡す
       }
+    }
     },
     preview: {
       host: '0.0.0.0',

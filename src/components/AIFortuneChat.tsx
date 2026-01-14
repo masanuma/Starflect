@@ -1204,7 +1204,6 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
       {/* 提案チップ */}
       {suggestions.length > 0 && (
         <div className="suggestions-container">
-          {(() => { console.log('🔍 レンダリング時のsuggestions:', suggestions.map(s => s.text)); return null; })()}
           <h4>💡 {suggestions.some(s => s.id.startsWith('level1-') || s.id.startsWith('level3-')) ? 'どの占い結果を詳しく知りたいですか？' : 'こんな質問はいかがですか？'}</h4>
           <div className="suggestion-chips">
             {suggestions.map((suggestion) => (
