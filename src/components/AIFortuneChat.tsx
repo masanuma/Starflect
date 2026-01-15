@@ -992,7 +992,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
         {/* 占いモード選択に戻るボタン */}
         <div className="back-button-container">
           <button 
-            className="back-button"
+            className="back-button theme-ghost"
             onClick={() => {
               // previousModeとselectedModeをクリア
               localStorage.removeItem('selectedMode');
@@ -1026,14 +1026,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
               }
               
               return currentLevel ? (
-                <p style={{ 
-                  fontSize: isMobile ? '0.75rem' : '0.8rem', 
-                  color: '#6b7280', 
-                  marginTop: '0.25rem',
-                  fontWeight: '500',
-                  lineHeight: '1.3',
-                  wordBreak: 'break-all'
-                }}>
+                <p className="current-level-tag">
                   📊 {currentLevel} の相談
                 </p>
               ) : null;
@@ -1187,7 +1180,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
               navigate('/');
             }
           }}
-          className="bottom-back-button single"
+          className="bottom-back-button single theme-ghost"
           type="button"
         >
           🔙 元のモードに戻る

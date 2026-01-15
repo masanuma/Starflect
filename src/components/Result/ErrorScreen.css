@@ -1,0 +1,33 @@
+.error-screen-container {
+  max-width: 500px;
+  margin: 4rem auto;
+  padding: 2.5rem;
+  background: rgba(220, 38, 38, 0.1);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: var(--glass-shadow);
+}
+
+.error-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error-title {
+  color: #fca5a5;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.error-guidance {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}

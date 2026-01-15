@@ -37,6 +37,15 @@ function loadEnv() {
 
 loadEnv();
 
+// 未キャッチのエラーをログ出力
+process.on('uncaughtException', (err) => {
+  console.error('💥 Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('💥 Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 app.use(cors());
 app.use(express.json());
 
@@ -98,11 +107,18 @@ app.post('/api/gemini-proxy', async (req, res) => {
       })
     });
 
-    const data = await response.json();
+    const responseText = await response.text();
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      console.error('❌ Failed to parse Google API response as JSON:', responseText);
+      return res.status(500).json({ error: 'Google API returned non-JSON response', detail: responseText });
+    }
     
     if (!response.ok) {
       console.error('❌ Google API Error:', JSON.stringify(data, null, 2));
-      return res.status(500).json({ error: 'Google API Error', detail: data });
+      return res.status(response.status).json({ error: 'Google API Error', detail: data });
     }
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";

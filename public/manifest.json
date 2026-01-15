@@ -2,7 +2,7 @@
   "name": "Starflect - 無料星占い・天体占い",
   "short_name": "Starflect",
   "description": "【無料】生年月日・出生時刻から占う本格占星術。12星座・太陽月上昇星座の詳細分析で恋愛・仕事・性格を完全解明。AI搭載の本格占い",
-  "theme_color": "#667eea",
+  "theme_color": "#0a0e1a",
   "background_color": "#1a1a2e",
   "display": "standalone",
   "orientation": "portrait-primary",

@@ -1,0 +1,74 @@
+.data-missing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 1rem;
+}
+
+.data-missing-card {
+  max-width: 500px;
+  width: 100%;
+  padding: 3rem 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  text-align: center;
+  box-shadow: var(--glass-shadow);
+}
+
+.data-missing-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 10px var(--ethereal-gold));
+}
+
+.data-missing-title {
+  font-size: 1.5rem;
+  color: var(--ethereal-gold);
+  margin-bottom: 1.5rem;
+}
+
+.data-missing-message {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+}
+
+.data-missing-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.registration-button {
+  background: linear-gradient(135deg, var(--ethereal-blue) 0%, var(--ethereal-violet) 100%);
+  color: var(--cosmos-deep);
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.registration-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(125, 211, 252, 0.4);
+}
+
+.back-button {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--glass-border);
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: var(--glass-bg-hover);
+  color: var(--text-primary);
+}

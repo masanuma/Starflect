@@ -1,0 +1,99 @@
+.input-form-container {
+  max-width: 650px;
+  width: calc(100% - 2rem);
+  margin: 2rem auto;
+  padding: 3.5rem 2.5rem;
+  background: var(--cosmos-card);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-card);
+  box-shadow: var(--glass-shadow);
+  color: var(--text-primary);
+}
+
+.input-form-container h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 2.2rem;
+  color: var(--ethereal-gold);
+  text-align: center;
+  margin-bottom: 3rem;
+  text-shadow: 0 0 20px rgba(253, 224, 71, 0.4);
+}
+
+.birth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.input-group label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ethereal-blue);
+  margin-left: 0.5rem;
+}
+
+/* 共通パーツ（App.css）を使用するため、レイアウトのみ定義 */
+
+.birth-date-inputs {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 0.8rem;
+}
+
+/* 時刻精度選択 */
+.time-precision-selector {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.precision-option {
+  flex: 1;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-pill);
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  color: var(--text-secondary);
+}
+
+.precision-option.selected {
+  background: rgba(125, 211, 252, 0.15);
+  border-color: var(--ethereal-blue);
+  color: var(--ethereal-blue);
+  font-weight: 700;
+  box-shadow: 0 0 15px rgba(125, 211, 252, 0.2);
+}
+
+/* エラーメッセージ */
+.error-message {
+  color: #fca5a5;
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+  padding-left: 1rem;
+}
+
+@media (max-width: 480px) {
+  .input-form-container {
+    padding: 2.5rem 1.5rem;
+  }
+  
+  .birth-date-inputs {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  
+  .time-precision-selector {
+    flex-direction: column;
+  }
+}

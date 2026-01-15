@@ -1,0 +1,85 @@
+.location-picker-container {
+  position: relative;
+  width: 100%;
+}
+
+.location-search-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.location-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--cosmos-navy);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  margin-top: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+}
+
+.suggestion-item {
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.manual-input-link {
+  font-size: 0.8rem;
+  color: var(--ethereal-blue);
+  cursor: pointer;
+  text-align: right;
+  margin-top: 0.3rem;
+  text-decoration: underline;
+}
+
+.manual-coords-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.api-error-message {
+  color: #fca5a5;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.map-preview {
+  margin-top: 1rem;
+  height: 200px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  overflow: hidden;
+}

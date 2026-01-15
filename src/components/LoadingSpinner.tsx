@@ -8,7 +8,7 @@ interface LoadingSpinnerProps {
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 50,
-  color = '#667eea',
+  color = '#7dd3fc',
   speed = 50
 }) => {
   const spinnerRef = useRef<HTMLDivElement>(null);

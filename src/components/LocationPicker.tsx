@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import './LocationPicker.css';
 
 interface LocationPickerProps {
   onLocationSelect: (location: {

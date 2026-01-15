@@ -1,0 +1,95 @@
+.level-1-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem 5rem;
+}
+
+/* 太陽の輝き画面専用：黄金のクリスタルカード */
+.level-1-section .section-card {
+  background: rgba(251, 191, 36, 0.18) !important; /* 黄金色の背景を少し濃く */
+  border: 1px solid rgba(253, 224, 71, 0.4) !important;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(253, 224, 71, 0.1) !important;
+}
+
+.section-intro {
+  margin-bottom: 2rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* 占い実行エリア */
+.fortune-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding: 2.5rem;
+  background: rgba(253, 224, 71, 0.05); /* セレクタ背景も黄金に */
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(253, 224, 71, 0.1);
+}
+
+.period-dropdown {
+  width: 100% !important;
+  max-width: 340px !important;
+}
+
+/* 占い結果表示 */
+.five-fortunes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.fortune-item-card {
+  background: rgba(253, 224, 71, 0.08); /* 鑑定文カードも黄金 */
+  border: 1px solid rgba(253, 224, 71, 0.2);
+  border-radius: 24px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.fortune-item-card:hover {
+  background: rgba(253, 224, 71, 0.15);
+  transform: translateY(-5px);
+}
+
+.fortune-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(253, 224, 71, 0.2);
+  padding-bottom: 0.8rem;
+}
+
+.fortune-item-label {
+  font-weight: 800;
+  color: var(--ethereal-gold);
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+}
+
+/* 重要な日 */
+.important-days-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: rgba(253, 224, 71, 0.15);
+  border-radius: 24px;
+  border: 1px solid rgba(253, 224, 71, 0.3);
+}
+
+.important-days-title {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(253, 224, 71, 0.5);
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .five-fortunes-grid {
+    grid-template-columns: 1fr;
+  }
+}

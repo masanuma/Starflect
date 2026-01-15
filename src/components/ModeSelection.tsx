@@ -10,74 +10,52 @@ interface ModeSelectionProps {
 const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
   const [showTutorial, setShowTutorial] = useState(false);
 
-  // 初回訪問時のチュートリアル表示判定
   useEffect(() => {
     const tutorialCompleted = localStorage.getItem('starflect_tutorial_completed');
-    if (!tutorialCompleted) {
-      setShowTutorial(true);
-    }
+    if (!tutorialCompleted) setShowTutorial(true);
   }, []);
-
-  const handleCloseTutorial = () => {
-    setShowTutorial(false);
-  };
-
-  // 過去の結果のみクリア（基本情報は保持）
-  const handleClearResultsOnly = () => {
-    confirmAndClearResultsOnly();
-  };
-
-  // 全データクリア（従来の機能）
-  const handleResetAllData = () => {
-    confirmAndClearData(
-      '全てのデータを削除しますか？\n\n入力した名前、生年月日、時刻、出生地の情報も削除されます。\nこの操作は取り消せません。'
-    );
-  };
 
   const modes = [
     {
       id: 'sun-sign',
-      title: 'お手軽12星座占い',
-      icon: '⭐',
+      title: '太陽の輝き',
+      subtitle: '基本性格・運勢',
+      icon: '☀️',
       duration: '30秒',
-      description: '占い初心者でも安心！\n生まれた日の太陽の位置から基本的な性格を分析\n気になることはAI占い師に相談',
-      features: ['太陽星座による基本分析', 'AI占い師に相談'],
-      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      required: '生年月日のみ'
+      description: '太陽が司る「表向きの性質」と基本運勢を、AIの智慧とともに読み解きます。',
+      gradient: 'linear-gradient(135deg, rgba(253, 224, 71, 0.25) 0%, rgba(234, 179, 8, 0.5) 100%)',
+      border: 'rgba(253, 224, 71, 0.5)',
+      glow: 'rgba(253, 224, 71, 0.2)'
     },
     {
       id: 'ten-planets',
-      title: '星が伝える あなたの印象診断',
-      icon: '🌌⭐',
+      title: '星々の共鳴',
+      subtitle: '完全ホロスコープ',
+      icon: '🌌',
       duration: '2分',
-      description: '10天体で完全分析！\n生まれた瞬間の全ての天体位置から性格・行動・印象を徹底診断\n時刻・場所の情報で天体の正確な位置を計算します',
-      features: ['10天体の完全分析', '話し方の特徴', '外面的な行動', '第一印象分析', '社交での振る舞い'],
-      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-      required: '出生時刻・場所も必要'
+      description: '10天体の配置から、あなたの内面、才能、そして真実の姿を完全解読。',
+      gradient: 'linear-gradient(135deg, rgba(125, 211, 252, 0.25) 0%, rgba(14, 165, 233, 0.5) 100%)',
+      border: 'rgba(125, 211, 252, 0.5)',
+      glow: 'rgba(125, 211, 252, 0.2)'
     },
     {
       id: 'ai-chat',
-      title: 'AI占い師チャット',
-      icon: '🤖',
-      duration: '対話式',
-      description: 'AI占い師とチャットしながら\nあなたの質問になんでも答えます\n天体配置を元にしたパーソナライズ回答',
-      features: ['対話形式', 'カスタム質問', 'リアルタイム回答'],
-      gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-      required: '何でも聞いてみてください'
+      title: '星の対話',
+      subtitle: 'AI相談',
+      icon: '✨',
+      duration: '自由形式',
+      description: '専属のAI占星術師が、あなたの星の配置に基づき、個別の悩みにお答えします。',
+      gradient: 'linear-gradient(135deg, rgba(192, 132, 252, 0.25) 0%, rgba(126, 34, 206, 0.5) 100%)',
+      border: 'rgba(192, 132, 252, 0.5)',
+      glow: 'rgba(192, 132, 252, 0.2)'
     }
   ];
 
   return (
     <div className="mode-selection-container">
-
-      
-      {/* チュートリアルボタンを太陽星座の簡単占いの上に配置 */}
       <div className="tutorial-info-box">
-        <button 
-          className="tutorial-button-banner"
-          onClick={() => setShowTutorial(true)}
-        >
-          📖 なぜ数百万分の１なのか？使い方ガイド
+        <button className="tutorial-button-banner theme-gold" onClick={() => setShowTutorial(true)}>
+          📖 悠久の星が教える、あなたの真実<br />（使い方ガイド）
         </button>
       </div>
       
@@ -86,65 +64,41 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
           <div
             key={mode.id}
             className="mode-card"
-            style={{ background: mode.gradient }}
+            style={{ 
+              background: mode.gradient, 
+              borderColor: mode.border,
+              boxShadow: `0 10px 30px rgba(0,0,0,0.5), 0 0 20px ${mode.glow}` 
+            }}
             onClick={() => onSelectMode(mode.id as 'sun-sign' | 'ten-planets' | 'ai-chat')}
           >
-            <div className="mode-card-content">
-              <div className="mode-icon">{mode.icon}</div>
-              <h3 className="mode-card-title">{mode.title}</h3>
-              <div className="mode-duration">{mode.duration}</div>
-              <p className="mode-description">{mode.description}</p>
-              
-              <div className="mode-features">
-                {mode.features.map((feature, index) => (
-                  <span key={index} className="feature-tag">{feature}</span>
-                ))}
-              </div>
-              
-              <div className="mode-required">
-                <span className="required-label">必要な情報:</span>
-                <span className="required-text">{mode.required}</span>
-              </div>
+            <div className="mode-icon">{mode.icon}</div>
+            <div className="mode-header">
+              <h2 className="mode-title">{mode.title}</h2>
+              <p className="mode-subtitle">{mode.subtitle}</p>
+            </div>
+            <p className="mode-description">{mode.description}</p>
+            <div className="mode-footer">
+              <span className="mode-duration">⏱️ {mode.duration}</span>
+              <span className="mode-required">📍 {mode.id === 'sun-sign' ? '生年月日のみ' : '出生時刻・場所が必要'}</span>
             </div>
           </div>
         ))}
       </div>
-      
 
-
-      {/* データクリア機能（2つのボタン） */}
-      <div className="reset-data-section">
+      <div className="reset-data-section section-card">
         <div className="reset-buttons">
-          <button 
-            className="reset-data-button clear-results"
-            onClick={handleClearResultsOnly}
-            title="名前・生年月日・時刻・場所は保持して、占い結果のみクリア"
-          >
-            🔄 過去の占い結果をクリア
+          <button className="reset-data-button clear-results theme-gold" onClick={confirmAndClearResultsOnly}>
+            🔄 占い結果をクリア
           </button>
-          <button 
-            className="reset-data-button clear-all"
-            onClick={handleResetAllData}
-            title="名前・生年月日・時刻・場所も含めて全てクリア"
-          >
+          <button className="reset-data-button clear-all theme-gold" onClick={() => confirmAndClearData('全データを削除しますか？')}>
             🗑️ 全データをリセット
           </button>
         </div>
-        <div className="reset-buttons-description">
-          <p className="reset-note">
-            <strong>🔄 占い結果をクリア</strong>：名前・生年月日・時刻・場所は保持して、占い結果のみ削除<br/>
-            <strong>🗑️ 全データをリセット</strong>：名前・生年月日・時刻・場所も含めて全て削除
-          </p>
-        </div>
       </div>
         
-        {/* チュートリアルモーダル */}
-        <TutorialModal 
-          isOpen={showTutorial} 
-          onClose={handleCloseTutorial} 
-        />
-      </div>
-    );
-  };
+      <TutorialModal isOpen={showTutorial} onClose={() => setShowTutorial(false)} />
+    </div>
+  );
+};
 
 export default ModeSelection; 

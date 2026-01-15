@@ -1,0 +1,39 @@
+.result-header-container {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  background: rgba(10, 14, 26, 0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(125, 211, 252, 0.2);
+  margin-bottom: 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.back-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 1rem auto;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+/* スタイルは App.css の .back-button で定義済み */
+
+.result-title-text {
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  color: var(--ethereal-gold);
+  text-shadow: 0 0 15px rgba(253, 224, 71, 0.4);
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+@media (max-width: 768px) {
+  .result-title-text {
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+  }
+}

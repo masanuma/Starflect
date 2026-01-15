@@ -30,7 +30,9 @@ function App() {
         </a>
         
         <header className="App-header" role="banner">
-          <h1>✨ Starflect</h1>
+          <div className="header-logo-wrapper">
+            <img src="/header-logo.svg" alt="Starflect" className="header-logo-image" />
+          </div>
           <p className="subtitle">〜12星座から数百万分の１のあなただけの星占い〜</p>
         </header>
         
@@ -49,24 +51,18 @@ function App() {
         <footer className="App-footer" role="contentinfo">
           <div className="footer-content">
             <div className="footer-links">
-              <a href="/privacy-policy.html">
+              <a href="/privacy-policy.html" className="footer-link">
                 🔒 プライバシーポリシー
               </a>
-              <span className="footer-separator">|</span>
-              <a href="/terms-of-service.html">
+              <a href="/terms-of-service.html" className="footer-link">
                 📋 利用規約
               </a>
             </div>
             <div className="footer-note">
-              <p>✨ Starflect - あなただけの星占い</p>
-              <p className="disclaimer">※ 当サービスは娯楽目的です。重要な決定には専門家にご相談ください。</p>
-              <div className="footer-seo-content" style={{ fontSize: '0.8rem', color: '#999', marginTop: '1rem', lineHeight: '1.4' }}>
-                <p>
-                  【関連キーワード】星占い | 占い | 天体占い | 占星術 | 12星座 | ホロスコープ | 星座占い | 無料占い | 
-                  恋愛占い | 相性占い | 性格診断 | 太陽星座 | 月星座 | 上昇星座 | AI占い | 
-                  牡羊座 | 牡牛座 | 双子座 | 蟹座 | 獅子座 | 乙女座 | 天秤座 | 蠍座 | 射手座 | 山羊座 | 水瓶座 | 魚座
-                </p>
-              </div>
+              <p>✨ Starflect - 12星座から数百万分の１のあなただけの星占い</p>
+              <p className="disclaimer">
+                &copy; 2026 Starflect All Rights Reserved.
+              </p>
             </div>
           </div>
         </footer>

@@ -1,0 +1,100 @@
+.share-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 1.5rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.share-modal-content {
+  background: var(--cosmos-navy);
+  padding: 2.5rem;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--glass-border);
+  max-width: 850px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+  animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.share-modal-title {
+  color: var(--ethereal-gold);
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.share-modal-instructions {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.share-image-preview {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  margin-bottom: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.share-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.share-modal-actions button {
+  margin: 0 !important;
+  flex: 1;
+  min-width: 200px;
+}
+
+.close-modal-button {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-modal-button:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 600px) {
+  .share-modal-content {
+    padding: 1.5rem;
+  }
+  .share-modal-title {
+    font-size: 1.2rem;
+  }
+  .share-modal-actions button {
+    min-width: 100%;
+  }
+}

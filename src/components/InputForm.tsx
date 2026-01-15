@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BirthData } from '../types';
 import LocationPicker from './LocationPicker';
+import './InputForm.css';
+
 type FortuneMode = 'sun-sign' | 'ten-planets' | 'ai-chat';
 
 interface InputFormProps {
@@ -350,7 +352,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
   return (
     <div className="input-form-container">
       <div className="form-card">
-        <h2>あなたの出生情報を入力してください</h2>
+        <h2 className="form-title">あなたの出生情報を教えてください</h2>
         
 
         
@@ -447,7 +449,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
               </div>
             </div>
             <small id="birthDate-hint" className="input-hint">
-              💡 プルダウンメニューから年、月、日を選択してください
+              💡 生年月日をプルダウンから選択してください
             </small>
             {errors.birthDate && (
               <span 
@@ -476,7 +478,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
                     checked={formData.timeType === 'exact'}
                     onChange={(e) => handleInputChange('timeType', e.target.value)}
                   />
-                  正確な時刻がわかる
+                  正確な時刻
                 </label>
                 <label className={`precision-option ${formData.timeType === 'approximate' ? 'selected' : ''}`}>
                   <input
@@ -486,7 +488,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
                     checked={formData.timeType === 'approximate'}
                     onChange={(e) => handleInputChange('timeType', e.target.value)}
                   />
-                  大体の時刻
+                  おおよその時間
                 </label>
               </div>
 
@@ -515,15 +517,15 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
                   className="form-input"
                   tabIndex={5}
                 >
-                  <option value="morning">☀️ 朝生まれ（6:00-12:00）</option>
-                  <option value="afternoon">🌞 昼生まれ（12:00-18:00）</option>
-                  <option value="evening">🌙 夕方・夜生まれ（18:00-24:00）</option>
-                  <option value="midnight">🌌 深夜・明け方生まれ（0:00-6:00）</option>
+                  <option value="morning">☀️ 朝（6:00-12:00）</option>
+                  <option value="afternoon">🌞 昼（12:00-18:00）</option>
+                  <option value="evening">🌙 夕方・夜（18:00-24:00）</option>
+                  <option value="midnight">🌌 深夜・明け方（0:00-6:00）</option>
                 </select>
               )}
               
               <small id="birthTime-hint" className="input-hint">
-                💡 出生時刻が分かると、月星座や上昇星座も占えます
+                💡 出生時刻が分かると、より正確な分析が可能になります
               </small>
               {errors.birthTime && (
                 <span 
@@ -553,7 +555,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
                 />
               </div>
               <small id="birthPlace-hint" className="input-hint">
-                💡 正確な住所がわからない場合は、都道府県や市区町村でも占えます
+                💡 生まれた場所（市区町村など）を入力してください
               </small>
               {errors.birthPlace && (
                 <span 
@@ -598,7 +600,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
               aria-label="入力した情報をすべてクリアします"
               tabIndex={8}
             >
-              入力内容をクリア
+              入力をクリア
             </button>
           </div>
         </form>

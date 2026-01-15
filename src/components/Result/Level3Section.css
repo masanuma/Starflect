@@ -1,0 +1,268 @@
+.level-3-section {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1rem 6rem;
+}
+
+/* 星々の共鳴画面専用：紺碧のクリスタルカード */
+.level-3-section .section-card {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(125, 211, 252, 0.4) !important;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(125, 211, 252, 0.1) !important;
+  padding: 3rem 2.5rem !important;
+  margin-bottom: 3rem !important;
+  border-radius: var(--radius-card) !important;
+}
+
+/* セクション説明文 */
+.section-intro {
+  margin-bottom: 2.5rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  text-align: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* === 10天体配置セクション === */
+.ten-planets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 2rem;
+}
+
+.planet-group {
+  background: rgba(125, 211, 252, 0.05);
+  padding: 2.2rem;
+  border-radius: 28px;
+  border: 1px solid rgba(125, 211, 252, 0.1);
+}
+
+.group-title {
+  color: var(--ethereal-blue);
+  font-size: 1.2rem;
+  margin-bottom: 1.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(125, 211, 252, 0.2);
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+.planet-item {
+  margin-bottom: 1.2rem;
+}
+
+.planet-title-line {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: rgba(125, 211, 252, 0.08);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(125, 211, 252, 0.1);
+}
+
+.planet-title-line:hover {
+  background: rgba(125, 211, 252, 0.18);
+  border-color: rgba(125, 211, 252, 0.4);
+  transform: translateX(8px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.planet-emoji { font-size: 1.3rem; }
+.planet-name { flex: 1; font-weight: 700; color: #fff; font-size: 1.05rem; }
+.zodiac-emoji { font-size: 1.2rem; }
+.zodiac-sign { color: var(--ethereal-gold); font-weight: 700; font-size: 1.1rem; }
+.detail-toggle { color: var(--text-muted); font-size: 0.9rem; }
+
+/* 天体詳細アコーディオン */
+.planet-detail-accordion {
+  margin-top: 1rem;
+  padding: 2rem;
+  background: rgba(10, 14, 26, 0.7);
+  border-radius: 24px;
+  border: 1px solid rgba(125, 211, 252, 0.2);
+  animation: slideDown 0.4s ease-out;
+}
+
+.planet-detail-text p {
+  margin-bottom: 1.2rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.planet-detail-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* === まわりから見たあなた（AI分析） === */
+.ai-analysis-results {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Geminiの詳細な回答に合わせて1カラムで深く読ませる */
+  gap: 2rem;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.analysis-item-card {
+  background: rgba(192, 132, 252, 0.12);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  padding: 2.5rem;
+  border-radius: 32px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.analysis-item-card:hover {
+  background: rgba(192, 132, 252, 0.18);
+  transform: translateY(-5px);
+  border-color: rgba(192, 132, 252, 0.5);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.analysis-item-title {
+  color: var(--ethereal-purple);
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0;
+  padding-left: 1.5rem;
+  border-left: 5px solid var(--ethereal-purple);
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+}
+
+.analysis-item-text {
+  margin: 0;
+  line-height: 2;
+  color: #f8fafc;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+/* 生成中メッセージ */
+.generating-message {
+  text-align: center;
+  padding: 5rem 2rem;
+  background: rgba(125, 211, 252, 0.03);
+  border-radius: 32px;
+  border: 1px solid rgba(125, 211, 252, 0.1);
+  margin: 2rem 0;
+}
+
+.generating-message p {
+  margin-top: 2rem;
+  color: var(--ethereal-blue);
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+}
+
+/* 実行ボタンエリア */
+.analysis-cta {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(125, 211, 252, 0.3);
+  border-radius: 32px;
+}
+
+.cta-text {
+  margin-bottom: 2.5rem;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* === 今の運勢セクション === */
+.fortune-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 4rem;
+  padding: 3rem;
+  background: rgba(125, 211, 252, 0.05);
+  border-radius: 32px;
+  border: 1px solid rgba(125, 211, 252, 0.1);
+}
+
+.five-fortunes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.fortune-item-card {
+  background: rgba(12, 22, 45, 0.6);
+  border: 1px solid rgba(125, 211, 252, 0.2);
+  padding: 2.5rem;
+  border-radius: 32px;
+  transition: all 0.3s ease;
+}
+
+.fortune-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.8rem;
+  border-bottom: 1px solid rgba(125, 211, 252, 0.2);
+  padding-bottom: 1.2rem;
+}
+
+.fortune-item-label {
+  font-weight: 800;
+  color: var(--ethereal-blue);
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+}
+
+.fortune-item-content p {
+  line-height: 1.9;
+  color: #fff;
+  font-size: 1.05rem;
+}
+
+/* アクションボタン一覧 */
+.action-buttons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 900px) {
+  .ten-planets-grid, .analysis-grid, .five-fortunes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .level-3-section .section-card {
+    padding: 2.5rem 1.5rem !important;
+  }
+  
+  .analysis-item-card, .fortune-item-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .analysis-item-title {
+    font-size: 1.2rem;
+  }
+}
