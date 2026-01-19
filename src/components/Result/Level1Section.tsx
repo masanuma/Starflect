@@ -65,13 +65,25 @@ const Level1Section: React.FC<Level1SectionProps> = ({
     // 星の数を抽出
     const rating = fortuneSections.overallStars || 5;
 
+    const getPeriodLabel = (period: string) => {
+      const labels: any = {
+        today: '今日の運勢',
+        tomorrow: '明日の運勢',
+        thisWeek: '今週の運勢',
+        nextWeek: '来週の運勢',
+      };
+      return labels[period] || '星の導き';
+    };
+
     try {
       const dataUrl = await generateShareCard({
         sunSign,
         moonSign,
         ascSign,
         fortuneMessage: fortuneMessage.substring(0, 100),
-        rating
+        rating,
+        periodLabel: getPeriodLabel(fortunePeriod),
+        theme: 'gold'
       });
       
       setShareImageUrl(dataUrl);

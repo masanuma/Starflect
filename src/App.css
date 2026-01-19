@@ -25,6 +25,11 @@
   
   --radius-card: 32px;
   --radius-pill: 50px;
+
+  /* Aliases for components */
+  --border-radius-card: var(--radius-card);
+  --border-radius-pill: var(--radius-pill);
+  --cosmos-card: var(--card-bg);
 }
 
 /* === Global Reset === */

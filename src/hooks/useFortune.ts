@@ -3,9 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { BirthData, HoroscopeData } from '../types';
 import { generateCompleteHoroscope } from '../utils/astronomyCalculator';
 import { generateAIAnalysis, AIAnalysisResult } from '../utils/aiAnalyzer';
-import { getSunSignFortuneContext } from '../utils/sunSignTraits';
-import { getTimeContextForAI } from '../utils/dateUtils';
-import { cleanAIOutput } from '../utils/aiAnalyzerUtils';
 import { analyzePlanetSignWithAI } from '../utils/aiAnalyzer';
 
 export type PeriodSelection = 'today' | 'tomorrow' | 'thisWeek' | 'nextWeek' | 'thisMonth' | 'nextMonth' | 'threeMonths' | 'sixMonths' | 'oneYear';
@@ -29,7 +26,6 @@ export const useFortune = (initialSelectedMode?: 'sun-sign' | 'ten-planets') => 
   const [isGeneratingLevel3Analysis, setIsGeneratingLevel3Analysis] = useState(false);
   
   const [showDataMissingMessage, setShowDataMissingMessage] = useState(false);
-  const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   const [planetDetails, setPlanetDetails] = useState<Record<string, string>>({});
   const [openPlanets, setOpenPlanets] = useState<Set<string>>(new Set());
   
@@ -123,7 +119,6 @@ export const useFortune = (initialSelectedMode?: 'sun-sign' | 'ten-planets') => 
         ].join('\n\n') : '分析結果の生成に失敗しました。'
       );
       
-      console.log('🔍 【Level1設定テキスト】:', fortuneText);
       setLevel1Fortune(fortuneText);
       
       // ローカルストレージに保存
@@ -185,8 +180,6 @@ ${result.detailedFortune.personalGrowth}
       }
       
       setLevel3Fortune(fortuneText);
-      
-      // 必要に応じて保存処理を追加
     } catch (err) {
       console.error('Level 3 generation error:', err);
       setError('占いの生成に失敗しました。');
@@ -274,7 +267,6 @@ ${result.detailedFortune.personalGrowth}
     level3Analysis,
     isGeneratingLevel3Analysis,
     showDataMissingMessage,
-    selectedPlanet,
     planetDetails,
     openPlanets,
     setSelectedPeriod,

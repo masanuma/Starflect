@@ -112,9 +112,7 @@ const InputForm: React.FC<InputFormProps> = ({ mode = 'ten-planets' }) => {
           // savedFormDataも更新して整合性を保つ
           localStorage.setItem('savedFormData', JSON.stringify(restoredFormData));
           
-          // データ復元完了後にフラグを削除
-          localStorage.removeItem('starflect_need_three_planets_input');
-          console.log('🔍 レベルアップフラグを削除しました');
+          console.log('🔍 レベルアップ用の初期設定を完了しました');
         } catch (error) {
           console.error('既存出生データの読み込みに失敗:', error);
         }

@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import './ErrorScreen.css';
 
 interface ErrorScreenProps {
-  error: string;
+  message: string;
 }
 
-const ErrorScreen: React.FC<ErrorScreenProps> = ({ error }) => {
+const ErrorScreen: React.FC<ErrorScreenProps> = ({ message }) => {
   const navigate = useNavigate();
 
   return (
@@ -14,7 +14,7 @@ const ErrorScreen: React.FC<ErrorScreenProps> = ({ error }) => {
       <div className="error-card">
         <div className="error-icon">⚠️</div>
         <h2 className="error-title">通信エラーが発生しました</h2>
-        <p className="error-message">{error}</p>
+        <p className="error-message">{message}</p>
         <button 
           className="back-button"
           onClick={() => navigate('/')}

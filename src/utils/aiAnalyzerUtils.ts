@@ -81,6 +81,18 @@ export function safeParseJSON(raw: string): any {
   }
 }
 
+/**
+ * デバッグ用ログ出力
+ */
+export function debugLog(message: string, data?: any): void {
+  const timestamp = new Date().toISOString();
+  if (data) {
+    console.log(`[DEBUG ${timestamp}] ${message}`, data);
+  } else {
+    console.log(`[DEBUG ${timestamp}] ${message}`);
+  }
+}
+
 // mapAIResponseToAIAnalysisResult: パース済みAI応答をAIAnalysisResult型に変換
 export function mapAIResponseToAIAnalysisResult(raw: any): any {
   const personalityInsights = raw.personalityInsights || {};

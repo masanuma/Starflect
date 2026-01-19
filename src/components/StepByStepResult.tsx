@@ -82,7 +82,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode: initi
   }
 
   if (showDataMissingMessage) {
-    return <DataMissingMessage selectedMode={selectedMode} />;
+    return <DataMissingMessage selectedMode={selectedMode as any} />;
   }
 
   // 太陽星座を取得
@@ -92,18 +92,24 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode: initi
 
   const handleLevelUp = () => {
     setCurrentLevel(3);
-    window.scrollTo(0, 0);
+      window.scrollTo(0, 0);
   };
 
   const handleNewFortune = () => {
-    navigate('/');
+              navigate('/');
   };
 
   const handleAIChat = () => {
-    navigate('/ai-fortune');
+    // 現在のモードを保存してからAIチャットへ
+    const currentMode = localStorage.getItem('selectedMode');
+                    if (currentMode) {
+                      localStorage.setItem('previousMode', currentMode);
+    }
+    localStorage.setItem('selectedMode', 'ai-chat');
+              navigate('/');
   };
 
-  return (
+                  return (
     <div className="step-by-step-result">
       {currentLevel === 1 && (
         <Level1Section
@@ -147,4 +153,4 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode: initi
   );
 };
 
-export default StepByStepResult;
+export default StepByStepResult; 

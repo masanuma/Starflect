@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { chatWithAIAstrologer } from '../utils/aiAnalyzer';
-import { getTimeContextForAI } from '../utils/dateUtils';
 import { BirthData } from '../types';
 import AdBanner from './AdBanner';
 import './AIFortuneChat.css';
@@ -127,9 +126,8 @@ const AIFortuneChat: React.FC = () => {
 
 【重要】毎回新しい視点で分析し、異なる角度からのアドバイスを提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。
 
+今日の日付: ${new Date().toLocaleDateString('ja-JP')}
 相談者の質問: ${question}
-
-${getTimeContextForAI()}
 
 分析ID: ${Math.random().toString(36).substr(2, 9)}
 
@@ -156,11 +154,6 @@ ${getTimeContextForAI()}
           if (data.basicPersonality) prompt += `- 基本性格: ${data.basicPersonality.substring(0, 100)}...\n`;
           if (data.loveAndAction) prompt += `- 恋愛・行動: ${data.loveAndAction.substring(0, 100)}...\n`;
           if (data.workAndGrowth) prompt += `- 仕事・成長: ${data.workAndGrowth.substring(0, 100)}...\n`;
-        } else if (astrologyData.type === '3天体分析') {
-          const data = astrologyData.data;
-          prompt += `3天体分析結果:\n`;
-          if (data.combinedAnalysis?.overview) prompt += `- 全体像: ${data.combinedAnalysis.overview.substring(0, 100)}...\n`;
-          if (data.combinedAnalysis?.basicPersonality) prompt += `- 基本性格: ${data.combinedAnalysis.basicPersonality.substring(0, 100)}...\n`;
         } else if (astrologyData.type === '太陽星座') {
           prompt += `太陽星座: ${astrologyData.data.sunSign}\n`;
         }
@@ -710,52 +703,35 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
     return shuffled.slice(0, 5);
   };
 
-  // ローカルストレージキー生成
-  const generateStorageKey = (type: 'three-signs' | 'four-sections') => {
-    if (!birthData) return null;
-    const key = `${birthData.name}-${birthData.birthDate}-${birthData.birthTime}-${birthData.birthPlace}`;
-    return `personality-analysis-${type}-${encodeURIComponent(key)}`;
-  };
-
   // 占星術分析データを取得する関数
   const getAstrologyData = () => {
     if (!birthData) return null;
     
-    // 優先順位1: 10天体の分析データ
-    const fourSectionKey = generateStorageKey('four-sections');
-    if (fourSectionKey) {
-      const fourSectionData = localStorage.getItem(fourSectionKey);
-      if (fourSectionData) {
-        try {
-          const parsed = JSON.parse(fourSectionData);
+    const today = new Date().toISOString().split('T')[0];
+    const level3Key = `level3_analysis_result_${birthData.name}_${today}`;
+    
+    // 優先順位1: 10天体の分析データ (Level 3)
+    const level3Data = localStorage.getItem(level3Key);
+    if (level3Data) {
+      try {
+        const parsed = JSON.parse(level3Data);
+        if (parsed.tenPlanetSummary) {
+          const summary = parsed.tenPlanetSummary;
           return {
             type: '10天体分析',
-            data: parsed
+            data: {
+              basicPersonality: summary.overallInfluence,
+              loveAndAction: summary.loveAndBehavior,
+              workAndGrowth: summary.workBehavior
+            }
           };
-        } catch (e) {
-          console.error('10天体分析データの解析エラー:', e);
         }
+      } catch (e) {
+        console.error('Level 3分析データの解析エラー:', e);
       }
     }
     
-    // 優先順位2: 3天体の分析データ
-    const threeSignKey = generateStorageKey('three-signs');
-    if (threeSignKey) {
-      const threeSignData = localStorage.getItem(threeSignKey);
-      if (threeSignData) {
-        try {
-          const parsed = JSON.parse(threeSignData);
-          return {
-            type: '3天体分析',
-            data: parsed
-          };
-        } catch (e) {
-          console.error('3天体分析データの解析エラー:', e);
-        }
-      }
-    }
-    
-    // 優先順位3: 太陽星座情報
+    // 優先順位2: 太陽星座情報
     if (birthData.birthDate) {
       const birthDate = new Date(birthData.birthDate);
       const sunSign = getSunSign(birthDate);
@@ -1015,7 +991,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
             {(() => {
               const userName = birthData?.name || 'user';
               const today = new Date().toISOString().split('T')[0];
-              const level3Key = `level3_fortune_${userName}_${today}`;
+              const level3Key = `level3_analysis_result_${userName}_${today}`;
               const level1Key = `level1_fortune_${userName}_${today}`;
               
               let currentLevel = '';
@@ -1133,7 +1109,7 @@ ${astrologyData ? `${astrologyData.type}が物語るように、` : '天体の�
             const today = new Date().toISOString().split('T')[0];
             
             // Level3 → Level1の順で確認（Level2削除済み）
-            const level3Key = `level3_fortune_${userName}_${today}`;
+            const level3Key = `level3_analysis_result_${userName}_${today}`;
             const level1Key = `level1_fortune_${userName}_${today}`;
             
             console.log('🔍 【レベル判定チェック】');

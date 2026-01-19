@@ -4,7 +4,6 @@ import './App.css'
 import ModeSelection from './components/ModeSelection'
 import InputForm from './components/InputForm'
 import StepByStepResult from './components/StepByStepResult'
-import AIChat from './components/AIChat'
 import AIFortuneChat from './components/AIFortuneChat'
 import { initializeDataManager } from './utils/dataManager';
 
@@ -40,11 +39,6 @@ function App() {
           <Routes>
             <Route path="/" element={<HomeWrapper />} />
             <Route path="/result" element={<StepByStepResultWrapper />} />
-            <Route path="/chat" element={<AIChatWrapper />} />
-            <Route path="/ai-fortune" element={<AIFortuneWrapper />} />
-            {/* 将来的なSEOコンテンツページのルーティング */}
-            <Route path="/zodiac/:sign" element={<ZodiacPageWrapper />} />
-            <Route path="/guide/:topic" element={<GuidePageWrapper />} />
           </Routes>
         </main>
         
@@ -84,18 +78,14 @@ function HomeWrapper() {
       console.log('🔍 データ不足により自動モード選択:', missingDataMode);
       return missingDataMode as FortuneMode;
     }
-    // Level2削除により、3天体モードは無効
     console.log('🔍 通常の初期化 - モード選択画面を表示');
     return null;
   });
 
-  // レベルアップから来たかどうかを記録
-  const [isFromLevelUp] = useState(false); // Level2削除により常にfalse
   // データ不足から来たかどうかを記録
   const [isFromMissingData] = useState(!!missingDataMode);
   
   console.log('🔍 フラグ状態:');
-  console.log('  isFromLevelUp:', isFromLevelUp);
   console.log('  isFromMissingData:', isFromMissingData);
   console.log('  selectedMode:', selectedMode);
 
@@ -162,15 +152,6 @@ function HomeWrapper() {
             canSkipInput = birthData.name && birthData.birthDate;
             console.log('🔍 簡単占い - スキップ可能:', canSkipInput);
             break;
-          // case 'three-planets': // Level2削除済み
-            // 3天体占い：名前、生年月日、出生時刻、出生地があればOK
-            canSkipInput = birthData.name && birthData.birthDate && 
-                          birthData.birthTime && birthData.birthPlace && 
-                          (birthData.birthPlace.city || birthData.birthPlace.country);
-            console.log('🔍 3天体占い - スキップ可能:', canSkipInput);
-            console.log('🔍 birthTime:', birthData.birthTime);
-            console.log('🔍 birthPlace:', birthData.birthPlace);
-            break;
           case 'ten-planets':
             // 10天体占い：名前、生年月日、出生時刻、出生地があればOK
             canSkipInput = birthData.name && birthData.birthDate && 
@@ -234,21 +215,6 @@ function HomeWrapper() {
                 <p>生年月日を入力するだけで、あなたの基本的な性格や運勢を占います。</p>
               </div>
             )}
-            {false && ( // Level2削除により無効化
-              <div className="mode-info detailed">
-                <h3>🌙✨ 3天体の本格占い</h3>
-                {isFromLevelUp ? (
-                  <>
-                    <p style={{ color: '#0ea5e9', fontWeight: '600', fontSize: '1.1rem' }}>
-                      🔮 3天体の本格占いにレベルアップしました！
-                    </p>
-                    <p>出生時刻と出生地を追加で入力することで、太陽・月・上昇星座の詳細分析が可能になります。</p>
-                  </>
-                ) : (
-                  <p>出生時刻と出生地も入力して、太陽・月・上昇星座の詳細分析を行います。</p>
-                )}
-              </div>
-            )}
             {selectedMode === 'ten-planets' && (
               <div className="mode-info detailed">
                 <h3>🌌⭐ 10天体の完全占い</h3>
@@ -268,144 +234,13 @@ function HomeWrapper() {
   );
 }
 
-// AI占い専用ページのラッパー
-function AIFortuneWrapper() {
-  return (
-    <div className="ai-fortune-wrapper">
-      <AIFortuneChat />
-    </div>
-  );
-}
-
-// 段階的結果表示のラッパー
 function StepByStepResultWrapper() {
-  const navigate = useNavigate();
-  
   // localStorageから選択されたモードを取得
   const selectedMode = localStorage.getItem('selectedMode');
-  const birthDataRaw = localStorage.getItem('birthData');
-  let mode: 'simple' | 'detailed' = 'detailed';
   
-  console.log('🔍 【StepByStepResultWrapper】- デバッグ情報:');
-  console.log('  selectedMode:', selectedMode);
-  console.log('  birthDataRaw:', birthDataRaw);
-  console.log('  localStorage全体:', Object.keys(localStorage));
+  console.log('🔍 【StepByStepResultWrapper】selectedMode:', selectedMode);
   
-  // データ不足チェックはStepByStepResultコンポーネント内で行うため、ここでは削除
-  
-  if (selectedMode) {
-    console.log('🔍 selectedModeが存在します:', selectedMode);
-    // 選択されたモードに基づいて判定
-    if (selectedMode === 'sun-sign') {
-      mode = 'simple';
-      console.log('🔍 sun-signのため簡単占いモードに設定');
-          } else if (selectedMode === 'ten-planets') {
-      mode = 'detailed';
-              console.log('🔍 ten-planetsのため詳細占いモードに設定');
-    }
-  } else {
-    console.log('🔍 selectedModeがないため、フォールバック処理を実行');
-    // フォールバック: 出生データの内容で判定
-    if (birthDataRaw) {
-      try {
-        const birthData = JSON.parse(birthDataRaw);
-        console.log('🔍 出生データ:', birthData);
-        console.log('🔍 birthTime:', birthData.birthTime);
-        console.log('🔍 birthPlace:', birthData.birthPlace);
-        
-        // 出生時刻や出生地が設定されていない場合は簡単占いとみなす
-        if (!birthData.birthTime || birthData.birthTime === '12:00' || 
-            !birthData.birthPlace || birthData.birthPlace.city === '東京') {
-          mode = 'simple';
-          console.log('🔍 フォールバック: 簡単占いモードに設定');
-        } else {
-          console.log('🔍 フォールバック: 詳細占いモードに設定');
-        }
-      } catch (e) {
-        console.log('🔍 出生データの解析エラー:', e);
-      }
-    }
-  }
-  
-  console.log('🔍 【StepByStepResultWrapper】最終的なmode:', mode);
-  console.log('🔍 【StepByStepResultWrapper】propsとして渡すselectedMode:', selectedMode);
-  
-      return <StepByStepResult mode={mode} selectedMode={selectedMode as 'sun-sign' | 'ten-planets'} />;
-}
-
-// 将来的なSEOコンテンツページのプレースホルダー
-function ZodiacPageWrapper() {
-  const navigate = useNavigate();
-  
-  return (
-    <div style={{ textAlign: 'center', padding: '2rem' }}>
-      <h2>🌟 星座別詳細ページ</h2>
-      <p>将来的に各星座の詳細情報を掲載予定です。</p>
-      <button onClick={() => navigate('/')} style={{ marginTop: '1rem', padding: '0.5rem 1rem' }}>
-        ← ホームに戻る
-      </button>
-    </div>
-  );
-}
-
-function GuidePageWrapper() {
-  const navigate = useNavigate();
-  
-  return (
-    <div style={{ textAlign: 'center', padding: '2rem' }}>
-      <h2>📖 占い解説ページ</h2>
-      <p>将来的に占星術の詳細解説を掲載予定です。</p>
-      <button onClick={() => navigate('/')} style={{ marginTop: '1rem', padding: '0.5rem 1rem' }}>
-        ← ホームに戻る
-      </button>
-    </div>
-  );
-}
-
-// 既存のAIチャットのラッパー（既存機能用）
-function AIChatWrapper() {
-  const navigate = useNavigate();
-  const [birthData, setBirthData] = useState<any>(null);
-  const [planets, setPlanets] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  
-  useEffect(() => {
-    // birthData, planetsをlocalStorageから取得
-    const birthDataRaw = localStorage.getItem('birthData');
-    let parsedBirthData = null;
-    if (birthDataRaw) {
-      parsedBirthData = JSON.parse(birthDataRaw);
-      if (parsedBirthData.birthDate) parsedBirthData.birthDate = new Date(parsedBirthData.birthDate);
-    }
-    
-    const planetsRaw = localStorage.getItem('horoscopeData');
-    let parsedPlanets = [];
-    if (planetsRaw) {
-      try {
-        const parsed = JSON.parse(planetsRaw);
-        parsedPlanets = parsed.planets || [];
-      } catch {}
-    }
-    
-    // データがない場合は自動的にトップページにリダイレクト
-    if (!parsedBirthData || !parsedPlanets.length) {
-      console.log('🔍 AIチャット: 必要なデータがないため、トップページにリダイレクトします');
-      navigate('/');
-      return;
-    }
-    
-    // データがある場合は状態を設定
-    setBirthData(parsedBirthData);
-    setPlanets(parsedPlanets);
-    setIsLoading(false);
-  }, [navigate]);
-  
-  // ローディング中または データがない場合は何も表示しない
-  if (isLoading || !birthData || !planets.length) {
-    return null;
-  }
-  
-  return <AIChat birthData={birthData} planets={planets} />;
+  return <StepByStepResult selectedMode={selectedMode as 'sun-sign' | 'ten-planets'} />;
 }
 
 export default App 

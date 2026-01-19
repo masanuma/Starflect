@@ -87,7 +87,7 @@ const ModeSelection: React.FC<ModeSelectionProps> = ({ onSelectMode }) => {
 
       <div className="reset-data-section section-card">
         <div className="reset-buttons">
-          <button className="reset-data-button clear-results theme-gold" onClick={confirmAndClearResultsOnly}>
+          <button className="reset-data-button clear-results theme-gold" onClick={() => confirmAndClearResultsOnly()}>
             🔄 占い結果をクリア
           </button>
           <button className="reset-data-button clear-all theme-gold" onClick={() => confirmAndClearData('全データを削除しますか？')}>

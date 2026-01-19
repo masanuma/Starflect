@@ -115,6 +115,21 @@ const Level3Section: React.FC<Level3SectionProps> = ({
       ? sentences.slice(0, 2).join('。') + '。' 
       : `${sunSign}座の太陽が導く、あなたの物語。`;
 
+    const getPeriodLabel = (period: string) => {
+      const labels: any = {
+        today: '今日の運勢',
+        tomorrow: '明日の運勢',
+        thisWeek: '今週の運勢',
+        nextWeek: '来週の運勢',
+        thisMonth: '今月の運勢',
+        nextMonth: '来月の運勢',
+        threeMonths: '3ヶ月の運勢',
+        sixMonths: '半年の運勢',
+        oneYear: '1年の運勢',
+      };
+      return labels[period] || '星の導き';
+    };
+
     try {
       const dataUrl = await generateShareCard({
         sunSign,
@@ -122,7 +137,9 @@ const Level3Section: React.FC<Level3SectionProps> = ({
         ascSign,
         fortuneMessage: fortuneMessage.substring(0, 100),
         // Level 3は総合的な分析なので星5つ相当の輝きとして表示（または非表示も可）
-        rating: fortuneSections.overallStars || 5 
+        rating: fortuneSections.overallStars || 5,
+        periodLabel: getPeriodLabel(fortunePeriod),
+        theme: 'azure'
       });
       
       setShareImageUrl(dataUrl);

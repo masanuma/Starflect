@@ -2,17 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface DataMissingMessageProps {
-  currentLevel: number;
+  selectedMode?: 'sun-sign' | 'ten-planets';
 }
 
-const DataMissingMessage: React.FC<DataMissingMessageProps> = ({ currentLevel }) => {
+const DataMissingMessage: React.FC<DataMissingMessageProps> = ({ selectedMode }) => {
   const navigate = useNavigate();
-  const selectedMode = localStorage.getItem('selectedMode');
-  const isForThreePlanets = (currentLevel === 1) || (selectedMode === 'three-planets');
-  const modeTitle = isForThreePlanets ? '3天体の本格占い' : '10天体の完全占い';
+  const modeTitle = '10天体の完全占い';
   
   const handleGoToRegistration = () => {
-    const targetMode = isForThreePlanets ? 'three-planets' : 'ten-planets';
+    const targetMode = 'ten-planets';
     localStorage.setItem('starflect_missing_data_mode', targetMode);
     localStorage.setItem('selectedMode', targetMode);
     window.scrollTo(0, 0);

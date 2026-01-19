@@ -281,65 +281,6 @@ ${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('
 `;
 };
 
-// プロンプト生成関数（簡単占いモード対応）
-const generateEnhancedAnalysisPrompt = (
-  birthData: BirthData,
-  planets: PlanetPosition[]
-): string => {
-  return `
-【詳細占星術分析のご依頼】
-
-以下の出生データと天体配置をもとに、クライアント様の性格や運勢について、
-必ず丁寧語（「です・ます」調）で統一し、簡潔で分かりやすく解説してください。
-
-【重要】毎回新しい視点で分析し、異なる角度からのアドバイスを提供してください。同じ内容の繰り返しは避け、新鮮な洞察を含めてください。
-
-【クライアント情報】
-お名前: ${birthData.name}
-生年月日: ${birthData.birthDate.toLocaleDateString('ja-JP')}
-出生時刻: ${birthData.birthTime}
-出生地: ${birthData.birthPlace.city}
-
-【天体配置】
-${planets.map(p => `${p.planet}: ${p.sign}座 ${p.degree.toFixed(1)}度`).join('\n')}
-
-【出力形式】
-必ず以下のJSON形式のみでご回答ください。キーは英語、値は日本語（必ずですます調）で記述してください。
-
-{
-  "personalityInsights": {
-    "corePersonality": "太陽星座の特徴を120-150文字で、必ずですます調で記述。性格の特徴と強み・注意点を含めて。",
-    "hiddenTraits": "月星座の隠れた特性を100-120文字で、必ずですます調で記述。内面の感情と特徴を含めて。",
-    "lifePhilosophy": "人生哲学や価値観を100-120文字で、必ずですます調で記述。何を重視するかを含めて。",
-    "relationshipStyle": "人間関係のスタイルを100-120文字で、必ずですます調で記述。コミュニケーションの特徴を含めて。",
-    "careerTendencies": "キャリア傾向を100-120文字で、必ずですます調で記述。適職と成功のポイントを含めて。"
-  },
-  "detailedFortune": {
-    "overallTrend": "全体的な運勢傾向を120-150文字で、必ずですます調で記述。",
-    "loveLife": "恋愛運を100-120文字で、必ずですます調で記述。",
-    "careerPath": "仕事運を100-120文字で、必ずですます調で記述。",
-    "healthWellness": "健康運を100-120文字で、必ずですます調で記述。",
-    "financialProspects": "金運を100-120文字で、必ずですます調で記述。",
-    "personalGrowth": "成長運を100-120文字で、必ずですます調で記述。"
-  },
-  "tenPlanetSummary": {
-    "overallInfluence": "総合的な影響について120-150文字で、必ずですます調で記述。",
-    "communicationStyle": "話し方の癖について100-120文字で、必ずですます調で記述。",
-    "loveAndBehavior": "恋愛や行動について100-120文字で、必ずですます調で記述。",
-    "workBehavior": "仕事での振る舞いについて100-120文字で、必ずですます調で記述。",
-    "transformationAndDepth": "変革と深層心理について100-120文字で、必ずですます調で記述。"
-  }
-}
-
-【厳守事項】
-- 必ずJSON形式のみで回答してください。
-- 各項目の文字数を指定通りに記述してください。
-- 丁寧な日本語（です・ます調）で記述してください。
-- マークダウン記号（**）は絶対に使用しないでください。
-- 上記のJSON形式を守ってください。
-`;
-};
-
 // AIの出力からマークダウン（**）を除去または変換するユーティリティ
 const cleanAIOutput = (text: any): any => {
   if (typeof text === 'string') {
@@ -573,13 +514,13 @@ async function generatePlanetAnalysisAll(birthData: BirthData, planets: PlanetPo
 export const generateAIAnalysis = async (
   birthData: BirthData,
   planets: PlanetPosition[],
-  mode: 'simple' | 'detailed' | 'level3' = 'detailed'
+  mode: 'simple' | 'level3' = 'level3'
 ): Promise<AIAnalysisResult> => {
   console.log('🔍 【generateAIAnalysis開始】モード:', mode, 'プラネット数:', planets.length);
   
   if (!isApiKeyAvailable()) {
     debugEnvConfig();
-    throw new Error('OpenAI APIキーが設定されていません。環境変数を確認してください。');
+    throw new Error('APIキーが設定されていません。環境変数を確認してください。');
   }
 
   let baseResult: AIAnalysisResult;
@@ -590,14 +531,14 @@ export const generateAIAnalysis = async (
     const sunSign = sunPlanet?.sign || '牡羊座';
     
     const simplePrompt = generateSimpleAnalysisPrompt(birthData, sunSign);
-    baseResult = await callAIAPI(simplePrompt, 1500); // 短いトークン数
+    baseResult = await callAIAPI(simplePrompt, 1500);
     
-    // 簡単占いでは planetAnalysis は基本的な3天体のみ
+    // 簡単占いでは主要な天体のみ分析
     const mainPlanets = planets.filter(p => 
       ['太陽', 'Sun', '月', 'Moon', '上昇星座', 'Ascendant'].includes(p.planet)
     );
     const planetAnalysis = mainPlanets.length > 0 
-      ? await generatePlanetAnalysisAll(birthData, mainPlanets.slice(0, 2)) // 太陽・月のみ
+      ? await generatePlanetAnalysisAll(birthData, mainPlanets.slice(0, 2))
       : {};
 
     return {
@@ -605,29 +546,15 @@ export const generateAIAnalysis = async (
       planetAnalysis,
       aiPowered: true
     };
-  } else if (mode === 'level3') {
-    // Level3詳細分析: 印象診断専用の詳細プロンプト
-    const level3Prompt = generateLevel3DetailedAnalysisPrompt(birthData, planets);
-    baseResult = await callAIAPI(level3Prompt, 3500); // より多くのトークン数
-
-    // planetAnalysisは天体ごとに分割API呼び出し
-    const planetAnalysis = await generatePlanetAnalysisAll(birthData, planets);
-
-    console.log('🔍 【Level3詳細分析完了】結果:', baseResult);
-    return {
-      ...baseResult,
-      planetAnalysis,
-      aiPowered: true
-    };
   } else {
-    // 詳しい占い: 全天体の詳細分析
-    const enhancedPrompt = generateEnhancedAnalysisPrompt(birthData, planets);
-    baseResult = await callAIAPI(enhancedPrompt, 2000); // トークン数を2500から2000に削減
+    // Level3詳細分析
+    const level3Prompt = generateLevel3DetailedAnalysisPrompt(birthData, planets);
+    baseResult = await callAIAPI(level3Prompt, 3500);
 
-    // planetAnalysisは天体ごとに分割API呼び出し
+    // 全天体の分析を並列取得
     const planetAnalysis = await generatePlanetAnalysisAll(birthData, planets);
 
-    console.log('🔍 【generateAIAnalysis成功】結果:', baseResult);
+    console.log('🔍 【Level3分析完了】');
     return {
       ...baseResult,
       planetAnalysis,
@@ -636,9 +563,7 @@ export const generateAIAnalysis = async (
   }
 };
 
-
-
-
+// ... existing code ...
 
 // AI占い師チャット機能（アスペクト情報追加版）
 export const chatWithAIAstrologer = async (
@@ -673,8 +598,6 @@ ${fortuneData.result}
   } catch (error) {
     console.warn('Level1占い結果の読み込みエラー:', error);
   }
-
-  // Level2関連処理は削除済み
 
   // 🔧 Level3星が伝えるあなたの印象診断結果の読み込み（AIチャット引き継ぎ用）
   const level3Key = `level3_analysis_result_${birthData.name}_${new Date().toISOString().split('T')[0]}`;
@@ -793,58 +716,6 @@ ${recentFortuneInfo ? '- 上記の「本日のお手軽12星座占い結果」�
   );
 
   return cleanAIOutput(data.choices[0].message.content);
-};
-
-// 天体計算プロンプトも簡略化
-const generatePlanetCalculationPrompt = (birthData: BirthData): string => {
-  return `
-【天体位置計算依頼】
-
-以下の出生データから10天体の位置を計算し、JSON形式で返してください。
-
-名前: ${birthData.name}
-生年月日: ${birthData.birthDate.toLocaleDateString('ja-JP')}
-出生時刻: ${birthData.birthTime}
-出生地: ${birthData.birthPlace.city}
-緯度: ${birthData.birthPlace.latitude}
-経度: ${birthData.birthPlace.longitude}
-`;
-};
-
-// 天体計算用のAI呼び出し
-const callPlanetCalculationAPI = async (prompt: string): Promise<PlanetPosition[]> => {
-  const data = await callAIWithRetry(
-    prompt,
-    "あなたは精密な計算を行う占星術の学者です。10天体すべての正確な位置をJSON形式で提供してください。",
-    3000
-  );
-
-  const content = data.choices[0].message.content;
-
-  try {
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      const result = JSON.parse(jsonMatch[0]);
-      return result.planets || [];
-    } else {
-      throw new Error('Valid JSON not found in response');
-    }
-  } catch (error) {
-    console.error('JSON parsing error:', error);
-    console.error('Raw content:', content);
-    throw new Error('天体計算の解析に失敗しました。再度お試しください。');
-  }
-};
-
-// AI経由の天体計算関数
-export const calculatePlanetsWithAI = async (birthData: BirthData): Promise<PlanetPosition[]> => {
-  if (!isApiKeyAvailable()) {
-    debugEnvConfig();
-    throw new Error('APIキーが設定されていません。環境変数を確認してください。');
-  }
-
-  const prompt = generatePlanetCalculationPrompt(birthData);
-  return await callPlanetCalculationAPI(prompt);
 };
 
 // 天体×星座ごとにAI分析を行う関数
