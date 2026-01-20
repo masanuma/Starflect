@@ -100,6 +100,7 @@ export function mapAIResponseToAIAnalysisResult(raw: any): any {
   const todaysFortune = raw.todaysFortune || {};
   const planetAnalysis = raw.planetAnalysis || {};
   const tenPlanetSummary = raw.tenPlanetSummary || {};
+  const soulPortrait = raw.soulPortrait || {};
 
   const result: any = {
     personalityInsights: {
@@ -133,6 +134,11 @@ export function mapAIResponseToAIAnalysisResult(raw: any): any {
       loveAndBehavior: tenPlanetSummary.loveAndBehavior || "データなし",
       workBehavior: tenPlanetSummary.workBehavior || "データなし",
       transformationAndDepth: tenPlanetSummary.transformationAndDepth || "データなし"
+    },
+    soulPortrait: {
+      keynote: soulPortrait.keynote || "",
+      dynamics: soulPortrait.dynamics || "",
+      advice: soulPortrait.advice || ""
     },
     aiPowered: true
   };

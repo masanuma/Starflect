@@ -5,6 +5,7 @@ import FortuneRating from './FortuneRating';
 import LoadingSpinner from '../LoadingSpinner';
 import { ZodiacInfo } from '../../utils/zodiacData';
 import { parseAIFortune } from '../../utils/fortuneParser';
+import { AIAnalysisResult } from '../../utils/aiAnalyzer';
 import { generateShareCard, shareImage } from '../../utils/shareCardGenerator';
 import ShareModal from './ShareModal';
 import './Level1Section.css';
@@ -19,6 +20,9 @@ interface Level1SectionProps {
   isGenerating: boolean;
   fortune: string | null;
   fortunePeriod: string;
+  level1Analysis: AIAnalysisResult | null; // 追加
+  isGeneratingAnalysis: boolean; // 追加
+  handleGenerateAnalysis: () => void; // 追加
   onLevelUp: () => void;
   onNewFortune: () => void;
   onAIChat: () => void;
@@ -34,6 +38,9 @@ const Level1Section: React.FC<Level1SectionProps> = ({
   isGenerating,
   fortune,
   fortunePeriod,
+  level1Analysis,
+  isGeneratingAnalysis,
+  handleGenerateAnalysis,
   onLevelUp,
   onNewFortune,
   onAIChat
@@ -112,6 +119,47 @@ const Level1Section: React.FC<Level1SectionProps> = ({
         />
       )}
       <ZodiacBasics sign={sunSign} signInfo={signInfo} />
+
+      {/* 星からの特別メッセージ（AI分析） */}
+      <div className="section-card personality-analysis-section">
+        <h3 className="section-title">🌟 星からの特別メッセージ</h3>
+        <p className="section-intro">太陽の配置から、あなたの性格と人生のテーマを読み解きます。</p>
+        
+        {isGeneratingAnalysis && (
+          <div className="generating-message">
+            <LoadingSpinner size={50} color="var(--ethereal-blue)" />
+            <p>太陽の輝きから、あなたの魂の物語を紡いでいます...</p>
+          </div>
+        )}
+        
+        {!isGeneratingAnalysis && level1Analysis?.soulPortrait?.keynote && (
+          <div className="ai-analysis-results soul-portrait-results">
+            <div className="soul-portrait-grid">
+              {[
+                { label: 'あなたの本当の性格と、人生のテーマ', text: level1Analysis.soulPortrait.keynote, icon: '🎼' },
+                { label: '授かった才能と、気をつけるべき点', text: level1Analysis.soulPortrait.dynamics, icon: '🌓' },
+                { label: '今、あなたへ伝えたいアドバイス', text: level1Analysis.soulPortrait.advice, icon: '📜' }
+              ].map(item => (
+                <div key={item.label} className="analysis-item-card soul-portrait-card">
+                  <h4 className="analysis-item-title">
+                    <span className="item-icon">{item.icon}</span> {item.label}
+                  </h4>
+                  <p className="analysis-item-text">{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {!level1Analysis?.soulPortrait?.keynote && !isGeneratingAnalysis && (
+          <div className="analysis-cta">
+            <p className="cta-text">太陽星座の配置に基づいた、AIによる特別メッセージを生成します。</p>
+            <button className="generate-fortune-button theme-gold" onClick={handleGenerateAnalysis}>
+              特別メッセージを受け取る
+            </button>
+          </div>
+        )}
+      </div>
       
       {/* 占い実行セクション */}
       <div className="section-card fortune-execution-section">

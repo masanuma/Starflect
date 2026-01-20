@@ -188,17 +188,36 @@ const Level3Section: React.FC<Level3SectionProps> = ({
         </div>
       </div>
 
-      {/* まわりから見たあなた（AI分析） */}
+      {/* 星からの特別メッセージ（AI分析） */}
       <div className="section-card personality-analysis-section">
-        <h3 className="section-title">🌟 まわりから見たあなた</h3>
+        <h3 className="section-title">🌟 星からの特別メッセージ</h3>
         {isGeneratingAnalysis && (
           <div className="generating-message">
             <LoadingSpinner size={50} color="var(--ethereal-blue)" />
-            <p>10天体の共鳴から、あなたの魂の肖像を分析しています...</p>
+            <p>10天体の共鳴から、あなたの魂の物語を紡いでいます...</p>
           </div>
         )}
         
-        {level3Analysis?.tenPlanetSummary && !isGeneratingAnalysis && (
+        {!isGeneratingAnalysis && level3Analysis?.soulPortrait?.keynote && (
+          <div className="ai-analysis-results soul-portrait-results">
+            <div className="soul-portrait-grid">
+              {[
+                { label: 'あなたの本当の性格と、人生のテーマ', text: level3Analysis.soulPortrait.keynote, icon: '🎼' },
+                { label: '授かった才能と、気をつけるべき点', text: level3Analysis.soulPortrait.dynamics, icon: '🌓' },
+                { label: '今、あなたへ伝えたいアドバイス', text: level3Analysis.soulPortrait.advice, icon: '📜' }
+              ].map(item => (
+                <div key={item.label} className="analysis-item-card soul-portrait-card">
+                  <h4 className="analysis-item-title">
+                    <span className="item-icon">{item.icon}</span> {item.label}
+                  </h4>
+                  <p className="analysis-item-text">{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!isGeneratingAnalysis && !level3Analysis?.soulPortrait?.keynote && level3Analysis?.tenPlanetSummary && (
           <div className="ai-analysis-results">
             <div className="analysis-grid">
               {[

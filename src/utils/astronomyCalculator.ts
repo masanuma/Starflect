@@ -432,91 +432,71 @@ function calculateMidheaven(birthData: BirthData): number {
   return mc;
 }
 
-// 正確な天体計算（上昇星座・MCを含む）
-export async function calculateAllPlanets(birthData: BirthData): Promise<PlanetPosition[]> {
-  const date = birthData.birthDate instanceof Date ? birthData.birthDate : new Date(birthData.birthDate);
-  
+// 特定の日時における天体位置を計算（緯度経度が指定されればAsc/MCも計算）
+export async function calculatePlanetsAtDate(date: Date, latitude?: number, longitude?: number): Promise<PlanetPosition[]> {
   const planetNames = ['太陽', '月', '水星', '金星', '火星', '木星', '土星', '天王星', '海王星', '冥王星'];
   const planetPositions: PlanetPosition[] = [];
 
-  // 通常の天体計算
   for (const planetName of planetNames) {
     try {
-      const longitude = calculatePlanetLongitude(planetName, date);
-      const sign = longitudeToZodiacSign(longitude);
-      const degree = longitudeToDegreeInSign(longitude);
+      const longitudeVal = calculatePlanetLongitude(planetName, date);
+      const sign = longitudeToZodiacSign(longitudeVal);
+      const degree = longitudeToDegreeInSign(longitudeVal);
       const retrograde = isPlanetRetrograde(planetName, date);
       
       planetPositions.push({
         planet: planetName,
         sign,
-        house: 1, // ハウス計算は後で実装
+        house: 1,
         degree: Math.round(degree * 10) / 10,
         retrograde
       });
-      
     } catch (error) {
       console.error(`${planetName}の計算エラー:`, error);
-      // エラー時はデフォルト値を設定
-      planetPositions.push({
-        planet: planetName,
-        sign: '不明' as ZodiacSign,
-        house: 1,
-        degree: 0,
-        retrograde: false
-      });
     }
   }
 
-  // 上昇星座を追加
-  try {
-    const ascendantLongitude = calculateAscendant(birthData);
-    const ascendantSign = longitudeToZodiacSign(ascendantLongitude);
-    const ascendantDegree = longitudeToDegreeInSign(ascendantLongitude);
-    
-    planetPositions.push({
-      planet: '上昇星座',
-      sign: ascendantSign,
-      house: 1,
-      degree: Math.round(ascendantDegree * 10) / 10,
-      retrograde: false
-    });
-  } catch (error) {
-    console.error('上昇星座計算エラー:', error);
-    planetPositions.push({
-      planet: '上昇星座',
-      sign: '不明' as ZodiacSign,
-      house: 1,
-      degree: 0,
-      retrograde: false
-    });
-  }
+  if (latitude !== undefined && longitude !== undefined) {
+    try {
+      // 簡易的なBirthDataを作成して既存の関数を利用
+      const tempBirthData: BirthData = {
+        birthDate: date,
+        birthTime: `${date.getHours()}:${date.getMinutes()}`,
+        birthPlace: { city: '', latitude, longitude, timezone: '' }
+      };
+      
+      const ascendantLongitude = calculateAscendant(tempBirthData);
+      planetPositions.push({
+        planet: '上昇星座',
+        sign: longitudeToZodiacSign(ascendantLongitude),
+        house: 1,
+        degree: Math.round(longitudeToDegreeInSign(ascendantLongitude) * 10) / 10,
+        retrograde: false
+      });
 
-  // MC（中天）を追加
-  try {
-    const mcLongitude = calculateMidheaven(birthData);
-    const mcSign = longitudeToZodiacSign(mcLongitude);
-    const mcDegree = longitudeToDegreeInSign(mcLongitude);
-    
-    planetPositions.push({
-      planet: 'MC',
-      sign: mcSign,
-      house: 10,
-      degree: Math.round(mcDegree * 10) / 10,
-      retrograde: false
-    });
-  } catch (error) {
-    console.error('MC計算エラー:', error);
-    planetPositions.push({
-      planet: 'MC',
-      sign: '不明' as ZodiacSign,
-      house: 10,
-      degree: 0,
-      retrograde: false
-    });
+      const mcLongitude = calculateMidheaven(tempBirthData);
+      planetPositions.push({
+        planet: 'MC',
+        sign: longitudeToZodiacSign(mcLongitude),
+        house: 10,
+        degree: Math.round(longitudeToDegreeInSign(mcLongitude) * 10) / 10,
+        retrograde: false
+      });
+    } catch (error) {
+      console.error('Asc/MC計算エラー:', error);
+    }
   }
   
   return planetPositions;
+}
+
+// 正確な天体計算（上昇星座・MCを含む）
+export async function calculateAllPlanets(birthData: BirthData): Promise<PlanetPosition[]> {
+  const date = birthData.birthDate instanceof Date ? birthData.birthDate : new Date(birthData.birthDate);
+  const lat = birthData.birthPlace?.latitude;
+  const lng = birthData.birthPlace?.longitude;
+  
+  return calculatePlanetsAtDate(date, lat, lng);
 }
 
 // ハウス計算（等分ハウスシステム）

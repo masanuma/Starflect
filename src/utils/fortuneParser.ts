@@ -110,7 +110,9 @@ export const parseAIFortune = (fortuneText: string | null, period: string): Fort
     const cleaned = section.replace(/【[^】]*】|###[^#]*?運/, '').trim()
       .replace(/🍀.*?(?=⚠️|$)/gs, '').trim()
       .replace(/⚠️.*$/gs, '').trim()
-      .replace(/運勢評価:.*$/g, '').trim()
+      .replace(/(?:運勢評価|評価|スコア)\s*:[★☆\d\s\/]+/g, '').trim()
+      .replace(/【?\s*(?:魂の肖像|Soul Portrait|魂の基調講演|光と影のダイナミクス|星々からの具体的な助言)\s*】?\s*/g, '')
+      .replace(/【?\s*(?:あなたの本当の性格と、人生のテーマ|授かった才能と、気をつけるべき点|今、あなたへ伝えたいアドバイス)\s*】?\s*/g, '')
       .replace(/★+[☆★]*.*$/g, '').trim();
 
     if (section.includes('全体運') || section.includes('全体的') || section.includes('総合運')) {

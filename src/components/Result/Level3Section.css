@@ -100,56 +100,54 @@
   margin-bottom: 0;
 }
 
-/* === まわりから見たあなた（AI分析） === */
-.ai-analysis-results {
-  width: 100%;
-  margin-top: 1rem;
-}
-
-.analysis-grid {
+/* === 星からの特別メッセージ === */
+.soul-portrait-grid {
   display: grid;
-  grid-template-columns: 1fr; /* Geminiの詳細な回答に合わせて1カラムで深く読ませる */
-  gap: 2rem;
-  max-width: 850px;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  max-width: 900px;
   margin: 0 auto;
 }
 
-.analysis-item-card {
-  background: rgba(192, 132, 252, 0.12);
-  border: 1px solid rgba(192, 132, 252, 0.3);
-  padding: 2.5rem;
-  border-radius: 32px;
-  transition: all 0.3s ease;
+.soul-portrait-card {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.15) 0%, rgba(79, 70, 229, 0.1) 100%) !important;
+  border: 1px solid rgba(192, 132, 252, 0.4) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.soul-portrait-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--ethereal-purple), var(--ethereal-blue));
+}
+
+.soul-portrait-card .item-icon {
+  font-size: 1.6rem;
+  margin-right: 0.8rem;
+  vertical-align: middle;
+}
+
+.soul-portrait-card .analysis-item-title {
+  border-left: none;
+  padding-left: 0;
+  font-size: 1.5rem;
+  background: linear-gradient(to right, #e9d5ff, #bfdbfe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  align-items: center;
 }
 
-.analysis-item-card:hover {
-  background: rgba(192, 132, 252, 0.18);
-  transform: translateY(-5px);
-  border-color: rgba(192, 132, 252, 0.5);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-}
-
-.analysis-item-title {
-  color: var(--ethereal-purple);
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin: 0;
-  padding-left: 1.5rem;
-  border-left: 5px solid var(--ethereal-purple);
-  line-height: 1.2;
-  letter-spacing: 0.05em;
-}
-
-.analysis-item-text {
-  margin: 0;
-  line-height: 2;
-  color: #f8fafc;
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
+.soul-portrait-card .analysis-item-text {
+  font-size: 1.15rem;
+  line-height: 2.2;
+  color: #f1f5f9;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* 生成中メッセージ */

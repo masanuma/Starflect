@@ -30,6 +30,8 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode: initi
     level3Fortune,
     isGeneratingLevel1,
     isGeneratingLevel3,
+    level1Analysis,
+    isGeneratingLevel1Analysis,
     level3Analysis,
     isGeneratingLevel3Analysis,
     showDataMissingMessage,
@@ -37,6 +39,7 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode: initi
     planetDetails,
     setSelectedPeriod,
     handleGenerateLevel1Fortune,
+    handleGenerateLevel1Analysis,
     handleGenerateLevel3Fortune,
     handleGenerateLevel3Analysis,
     handlePlanetClick,
@@ -122,6 +125,9 @@ const StepByStepResult: React.FC<StepByStepResultProps> = ({ selectedMode: initi
           isGenerating={isGeneratingLevel1}
           fortune={level1Fortune}
           fortunePeriod={fortunePeriod}
+          level1Analysis={level1Analysis}
+          isGeneratingAnalysis={isGeneratingLevel1Analysis}
+          handleGenerateAnalysis={handleGenerateLevel1Analysis}
           onLevelUp={handleLevelUp}
           onNewFortune={handleNewFortune}
           onAIChat={handleAIChat}
