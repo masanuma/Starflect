@@ -15,6 +15,7 @@ const handlers = createAiHandlers(process.env.ANTHROPIC_API_KEY)
 // APIルート(静的配信より前に登録する)
 app.post('/api/ai-reading', handlers.reading)
 app.post('/api/ai-pair', handlers.pair)
+app.post('/api/ai-chat', handlers.chat)
 
 // ビルド済みの静的ファイル
 app.use(express.static(distDir))

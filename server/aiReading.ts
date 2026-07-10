@@ -12,6 +12,7 @@ export function aiReadingPlugin(apiKey: string | undefined): Plugin {
     configureServer(server) {
       server.middlewares.use('/api/ai-reading', handlers.reading)
       server.middlewares.use('/api/ai-pair', handlers.pair)
+      server.middlewares.use('/api/ai-chat', handlers.chat)
     },
   }
 }

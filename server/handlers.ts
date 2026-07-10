@@ -178,13 +178,150 @@ function makeHandler<T>(
   }
 }
 
-/** 鑑定用・相性用の2つのAPIハンドラを生成する */
+/* ---------- 相談チャット(ストリーミング) ---------- */
+
+export interface ChatMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+/** チャットに渡す、その人の占星術データ一式 */
+export interface ChatChartContext {
+  name: string
+  dateLabel: string
+  placeLabel?: string
+  starTypeName?: string
+  starTypeCopy?: string
+  planets: { label: string; sign: string; deg: number; retro?: boolean }[]
+  natalAspects?: string[]
+  periodLabel: string
+  skyNote: string
+  toneLabel: string
+  transits: string[]
+  /** すでに生成済みのAI鑑定文があれば渡す */
+  reading?: string
+}
+
+export interface ChatRequest {
+  context: ChatChartContext
+  messages: ChatMessage[]
+}
+
+function buildChatSystem(c: ChatChartContext): string {
+  const who = c.name || 'この方'
+  const lines = [
+    `あなたは${who}さん専属の、あたたかく信頼できる占星術カウンセラーです。`,
+    `以下は${who}さんの出生チャート(生まれた瞬間の星の配置)と、いまの星の運行です。相談には必ずこのデータに基づいて、${who}さんだけに向けた答えを返してください。`,
+    '',
+    `【生年月日】${c.dateLabel}${c.placeLabel ? `(${c.placeLabel})` : ''}`,
+  ]
+  if (c.starTypeName) {
+    lines.push(`【ほしキャラ】${c.starTypeName}${c.starTypeCopy ? ` — ${c.starTypeCopy}` : ''}`)
+  }
+  lines.push(
+    '',
+    '【出生の天体配置】',
+    ...c.planets.map((p) => `- ${p.label}: ${p.sign} ${p.deg.toFixed(1)}°${p.retro ? '(逆行)' : ''}`),
+  )
+  if (c.natalAspects?.length) {
+    lines.push('', '【出生図の注目の角度】', ...c.natalAspects.map((a) => `- ${a}`))
+  }
+  lines.push('', `【占う期間: ${c.periodLabel}】${c.skyNote}(全体の基調: ${c.toneLabel})`)
+  if (c.transits.length) lines.push(...c.transits.map((t) => `- ${t}`))
+  if (c.reading) lines.push('', '【すでにこの人へ伝えた鑑定】', c.reading)
+  lines.push(
+    '',
+    '相談への答え方:',
+    '- 一般論で終わらせず、必ず上の具体的な配置に紐づけて答える(例:「あなたの火星は山羊座だから、焦らず段取りを組むほど力が出ます」)',
+    '- あたたかく背中を押す口調で。でも実行できる具体的な行動やヒントを1つ添える',
+    '- 断定的な予言(「必ず〜になる」)や、健康・金銭・進退の重大な決断を煽る言い方はしない',
+    '- 上に書かれていない星の配置を勝手に作り出さない',
+    '- 1回の返答は2〜4文程度で簡潔に。占い師との自然な会話のテンポを保つ',
+    '- 相手の名前を時々やさしく呼びかけてもよい',
+  )
+  return lines.join('\n')
+}
+
+function chatErrorJson(res: ServerResponse, err: unknown) {
+  if (err instanceof Anthropic.AuthenticationError) {
+    return json(res, 500, { error: 'APIキーが無効です。環境変数 ANTHROPIC_API_KEY を確認してください。' })
+  }
+  if (err instanceof Anthropic.RateLimitError) {
+    return json(res, 429, { error: 'リクエストが集中しています。少し待ってからお試しください。' })
+  }
+  if (err instanceof Anthropic.APIError) {
+    return json(res, 500, { error: `Claude APIエラー: ${err.message}` })
+  }
+  return json(res, 500, { error: '応答の生成中にエラーが発生しました' })
+}
+
+function createChatHandler(apiKey: string | undefined): RawHandler {
+  return (req, res) => {
+    void (async () => {
+      if (req.method !== 'POST') return json(res, 405, { error: 'POST only' })
+      if (!apiKey || apiKey.includes('ここに')) {
+        return json(res, 500, {
+          error:
+            'APIキーが未設定です。サーバーの環境変数 ANTHROPIC_API_KEY を設定してください(ローカルは .env、本番は Railway の Variables)。',
+        })
+      }
+
+      let payload: ChatRequest
+      try {
+        payload = JSON.parse(await readBody(req)) as ChatRequest
+      } catch {
+        return json(res, 400, { error: 'リクエストの形式が不正です' })
+      }
+      if (!payload?.messages?.length || !payload.context) {
+        return json(res, 400, { error: 'メッセージがありません' })
+      }
+
+      try {
+        const client = new Anthropic({ apiKey })
+        const stream = client.messages.stream({
+          model: 'claude-opus-4-8',
+          max_tokens: 1500,
+          thinking: { type: 'adaptive' },
+          output_config: { effort: 'low' },
+          system: buildChatSystem(payload.context),
+          messages: payload.messages.map((m) => ({ role: m.role, content: m.content })),
+        })
+
+        stream.on('text', (delta) => {
+          if (!res.headersSent) {
+            res.writeHead(200, {
+              'Content-Type': 'text/plain; charset=utf-8',
+              'Cache-Control': 'no-cache, no-transform',
+              // Railway等のプロキシでのバッファリングを抑止し、逐次届くようにする
+              'X-Accel-Buffering': 'no',
+            })
+          }
+          res.write(delta)
+        })
+
+        await stream.finalMessage()
+        if (!res.headersSent) {
+          res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' })
+        }
+        res.end()
+      } catch (err) {
+        // ヘッダ送信前ならJSONエラー、送信後は静かに終了(クライアントは受信済み分を保持)
+        if (!res.headersSent) return chatErrorJson(res, err)
+        res.end()
+      }
+    })()
+  }
+}
+
+/** 鑑定・相性・相談チャットのAPIハンドラを生成する */
 export function createAiHandlers(apiKey: string | undefined): {
   reading: RawHandler
   pair: RawHandler
+  chat: RawHandler
 } {
   return {
     reading: makeHandler<AiReadingRequest>(apiKey, SYSTEM_PROMPT, buildUserPrompt),
     pair: makeHandler<AiPairRequest>(apiKey, PAIR_SYSTEM_PROMPT, buildPairPrompt),
+    chat: createChatHandler(apiKey),
   }
 }

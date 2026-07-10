@@ -8,6 +8,8 @@ import { fetchAiReading } from '../lib/aiReading'
 import { PLANET_INFO, signMannerOf } from '../lib/planets'
 import { findNatalAspects } from '../lib/natalAspects'
 import { starTypeOf, ELEMENT_WORD } from '../lib/startypes'
+import AiChat from './AiChat'
+import type { ChatChartContext } from '../lib/aiChat'
 
 interface Props {
   data: ChartData
@@ -74,6 +76,28 @@ export default function Result({ data, onRetry, onHome }: Props) {
       setAiState({ status: 'error', message: e instanceof Error ? e.message : '不明なエラー' })
     }
   }
+
+  // 相談チャットに渡すコンテキスト(鑑定済みならその文章も文脈に含める)
+  const chatContext: ChatChartContext = {
+    name: data.name,
+    dateLabel: data.dateLabel,
+    placeLabel: data.placeLabel,
+    starTypeName: starType?.type.name,
+    starTypeCopy: starType?.type.copy,
+    planets: data.planets.map((p) => ({
+      label: PLANET_INFO[p.key].name,
+      sign: SIGNS[signIndex(p.lon)].name,
+      deg: degInSign(p.lon),
+      retro: p.retro,
+    })),
+    natalAspects: natalAspects.length ? natalAspects.map((a) => a.tech) : undefined,
+    periodLabel: period.noun,
+    skyNote: fortune.skyNote,
+    toneLabel: fortune.toneLabel,
+    transits: fortune.items.map((i) => i.title),
+    reading: aiState.status === 'done' ? aiState.text : undefined,
+  }
+  const chatStorageKey = `starflect-chat:${data.dateLabel}:${data.name}`
 
   return (
     <div className="result-screen">
@@ -332,6 +356,8 @@ export default function Result({ data, onRetry, onHome }: Props) {
           </>
         )}
       </section>
+
+      <AiChat context={chatContext} storageKey={chatStorageKey} />
 
       {ascLon === undefined && (
         <div className="upsell">
