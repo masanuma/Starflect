@@ -90,7 +90,7 @@ export default function AiChat({ context, storageKey }: Props) {
           🔮
         </div>
         <div>
-          <p className="planet-title">星よみ相談室</p>
+          <p className="planet-title">ほしキャラ相談室</p>
           <p className="planet-sub">あなたの星の配置をぜんぶ踏まえて、AIがなんでも相談にのります</p>
         </div>
       </header>
@@ -143,7 +143,7 @@ export default function AiChat({ context, storageKey }: Props) {
 
       <div className="chat-foot-row">
         <p className="ai-note chat-note">
-          送信するとあなたの星のデータがAI(Claude API)に送られます。1回ごとに少額の費用がかかります。
+          送信するとあなたの星のデータがAI(Claude API)に送られます。
         </p>
         {hasChat && (
           <button className="chat-clear" onClick={clearChat}>
