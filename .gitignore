@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+.env.local
+
+# Claude Code のローカル個人設定
+.claude/settings.local.json
+
+# Vite の一時ファイル
+vite.config.ts.timestamp-*.mjs
