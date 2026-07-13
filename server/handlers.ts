@@ -1,6 +1,20 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import Anthropic from '@anthropic-ai/sdk'
 
+type Lang = 'ja' | 'en' | 'es'
+
+/** システムプロンプト末尾に足す、応答言語の指示 */
+const LANG_DIRECTIVE: Record<Lang, string> = {
+  ja: '',
+  en: '\n\n【CRITICAL — OUTPUT LANGUAGE】Respond ENTIRELY in natural, warm English. The chart data may contain Japanese sign/planet names — translate them to English (獅子座→Leo, 火星→Mars, 上昇星座→Rising sign, etc.). Translate the section headings to English too, keeping the 【】 bracket style.',
+  es: '\n\n【CRÍTICO — IDIOMA DE SALIDA】Responde ENTERAMENTE en español natural y cálido. Los datos pueden incluir nombres de signos/planetas en japonés — tradúcelos al español (獅子座→Leo, 火星→Marte, 上昇星座→Ascendente, etc.). Traduce también los títulos de sección al español, manteniendo el estilo de corchetes 【】.',
+}
+
+const langOf = (payload: unknown): Lang => {
+  const l = (payload as { lang?: string })?.lang
+  return l === 'en' || l === 'es' ? l : 'ja'
+}
+
 /** クライアントから送られてくる鑑定リクエスト(計算済みの占星術データ) */
 export interface AiReadingRequest {
   name: string
@@ -14,6 +28,7 @@ export interface AiReadingRequest {
   toneLabel: string
   skyNote: string
   aspects: string[]
+  lang?: Lang
 }
 
 /** 相性鑑定リクエスト */
@@ -33,6 +48,7 @@ export interface AiPairRequest {
   toneB: string
   aspectsA: string[]
   aspectsB: string[]
+  lang?: Lang
 }
 
 const PAIR_SYSTEM_PROMPT = `あなたは関係性・相性を専門とする経験豊富な西洋占星術師です。ふたりの出生チャートの相性と、実際の天体の運行から計算されたデータをもとに、日本語で相性鑑定を書きます。
@@ -156,7 +172,7 @@ function makeHandler<T>(
           max_tokens: 2000,
           thinking: { type: 'adaptive' },
           output_config: { effort: 'low' },
-          system,
+          system: system + LANG_DIRECTIVE[langOf(payload)],
           messages: [{ role: 'user', content: buildPrompt(payload) }],
         })
         const text = response.content
@@ -207,6 +223,7 @@ export interface ChatChartContext {
 export interface ChatRequest {
   context: ChatChartContext
   messages: ChatMessage[]
+  lang?: Lang
 }
 
 function buildChatSystem(c: ChatChartContext): string {
@@ -289,7 +306,7 @@ function createChatHandler(apiKey: string | undefined): RawHandler {
           max_tokens: 1500,
           thinking: { type: 'adaptive' },
           output_config: { effort: 'low' },
-          system: buildChatSystem(payload.context),
+          system: buildChatSystem(payload.context) + LANG_DIRECTIVE[langOf(payload)],
           messages: payload.messages.map((m) => ({ role: m.role, content: m.content })),
         })
 

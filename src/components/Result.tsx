@@ -1,16 +1,20 @@
 import { useState } from 'react'
 import type { ChartData, PlanetKey } from '../lib/types'
 import { signIndex, degInSign } from '../lib/astro'
-import { SIGNS } from '../lib/signs'
+import { signName, signSymbol } from '../lib/signs'
 import { synthesize } from '../lib/synthesis'
-import { readFortune, periodDef } from '../lib/fortune'
+import { readFortune, periodNoun, periodLabel } from '../lib/fortune'
 import { fetchAiReading } from '../lib/aiReading'
-import { PLANET_INFO, signMannerOf } from '../lib/planets'
+import { getPlanet, signMannerOf } from '../lib/planets'
 import { findNatalAspects } from '../lib/natalAspects'
-import { starTypeOf, ELEMENT_WORD } from '../lib/startypes'
+import { starTypeOf, elementPhrase } from '../lib/startypes'
 import AiChat from './AiChat'
 import type { ChatChartContext } from '../lib/aiChat'
 import PlanetMascot, { MASCOT_COLOR } from './PlanetMascot'
+import { useLang } from '../lib/i18n'
+import { useUI } from '../lib/ui'
+
+const RETRO_SUFFIX: Record<string, string> = { ja: '(逆行)', en: '(retrograde)', es: '(retrógrado)' }
 
 interface Props {
   data: ChartData
@@ -19,7 +23,9 @@ interface Props {
 }
 
 export default function Result({ data, onRetry, onHome }: Props) {
-  const who = data.name ? `${data.name}さん` : 'あなた'
+  const { lang } = useLang()
+  const t = useUI()
+  const retroSuffix = RETRO_SUFFIX[lang] ?? RETRO_SUFFIX.ja
 
   const lonOf = (key: PlanetKey) => data.planets.find((p) => p.key === key)?.lon
   const sunLon = lonOf('sun')
@@ -30,7 +36,6 @@ export default function Result({ data, onRetry, onHome }: Props) {
       ? synthesize(sunLon, moonLon, ascLon)
       : null
 
-  const period = periodDef(data.period)
   const fortune = readFortune(data.planets, data.period)
 
   // ほしキャラを構成するパーティ = 計算した全天体(太陽・月・上昇星座を先頭に)
@@ -47,12 +52,12 @@ export default function Result({ data, onRetry, onHome }: Props) {
     try {
       const text = await fetchAiReading({
         name: data.name,
-        periodLabel: period.noun,
+        periodLabel: periodNoun(data.period),
         dateLabel: data.dateLabel,
         placeLabel: data.placeLabel,
         natal: data.planets.map((p) => ({
-          label: PLANET_INFO[p.key].name + (p.retro ? '(逆行)' : ''),
-          sign: SIGNS[signIndex(p.lon)].name,
+          label: getPlanet(p.key).name + (p.retro ? retroSuffix : ''),
+          sign: signName(signIndex(p.lon)),
           deg: degInSign(p.lon),
         })),
         synthesis: synthesis ? [synthesis.intro, synthesis.balance, synthesis.relation] : undefined,
@@ -60,10 +65,11 @@ export default function Result({ data, onRetry, onHome }: Props) {
         toneLabel: fortune.toneLabel,
         skyNote: fortune.skyNote,
         aspects: fortune.items.map((i) => i.title),
+        lang,
       })
       setAiState({ status: 'done', text })
     } catch (e) {
-      setAiState({ status: 'error', message: e instanceof Error ? e.message : '不明なエラー' })
+      setAiState({ status: 'error', message: e instanceof Error ? e.message : t.common.unknownError })
     }
   }
 
@@ -75,13 +81,13 @@ export default function Result({ data, onRetry, onHome }: Props) {
     starTypeName: starType?.type.name,
     starTypeCopy: starType?.type.copy,
     planets: data.planets.map((p) => ({
-      label: PLANET_INFO[p.key].name,
-      sign: SIGNS[signIndex(p.lon)].name,
+      label: getPlanet(p.key).name,
+      sign: signName(signIndex(p.lon)),
       deg: degInSign(p.lon),
       retro: p.retro,
     })),
     natalAspects: natalAspects.length ? natalAspects.map((a) => a.tech) : undefined,
-    periodLabel: period.noun,
+    periodLabel: periodNoun(data.period),
     skyNote: fortune.skyNote,
     toneLabel: fortune.toneLabel,
     transits: fortune.items.map((i) => i.title),
@@ -91,9 +97,9 @@ export default function Result({ data, onRetry, onHome }: Props) {
 
   return (
     <div className="result-screen">
-      <p className="result-lead">{data.dateLabel} 生まれ</p>
+      <p className="result-lead">{t.result.born(data.dateLabel)}</p>
       {data.placeLabel && <p className="result-place">{data.placeLabel}</p>}
-      <h2 className="screen-title">{who}のほしキャラ</h2>
+      <h2 className="screen-title">{t.result.title(data.name ?? '')}</h2>
       <div className="ornament" aria-hidden="true">
         ✦ ✦ ✦
       </div>
@@ -108,7 +114,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
           <p className="type-text">{starType.type.text}</p>
           {synthesis && (
             <div className="type-synth">
-              <p className="type-synth-label">✦ もっと詳しく、あなたのほしキャラ ✦</p>
+              <p className="type-synth-label">{t.result.synthLabel}</p>
               <p className="type-text">{synthesis.intro}</p>
               <p className="type-text">{synthesis.balance}</p>
               <p className="type-text">{synthesis.relation}</p>
@@ -118,9 +124,9 @@ export default function Result({ data, onRetry, onHome }: Props) {
             <div className="type-formula-side">
               <PlanetMascot planetKey="sun" size={42} />
               <span>
-                表の顔
+                {t.result.outerFace}
                 <br />
-                {starType.sunElement}の{ELEMENT_WORD[starType.sunElement]}
+                {elementPhrase(starType.sunElement)}
               </span>
             </div>
             <span className="type-formula-x" aria-hidden="true">
@@ -129,27 +135,25 @@ export default function Result({ data, onRetry, onHome }: Props) {
             <div className="type-formula-side">
               <PlanetMascot planetKey="moon" size={42} />
               <span>
-                心の中
+                {t.result.innerHeart}
                 <br />
-                {starType.moonElement}の{ELEMENT_WORD[starType.moonElement]}
+                {elementPhrase(starType.moonElement)}
               </span>
             </div>
           </div>
-          <p className="type-count">この組み合わせで、全16キャラ</p>
+          <p className="type-count">{t.result.typeCount}</p>
         </section>
       )}
 
       <section className="party-card">
         <div className="party-head">
-          <p className="party-title">ほしキャラを構成するパーティ</p>
-          <p className="party-sub">
-            生まれた瞬間の星たちが、あなたを動かすキャラになりました。担当と、いまの発揮のしかたです
-          </p>
+          <p className="party-title">{t.result.partyTitle}</p>
+          <p className="party-sub">{t.result.partySub}</p>
         </div>
         <ul className="party-list">
           {partyPlanets.map((p) => {
-            const info = PLANET_INFO[p.key]
-            const sign = SIGNS[signIndex(p.lon)]
+            const info = getPlanet(p.key)
+            const si = signIndex(p.lon)
             const color = MASCOT_COLOR[p.key]
             return (
               <li
@@ -167,19 +171,19 @@ export default function Result({ data, onRetry, onHome }: Props) {
                       {info.symbol} {info.name}
                     </span>
                     {p.retro && <span className="retro-badge">℞</span>}
-                    {info.generational && <span className="gen-badge">世代</span>}
+                    {info.generational && <span className="gen-badge">{t.result.genBadge}</span>}
                   </p>
                   <span className="party-row-sign">
-                    {sign.symbol} {sign.name} {degInSign(p.lon).toFixed(1)}°
+                    {signSymbol(si)} {signName(si)} {degInSign(p.lon).toFixed(1)}°
                   </span>
                   <dl className="party-facts">
                     <div>
-                      <dt>担当</dt>
+                      <dt>{t.result.domain}</dt>
                       <dd>{info.domain}</dd>
                     </div>
                     <div>
-                      <dt>クセ</dt>
-                      <dd>「{signMannerOf(p.lon)}」</dd>
+                      <dt>{t.result.quirk}</dt>
+                      <dd>{lang === 'ja' ? `「${signMannerOf(p.lon)}」` : signMannerOf(p.lon)}</dd>
                     </div>
                   </dl>
                 </div>
@@ -187,7 +191,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
             )
           })}
         </ul>
-        <p className="party-foot">「世代」= 動きがゆっくりで、同世代に共通する時代の空気も映す天体です</p>
+        <p className="party-foot">{t.result.partyFoot}</p>
       </section>
 
       <section className="planet-card fortune-card">
@@ -197,10 +201,10 @@ export default function Result({ data, onRetry, onHome }: Props) {
           </div>
           <div>
             <p className="planet-title">
-              {period.label}の運勢
+              {t.result.fortuneTitle(periodLabel(data.period))}
               <span className="planet-deg">{fortune.skyNote}</span>
             </p>
-            <p className="planet-sub">いまの星の運行と{who}のほしキャラから読んでいます</p>
+            <p className="planet-sub">{t.result.fortuneSub(data.name ?? '')}</p>
           </div>
         </header>
         <p className="fortune-tone">
@@ -220,9 +224,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
             </li>
           ))}
         </ul>
-        <p className="sign-foot">
-          {period.noun}の空をゆく星々と、生まれた瞬間の星の配置との角度をもとにしています。
-        </p>
+        <p className="sign-foot">{t.result.fortuneFoot(periodNoun(data.period))}</p>
       </section>
 
       <section className="planet-card ai-card">
@@ -231,19 +233,17 @@ export default function Result({ data, onRetry, onHome }: Props) {
             ✶
           </div>
           <div>
-            <p className="planet-title">AI占星術師の詳しいほしキャラ鑑定</p>
-            <p className="planet-sub">AIが{who}のチャートと星の運行を読み解きます</p>
+            <p className="planet-title">{t.result.aiTitle}</p>
+            <p className="planet-sub">{t.result.aiSub(data.name ?? '')}</p>
           </div>
         </header>
 
         {aiState.status === 'idle' && (
           <>
             <button className="cta" onClick={handleAiReading}>
-              AIに詳しく占ってもらう
+              {t.result.aiCta}
             </button>
-            <p className="ai-note">
-              上記の計算結果(星座・角度)がAIに送信されます。鑑定には10〜30秒ほどかかります。
-            </p>
+            <p className="ai-note">{t.result.aiNote}</p>
           </>
         )}
 
@@ -252,7 +252,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
             <span className="ai-spinner" aria-hidden="true">
               ✦
             </span>
-            星を読んでいます……(10〜30秒ほどお待ちください)
+            {t.result.aiLoading}
           </p>
         )}
 
@@ -262,7 +262,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
           <>
             <p className="form-error">{aiState.message}</p>
             <button className="ghost" onClick={handleAiReading}>
-              もう一度試す
+              {t.common.tryAgain}
             </button>
           </>
         )}
@@ -272,19 +272,16 @@ export default function Result({ data, onRetry, onHome }: Props) {
 
       {ascLon === undefined && (
         <div className="upsell">
-          <p>
-            生まれた<strong>時刻</strong>が分かると、<strong>上昇星座</strong>
-            と3天体の総合分析まで占えます(月星座の精度も上がります)。母子手帳をチェックしてみて。
-          </p>
+          <p>{t.result.upsell}</p>
         </div>
       )}
 
       <div className="result-actions">
         <button className="cta" onClick={onRetry}>
-          もう一度占う
+          {t.result.retry}
         </button>
         <button className="ghost" onClick={onHome}>
-          モード選択に戻る
+          {t.result.home}
         </button>
       </div>
     </div>

@@ -1,9 +1,12 @@
+import { useUI } from '../lib/ui'
+
 interface Props {
   onSelect: () => void
   onSelectPair: () => void
 }
 
 export default function Home({ onSelect, onSelectPair }: Props) {
+  const t = useUI()
   return (
     <div className="home">
       <div className="hero">
@@ -19,33 +22,31 @@ export default function Home({ onSelect, onSelectPair }: Props) {
         </div>
         <h1 className="wordmark">Starflect</h1>
         <p className="tagline">
-          あなたはどの「ほしキャラ」?
+          {t.home.tagline1}
           <br />
-          生まれた瞬間の星の配置でわかる、16キャラ×本格星占い。
+          {t.home.tagline2}
         </p>
       </div>
 
       <div className="mode-list">
         <button className="mode-card mode-detailed" onClick={onSelect}>
           <div className="mode-head">
-            <span className="mode-name">🌟 ほしキャラ診断</span>
-            <span className="mode-time">30秒</span>
+            <span className="mode-name">{t.home.soloName}</span>
+            <span className="mode-time">{t.home.soloTime}</span>
           </div>
-          <p className="mode-desc">
-            生年月日だけでOK。あなたのほしキャラ(全16キャラ)と、あなたの中に住む10天体キャラまで分析
-          </p>
+          <p className="mode-desc">{t.home.soloDesc}</p>
         </button>
 
         <button className="mode-card mode-pair" onClick={onSelectPair}>
           <div className="mode-head">
-            <span className="mode-name">💞 ふたりの相性</span>
+            <span className="mode-name">{t.home.pairName}</span>
             <span className="mode-badge-new">NEW</span>
           </div>
-          <p className="mode-desc">ほしキャラの相性と「今日のふたり」を診断。相手の生年月日だけでOK</p>
+          <p className="mode-desc">{t.home.pairDesc}</p>
         </button>
       </div>
 
-      <p className="home-note">計算は雑誌の12星座占いと同じ生年月日ベース。でも結果は、あなただけのもの。</p>
+      <p className="home-note">{t.home.note}</p>
     </div>
   )
 }

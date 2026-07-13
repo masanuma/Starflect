@@ -1,5 +1,7 @@
 /** 相談チャット。server/handlers.ts の Chat* と対で管理する */
 
+import type { Lang } from './i18n'
+
 export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
@@ -28,11 +30,12 @@ export async function streamAiChat(
   context: ChatChartContext,
   messages: ChatMessage[],
   onDelta: (text: string) => void,
+  lang?: Lang,
 ): Promise<void> {
   const res = await fetch('/api/ai-chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ context, messages }),
+    body: JSON.stringify({ context, messages, lang }),
   })
 
   if (!res.ok || !res.body) {

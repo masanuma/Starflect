@@ -1,4 +1,6 @@
-/** サーバー(/api/ai-reading)に送る鑑定リクエスト。server/aiReading.ts と対で管理する */
+import type { Lang } from './i18n'
+
+/** サーバー(/api/ai-reading)に送る鑑定リクエスト。server/handlers.ts と対で管理する */
 export interface AiReadingRequest {
   name: string
   periodLabel: string
@@ -11,6 +13,7 @@ export interface AiReadingRequest {
   toneLabel: string
   skyNote: string
   aspects: string[]
+  lang?: Lang
 }
 
 /** 相性鑑定リクエスト。server/aiReading.ts の AiPairRequest と対で管理する */
@@ -30,6 +33,7 @@ export interface AiPairRequest {
   toneB: string
   aspectsA: string[]
   aspectsB: string[]
+  lang?: Lang
 }
 
 async function postJson<T>(url: string, body: T): Promise<string> {

@@ -5,8 +5,10 @@ import BirthForm from './components/BirthForm'
 import Result from './components/Result'
 import PairForm from './components/PairForm'
 import PairResult from './components/PairResult'
+import LangSwitcher from './components/LangSwitcher'
 import type { ChartData } from './lib/types'
 import type { PairData } from './lib/compat'
+import { useUI } from './lib/ui'
 
 type Screen =
   | { page: 'home' }
@@ -17,10 +19,12 @@ type Screen =
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>({ page: 'home' })
+  const t = useUI()
 
   return (
     <div className="app">
       <Stars />
+      <LangSwitcher />
       <main className="container">
         {screen.page === 'home' && (
           <Home
@@ -57,7 +61,7 @@ export default function App() {
       </main>
       <footer className="footer">
         <span className="footer-star">✦</span>
-        星の計算はすべてお使いの端末内で行われます。「AIに詳しく占ってもらう」を選んだときのみ、計算結果がAIに送信されます。
+        {t.footer}
       </footer>
     </div>
   )

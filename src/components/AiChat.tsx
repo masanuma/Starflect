@@ -2,20 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import type { ChatChartContext, ChatMessage } from '../lib/aiChat'
 import { streamAiChat } from '../lib/aiChat'
+import { useLang } from '../lib/i18n'
+import { useUI } from '../lib/ui'
 
 interface Props {
   context: ChatChartContext
   /** 会話を保存するlocalStorageキー(人ごとに分ける) */
   storageKey: string
 }
-
-const STARTERS: { label: string; q: string }[] = [
-  { label: '💕 恋愛', q: 'いまの恋愛運と、恋愛で私が気をつけるといいことを教えて。' },
-  { label: '💼 仕事', q: '仕事でいまの私が力を発揮するには、どう動くといい?' },
-  { label: '🤝 人間関係', q: '人間関係で私が心地よくいるためのヒントがほしいな。' },
-  { label: '🌱 性格', q: '星から見て、私って結局どういう性格の持ち主?' },
-  { label: '🔮 この先', q: 'これからの私に、星はどんな流れを用意してる?' },
-]
 
 function loadMessages(key: string): ChatMessage[] {
   try {
@@ -27,6 +21,8 @@ function loadMessages(key: string): ChatMessage[] {
 }
 
 export default function AiChat({ context, storageKey }: Props) {
+  const { lang } = useLang()
+  const t = useUI()
   const [messages, setMessages] = useState<ChatMessage[]>(() => loadMessages(storageKey))
   const [input, setInput] = useState('')
   const [streaming, setStreaming] = useState(false)
@@ -54,18 +50,23 @@ export default function AiChat({ context, storageKey }: Props) {
     setMessages([...base, { role: 'assistant', content: '' }])
     setStreaming(true)
     try {
-      await streamAiChat(context, base, (delta) => {
-        setMessages((cur) => {
-          const copy = cur.slice()
-          const last = copy[copy.length - 1]
-          copy[copy.length - 1] = { ...last, content: last.content + delta }
-          return copy
-        })
-      })
+      await streamAiChat(
+        context,
+        base,
+        (delta) => {
+          setMessages((cur) => {
+            const copy = cur.slice()
+            const last = copy[copy.length - 1]
+            copy[copy.length - 1] = { ...last, content: last.content + delta }
+            return copy
+          })
+        },
+        lang,
+      )
     } catch (e) {
       // 失敗したら空のアシスタント吹き出しを取り除き、ユーザー発言は残す
       setMessages((cur) => (cur.length && cur[cur.length - 1].role === 'assistant' && !cur[cur.length - 1].content ? cur.slice(0, -1) : cur))
-      setError(e instanceof Error ? e.message : '不明なエラー')
+      setError(e instanceof Error ? e.message : t.common.unknownError)
     } finally {
       setStreaming(false)
     }
@@ -104,16 +105,16 @@ export default function AiChat({ context, storageKey }: Props) {
           🔮
         </div>
         <div>
-          <p className="planet-title">ほしキャラ相談室</p>
-          <p className="planet-sub">あなたのほしキャラパーティをぜんぶ踏まえて、AIがなんでも相談にのります</p>
+          <p className="planet-title">{t.chat.title}</p>
+          <p className="planet-sub">{t.chat.sub}</p>
         </div>
       </header>
 
       {hasChat && (
         <div className="chat-loghead">
-          <span>これまでの相談 {questionCount}件</span>
+          <span>{t.chat.historyCount(questionCount)}</span>
           <button className="chat-toggle" onClick={() => setShowLog((v) => !v)}>
-            {showLog ? '非表示にする' : '表示する'}
+            {showLog ? t.chat.hide : t.chat.show}
           </button>
         </div>
       )}
@@ -127,7 +128,7 @@ export default function AiChat({ context, storageKey }: Props) {
                 <button
                   className="chat-del"
                   onClick={() => deleteExchange(i)}
-                  aria-label="この質問と回答を削除"
+                  aria-label={t.chat.delAria}
                 >
                   ×
                 </button>
@@ -137,14 +138,10 @@ export default function AiChat({ context, storageKey }: Props) {
         </div>
       )}
 
-      {!hasChat && (
-        <p className="chat-intro">
-          気になることを聞いてみてください。恋愛・仕事・性格・これからの運勢——あなたの10天体といまの星回りをもとにお答えします。
-        </p>
-      )}
+      {!hasChat && <p className="chat-intro">{t.chat.intro}</p>}
 
       <div className="chat-starters">
-        {STARTERS.map((s) => (
+        {t.chat.starters.map((s) => (
           <button key={s.label} className="chat-chip" disabled={streaming} onClick={() => void send(s.q)}>
             {s.label}
           </button>
@@ -158,7 +155,7 @@ export default function AiChat({ context, storageKey }: Props) {
           type="text"
           className="chat-input"
           value={input}
-          placeholder="メッセージを入力…"
+          placeholder={t.chat.inputPlaceholder}
           disabled={streaming}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={onKeyDown}
@@ -167,19 +164,17 @@ export default function AiChat({ context, storageKey }: Props) {
           className="chat-send"
           disabled={streaming || !input.trim()}
           onClick={() => void send(input)}
-          aria-label="送信"
+          aria-label={t.chat.sendAria}
         >
           {streaming ? '···' : '➤'}
         </button>
       </div>
 
       <div className="chat-foot-row">
-        <p className="ai-note chat-note">
-          送信するとあなたのほしキャラのデータがAIに送られます。
-        </p>
+        <p className="ai-note chat-note">{t.chat.note}</p>
         {hasChat && (
           <button className="chat-clear" onClick={clearChat}>
-            会話を消す
+            {t.chat.clear}
           </button>
         )}
       </div>

@@ -6,9 +6,13 @@ export const norm = (d: number) => ((d % 360) + 360) % 360
 export const signIndex = (lon: number) => Math.floor(norm(lon) / 30)
 export const degInSign = (lon: number) => norm(lon) % 30
 
-/** JSTの日付・時刻文字列からDateを生成 */
-export function jstDate(dateStr: string, timeStr = '12:00'): Date {
-  return new Date(`${dateStr}T${timeStr}:00+09:00`)
+/** ローカル日時(指定UTCオフセット)からDateを生成。offsetHours 例: 日本=9, スペイン=1, 米東部=-5 */
+export function localToDate(dateStr: string, timeStr = '12:00', offsetHours = 9): Date {
+  const sign = offsetHours < 0 ? '-' : '+'
+  const abs = Math.abs(offsetHours)
+  const hh = String(Math.floor(abs)).padStart(2, '0')
+  const mm = String(Math.round((abs - Math.floor(abs)) * 60)).padStart(2, '0')
+  return new Date(`${dateStr}T${timeStr}:00${sign}${hh}:${mm}`)
 }
 
 /** 地心黄経(度) — トロピカル方式 */

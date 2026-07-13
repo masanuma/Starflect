@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import type { ChartData, PlanetPos, PeriodKey } from '../lib/types'
-import { jstDate, ascendant, eclipticLongitude, isRetrograde } from '../lib/astro'
-import { PLACES } from '../lib/places'
-import { PERIODS } from '../lib/fortune'
-import { PLANET_INFO, PRO_PLANETS } from '../lib/planets'
+import { localToDate, ascendant, eclipticLongitude, isRetrograde } from '../lib/astro'
+import { COUNTRIES, countryByCode, countryName, detectDefaultCountry } from '../lib/countries'
+import { PREFECTURES, prefectureByCode, prefectureName, DEFAULT_PREFECTURE } from '../lib/prefectures'
+import { PERIODS, periodLabel } from '../lib/fortune'
+import { getPlanet, PRO_PLANETS } from '../lib/planets'
+import { useLang } from '../lib/i18n'
+import { useUI, formatBirthDate } from '../lib/ui'
 
 interface Props {
   onBack: () => void
@@ -15,7 +18,8 @@ interface SavedInput {
   name: string
   date: string
   time: string
-  placeIdx: number
+  countryCode?: string
+  prefectureCode?: string
   period?: PeriodKey
 }
 
@@ -31,47 +35,59 @@ function loadSaved(): SavedInput | null {
 }
 
 export default function BirthForm({ onBack, onResult }: Props) {
+  const { lang } = useLang()
+  const t = useUI()
   const saved = loadSaved()
   const [name, setName] = useState(saved?.name ?? '')
   const [date, setDate] = useState(saved?.date ?? '')
   const [time, setTime] = useState(saved?.time ?? '')
-  const [placeIdx, setPlaceIdx] = useState(saved?.placeIdx ?? 12)
+  const [countryCode, setCountryCode] = useState(saved?.countryCode ?? detectDefaultCountry())
+  const [prefectureCode, setPrefectureCode] = useState(saved?.prefectureCode ?? DEFAULT_PREFECTURE)
   const [period, setPeriod] = useState<PeriodKey>(saved?.period ?? 'today')
   const [error, setError] = useState('')
+
+  const sortedCountries = [...COUNTRIES].sort((a, b) =>
+    countryName(a, lang).localeCompare(countryName(b, lang), lang),
+  )
 
   useEffect(() => {
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ name, date, time, placeIdx, period } satisfies SavedInput),
+        JSON.stringify({ name, date, time, countryCode, prefectureCode, period } satisfies SavedInput),
       )
     } catch {
       /* 保存できない環境では無視 */
     }
-  }, [name, date, time, placeIdx, period])
+  }, [name, date, time, countryCode, prefectureCode, period])
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError('')
     if (!date) {
-      setError('生年月日を入力してください')
+      setError(t.birth.errNoDate)
       return
     }
 
+    const country = countryByCode(countryCode)
+    const isJapan = countryCode === 'JP'
+    const pref = isJapan ? prefectureByCode(prefectureCode) : null
+    // 日本は都道府県の緯度経度を使う(上昇星座の精度が少し上がる)。時差は全国 +9。
+    const lat = pref ? pref.lat : country.lat
+    const lon = pref ? pref.lon : country.lon
     // 時刻不明でも占えるように正午で近似(その場合、上昇星座は省略)
     const hasTime = time !== ''
-    const d = jstDate(date, hasTime ? time : '12:00')
+    const d = localToDate(date, hasTime ? time : '12:00', country.offset)
     if (Number.isNaN(d.getTime())) {
-      setError('日付の形式が正しくありません')
+      setError(t.birth.errBadDate)
       return
     }
 
-    const place = PLACES[placeIdx]
-    const placeLabel = hasTime ? place.name : undefined
+    const placeLabel = hasTime ? (pref ? prefectureName(pref) : countryName(country, lang)) : undefined
 
     // 常に10天体を計算(逆行判定つき)。時刻がわかる場合は上昇星座も
     const planets: PlanetPos[] = PRO_PLANETS.map((key) => {
-      const body = PLANET_INFO[key].body!
+      const body = getPlanet(key).body!
       return {
         key,
         lon: eclipticLongitude(body, d),
@@ -79,11 +95,10 @@ export default function BirthForm({ onBack, onResult }: Props) {
       }
     })
     if (hasTime) {
-      planets.splice(2, 0, { key: 'asc', lon: ascendant(d, place.lat, place.lon) })
+      planets.splice(2, 0, { key: 'asc', lon: ascendant(d, lat, lon) })
     }
 
-    const [y, m, day] = date.split('-')
-    const dateLabel = `${y}年${Number(m)}月${Number(day)}日` + (hasTime ? ` ${time}` : '')
+    const dateLabel = formatBirthDate(date, hasTime ? time : undefined, lang)
 
     onResult({ name: name.trim(), dateLabel, placeLabel, planets, period })
   }
@@ -91,27 +106,25 @@ export default function BirthForm({ onBack, onResult }: Props) {
   return (
     <div className="form-screen">
       <button className="back-link" onClick={onBack}>
-        ← モード選択に戻る
+        {t.common.backToModes}
       </button>
 
-      <h2 className="screen-title pop-title">ほしキャラ診断</h2>
-      <p className="screen-sub">
-        生年月日だけでOK。あなたのほしキャラと、生まれた瞬間の星の配置をまるごと分析します
-      </p>
+      <h2 className="screen-title pop-title">{t.birth.title}</h2>
+      <p className="screen-sub">{t.birth.sub}</p>
 
       <form className="birth-form" onSubmit={handleSubmit}>
         <label className="field">
-          <span className="field-label">お名前(任意)</span>
+          <span className="field-label">{t.common.nameLabel}</span>
           <input
             type="text"
             value={name}
-            placeholder="ニックネームでもOK"
+            placeholder={t.common.namePlaceholder}
             onChange={(e) => setName(e.target.value)}
           />
         </label>
 
         <label className="field">
-          <span className="field-label">生年月日</span>
+          <span className="field-label">{t.common.birthdate}</span>
           <input
             type="date"
             value={date}
@@ -123,28 +136,40 @@ export default function BirthForm({ onBack, onResult }: Props) {
         </label>
 
         <label className="field">
-          <span className="field-label">生まれた時刻(任意)</span>
+          <span className="field-label">{t.common.birthtime}</span>
           <input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
-          <span className="field-hint">
-            母子手帳に記載があります。不明でもOK(お昼の12時で近似し、上昇星座は省略します)
-          </span>
+          <span className="field-hint">{t.birth.timeHint}</span>
         </label>
 
         <label className="field">
-          <span className="field-label">生まれた場所</span>
-          <select value={placeIdx} onChange={(e) => setPlaceIdx(Number(e.target.value))}>
-            {PLACES.map((p, i) => (
-              <option key={p.name} value={i}>
-                {p.name}
+          <span className="field-label">{t.birth.country}</span>
+          <select value={countryCode} onChange={(e) => setCountryCode(e.target.value)}>
+            {sortedCountries.map((c) => (
+              <option key={c.code} value={c.code}>
+                {countryName(c, lang)}
               </option>
             ))}
           </select>
-          <span className="field-hint">上昇星座の計算に使います(時刻が未入力のときは使いません)</span>
+          <span className="field-hint">{t.birth.countryHint}</span>
         </label>
 
+        {countryCode === 'JP' && (
+          <label className="field">
+            <span className="field-label">{t.birth.prefecture}</span>
+            <select value={prefectureCode} onChange={(e) => setPrefectureCode(e.target.value)}>
+              {PREFECTURES.map((p) => (
+                <option key={p.code} value={p.code}>
+                  {prefectureName(p)}
+                </option>
+              ))}
+            </select>
+            <span className="field-hint">{t.birth.prefectureHint}</span>
+          </label>
+        )}
+
         <div className="field">
-          <span className="field-label">いつを占う?</span>
-          <div className="period-row" role="radiogroup" aria-label="占う期間">
+          <span className="field-label">{t.common.when}</span>
+          <div className="period-row" role="radiogroup" aria-label={t.common.periodAria}>
             {PERIODS.map((p) => (
               <button
                 key={p.key}
@@ -154,17 +179,17 @@ export default function BirthForm({ onBack, onResult }: Props) {
                 className={`period-chip${period === p.key ? ' active' : ''}`}
                 onClick={() => setPeriod(p.key)}
               >
-                {p.label}
+                {periodLabel(p.key)}
               </button>
             ))}
           </div>
-          <span className="field-hint">占った時点の星の運行から、その期間の運勢を読みます</span>
+          <span className="field-hint">{t.birth.periodHint}</span>
         </div>
 
         {error && <p className="form-error">{error}</p>}
 
         <button type="submit" className="cta">
-          星を読む
+          {t.birth.submit}
         </button>
       </form>
     </div>

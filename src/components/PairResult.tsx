@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import type { PairData, PairPerson } from '../lib/compat'
-import { compatOf, pairTip, REL_LABEL } from '../lib/compat'
-import { readFortune, periodDef } from '../lib/fortune'
+import { compatOf, pairTip, relLabel } from '../lib/compat'
+import { readFortune, periodNoun, periodLabel } from '../lib/fortune'
 import { starTypeOf } from '../lib/startypes'
 import { fetchAiPairReading } from '../lib/aiReading'
-import { PLANET_INFO } from '../lib/planets'
-import { SIGNS } from '../lib/signs'
+import { getPlanet } from '../lib/planets'
+import { signName } from '../lib/signs'
 import { signIndex } from '../lib/astro'
+import { useLang } from '../lib/i18n'
+import { useUI } from '../lib/ui'
 
 interface Props {
   data: PairData
@@ -21,12 +23,13 @@ function personType(p: PairPerson) {
 }
 
 export default function PairResult({ data, onRetry, onHome }: Props) {
+  const { lang } = useLang()
+  const t = useUI()
   const { a, b } = data
   const typeA = personType(a)
   const typeB = personType(b)
   const compat = compatOf(a, b)
 
-  const period = periodDef(data.period)
   const fortuneA = readFortune(a.planets, data.period)
   const fortuneB = readFortune(b.planets, data.period)
   const tip = pairTip(fortuneA.toneLevel, fortuneB.toneLevel, a.name, b.name)
@@ -42,8 +45,8 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
     try {
       const natalOf = (p: PairPerson) =>
         p.planets.map((pp) => ({
-          label: PLANET_INFO[pp.key].name,
-          sign: SIGNS[signIndex(pp.lon)].name,
+          label: getPlanet(pp.key).name,
+          sign: signName(signIndex(pp.lon)),
         }))
       const text = await fetchAiPairReading({
         nameA: a.name,
@@ -55,16 +58,17 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
         details: compat.details.map((d) => `${d.title}: ${d.text}`),
         natalA: natalOf(a),
         natalB: natalOf(b),
-        periodLabel: period.noun,
+        periodLabel: periodNoun(data.period),
         skyNote: fortuneA.skyNote,
         toneA: fortuneA.toneLabel,
         toneB: fortuneB.toneLabel,
         aspectsA: fortuneA.items.map((i) => i.title),
         aspectsB: fortuneB.items.map((i) => i.title),
+        lang,
       })
       setAiState({ status: 'done', text })
     } catch (e) {
-      setAiState({ status: 'error', message: e instanceof Error ? e.message : '不明なエラー' })
+      setAiState({ status: 'error', message: e instanceof Error ? e.message : t.common.unknownError })
     }
   }
 
@@ -73,7 +77,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
       <p className="result-lead">
         {a.name} × {b.name}
       </p>
-      <h2 className="screen-title pop-title">ふたりの相性</h2>
+      <h2 className="screen-title pop-title">{t.pairResult.title}</h2>
       <div className="ornament" aria-hidden="true">
         ✦ ✦ ✦
       </div>
@@ -95,7 +99,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
           </div>
         </div>
         <p className="pair-percent">
-          相性 <strong>{compat.percent}</strong>
+          {t.pairResult.matchLabel} <strong>{compat.percent}</strong>
           <span className="pair-percent-unit">%</span>
         </p>
         <p className="pair-nickname">
@@ -109,8 +113,8 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
             🔍
           </div>
           <div>
-            <p className="planet-title">相性の内訳</p>
-            <p className="planet-sub">太陽(表の顔)と月(心)、4つの組み合わせから</p>
+            <p className="planet-title">{t.pairResult.breakdownTitle}</p>
+            <p className="planet-sub">{t.pairResult.breakdownSub}</p>
           </div>
         </header>
         <ul className="fortune-list">
@@ -118,7 +122,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
             <li key={d.title} className={`fortune-item ${d.rel === 'spark' ? 'hard' : 'good'}`}>
               <p className="fortune-item-title">
                 {d.title}
-                <span className={`rel-badge rel-${d.rel}`}>{REL_LABEL[d.rel]}</span>
+                <span className={`rel-badge rel-${d.rel}`}>{relLabel(d.rel)}</span>
               </p>
               <p className="fortune-item-text">{d.text}</p>
             </li>
@@ -132,8 +136,8 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
             🗓️
           </div>
           <div>
-            <p className="planet-title">{period.label}のふたり</p>
-            <p className="planet-sub">{fortuneA.skyNote} — その星がふたりに吹かせる風は?</p>
+            <p className="planet-title">{t.pairResult.todayTitle(periodLabel(data.period))}</p>
+            <p className="planet-sub">{t.pairResult.todaySub(fortuneA.skyNote)}</p>
           </div>
         </header>
 
@@ -159,21 +163,17 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
             💌
           </div>
           <div>
-            <p className="planet-title">AI占星術師のふたり鑑定</p>
-            <p className="planet-sub">
-              AIが{a.name}と{b.name}の星を読み解きます
-            </p>
+            <p className="planet-title">{t.pairResult.aiTitle}</p>
+            <p className="planet-sub">{t.pairResult.aiSub(a.name, b.name)}</p>
           </div>
         </header>
 
         {aiState.status === 'idle' && (
           <>
             <button className="cta" onClick={handleAiReading}>
-              AIにふたりを詳しく占ってもらう
+              {t.pairResult.aiCta}
             </button>
-            <p className="ai-note">
-              上記の計算結果(星座・相性・角度)がAIに送信されます。鑑定には10〜30秒ほどかかります。
-            </p>
+            <p className="ai-note">{t.pairResult.aiNote}</p>
           </>
         )}
 
@@ -182,7 +182,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
             <span className="ai-spinner" aria-hidden="true">
               ✦
             </span>
-            ふたりの星を読んでいます……(10〜30秒ほどお待ちください)
+            {t.pairResult.aiLoading}
           </p>
         )}
 
@@ -192,7 +192,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
           <>
             <p className="form-error">{aiState.message}</p>
             <button className="ghost" onClick={handleAiReading}>
-              もう一度試す
+              {t.common.tryAgain}
             </button>
           </>
         )}
@@ -200,18 +200,16 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
 
       {anyApprox && (
         <div className="upsell">
-          <p>
-            生まれた時刻が分かると月星座の精度が上がり、相性の判定もより正確になります(現在は正午で近似しています)。
-          </p>
+          <p>{t.pairResult.upsell}</p>
         </div>
       )}
 
       <div className="result-actions">
         <button className="cta cta-pop" onClick={onRetry}>
-          条件を変えて占う
+          {t.pairResult.retry}
         </button>
         <button className="ghost" onClick={onHome}>
-          モード選択に戻る
+          {t.pairResult.home}
         </button>
       </div>
     </div>
