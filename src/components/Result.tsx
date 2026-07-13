@@ -45,7 +45,6 @@ export default function Result({ data, onRetry, onHome }: Props) {
   const fortune = readFortune(data.planets, data.period)
 
   const corePlanets = data.planets.filter((p) => isCoreKey(p.key))
-  const otherPlanets = data.planets.filter((p) => !isCoreKey(p.key))
   // 星のパーティ = 上昇星座を除く10天体(それぞれにマスコットあり)
   const partyPlanets = data.planets.filter((p) => p.key !== 'asc')
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
@@ -285,19 +284,19 @@ export default function Result({ data, onRetry, onHome }: Props) {
             </table>
           </section>
 
-          {otherPlanets.length > 0 && (
+          {partyPlanets.length > 0 && (
             <section className="planet-card">
               <header className="planet-head">
                 <div className="planet-symbol" aria-hidden="true">
-                  ☿
+                  ✦
                 </div>
                 <div>
-                  <p className="planet-title">あなたの中の仲間キャラ</p>
-                  <p className="planet-sub">主人公(太陽)と素顔(月)を支える、8天体のプロフィール</p>
+                  <p className="planet-title">パーティ全員の詳しいステータス</p>
+                  <p className="planet-sub">10キャラそれぞれの担当と、いまの発揮のしかた</p>
                 </div>
               </header>
               <ul className="minor-planet-list">
-                {otherPlanets.map((p) => {
+                {partyPlanets.map((p) => {
                   const info = PLANET_INFO[p.key]
                   const sign = SIGNS[signIndex(p.lon)]
                   return (
