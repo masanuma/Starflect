@@ -774,6 +774,26 @@ body {
   margin: 0;
 }
 
+.type-synth {
+  border-top: 1px dashed var(--pink-soft);
+  padding-top: 14px;
+  margin-top: 2px;
+}
+
+.type-synth-label {
+  font-family: var(--font-pop);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--pink);
+  text-align: center;
+  margin: 0 0 12px;
+}
+
+.type-synth .type-text:last-child {
+  margin-bottom: 0;
+}
+
 .type-formula {
   display: flex;
   align-items: center;
@@ -781,7 +801,7 @@ body {
   gap: 12px;
   border-top: 1px solid var(--line);
   padding-top: 14px;
-  margin-top: 2px;
+  margin-top: 16px;
 }
 
 .type-formula-side {
@@ -852,64 +872,100 @@ body {
   margin: 0;
 }
 
-.party-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.party-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
-.party-member {
+.party-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
   border: 1.5px solid;
-  border-radius: 16px;
-  padding: 12px 10px 11px;
-  text-align: center;
-  transition: transform 0.15s ease;
+  border-radius: 18px;
+  padding: 12px 13px;
 }
 
-.party-member:active {
-  transform: scale(0.97);
-}
-
-.party-avatar {
-  width: 62px;
-  height: 62px;
-  margin: 0 auto 7px;
+.party-row-av {
+  flex: none;
+  width: 66px;
+  height: 66px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.party-class {
-  font-family: var(--font-pop);
-  font-size: 14.5px;
-  font-weight: 900;
-  color: var(--ink);
-  margin: 0 0 1px;
+.party-row-body {
+  flex: 1;
+  min-width: 0;
 }
 
-.party-planet {
-  font-size: 11px;
-  color: var(--ink-sub);
-  margin: 0 0 7px;
-}
-
-.party-chips {
+.party-row-top {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 5px;
+  gap: 8px;
   flex-wrap: wrap;
+  margin: 0 0 4px;
 }
 
-.party-sign {
+.party-row-class {
+  font-family: var(--font-pop);
+  font-size: 15.5px;
+  font-weight: 900;
+  color: var(--ink);
+}
+
+.party-row-planet {
+  font-size: 11.5px;
+  color: var(--ink-sub);
+}
+
+.party-row-sign {
+  display: inline-block;
   font-size: 11.5px;
   font-weight: 700;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 999px;
   padding: 2px 10px;
-  white-space: nowrap;
+  margin-bottom: 9px;
+}
+
+.party-facts {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.party-facts > div {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.party-facts dt {
+  flex: none;
+  min-width: 40px;
+  text-align: center;
+  font-family: var(--font-pop);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--violet);
+  background: #f1eafc;
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+.party-facts dd {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.6;
 }
 
 .party-foot {
@@ -1248,17 +1304,43 @@ body {
   margin: 0 0 14px;
 }
 
+.chat-loghead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--ink-sub);
+  margin-bottom: 8px;
+}
+
+.chat-toggle {
+  background: none;
+  border: 1px solid var(--violet-soft);
+  border-radius: 999px;
+  color: var(--violet);
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  padding: 3px 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.chat-toggle:hover {
+  background: #f1eafc;
+}
+
 .chat-log {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   max-height: 420px;
   overflow-y: auto;
-  padding: 4px 2px 2px;
+  padding: 8px 4px 4px;
   margin-bottom: 14px;
 }
 
 .chat-bubble {
+  position: relative;
   max-width: 85%;
   font-size: 13.5px;
   line-height: 1.7;
@@ -1266,6 +1348,28 @@ body {
   border-radius: 16px;
   white-space: pre-line;
   word-break: break-word;
+}
+
+.chat-del {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  color: var(--ink-sub);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 5px rgba(105, 78, 170, 0.25);
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.chat-del:hover {
+  color: var(--pink);
+  transform: scale(1.12);
 }
 
 .chat-user {

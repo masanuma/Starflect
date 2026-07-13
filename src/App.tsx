@@ -57,8 +57,7 @@ export default function App() {
       </main>
       <footer className="footer">
         <span className="footer-star">✦</span>
-        星の計算はすべてお使いの端末内で行われます。「AIに詳しく占ってもらう」を選んだときのみ、計算結果がClaude
-        APIに送信されます。
+        星の計算はすべてお使いの端末内で行われます。「AIに詳しく占ってもらう」を選んだときのみ、計算結果がAIに送信されます。
       </footer>
     </div>
   )

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { ChartData, PlanetKey } from '../lib/types'
 import { signIndex, degInSign } from '../lib/astro'
-import { SIGNS, ELEMENT_NOTE } from '../lib/signs'
+import { SIGNS } from '../lib/signs'
 import { synthesize } from '../lib/synthesis'
 import { readFortune, periodDef } from '../lib/fortune'
 import { fetchAiReading } from '../lib/aiReading'
@@ -18,17 +18,6 @@ interface Props {
   onHome: () => void
 }
 
-/** フルカードで表示する主要3天体(星座ごとの詳細文があるもの) */
-type CoreKey = 'sun' | 'moon' | 'asc'
-
-const PLANET_META: Record<CoreKey, { title: string; sub: string }> = {
-  sun: { title: '太陽星座', sub: 'あなたの基本性格・人生の方向性' },
-  moon: { title: '月星座', sub: '素顔の感情・心が安らぐもの' },
-  asc: { title: '上昇星座', sub: '第一印象・生まれ持った雰囲気' },
-}
-
-const isCoreKey = (key: PlanetKey): key is CoreKey => key === 'sun' || key === 'moon' || key === 'asc'
-
 export default function Result({ data, onRetry, onHome }: Props) {
   const who = data.name ? `${data.name}さん` : 'あなた'
 
@@ -44,9 +33,8 @@ export default function Result({ data, onRetry, onHome }: Props) {
   const period = periodDef(data.period)
   const fortune = readFortune(data.planets, data.period)
 
-  const corePlanets = data.planets.filter((p) => isCoreKey(p.key))
-  // 星のパーティ = 上昇星座を除く10天体(それぞれにマスコットあり)
-  const partyPlanets = data.planets.filter((p) => p.key !== 'asc')
+  // ほしキャラを構成するパーティ = 計算した全天体(太陽・月・上昇星座を先頭に)
+  const partyPlanets = data.planets
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
   const natalAspects = findNatalAspects(data.planets)
 
@@ -105,20 +93,27 @@ export default function Result({ data, onRetry, onHome }: Props) {
     <div className="result-screen">
       <p className="result-lead">{data.dateLabel} 生まれ</p>
       {data.placeLabel && <p className="result-place">{data.placeLabel}</p>}
-      <h2 className="screen-title">{who}の星</h2>
+      <h2 className="screen-title">{who}のほしキャラ</h2>
       <div className="ornament" aria-hidden="true">
         ✦ ✦ ✦
       </div>
 
       {starType && (
         <section className="type-card">
-          <p className="type-eyebrow">✦ あなたのほしキャラ ✦</p>
           <div className="type-emoji" aria-hidden="true">
             {starType.type.emoji}
           </div>
           <h3 className="type-name">{starType.type.name}</h3>
           <p className="type-copy">{starType.type.copy}</p>
           <p className="type-text">{starType.type.text}</p>
+          {synthesis && (
+            <div className="type-synth">
+              <p className="type-synth-label">✦ もっと詳しく、あなたのほしキャラ ✦</p>
+              <p className="type-text">{synthesis.intro}</p>
+              <p className="type-text">{synthesis.balance}</p>
+              <p className="type-text">{synthesis.relation}</p>
+            </div>
+          )}
           <div className="type-formula">
             <div className="type-formula-side">
               <PlanetMascot planetKey="sun" size={42} />
@@ -144,200 +139,56 @@ export default function Result({ data, onRetry, onHome }: Props) {
         </section>
       )}
 
-      {corePlanets.map((p) => {
-        if (!isCoreKey(p.key)) return null
-        const coreKey = p.key
-        const idx = signIndex(p.lon)
-        const sign = SIGNS[idx]
-        const meta = PLANET_META[coreKey]
-        const deg = degInSign(p.lon)
-        return (
-          <section key={p.key} className="planet-card">
-            <header className="planet-head">
-              <div
-                className="planet-symbol planet-symbol-char"
-                style={{ background: `${MASCOT_COLOR[coreKey]}2e` }}
-                aria-hidden="true"
-              >
-                <PlanetMascot planetKey={coreKey} size={48} />
-              </div>
-              <div>
-                <p className="planet-title">
-                  {meta.title}
-                  <span className="planet-deg">
-                    {sign.name} {deg.toFixed(1)}°
-                  </span>
-                </p>
-                <p className="planet-sub">{meta.sub}</p>
-              </div>
-            </header>
-            <h3 className="sign-name">{sign.name}</h3>
-            <div className="keyword-row">
-              {sign.keywords.map((k) => (
-                <span key={k} className="keyword">
-                  {k}
-                </span>
-              ))}
-            </div>
-            <p className="sign-text">{sign[coreKey]}</p>
-            <p className="sign-foot">
-              {sign.element}の星座 — {ELEMENT_NOTE[sign.element]} ／ 支配星: {sign.ruler}
-            </p>
-          </section>
-        )
-      })}
-
-      {synthesis && (
-        <section className="planet-card synth-card">
-          <header className="planet-head">
-            <div className="planet-symbol" aria-hidden="true">
-              ✧
-            </div>
-            <div>
-              <p className="planet-title">3天体を総合的に見たとき</p>
-              <p className="planet-sub">太陽 × 月 × 上昇星座が描く、{who}の全体像</p>
-            </div>
-          </header>
-          <p className="sign-text">{synthesis.intro}</p>
-          <p className="sign-text">{synthesis.balance}</p>
-          <p className="sign-text synth-last">{synthesis.relation}</p>
-        </section>
-      )}
-
       <section className="party-card">
         <div className="party-head">
-          <p className="party-title">あなたの星のパーティ</p>
-          <p className="party-sub">10の星が、あなたを動かす10人のキャラです</p>
+          <p className="party-title">ほしキャラを構成するパーティ</p>
+          <p className="party-sub">
+            生まれた瞬間の星たちが、あなたを動かすキャラになりました。担当と、いまの発揮のしかたです
+          </p>
         </div>
-        <div className="party-grid">
+        <ul className="party-list">
           {partyPlanets.map((p) => {
             const info = PLANET_INFO[p.key]
             const sign = SIGNS[signIndex(p.lon)]
             const color = MASCOT_COLOR[p.key]
             return (
-              <div
+              <li
                 key={p.key}
-                className="party-member"
-                style={{ background: `${color}18`, borderColor: `${color}55` }}
+                className="party-row"
+                style={{ background: `${color}14`, borderColor: `${color}44` }}
               >
-                <div className="party-avatar" style={{ background: `${color}2e` }}>
-                  <PlanetMascot planetKey={p.key} size={54} />
+                <div className="party-row-av" style={{ background: `${color}2e` }}>
+                  <PlanetMascot planetKey={p.key} size={58} />
                 </div>
-                <p className="party-class">{info.role}</p>
-                <p className="party-planet">
-                  {info.symbol} {info.name}
-                </p>
-                <div className="party-chips">
-                  <span className="party-sign">
-                    {sign.symbol} {sign.name}
+                <div className="party-row-body">
+                  <p className="party-row-top">
+                    <span className="party-row-class">{info.role}</span>
+                    <span className="party-row-planet">
+                      {info.symbol} {info.name}
+                    </span>
+                    {p.retro && <span className="retro-badge">℞</span>}
+                    {info.generational && <span className="gen-badge">世代</span>}
+                  </p>
+                  <span className="party-row-sign">
+                    {sign.symbol} {sign.name} {degInSign(p.lon).toFixed(1)}°
                   </span>
-                  {p.retro && <span className="retro-badge">℞</span>}
+                  <dl className="party-facts">
+                    <div>
+                      <dt>担当</dt>
+                      <dd>{info.domain}</dd>
+                    </div>
+                    <div>
+                      <dt>クセ</dt>
+                      <dd>「{signMannerOf(p.lon)}」</dd>
+                    </div>
+                  </dl>
                 </div>
-              </div>
+              </li>
             )
           })}
-        </div>
-        <p className="party-foot">タップで各キャラの詳しいステータスは下の「もっと深く見る」へ</p>
+        </ul>
+        <p className="party-foot">「世代」= 動きがゆっくりで、同世代に共通する時代の空気も映す天体です</p>
       </section>
-
-      <details className="deep-details">
-        <summary className="deep-summary">
-          <span className="deep-summary-icon" aria-hidden="true">
-            🔭
-          </span>
-          もっと深く見る — キャラの詳しいステータス
-          <span className="deep-summary-hint">タップで展開</span>
-        </summary>
-        <div className="deep-body">
-          <p className="deep-lead">
-            ほしキャラはあなたの「メインキャラ」。でも生まれた瞬間の空には10個の天体があり、それぞれがあなたの中の別のキャラを担当しています。ここから先は、その全員のプロフィールです。
-          </p>
-
-          <section className="planet-card chart-card">
-            <header className="planet-head">
-              <div className="planet-symbol" aria-hidden="true">
-                ✵
-              </div>
-              <div>
-                <p className="planet-title">天体配置表</p>
-                <p className="planet-sub">生まれた瞬間の星の配置(℞は逆行)</p>
-              </div>
-            </header>
-            <table className="chart-table">
-              <tbody>
-                {data.planets.map((p) => {
-                  const info = PLANET_INFO[p.key]
-                  const sign = SIGNS[signIndex(p.lon)]
-                  return (
-                    <tr key={p.key}>
-                      <td className="chart-symbol">{info.symbol}</td>
-                      <td className="chart-planet">{info.name}</td>
-                      <td className="chart-sign">
-                        {sign.symbol} {sign.name}
-                      </td>
-                      <td className="chart-deg">{degInSign(p.lon).toFixed(1)}°</td>
-                      <td className="chart-retro">{p.retro ? <span className="retro-badge">℞ 逆行</span> : ''}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </section>
-
-          {partyPlanets.length > 0 && (
-            <section className="planet-card">
-              <header className="planet-head">
-                <div className="planet-symbol" aria-hidden="true">
-                  ✦
-                </div>
-                <div>
-                  <p className="planet-title">パーティ全員の詳しいステータス</p>
-                  <p className="planet-sub">10キャラそれぞれの担当と、いまの発揮のしかた</p>
-                </div>
-              </header>
-              <ul className="minor-planet-list">
-                {partyPlanets.map((p) => {
-                  const info = PLANET_INFO[p.key]
-                  const sign = SIGNS[signIndex(p.lon)]
-                  return (
-                    <li key={p.key} className="minor-planet">
-                      <div className="minor-head">
-                        <p className="minor-role">
-                          あなたの{info.role}
-                          <span className="minor-planet-name">
-                            〈{info.symbol} {info.name}〉
-                          </span>
-                        </p>
-                        <div className="minor-chips">
-                          <span className="sign-chip">
-                            {sign.symbol} {sign.name} {degInSign(p.lon).toFixed(1)}°
-                          </span>
-                          {p.retro && <span className="retro-badge">℞</span>}
-                          {info.generational && <span className="gen-badge">世代</span>}
-                        </div>
-                      </div>
-                      <dl className="minor-facts">
-                        <div>
-                          <dt>担当</dt>
-                          <dd>{info.domain}</dd>
-                        </div>
-                        <div>
-                          <dt>やり方</dt>
-                          <dd>「{signMannerOf(p.lon)}」</dd>
-                        </div>
-                      </dl>
-                    </li>
-                  )
-                })}
-              </ul>
-              <p className="sign-foot">
-                「世代」マークの天体は動きがゆっくりで、同世代に共通する時代の空気も映します。
-              </p>
-            </section>
-          )}
-
-        </div>
-      </details>
 
       <section className="planet-card fortune-card">
         <header className="planet-head">
@@ -349,7 +200,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
               {period.label}の運勢
               <span className="planet-deg">{fortune.skyNote}</span>
             </p>
-            <p className="planet-sub">いまの星の運行と{who}の星との角度から読んでいます</p>
+            <p className="planet-sub">いまの星の運行と{who}のほしキャラから読んでいます</p>
           </div>
         </header>
         <p className="fortune-tone">
@@ -380,8 +231,8 @@ export default function Result({ data, onRetry, onHome }: Props) {
             ✶
           </div>
           <div>
-            <p className="planet-title">AI占星術師の詳しい鑑定</p>
-            <p className="planet-sub">Claudeが{who}のチャートと星の運行を読み解きます</p>
+            <p className="planet-title">AI占星術師の詳しいほしキャラ鑑定</p>
+            <p className="planet-sub">AIが{who}のチャートと星の運行を読み解きます</p>
           </div>
         </header>
 
@@ -391,7 +242,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
               AIに詳しく占ってもらう
             </button>
             <p className="ai-note">
-              上記の計算結果(星座・角度)がAI(Claude API)に送信されます。鑑定には10〜30秒ほどかかります。
+              上記の計算結果(星座・角度)がAIに送信されます。鑑定には10〜30秒ほどかかります。
             </p>
           </>
         )}

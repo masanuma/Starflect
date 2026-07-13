@@ -31,6 +31,7 @@ export default function AiChat({ context, storageKey }: Props) {
   const [input, setInput] = useState('')
   const [streaming, setStreaming] = useState(false)
   const [error, setError] = useState('')
+  const [showLog, setShowLog] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function AiChat({ context, storageKey }: Props) {
     if (!q || streaming) return
     setError('')
     setInput('')
+    setShowLog(true)
     const base: ChatMessage[] = [...messages, { role: 'user', content: q }]
     // 空のアシスタント吹き出しを置き、そこへストリームを流し込む
     setMessages([...base, { role: 'assistant', content: '' }])
@@ -81,7 +83,19 @@ export default function AiChat({ context, storageKey }: Props) {
     setError('')
   }
 
+  /** 質問(ユーザー発言)と、その直後の回答をペアで削除する */
+  function deleteExchange(index: number) {
+    if (streaming) return
+    setMessages((cur) => {
+      const copy = cur.slice()
+      const removeCount = copy[index + 1]?.role === 'assistant' ? 2 : 1
+      copy.splice(index, removeCount)
+      return copy
+    })
+  }
+
   const hasChat = messages.length > 0
+  const questionCount = messages.filter((m) => m.role === 'user').length
 
   return (
     <section className="planet-card chat-card">
@@ -91,15 +105,33 @@ export default function AiChat({ context, storageKey }: Props) {
         </div>
         <div>
           <p className="planet-title">ほしキャラ相談室</p>
-          <p className="planet-sub">あなたの星の配置をぜんぶ踏まえて、AIがなんでも相談にのります</p>
+          <p className="planet-sub">あなたのほしキャラパーティをぜんぶ踏まえて、AIがなんでも相談にのります</p>
         </div>
       </header>
 
       {hasChat && (
+        <div className="chat-loghead">
+          <span>これまでの相談 {questionCount}件</span>
+          <button className="chat-toggle" onClick={() => setShowLog((v) => !v)}>
+            {showLog ? '非表示にする' : '表示する'}
+          </button>
+        </div>
+      )}
+
+      {hasChat && showLog && (
         <div className="chat-log" ref={scrollRef}>
           {messages.map((m, i) => (
             <div key={i} className={`chat-bubble chat-${m.role}`}>
               {m.content || (streaming && i === messages.length - 1 ? <span className="chat-typing">···</span> : '')}
+              {m.role === 'user' && !streaming && (
+                <button
+                  className="chat-del"
+                  onClick={() => deleteExchange(i)}
+                  aria-label="この質問と回答を削除"
+                >
+                  ×
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -143,7 +175,7 @@ export default function AiChat({ context, storageKey }: Props) {
 
       <div className="chat-foot-row">
         <p className="ai-note chat-note">
-          送信するとあなたの星のデータがAI(Claude API)に送られます。
+          送信するとあなたのほしキャラのデータがAIに送られます。
         </p>
         {hasChat && (
           <button className="chat-clear" onClick={clearChat}>

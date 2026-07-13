@@ -161,7 +161,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
           <div>
             <p className="planet-title">AI占星術師のふたり鑑定</p>
             <p className="planet-sub">
-              Claudeが{a.name}と{b.name}の星を読み解きます
+              AIが{a.name}と{b.name}の星を読み解きます
             </p>
           </div>
         </header>
@@ -172,7 +172,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
               AIにふたりを詳しく占ってもらう
             </button>
             <p className="ai-note">
-              上記の計算結果(星座・相性・角度)がAI(Claude API)に送信されます。鑑定には10〜30秒ほどかかります。
+              上記の計算結果(星座・相性・角度)がAIに送信されます。鑑定には10〜30秒ほどかかります。
             </p>
           </>
         )}
