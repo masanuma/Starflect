@@ -221,7 +221,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
           ))}
         </ul>
         <p className="sign-foot">
-          {period.noun}の空をゆく星々と、生まれた瞬間の星の配置との実際の角度(アスペクト)をもとにしています。
+          {period.noun}の空をゆく星々と、生まれた瞬間の星の配置との角度をもとにしています。
         </p>
       </section>
 

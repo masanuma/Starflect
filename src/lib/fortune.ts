@@ -101,12 +101,13 @@ interface AspectDef {
   quality: Quality
 }
 
+// name は運勢カードの見出しに表示。専門用語を避け、度数は残す(AIの精度確保も兼ねる)
 const ASPECTS: AspectDef[] = [
-  { angle: 0, orb: 6, name: '合(0°)', quality: 'conj' },
-  { angle: 60, orb: 4, name: 'セクスタイル(60°)', quality: 'good' },
-  { angle: 90, orb: 6, name: 'スクエア(90°)', quality: 'hard' },
-  { angle: 120, orb: 6, name: 'トライン(120°)', quality: 'good' },
-  { angle: 180, orb: 6, name: 'オポジション(180°)', quality: 'hard' },
+  { angle: 0, orb: 6, name: 'ぴったり重なる(0°)', quality: 'conj' },
+  { angle: 60, orb: 4, name: 'ゆるやかな追い風(60°)', quality: 'good' },
+  { angle: 90, orb: 6, name: '試練の角度(90°)', quality: 'hard' },
+  { angle: 120, orb: 6, name: '大きな追い風(120°)', quality: 'good' },
+  { angle: 180, orb: 6, name: 'ひっぱり合い(180°)', quality: 'hard' },
 ]
 
 export interface FortuneItem {
