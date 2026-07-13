@@ -10,6 +10,7 @@ import { findNatalAspects } from '../lib/natalAspects'
 import { starTypeOf, ELEMENT_WORD } from '../lib/startypes'
 import AiChat from './AiChat'
 import type { ChatChartContext } from '../lib/aiChat'
+import PlanetMascot, { MASCOT_COLOR } from './PlanetMascot'
 
 interface Props {
   data: ChartData
@@ -45,6 +46,8 @@ export default function Result({ data, onRetry, onHome }: Props) {
 
   const corePlanets = data.planets.filter((p) => isCoreKey(p.key))
   const otherPlanets = data.planets.filter((p) => !isCoreKey(p.key))
+  // 星のパーティ = 上昇星座を除く10天体(それぞれにマスコットあり)
+  const partyPlanets = data.planets.filter((p) => p.key !== 'asc')
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
   const natalAspects = findNatalAspects(data.planets)
 
@@ -110,17 +113,35 @@ export default function Result({ data, onRetry, onHome }: Props) {
 
       {starType && (
         <section className="type-card">
-          <p className="type-eyebrow">— あなたのほしキャラ —</p>
+          <p className="type-eyebrow">✦ あなたのほしキャラ ✦</p>
           <div className="type-emoji" aria-hidden="true">
             {starType.type.emoji}
           </div>
           <h3 className="type-name">{starType.type.name}</h3>
           <p className="type-copy">{starType.type.copy}</p>
           <p className="type-text">{starType.type.text}</p>
-          <p className="type-basis">
-            表の顔(太陽)= {starType.sunElement}の{ELEMENT_WORD[starType.sunElement]} × 心の中(月)={' '}
-            {starType.moonElement}の{ELEMENT_WORD[starType.moonElement]} ／ 全16キャラ
-          </p>
+          <div className="type-formula">
+            <div className="type-formula-side">
+              <PlanetMascot planetKey="sun" size={42} />
+              <span>
+                表の顔
+                <br />
+                {starType.sunElement}の{ELEMENT_WORD[starType.sunElement]}
+              </span>
+            </div>
+            <span className="type-formula-x" aria-hidden="true">
+              ×
+            </span>
+            <div className="type-formula-side">
+              <PlanetMascot planetKey="moon" size={42} />
+              <span>
+                心の中
+                <br />
+                {starType.moonElement}の{ELEMENT_WORD[starType.moonElement]}
+              </span>
+            </div>
+          </div>
+          <p className="type-count">この組み合わせで、全16キャラ</p>
         </section>
       )}
 
@@ -134,8 +155,12 @@ export default function Result({ data, onRetry, onHome }: Props) {
         return (
           <section key={p.key} className="planet-card">
             <header className="planet-head">
-              <div className="planet-symbol" aria-hidden="true">
-                {sign.symbol}
+              <div
+                className="planet-symbol planet-symbol-char"
+                style={{ background: `${MASCOT_COLOR[coreKey]}2e` }}
+                aria-hidden="true"
+              >
+                <PlanetMascot planetKey={coreKey} size={48} />
               </div>
               <div>
                 <p className="planet-title">
@@ -180,12 +205,48 @@ export default function Result({ data, onRetry, onHome }: Props) {
         </section>
       )}
 
+      <section className="party-card">
+        <div className="party-head">
+          <p className="party-title">あなたの星のパーティ</p>
+          <p className="party-sub">10の星が、あなたを動かす10人のキャラです</p>
+        </div>
+        <div className="party-grid">
+          {partyPlanets.map((p) => {
+            const info = PLANET_INFO[p.key]
+            const sign = SIGNS[signIndex(p.lon)]
+            const color = MASCOT_COLOR[p.key]
+            return (
+              <div
+                key={p.key}
+                className="party-member"
+                style={{ background: `${color}18`, borderColor: `${color}55` }}
+              >
+                <div className="party-avatar" style={{ background: `${color}2e` }}>
+                  <PlanetMascot planetKey={p.key} size={54} />
+                </div>
+                <p className="party-class">{info.role}</p>
+                <p className="party-planet">
+                  {info.symbol} {info.name}
+                </p>
+                <div className="party-chips">
+                  <span className="party-sign">
+                    {sign.symbol} {sign.name}
+                  </span>
+                  {p.retro && <span className="retro-badge">℞</span>}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+        <p className="party-foot">タップで各キャラの詳しいステータスは下の「もっと深く見る」へ</p>
+      </section>
+
       <details className="deep-details">
         <summary className="deep-summary">
           <span className="deep-summary-icon" aria-hidden="true">
             🔭
           </span>
-          もっと深く見る — あなたの中の10天体キャラ
+          もっと深く見る — キャラの詳しいステータス
           <span className="deep-summary-hint">タップで展開</span>
         </summary>
         <div className="deep-body">

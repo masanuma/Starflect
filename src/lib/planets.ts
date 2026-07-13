@@ -17,7 +17,7 @@ export interface PlanetInfo {
 
 export const PLANET_INFO: Record<PlanetKey, PlanetInfo> = {
   sun: { name: '太陽', symbol: '☉', domain: '基本性格・人生の目的', sub: 'あなたの核', role: '主人公', body: Body.Sun },
-  moon: { name: '月', symbol: '☽', domain: '素顔の感情・安心のありか', sub: '心の充電方法', role: '素顔のあなた', body: Body.Moon },
+  moon: { name: '月', symbol: '☽', domain: '素顔の感情・安心のありか', sub: '心の充電方法', role: '癒し手', body: Body.Moon },
   asc: { name: '上昇星座', symbol: 'ASC', domain: '第一印象・生まれ持った雰囲気', sub: '人生の入り口', role: '見た目担当' },
   mercury: { name: '水星', symbol: '☿', domain: '考え方・言葉・学び方', sub: '知性とコミュニケーション', role: '軍師', body: Body.Mercury },
   venus: { name: '金星', symbol: '♀', domain: '恋愛の好み・美意識・楽しみ方', sub: '愛と喜び', role: '恋の案内人', body: Body.Venus },
