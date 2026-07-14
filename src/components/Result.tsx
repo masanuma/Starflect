@@ -9,6 +9,7 @@ import { getPlanet, signMannerOf } from '../lib/planets'
 import { findNatalAspects } from '../lib/natalAspects'
 import { starTypeOf, elementPhrase } from '../lib/startypes'
 import AiChat from './AiChat'
+import AiReading from './AiReading'
 import type { ChatChartContext } from '../lib/aiChat'
 import PlanetMascot, { MASCOT_COLOR } from './PlanetMascot'
 import { useLang } from '../lib/i18n'
@@ -256,7 +257,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
           </p>
         )}
 
-        {aiState.status === 'done' && <p className="ai-text">{aiState.text}</p>}
+        {aiState.status === 'done' && <AiReading text={aiState.text} />}
 
         {aiState.status === 'error' && (
           <>

@@ -9,6 +9,7 @@ import { signName } from '../lib/signs'
 import { signIndex } from '../lib/astro'
 import { useLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
+import AiReading from './AiReading'
 
 interface Props {
   data: PairData
@@ -186,7 +187,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
           </p>
         )}
 
-        {aiState.status === 'done' && <p className="ai-text">{aiState.text}</p>}
+        {aiState.status === 'done' && <AiReading text={aiState.text} />}
 
         {aiState.status === 'error' && (
           <>

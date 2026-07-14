@@ -448,9 +448,11 @@ body {
 }
 
 .planet-card {
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 20px;
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(159, 127, 232, 0.1) 0%, rgba(234, 101, 150, 0.06) 60%),
+    var(--card);
+  border: 1.5px solid #e5daf4;
+  border-radius: 22px;
   padding: 22px 20px;
   margin-bottom: 16px;
   box-shadow: var(--shadow);
@@ -458,40 +460,47 @@ body {
 
 .planet-head {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 14px;
+  text-align: center;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
 .planet-symbol {
   flex: none;
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 1px solid #ead394;
-  background: #f8ebcb;
-  color: var(--gold);
-  font-size: 24px;
+  border: 1px solid #ecd9f2;
+  background: linear-gradient(135deg, rgba(234, 101, 150, 0.16) 0%, rgba(138, 99, 221, 0.16) 100%);
+  color: var(--violet);
+  font-size: 23px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .planet-title {
-  font-family: var(--font-head);
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: #9c7015;
+  font-family: var(--font-pop);
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
   margin: 0;
+  background: linear-gradient(120deg, var(--pink) 0%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .planet-deg {
+  display: block;
   font-family: var(--font-body);
   font-weight: 400;
   font-size: 12px;
   color: var(--ink-sub);
-  margin-left: 10px;
+  -webkit-text-fill-color: var(--ink-sub);
+  margin: 5px 0 0;
   letter-spacing: 0.04em;
 }
 
@@ -1264,24 +1273,31 @@ body {
 }
 
 .fortune-item {
-  border-left: 3px solid #e3bd6d;
-  padding-left: 14px;
+  background: #f4eefb;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 12px 14px;
 }
 
 .fortune-item.hard {
-  border-left-color: #e59a9a;
+  background: #fceef4;
+  border-color: #f2d4e2;
 }
 
 .fortune-item-title {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--ink-sub);
   letter-spacing: 0.04em;
-  margin: 0 0 4px;
+  margin: 0 0 6px;
 }
 
 .fortune-symbol {
   color: var(--gold);
   margin-right: 8px;
+}
+
+.fortune-item.hard .fortune-symbol {
+  color: var(--pink);
 }
 
 .fortune-item-text {
@@ -1323,6 +1339,44 @@ body {
   font-size: 14px;
   margin: 0;
   white-space: pre-line;
+}
+
+/* AI鑑定文(【見出し】+本文をほしキャラ調に整形) */
+.ai-section + .ai-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--pink-soft);
+}
+
+.ai-heading {
+  font-family: var(--font-pop);
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--violet);
+  margin: 0 0 8px;
+}
+
+.ai-heading::before {
+  content: '✦';
+  color: var(--pink);
+  margin-right: 7px;
+}
+
+.ai-para {
+  font-size: 14px;
+  line-height: 1.85;
+  margin: 0 0 10px;
+  white-space: pre-line;
+}
+
+.ai-para:last-child {
+  margin-bottom: 0;
+}
+
+.ai-para strong {
+  font-weight: 700;
+  color: var(--ink);
 }
 
 /* ---------- ほしキャラ相談室(チャット) ---------- */
