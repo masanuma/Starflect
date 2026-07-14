@@ -2,14 +2,16 @@
   /* ミルキーパステル(25歳女性・スマホ想定のライトテーマ) */
   --bg: #f3edfa;
   --ink: #382e56;
-  --ink-sub: #71649a;
+  --ink-sub: #5c4f82;
   --gold: #cf8e26;
   --gold-soft: rgba(207, 142, 38, 0.4);
   --gold-faint: rgba(207, 142, 38, 0.14);
   --pink: #ea6596;
+  --pink-strong: #c93b72;
   --pink-soft: rgba(234, 101, 150, 0.4);
   --pink-faint: rgba(234, 101, 150, 0.12);
   --violet: #8a63dd;
+  --violet-strong: #6a45c4;
   --violet-soft: rgba(138, 99, 221, 0.4);
   --cyan: #2fa2b0;
   --card: #ffffff;
@@ -40,6 +42,7 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 15px;
+  font-weight: 500;
   line-height: 1.8;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
@@ -105,7 +108,7 @@ body {
   background: none;
   border-radius: 999px;
   font-family: var(--font-pop);
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--ink-sub);
   padding: 4px 10px;
@@ -133,7 +136,7 @@ body {
   position: relative;
   z-index: 1;
   text-align: center;
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--ink-sub);
   padding: 18px 24px 26px;
 }
@@ -179,7 +182,7 @@ body {
 
 .wordmark-sub {
   font-family: var(--font-mark);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.34em;
   text-indent: 0.34em;
@@ -191,7 +194,7 @@ body {
 .wordmark-sub::after {
   content: '✦';
   color: var(--pink);
-  font-size: 10px;
+  font-size: 11px;
   margin: 0 0.6em;
   vertical-align: 2px;
 }
@@ -254,20 +257,20 @@ body {
 }
 
 .mode-time {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-sub);
 }
 
 .mode-desc {
   margin: 0;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink-sub);
   line-height: 1.7;
 }
 
 .home-note {
   text-align: center;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-sub);
   margin-top: 24px;
 }
@@ -277,7 +280,7 @@ body {
   background: none;
   border: none;
   color: var(--ink-sub);
-  font-size: 13px;
+  font-size: 14px;
   font-family: var(--font-body);
   cursor: pointer;
   padding: 0;
@@ -297,7 +300,7 @@ body {
 }
 
 .screen-sub {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink-sub);
   margin: 0 0 26px;
 }
@@ -315,14 +318,14 @@ body {
 }
 
 .field-label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--ink);
 }
 
 .field-hint {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--ink-sub);
 }
 
@@ -376,7 +379,7 @@ body {
   border-radius: 999px;
   color: var(--ink-sub);
   font-family: var(--font-body);
-  font-size: 13.5px;
+  font-size: 14.5px;
   padding: 9px 0;
   cursor: pointer;
   transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
@@ -390,13 +393,13 @@ body {
 .period-chip.active {
   background: var(--pink-faint);
   border-color: var(--pink);
-  color: var(--pink);
+  color: var(--pink-strong);
   font-weight: 700;
 }
 
 .form-error {
   color: #e06a6a;
-  font-size: 13px;
+  font-size: 14px;
   margin: 0;
 }
 
@@ -433,7 +436,7 @@ body {
   border-radius: 999px;
   color: var(--ink-sub);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 15px;
   padding: 13px;
   cursor: pointer;
   transition: border-color 0.2s ease, color 0.2s ease;
@@ -452,7 +455,7 @@ body {
 .result-lead,
 .result-place {
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink-sub);
   margin: 0;
 }
@@ -460,7 +463,7 @@ body {
 .ornament {
   text-align: center;
   color: var(--pink);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 1em;
   text-indent: 1em;
   margin: 14px 0 24px;
@@ -517,7 +520,7 @@ body {
   display: block;
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-sub);
   -webkit-text-fill-color: var(--ink-sub);
   margin: 5px 0 0;
@@ -525,7 +528,7 @@ body {
 }
 
 .planet-sub {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-sub);
   margin: 2px 0 0;
 }
@@ -546,7 +549,7 @@ body {
 }
 
 .keyword {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: #9c7015;
   background: #f8ebcb;
   border: 1px solid #ead394;
@@ -556,12 +559,12 @@ body {
 }
 
 .sign-text {
-  font-size: 14px;
+  font-size: 15px;
   margin: 0 0 14px;
 }
 
 .sign-foot {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--ink-sub);
   border-top: 1px solid var(--line);
   padding-top: 12px;
@@ -586,7 +589,7 @@ body {
 
 .mode-badge-new {
   font-family: var(--font-pop);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 900;
   letter-spacing: 0.14em;
   color: #ffffff;
@@ -609,9 +612,9 @@ body {
 
 .pair-legend {
   font-family: var(--font-pop);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
-  color: var(--pink);
+  color: var(--pink-strong);
   padding: 0 8px;
 }
 
@@ -654,13 +657,13 @@ body {
 
 .pair-type-name {
   font-family: var(--font-pop);
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 700;
   color: var(--ink);
 }
 
 .pair-type-person {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--ink-sub);
 }
 
@@ -704,7 +707,7 @@ body {
 
 .rel-badge {
   font-family: var(--font-pop);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 700;
   border-radius: 999px;
   padding: 2px 10px;
@@ -717,12 +720,12 @@ body {
 }
 
 .rel-friend {
-  color: #d64f81;
+  color: var(--pink-strong);
   background: #fbdfea;
 }
 
 .rel-spark {
-  color: #7a52d1;
+  color: var(--violet-strong);
   background: #ebe1fa;
 }
 
@@ -747,7 +750,7 @@ body {
 
 .pair-tone-name {
   font-family: var(--font-pop);
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 700;
   margin: 0 0 8px;
 }
@@ -757,7 +760,7 @@ body {
 }
 
 .pair-tone-text {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-sub);
   text-align: left;
   margin: 10px 0 0;
@@ -765,7 +768,7 @@ body {
 
 .pair-tip {
   font-family: var(--font-pop);
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-weight: 700;
   background: linear-gradient(135deg, #fce0ec 0%, #ece2fa 100%);
   border: 1.5px solid #f4c3d7;
@@ -790,11 +793,11 @@ body {
 
 .type-eyebrow {
   font-family: var(--font-pop);
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 700;
   letter-spacing: 0.28em;
   text-indent: 0.28em;
-  color: var(--pink);
+  color: var(--pink-strong);
   margin: 0 0 14px;
 }
 
@@ -834,21 +837,21 @@ body {
 }
 
 .type-copy {
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-weight: 700;
   color: var(--ink);
   margin: 0 0 14px;
 }
 
 .type-text {
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: var(--ink);
   margin: 0 0 16px;
   text-align: left;
 }
 
 .type-basis {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-sub);
   border-top: 1px solid var(--line);
   padding-top: 12px;
@@ -863,10 +866,10 @@ body {
 
 .type-synth-label {
   font-family: var(--font-pop);
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: var(--pink);
+  color: var(--pink-strong);
   text-align: center;
   margin: 0 0 12px;
 }
@@ -890,7 +893,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--ink-sub);
   line-height: 1.4;
@@ -904,7 +907,7 @@ body {
 }
 
 .type-count {
-  font-size: 10.5px;
+  font-size: 11.5px;
   color: var(--ink-sub);
   text-align: center;
   margin: 10px 0 0;
@@ -948,7 +951,7 @@ body {
 }
 
 .party-sub {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-sub);
   margin: 0;
 }
@@ -1002,13 +1005,13 @@ body {
 }
 
 .party-row-planet {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--ink-sub);
 }
 
 .party-row-sign {
   display: inline-block;
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--ink);
   background: rgba(255, 255, 255, 0.7);
@@ -1035,9 +1038,9 @@ body {
   min-width: 40px;
   text-align: center;
   font-family: var(--font-pop);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  color: var(--violet);
+  color: var(--violet-strong);
   background: #f1eafc;
   border-radius: 999px;
   padding: 1px 8px;
@@ -1045,12 +1048,12 @@ body {
 
 .party-facts dd {
   margin: 0;
-  font-size: 12.5px;
+  font-size: 13.5px;
   line-height: 1.6;
 }
 
 .party-foot {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--ink-sub);
   text-align: center;
   margin: 14px 0 0;
@@ -1068,7 +1071,7 @@ body {
   list-style: none;
   cursor: pointer;
   font-family: var(--font-pop);
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-weight: 700;
   color: var(--ink);
   background: linear-gradient(135deg, #ddf1f3 0%, #ebe2fa 100%);
@@ -1092,7 +1095,7 @@ body {
 
 .deep-summary-hint {
   margin-left: auto;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   color: var(--ink-sub);
   white-space: nowrap;
@@ -1117,7 +1120,7 @@ body {
 }
 
 .deep-lead {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink-sub);
   margin: 0 8px 16px;
 }
@@ -1125,7 +1128,7 @@ body {
 .chart-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .chart-table td {
@@ -1165,7 +1168,7 @@ body {
 }
 
 .retro-badge {
-  font-size: 10.5px;
+  font-size: 11.5px;
   color: #c95252;
   background: #fadfdf;
   border-radius: 999px;
@@ -1201,14 +1204,14 @@ body {
 
 .minor-role {
   font-family: var(--font-pop);
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-weight: 700;
   color: #9c7015;
   margin: 0;
 }
 
 .minor-planet-name {
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 400;
   color: var(--ink-sub);
   margin-left: 6px;
@@ -1222,7 +1225,7 @@ body {
 }
 
 .sign-chip {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--ink);
   background: #ffffff;
   border: 1px solid #d6c9ec;
@@ -1232,7 +1235,7 @@ body {
 }
 
 .gen-badge {
-  font-size: 10.5px;
+  font-size: 11.5px;
   color: #1f8b98;
   background: #d9eff2;
   border-radius: 999px;
@@ -1258,9 +1261,9 @@ body {
   min-width: 48px;
   text-align: center;
   font-family: var(--font-pop);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 700;
-  color: var(--violet);
+  color: var(--violet-strong);
   background: #f3edfd;
   border-radius: 999px;
   padding: 2px 8px;
@@ -1268,7 +1271,7 @@ body {
 
 .minor-facts dd {
   margin: 0;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.65;
 }
 
@@ -1284,14 +1287,14 @@ body {
   display: flex;
   align-items: baseline;
   gap: 10px;
-  font-size: 14px;
+  font-size: 15px;
   margin: 0 0 16px;
 }
 
 .tone-badge {
   flex: none;
   font-family: var(--font-head);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: #8f6407;
@@ -1322,7 +1325,7 @@ body {
 }
 
 .fortune-item-title {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-sub);
   letter-spacing: 0.04em;
   margin: 0 0 6px;
@@ -1338,12 +1341,12 @@ body {
 }
 
 .fortune-item-text {
-  font-size: 14px;
+  font-size: 15px;
   margin: 0;
 }
 
 .ai-note {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--ink-sub);
   margin: 12px 0 0;
   text-align: center;
@@ -1353,7 +1356,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--ink-sub);
   margin: 0;
 }
@@ -1373,7 +1376,7 @@ body {
 }
 
 .ai-text {
-  font-size: 14px;
+  font-size: 15px;
   margin: 0;
   white-space: pre-line;
 }
@@ -1387,10 +1390,10 @@ body {
 
 .ai-heading {
   font-family: var(--font-pop);
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 800;
   letter-spacing: 0.04em;
-  color: var(--violet);
+  color: var(--violet-strong);
   margin: 0 0 8px;
 }
 
@@ -1401,7 +1404,7 @@ body {
 }
 
 .ai-para {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.85;
   margin: 0 0 10px;
   white-space: pre-line;
@@ -1425,7 +1428,7 @@ body {
 }
 
 .chat-intro {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink-sub);
   margin: 0 0 14px;
 }
@@ -1434,7 +1437,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-sub);
   margin-bottom: 8px;
 }
@@ -1443,9 +1446,9 @@ body {
   background: none;
   border: 1px solid var(--violet-soft);
   border-radius: 999px;
-  color: var(--violet);
+  color: var(--violet-strong);
   font-family: var(--font-body);
-  font-size: 11.5px;
+  font-size: 12.5px;
   padding: 3px 12px;
   cursor: pointer;
   transition: background 0.2s ease;
@@ -1468,7 +1471,7 @@ body {
 .chat-bubble {
   position: relative;
   max-width: 85%;
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.7;
   padding: 10px 14px;
   border-radius: 16px;
@@ -1486,7 +1489,7 @@ body {
   border: none;
   background: #ffffff;
   color: var(--ink-sub);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1;
   cursor: pointer;
   box-shadow: 0 1px 5px rgba(105, 78, 170, 0.25);
@@ -1537,9 +1540,9 @@ body {
 
 .chat-chip {
   font-family: var(--font-pop);
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 700;
-  color: var(--violet);
+  color: var(--violet-strong);
   background: #f1eafc;
   border: 1px solid var(--violet-soft);
   border-radius: 999px;
@@ -1573,7 +1576,7 @@ body {
   border-radius: 999px;
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 14.5px;
+  font-size: 15.5px;
   padding: 11px 16px;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1629,7 +1632,7 @@ body {
   background: none;
   border: none;
   color: var(--ink-sub);
-  font-size: 11.5px;
+  font-size: 12.5px;
   text-decoration: underline;
   cursor: pointer;
   padding: 0;
@@ -1645,7 +1648,7 @@ body {
   border: 1.5px dashed #e3c377;
   border-radius: 14px;
   padding: 16px 18px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink-sub);
   margin: 6px 0 4px;
 }
@@ -1674,7 +1677,7 @@ body {
   border-radius: 999px;
   color: var(--violet);
   font-family: var(--font-pop);
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 700;
   padding: 6px 16px;
   cursor: pointer;
@@ -1702,7 +1705,7 @@ body {
 
 .about-lead {
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink-sub);
   margin: 8px 0 24px;
 }
@@ -1712,7 +1715,7 @@ body {
 }
 
 .about-p {
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.9;
   margin: 0 0 12px;
 }
@@ -1756,13 +1759,13 @@ body {
 
 .about-formula-label {
   font-family: var(--font-pop);
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 800;
   color: var(--ink);
 }
 
 .about-formula-sub {
-  font-size: 10.5px;
+  font-size: 11.5px;
   color: var(--ink-sub);
 }
 
@@ -1786,9 +1789,9 @@ body {
 
 .about-sub-h {
   font-family: var(--font-pop);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
-  color: var(--violet);
+  color: var(--violet-strong);
   text-align: center;
   margin: 4px 0 12px;
 }
@@ -1834,13 +1837,13 @@ body {
 
 .about-el-word {
   font-family: var(--font-pop);
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 800;
   color: var(--ink);
 }
 
 .about-el-desc {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--ink-sub);
 }
 
@@ -1885,9 +1888,9 @@ body {
 
 .type-mini-combo {
   font-family: var(--font-pop);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 700;
-  color: var(--violet);
+  color: var(--violet-strong);
   background: #f1eafc;
   border-radius: 999px;
   padding: 1px 10px;
@@ -1895,14 +1898,14 @@ body {
 
 .type-mini-name {
   font-family: var(--font-pop);
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 900;
   color: var(--ink);
   margin-top: 2px;
 }
 
 .type-mini-copy {
-  font-size: 10.5px;
+  font-size: 11.5px;
   color: var(--ink-sub);
   line-height: 1.5;
 }
