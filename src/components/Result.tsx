@@ -12,6 +12,8 @@ import AiChat from './AiChat'
 import AiReading from './AiReading'
 import type { ChatChartContext } from '../lib/aiChat'
 import PlanetMascot, { MASCOT_COLOR } from './PlanetMascot'
+import HoshiKyaraMascot from './HoshiKyaraMascot'
+import SectionIcon from './SectionIcon'
 import { useLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
 
@@ -107,8 +109,8 @@ export default function Result({ data, onRetry, onHome }: Props) {
 
       {starType && (
         <section className="type-card">
-          <div className="type-emoji" aria-hidden="true">
-            {starType.type.emoji}
+          <div className="type-mascot" aria-hidden="true">
+            <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={96} />
           </div>
           <h3 className="type-name">{starType.type.name}</h3>
           <p className="type-copy">{starType.type.copy}</p>
@@ -198,7 +200,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
       <section className="planet-card fortune-card">
         <header className="planet-head">
           <div className="planet-symbol" aria-hidden="true">
-            ☄
+            <SectionIcon name="fortune" />
           </div>
           <div>
             <p className="planet-title">
@@ -231,7 +233,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
       <section className="planet-card ai-card">
         <header className="planet-head">
           <div className="planet-symbol" aria-hidden="true">
-            ✶
+            <SectionIcon name="reading" />
           </div>
           <div>
             <p className="planet-title">{t.result.aiTitle}</p>

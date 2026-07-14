@@ -1,6 +1,7 @@
 import { useUI } from '../lib/ui'
 import { allStarTypes, ELEMENT_ORDER, elementWord } from '../lib/startypes'
 import { elementLabel } from '../lib/signs'
+import HoshiKyaraMascot from './HoshiKyaraMascot'
 
 interface Props {
   onBack: () => void
@@ -68,7 +69,9 @@ export default function About({ onBack, onStart }: Props) {
         <ul className="type-grid">
           {types.map((r, i) => (
             <li className="type-mini" key={i}>
-              <span className="type-mini-emoji">{r.type.emoji}</span>
+              <span className="type-mini-mascot" aria-hidden="true">
+                <HoshiKyaraMascot sunElement={r.sunElement} moonElement={r.moonElement} size={56} />
+              </span>
               <span className="type-mini-combo">
                 {elementLabel(r.sunElement)} × {elementLabel(r.moonElement)}
               </span>

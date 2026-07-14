@@ -10,6 +10,8 @@ import { signIndex } from '../lib/astro'
 import { useLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
 import AiReading from './AiReading'
+import HoshiKyaraMascot from './HoshiKyaraMascot'
+import SectionIcon from './SectionIcon'
 
 interface Props {
   data: PairData
@@ -86,7 +88,9 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
       <section className="pair-hero">
         <div className="pair-types">
           <div className="pair-type">
-            <span className="pair-type-emoji">{typeA.type.emoji}</span>
+            <span className="pair-type-mascot" aria-hidden="true">
+              <HoshiKyaraMascot sunElement={typeA.sunElement} moonElement={typeA.moonElement} size={62} />
+            </span>
             <span className="pair-type-name">{typeA.type.name}</span>
             <span className="pair-type-person">{a.name}</span>
           </div>
@@ -94,7 +98,9 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
             ×
           </div>
           <div className="pair-type">
-            <span className="pair-type-emoji">{typeB.type.emoji}</span>
+            <span className="pair-type-mascot" aria-hidden="true">
+              <HoshiKyaraMascot sunElement={typeB.sunElement} moonElement={typeB.moonElement} size={62} />
+            </span>
             <span className="pair-type-name">{typeB.type.name}</span>
             <span className="pair-type-person">{b.name}</span>
           </div>
@@ -111,7 +117,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
       <section className="planet-card">
         <header className="planet-head">
           <div className="planet-symbol" aria-hidden="true">
-            🔍
+            <SectionIcon name="breakdown" />
           </div>
           <div>
             <p className="planet-title">{t.pairResult.breakdownTitle}</p>
@@ -134,7 +140,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
       <section className="planet-card pair-today">
         <header className="planet-head">
           <div className="planet-symbol" aria-hidden="true">
-            🗓️
+            <SectionIcon name="today" />
           </div>
           <div>
             <p className="planet-title">{t.pairResult.todayTitle(periodLabel(data.period))}</p>
@@ -161,7 +167,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
       <section className="planet-card ai-card">
         <header className="planet-head">
           <div className="planet-symbol" aria-hidden="true">
-            💌
+            <SectionIcon name="pairReading" />
           </div>
           <div>
             <p className="planet-title">{t.pairResult.aiTitle}</p>

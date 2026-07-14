@@ -4,6 +4,7 @@ import type { ChatChartContext, ChatMessage } from '../lib/aiChat'
 import { streamAiChat } from '../lib/aiChat'
 import { useLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
+import SectionIcon from './SectionIcon'
 
 interface Props {
   context: ChatChartContext
@@ -102,7 +103,7 @@ export default function AiChat({ context, storageKey }: Props) {
     <section className="planet-card chat-card">
       <header className="planet-head">
         <div className="planet-symbol" aria-hidden="true">
-          🔮
+          <SectionIcon name="chat" />
         </div>
         <div>
           <p className="planet-title">{t.chat.title}</p>

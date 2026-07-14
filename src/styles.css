@@ -784,6 +784,23 @@ body {
   margin-bottom: 12px;
 }
 
+.type-mascot {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.pair-type-mascot {
+  display: flex;
+  justify-content: center;
+  line-height: 1;
+}
+
+.type-mini-mascot {
+  display: flex;
+  justify-content: center;
+}
+
 .type-name {
   font-family: var(--font-head);
   font-size: 29px;

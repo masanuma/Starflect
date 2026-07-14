@@ -1,4 +1,5 @@
 import { useUI } from '../lib/ui'
+import BrandMascot from './BrandMascot'
 
 interface Props {
   onSelect: () => void
@@ -12,14 +13,7 @@ export default function Home({ onSelect, onSelectPair, onAbout }: Props) {
     <div className="home">
       <div className="hero">
         <div className="hero-mark" aria-hidden="true">
-          <svg viewBox="0 0 48 48" width="44" height="44" fill="none">
-            <path
-              d="M24 4c1.2 8.4 4.9 15.6 20 20-15.1 4.4-18.8 11.6-20 20-1.2-8.4-4.9-15.6-20-20 15.1-4.4 18.8-11.6 20-20Z"
-              fill="#F2B25C"
-            />
-            <circle cx="38" cy="10" r="1.6" fill="#C9B8F0" />
-            <circle cx="9" cy="37" r="1.2" fill="#C9B8F0" />
-          </svg>
+          <BrandMascot size={92} />
         </div>
         <h1 className="wordmark">Starflect</h1>
         <p className="tagline">
