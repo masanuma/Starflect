@@ -1,5 +1,6 @@
 import { useLang, getLang } from './i18n'
 import type { Lang } from './i18n'
+import type { Element } from './signs'
 
 /** 生年月日ラベルを言語別に整形 */
 const MONTHS: Record<Lang, string[]> = {
@@ -41,12 +42,28 @@ export interface UIStrings {
   home: {
     tagline1: string
     tagline2: string
+    aboutLink: string
     soloName: string
     soloTime: string
     soloDesc: string
     pairName: string
     pairDesc: string
     note: string
+  }
+  about: {
+    title: string
+    lead: string
+    what: string[]
+    howTitle: string
+    outer: string
+    inner: string
+    sunElement: string
+    moonElement: string
+    elementsTitle: string
+    elements: Record<Element, string>
+    listTitle: string
+    listSub: string
+    cta: string
   }
   birth: {
     title: string
@@ -148,12 +165,37 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       tagline1: 'あなたはどの「ほしキャラ」?',
       tagline2: '生まれた瞬間の星の配置でわかる、16キャラ×本格星占い。',
+      aboutLink: 'ほしキャラとは？',
       soloName: '🌟 ほしキャラ診断',
       soloTime: '30秒',
       soloDesc: '生年月日だけでOK。あなたのほしキャラ(全16キャラ)と、あなたの中に住む10天体キャラまで分析',
       pairName: '💞 ふたりの相性',
       pairDesc: 'ほしキャラの相性と「今日のふたり」を診断。相手の生年月日だけでOK',
       note: '計算は雑誌の12星座占いと同じ生年月日ベース。でも結果は、あなただけのもの。',
+    },
+    about: {
+      title: 'ほしキャラとは？',
+      lead: '生まれた瞬間の星から生まれる、あなただけのキャラクター。',
+      what: [
+        '「ほしキャラ」は、あなたが生まれた瞬間の星の配置から生まれる、あなただけのキャラクターです。',
+        '雑誌の12星座占いが使う太陽星座(表の顔)に、月星座(心の中)を掛け合わせることで、「外から見たあなた」と「内側のあなた」の両方を映し出します。',
+        '星座は4つのエレメント(火・地・風・水)に分けられます。太陽のエレメント4種 × 月のエレメント4種 = 全16種類。あなたはそのどれか1つです。',
+      ],
+      howTitle: '16キャラの決まり方',
+      outer: '表の顔',
+      inner: '心の中',
+      sunElement: '太陽のエレメント',
+      moonElement: '月のエレメント',
+      elementsTitle: '4つのエレメント',
+      elements: {
+        火: '情熱・行動・エネルギー',
+        地: '現実・安定・継続',
+        風: '知性・言葉・自由',
+        水: '感情・共感・想像',
+      },
+      listTitle: '16のほしキャラ',
+      listSub: '太陽 × 月 のエレメントで決まる、あなたのキャラ',
+      cta: '自分のほしキャラを診断する',
     },
     birth: {
       title: 'ほしキャラ診断',
@@ -259,12 +301,37 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       tagline1: 'Which “Hoshi-Kyara” (star character) are you?',
       tagline2: '16 characters × real astrology, from the sky at the moment you were born.',
+      aboutLink: 'What is Hoshi-Kyara?',
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 sec',
       soloDesc: 'Just your birth date. We analyze your Hoshi-Kyara (1 of 16) and the 10 planet-characters living inside you.',
       pairName: '💞 Compatibility',
       pairDesc: 'Hoshi-Kyara compatibility plus “the two of you today.” Just their birth date needed.',
       note: 'The math uses the same birth date as magazine horoscopes—but the result is yours alone.',
+    },
+    about: {
+      title: 'What is Hoshi-Kyara?',
+      lead: 'Your very own character, born from the stars at the moment you arrived.',
+      what: [
+        '“Hoshi-Kyara” is your very own character, born from the arrangement of the stars at the moment you were born.',
+        'On top of the Sun sign (your outer face) used by magazine horoscopes, we blend in the Moon sign (your inner heart) to reflect both “you as others see you” and “you on the inside.”',
+        'The zodiac signs fall into four elements (Fire, Earth, Air, Water). Four Sun elements × four Moon elements = 16 characters in all. You are exactly one of them.',
+      ],
+      howTitle: 'How the 16 are decided',
+      outer: 'Outer face',
+      inner: 'Inner heart',
+      sunElement: 'Sun’s element',
+      moonElement: 'Moon’s element',
+      elementsTitle: 'The four elements',
+      elements: {
+        火: 'Passion, action, energy',
+        地: 'Reality, stability, persistence',
+        風: 'Intellect, words, freedom',
+        水: 'Emotion, empathy, imagination',
+      },
+      listTitle: 'The 16 Hoshi-Kyara',
+      listSub: 'Your character, set by the Sun × Moon elements',
+      cta: 'Find your Hoshi-Kyara',
     },
     birth: {
       title: 'Hoshi-Kyara',
@@ -370,12 +437,37 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       tagline1: '¿Qué “Hoshi-Kyara” (personaje estelar) eres?',
       tagline2: '16 personajes × astrología real, según el cielo del momento en que naciste.',
+      aboutLink: '¿Qué es Hoshi-Kyara?',
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 s',
       soloDesc: 'Solo tu fecha de nacimiento. Analizamos tu Hoshi-Kyara (1 de 16) y los 10 planetas-personaje que viven en ti.',
       pairName: '💞 Compatibilidad',
       pairDesc: 'Compatibilidad de Hoshi-Kyara y “vosotros dos hoy”. Solo hace falta su fecha de nacimiento.',
       note: 'El cálculo usa la misma fecha que los horóscopos de revista, pero el resultado es solo tuyo.',
+    },
+    about: {
+      title: '¿Qué es Hoshi-Kyara?',
+      lead: 'Tu propio personaje, nacido de los astros del momento en que llegaste.',
+      what: [
+        '«Hoshi-Kyara» es tu propio personaje, nacido de la disposición de los astros en el momento en que naciste.',
+        'Sobre el signo solar (tu cara externa) que usan los horóscopos de revista, sumamos el signo lunar (tu interior) para reflejar tanto «tú como te ven los demás» como «tú por dentro».',
+        'Los signos se agrupan en cuatro elementos (Fuego, Tierra, Aire, Agua). Cuatro elementos solares × cuatro lunares = 16 personajes en total. Tú eres exactamente uno de ellos.',
+      ],
+      howTitle: 'Cómo se deciden los 16',
+      outer: 'Cara externa',
+      inner: 'Interior',
+      sunElement: 'Elemento solar',
+      moonElement: 'Elemento lunar',
+      elementsTitle: 'Los cuatro elementos',
+      elements: {
+        火: 'Pasión, acción, energía',
+        地: 'Realidad, estabilidad, constancia',
+        風: 'Intelecto, palabras, libertad',
+        水: 'Emoción, empatía, imaginación',
+      },
+      listTitle: 'Los 16 Hoshi-Kyara',
+      listSub: 'Tu personaje, según los elementos Sol × Luna',
+      cta: 'Descubre tu Hoshi-Kyara',
     },
     birth: {
       title: 'Hoshi-Kyara',

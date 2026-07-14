@@ -3,9 +3,10 @@ import { useUI } from '../lib/ui'
 interface Props {
   onSelect: () => void
   onSelectPair: () => void
+  onAbout: () => void
 }
 
-export default function Home({ onSelect, onSelectPair }: Props) {
+export default function Home({ onSelect, onSelectPair, onAbout }: Props) {
   const t = useUI()
   return (
     <div className="home">
@@ -26,6 +27,9 @@ export default function Home({ onSelect, onSelectPair }: Props) {
           <br />
           {t.home.tagline2}
         </p>
+        <button className="about-link" onClick={onAbout}>
+          {t.home.aboutLink}
+        </button>
       </div>
 
       <div className="mode-list">

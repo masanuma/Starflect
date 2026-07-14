@@ -5,6 +5,7 @@ import BirthForm from './components/BirthForm'
 import Result from './components/Result'
 import PairForm from './components/PairForm'
 import PairResult from './components/PairResult'
+import About from './components/About'
 import LangSwitcher from './components/LangSwitcher'
 import type { ChartData } from './lib/types'
 import type { PairData } from './lib/compat'
@@ -12,6 +13,7 @@ import { useUI } from './lib/ui'
 
 type Screen =
   | { page: 'home' }
+  | { page: 'about' }
   | { page: 'form' }
   | { page: 'result'; data: ChartData }
   | { page: 'pairForm' }
@@ -30,6 +32,13 @@ export default function App() {
           <Home
             onSelect={() => setScreen({ page: 'form' })}
             onSelectPair={() => setScreen({ page: 'pairForm' })}
+            onAbout={() => setScreen({ page: 'about' })}
+          />
+        )}
+        {screen.page === 'about' && (
+          <About
+            onBack={() => setScreen({ page: 'home' })}
+            onStart={() => setScreen({ page: 'form' })}
           />
         )}
         {screen.page === 'form' && (

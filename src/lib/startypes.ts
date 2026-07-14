@@ -117,10 +117,25 @@ export interface StarTypeResult {
   moonElement: Element
 }
 
+/** エレメントの並び順(火→地→風→水) */
+export const ELEMENT_ORDER: Element[] = ['火', '地', '風', '水']
+
 /** 太陽と月の黄経から星タイプを判定(現在言語で) */
 export function starTypeOf(sunLon: number, moonLon: number): StarTypeResult {
   const sunElement = elementOf(sunLon)
   const moonElement = elementOf(moonLon)
   const table = STAR_TYPES[getLang()] ?? STAR_TYPES.ja
   return { type: table[sunElement][moonElement], sunElement, moonElement }
+}
+
+/** 全16タイプを表示順(太陽エレメント × 月エレメント)で返す(現在言語で) */
+export function allStarTypes(): StarTypeResult[] {
+  const table = STAR_TYPES[getLang()] ?? STAR_TYPES.ja
+  const out: StarTypeResult[] = []
+  for (const sunElement of ELEMENT_ORDER) {
+    for (const moonElement of ELEMENT_ORDER) {
+      out.push({ type: table[sunElement][moonElement], sunElement, moonElement })
+    }
+  }
+  return out
 }
