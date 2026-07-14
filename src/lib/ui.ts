@@ -40,6 +40,7 @@ export interface UIStrings {
     backToModes: string
   }
   home: {
+    appTitle: string
     tagline1: string
     tagline2: string
     aboutLink: string
@@ -163,6 +164,7 @@ const UI: Record<Lang, UIStrings> = {
       backToModes: '← モード選択に戻る',
     },
     home: {
+      appTitle: 'ほしキャラ診断',
       tagline1: 'あなたはどの「ほしキャラ」?',
       tagline2: '生まれた瞬間の星の配置でわかる、16キャラ×本格星占い。',
       aboutLink: 'ほしキャラとは？',
@@ -299,6 +301,7 @@ const UI: Record<Lang, UIStrings> = {
       backToModes: '← Back to modes',
     },
     home: {
+      appTitle: 'Hoshi-Kyara',
       tagline1: 'Which “Hoshi-Kyara” (star character) are you?',
       tagline2: '16 characters × real astrology, from the sky at the moment you were born.',
       aboutLink: 'What is Hoshi-Kyara?',
@@ -435,6 +438,7 @@ const UI: Record<Lang, UIStrings> = {
       backToModes: '← Volver a los modos',
     },
     home: {
+      appTitle: 'Hoshi-Kyara',
       tagline1: '¿Qué “Hoshi-Kyara” (personaje estelar) eres?',
       tagline2: '16 personajes × astrología real, según el cielo del momento en que naciste.',
       aboutLink: '¿Qué es Hoshi-Kyara?',

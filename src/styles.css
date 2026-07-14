@@ -167,19 +167,39 @@ body {
 .wordmark {
   font-family: var(--font-mark);
   font-weight: 900;
-  font-size: 36px;
-  letter-spacing: 0.12em;
-  margin: 0 0 12px;
-  text-indent: 0.12em;
+  font-size: 34px;
+  letter-spacing: 0.08em;
+  margin: 0 0 4px;
+  text-indent: 0.08em;
   background: linear-gradient(120deg, #edaf55 0%, var(--pink) 55%, var(--violet) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+.wordmark-sub {
+  font-family: var(--font-mark);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  text-indent: 0.34em;
+  color: var(--gold);
+  margin: 0 0 14px;
+}
+
+.wordmark-sub::before,
+.wordmark-sub::after {
+  content: '✦';
+  color: var(--pink);
+  font-size: 10px;
+  margin: 0 0.6em;
+  vertical-align: 2px;
+}
+
 .tagline {
   font-family: var(--font-body);
-  font-size: 13.5px;
+  font-size: 15px;
+  line-height: 1.75;
   color: var(--ink-sub);
   margin: 0;
 }
@@ -1893,6 +1913,6 @@ body {
   }
 
   .wordmark {
-    font-size: 46px;
+    font-size: 40px;
   }
 }

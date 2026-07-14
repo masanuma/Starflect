@@ -15,7 +15,8 @@ export default function Home({ onSelect, onSelectPair, onAbout }: Props) {
         <div className="hero-mark" aria-hidden="true">
           <BrandMascot size={92} />
         </div>
-        <h1 className="wordmark">Starflect</h1>
+        <h1 className="wordmark">{t.home.appTitle}</h1>
+        <p className="wordmark-sub">Starflect</p>
         <p className="tagline">
           {t.home.tagline1}
           <br />
