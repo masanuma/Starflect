@@ -19,7 +19,15 @@ import { useLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
 import { track } from '../lib/analytics'
 
-const RETRO_SUFFIX: Record<string, string> = { ja: '(逆行)', en: '(retrograde)', es: '(retrógrado)' }
+const RETRO_SUFFIX: Record<string, string> = {
+  ja: '(逆行)',
+  en: '(retrograde)',
+  es: '(retrógrado)',
+  fr: '(rétrograde)',
+  it: '(retrogrado)',
+  pt: '(retrógrado)',
+  ko: '(역행)',
+}
 
 const ELEMENT_SLUG: Record<string, string> = { 火: 'fire', 地: 'earth', 風: 'air', 水: 'water' }
 
