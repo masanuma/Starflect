@@ -17,6 +17,10 @@ const ELEMENT_WORD_L: Record<Lang, Record<Element, string>> = {
   ja: { 火: '情熱', 地: '現実', 風: '知性', 水: '感情' },
   en: { 火: 'passion', 地: 'grounding', 風: 'intellect', 水: 'emotion' },
   es: { 火: 'pasión', 地: 'realismo', 風: 'intelecto', 水: 'emoción' },
+  fr: { 火: 'passion', 地: 'réalisme', 風: 'intellect', 水: 'émotion' },
+  it: { 火: 'passione', 地: 'concretezza', 風: 'intelletto', 水: 'emozione' },
+  pt: { 火: 'paixão', 地: 'realismo', 風: 'intelecto', 水: 'emoção' },
+  ko: { 火: '열정', 地: '현실', 風: '지성', 水: '감정' },
 }
 
 export const elementWord = (el: Element): string => ELEMENT_WORD_L[getLang()][el] ?? ELEMENT_WORD_L.ja[el]
@@ -107,6 +111,110 @@ const STAR_TYPES: Record<Lang, TypeTable> = {
       地: { name: 'Ensenada Tranquila', emoji: '⚓', copy: 'Amable y, en el fondo, muy confiable', text: 'Dentro de tu ternura envolvente vive un sentido realista y firme. Sin dejarte llevar por la emoción, sabes ser un "puerto seguro" para quienes amas.' },
       風: { name: 'Agua que Refleja el Viento', emoji: '🪞', copy: 'Muy sensible y de mente ágil', text: 'Mientras acompañas los sentimientos de los demás, tus pensamientos nadan libres por dentro. Vas y vienes entre la empatía y la objetividad: una inteligencia flexible y ágil.' },
       水: { name: 'Luna del Mar Profundo', emoji: '🌊🌕', copy: 'Hijo de la empatía: un alma que siente contigo', text: 'Sensibilidad de principio a fin. Un alma rara que percibe lo no dicho y se acerca con suavidad. Esa hondura es como la luna reflejada en el fondo del mar.' },
+    },
+  },
+  fr: {
+    火: {
+      火: { name: 'Comète Fulgurante', emoji: '☄️', copy: 'Brûle sans hésiter : une âme animée par la passion', text: 'À fond dehors comme dedans. L’instant où tu décides est le coup de départ, et ton élan entraîne les autres. D’où vient ton énergie et où elle va, tout est fait de ce que tu aimes et de ce qui t’enthousiasme.' },
+      地: { name: 'Flamme sur Terre Ferme', emoji: '🔥⛰️', copy: 'Semble éclatant, mais garde les pieds sur terre', text: 'Tu avances avec passion à l’extérieur, pourtant tu es étonnamment pragmatique à l’intérieur. Tu ne t’élances jamais sur le seul élan : tu calcules l’atterrissage. « Ardent mais fiable » est ton mélange imbattable.' },
+      風: { name: 'Feu d’Artifice', emoji: '🎆', copy: 'Passionné, avec un cœur toujours léger', text: 'Tu fonces avec chaleur tout en cherchant sans cesse un vent nouveau au-dedans. Ton carburant, c’est une curiosité qui ne tient pas en place, et tu as le don d’illuminer n’importe quelle pièce.' },
+      水: { name: 'Flamme qui Abrite une Mer', emoji: '🔥🌊', copy: 'Semble ardent, mais son cœur est très tendre', text: 'Tu brûles fièrement à l’extérieur, mais au-dedans s’étend une mer de sensibilité. Comme tu vibres si profondément avec les autres, ta passion porte toujours de la chaleur : force et douceur à la fois.' },
+    },
+    地: {
+      火: { name: 'Volcan Silencieux', emoji: '🌋', copy: 'Calme au-dehors, magma au-dedans', text: 'Tu es d’ordinaire posé et solide, mais l’ambition et la passion bouillonnent en toi. Au moment décisif, ta force explosive surprend tout le monde, justement par contraste.' },
+      地: { name: 'Montagne Inébranlable', emoji: '⛰️', copy: 'Solide dedans comme dehors : du vrai', text: 'Aussi fiable que tu en as l’air. Ce que tu bâtis ne s’effondre pas, et la confiance en toi est profonde. En prenant ton temps, tu atteins le sommet à coup sûr.' },
+      風: { name: 'Grand Arbre qui Écoute le Vent', emoji: '🌳', copy: 'Semble enraciné, mais l’esprit vole libre', text: 'À l’extérieur, stable et digne de confiance ; à l’intérieur, débordant de curiosité et d’idées libres. Enraciné fermement tandis que tes branches jouent avec le vent : réalisme et souplesse en équilibre.' },
+      水: { name: 'Forêt qui Cache une Source', emoji: '🌲💧', copy: 'Semble pragmatique, mais très tendre au fond', text: 'Calme et fiable en surface, tu caches en dessous une riche sensibilité et beaucoup d’empathie. La source profonde derrière cet extérieur paisible est ce qui apaise ceux que tu aimes.' },
+    },
+    風: {
+      火: { name: 'Vent qui Porte la Chaleur', emoji: '🌬️🔥', copy: 'Semble léger, mais son cœur est une boule de feu', text: 'Derrière une allure sociable et vive brûle une passion combative. Tu fais bouger les gens en mettant de la chaleur dans tes mots et tes idées.' },
+      地: { name: 'Voyageur à la Boussole', emoji: '🧭', copy: 'Semble libre, mais retombe toujours sur ses pieds', text: 'Tu peux aller partout d’un pas léger, pourtant un solide sens du réel vit en toi. Tu équilibres liberté et ancrage : on dit que tu obtiens des résultats tout en ayant l’air de t’amuser.' },
+      風: { name: 'Oiseau Migrateur Libre', emoji: '🕊️', copy: 'Un esprit libre, léger jusqu’au cœur', text: 'Léger à l’extérieur comme à l’intérieur. Nourri par le savoir et la conversation, tu voles au-delà de toute frontière. Ta façon même de vivre, sans attaches, fait tout ton charme.' },
+      水: { name: 'Brise d’une Nuit de Lune', emoji: '🌙', copy: 'Semble sociable, mais sensible au fond du cœur', text: 'Tu parles avec aisance à tout le monde, pourtant un poète délicat habite en toi. Tu saisis les moindres nuances du sentiment, et tes mots portent une chaleur mystérieuse.' },
+    },
+    水: {
+      火: { name: 'Volcan Sous-Marin', emoji: '🌊🌋', copy: 'Semble calme, mais son cœur brûle plus que tout', text: 'Doux et empathique, tu abrites pourtant au plus profond une passion et une détermination ardentes. La flamme qui brûle au fond d’une mer paisible ne s’éteint pas facilement.' },
+      地: { name: 'Crique Paisible', emoji: '⚓', copy: 'Doux, et étonnamment fiable', text: 'Au sein de ta tendresse enveloppante vit un sens du réel bien ancré. Sans te laisser emporter par l’émotion, tu sais être un « port sûr » pour ceux que tu aimes.' },
+      風: { name: 'Eau qui Reflète le Vent', emoji: '🪞', copy: 'Très sensible, et l’esprit vif aussi', text: 'Tout en restant proche des sentiments des autres, tes pensées nagent librement au-dedans. Tu passes de l’empathie à l’objectivité : une intelligence souple et agile.' },
+      水: { name: 'Lune des Grands Fonds', emoji: '🌊🌕', copy: 'Enfant de l’empathie : une âme qui ressent avec toi', text: 'Sensibilité de bout en bout. Une âme rare qui perçoit le non-dit et s’approche avec douceur. Cette profondeur est comme la lune reflétée au fond de la mer.' },
+    },
+  },
+  it: {
+    火: {
+      火: { name: 'Cometa Sfrecciante', emoji: '☄️', copy: 'Brucia senza esitare: un’anima mossa dalla passione', text: 'A tutto gas dentro e fuori. L’istante in cui decidi è il via, e il tuo slancio trascina gli altri. Da dove nasce la tua energia e dove va sono entrambi ciò che ami e ciò che ti entusiasma.' },
+      地: { name: 'Fiamma su Terra Salda', emoji: '🔥⛰️', copy: 'Sembra sgargiante, ma ha i piedi per terra', text: 'Fuori avanzi con passione, eppure dentro sei sorprendentemente concreto. Non salti solo per slancio: calcoli dove atterrare. «Ardente ma affidabile» è la tua miscela imbattibile.' },
+      風: { name: 'Fuochi d’Artificio', emoji: '🎆', copy: 'Appassionato, con un cuore sempre leggero', text: 'Vai avanti con calore mentre cerchi sempre un’aria nuova dentro di te. Il tuo carburante è una curiosità che non sta mai ferma, e hai il dono naturale di illuminare qualsiasi luogo.' },
+      水: { name: 'Fiamma che Racchiude un Mare', emoji: '🔥🌊', copy: 'Sembra di fuoco, ma il cuore è molto tenero', text: 'Fuori ardi con orgoglio, ma dentro c’è un mare di sensibilità. Poiché entri in sintonia così in profondità con gli altri, la tua passione porta sempre calore: forza e dolcezza insieme.' },
+    },
+    地: {
+      火: { name: 'Vulcano Silenzioso', emoji: '🌋', copy: 'Calmo fuori, magma dentro', text: 'Di solito sei sereno e saldo, ma dentro ribollono ambizione e passione. Quando conta davvero, la tua forza esplosiva sorprende tutti proprio per il contrasto.' },
+      地: { name: 'Montagna Incrollabile', emoji: '⛰️', copy: 'Solido dentro e fuori: quello vero', text: 'Affidabile quanto sembri. Ciò che costruisci non crolla e la fiducia in te è profonda. Con i tuoi tempi, raggiungi di sicuro la vetta.' },
+      風: { name: 'Grande Albero che Ascolta il Vento', emoji: '🌳', copy: 'Sembra radicato, ma la mente vola libera', text: 'Fuori, stabile e affidabile; dentro, pieno di curiosità e idee libere. Radicato saldamente mentre i tuoi rami giocano con il vento: realismo e flessibilità in equilibrio.' },
+      水: { name: 'Bosco che Nasconde una Sorgente', emoji: '🌲💧', copy: 'Sembra pratico, ma è molto tenero dentro', text: 'Calmo e affidabile in superficie, nascondi sotto una ricca sensibilità ed empatia. La sorgente profonda dietro quell’aspetto tranquillo è ciò che guarisce le persone che ami.' },
+    },
+    風: {
+      火: { name: 'Vento che Porta Calore', emoji: '🌬️🔥', copy: 'Sembra leggero, ma il cuore è una palla di fuoco', text: 'Dietro un’aria socievole e brillante arde una passione combattiva. Muovi le persone mettendo calore nelle tue parole e nelle tue idee.' },
+      地: { name: 'Viaggiatore con la Bussola', emoji: '🧭', copy: 'Sembra libero, ma atterra sempre in piedi', text: 'Puoi andare ovunque con passo leggero, eppure dentro vive un solido senso della realtà. Bilanci libertà e concretezza: dicono che ottieni risultati pur sembrando che ti stia solo divertendo.' },
+      風: { name: 'Uccello Migratore Libero', emoji: '🕊️', copy: 'Uno spirito libero, leggero fino al cuore', text: 'Leggero fuori e dentro. Nutrito da conoscenza e conversazione, voli oltre ogni confine. Il tuo stesso modo di vivere, senza legami, è il tuo fascino.' },
+      水: { name: 'Brezza di una Notte di Luna', emoji: '🌙', copy: 'Sembra socievole, ma dentro è sentimentale', text: 'Chiacchieri con facilità con chiunque, eppure dentro vive un poeta delicato. Cogli le sfumature più sottili del sentire, e le tue parole portano un calore misterioso.' },
+    },
+    水: {
+      火: { name: 'Vulcano Sottomarino', emoji: '🌊🌋', copy: 'Sembra calmo, ma nel profondo arde più di tutti', text: 'Dai modi gentili ed empatico, eppure nel profondo dormono una passione e una determinazione intense. La fiamma che arde in fondo a un mare tranquillo non si spegne facilmente.' },
+      地: { name: 'Insenatura Tranquilla', emoji: '⚓', copy: 'Gentile e, in fondo, molto affidabile', text: 'Dentro la tua tenerezza avvolgente vive un saldo senso della realtà. Senza farti travolgere dall’emozione, sai essere un «porto sicuro» per chi ami.' },
+      風: { name: 'Acqua che Riflette il Vento', emoji: '🪞', copy: 'Molto sensibile e dalla mente pronta', text: 'Mentre resti vicino ai sentimenti degli altri, i tuoi pensieri nuotano liberi dentro di te. Vai e vieni tra empatia e obiettività: un’intelligenza duttile e flessibile.' },
+      水: { name: 'Luna del Mare Profondo', emoji: '🌊🌕', copy: 'Figlio dell’empatia: un’anima che sente con te', text: 'Sensibilità dall’inizio alla fine. Un’anima rara che percepisce il non detto e si avvicina con dolcezza. Quella profondità è come la luna riflessa in fondo al mare.' },
+    },
+  },
+  pt: {
+    火: {
+      火: { name: 'Cometa Veloz', emoji: '☄️', copy: 'Arde sem hesitar: uma alma movida pela paixão', text: 'A todo vapor por dentro e por fora. O instante em que você decide é o sinal de largada, e seu ímpeto arrasta os outros. A origem e o destino da sua energia são aquilo que você ama e o que te empolga.' },
+      地: { name: 'Chama em Terra Firme', emoji: '🔥⛰️', copy: 'Parece chamativo, mas tem os pés no chão', text: 'Por fora você avança com paixão, mas por dentro é surpreendentemente prático. Você não salta só no ímpeto: calcula onde aterrissar. «Ardente, porém confiável» é a sua mistura imbatível.' },
+      風: { name: 'Fogos de Artifício', emoji: '🎆', copy: 'Apaixonado, com um coração sempre leve', text: 'Você segue em frente com calor enquanto busca sempre um ar novo por dentro. Seu combustível é uma curiosidade que nunca fica parada, e você tem o dom natural de iluminar qualquer lugar.' },
+      水: { name: 'Chama que Abriga um Mar', emoji: '🔥🌊', copy: 'Parece de fogo, mas seu coração é muito terno', text: 'Você arde com orgulho por fora, mas por dentro há um mar de sensibilidade. Como você sintoniza tão fundo com os outros, sua paixão sempre carrega calor: força e ternura ao mesmo tempo.' },
+    },
+    地: {
+      火: { name: 'Vulcão Silencioso', emoji: '🌋', copy: 'Calmo por fora, magma por dentro', text: 'Você costuma ser tranquilo e firme, mas por dentro fervem ambição e paixão. Na hora que realmente importa, sua força explosiva surpreende a todos justamente pelo contraste.' },
+      地: { name: 'Montanha Inabalável', emoji: '⛰️', copy: 'Sólido por dentro e por fora: o verdadeiro', text: 'Tão confiável quanto aparenta. O que você constrói não desmorona, e a confiança em você é profunda. No seu tempo, você chega ao topo com certeza.' },
+      風: { name: 'Grande Árvore que Escuta o Vento', emoji: '🌳', copy: 'Parece enraizado, mas a mente voa livre', text: 'Por fora, estável e digno de confiança; por dentro, cheio de curiosidade e ideias livres. Enraizado com firmeza enquanto seus galhos brincam com o vento: realismo e flexibilidade em equilíbrio.' },
+      水: { name: 'Floresta que Esconde uma Nascente', emoji: '🌲💧', copy: 'Parece prático, mas é muito terno por dentro', text: 'Calmo e confiável na superfície, você esconde por baixo uma rica sensibilidade e empatia. A nascente profunda por trás desse exterior sereno é o que cura as pessoas que você ama.' },
+    },
+    風: {
+      火: { name: 'Vento que Leva Calor', emoji: '🌬️🔥', copy: 'Parece leve, mas seu coração é uma bola de fogo', text: 'Por trás de um jeito sociável e afiado arde uma paixão competitiva. Você move as pessoas colocando calor nas suas palavras e ideias.' },
+      地: { name: 'Viajante com Bússola', emoji: '🧭', copy: 'Parece livre, mas sempre cai de pé', text: 'Você pode ir a qualquer lugar com passos leves, mas por dentro vive um sólido senso de realidade. Você equilibra liberdade e firmeza: dizem que você entrega resultados mesmo parecendo só estar brincando.' },
+      風: { name: 'Ave Migratória Livre', emoji: '🕊️', copy: 'Um espírito livre, leve até o coração', text: 'Leve por fora e por dentro. Nutrido por conhecimento e conversa, você voa sem fronteiras. Seu próprio modo de viver, sem amarras, é o seu encanto.' },
+      水: { name: 'Brisa de uma Noite de Lua', emoji: '🌙', copy: 'Parece sociável, mas é sentimental por dentro', text: 'Você conversa com facilidade com qualquer um, mas por dentro vive um poeta delicado. Você capta as nuances mais sutis do sentir, e suas palavras carregam um calor misterioso.' },
+    },
+    水: {
+      火: { name: 'Vulcão Submarino', emoji: '🌊🌋', copy: 'Parece calmo, mas seu âmago arde mais que todos', text: 'De trato suave e empático, você guarda no fundo uma paixão e uma determinação intensas. A chama que arde no fundo de um mar tranquilo não se apaga com facilidade.' },
+      地: { name: 'Enseada Tranquila', emoji: '⚓', copy: 'Gentil e, no fundo, muito confiável', text: 'Dentro da sua ternura acolhedora vive um firme senso de realidade. Sem se deixar levar pela emoção, você sabe ser um «porto seguro» para quem você ama.' },
+      風: { name: 'Água que Reflete o Vento', emoji: '🪞', copy: 'Muito sensível e de raciocínio rápido', text: 'Enquanto acompanha os sentimentos dos outros, seus pensamentos nadam livres por dentro. Você transita entre a empatia e a objetividade: uma inteligência flexível e ágil.' },
+      水: { name: 'Lua do Mar Profundo', emoji: '🌊🌕', copy: 'Filho da empatia: uma alma que sente com você', text: 'Sensibilidade do começo ao fim. Uma alma rara que percebe o não dito e se aproxima com suavidade. Essa profundidade é como a lua refletida no fundo do mar.' },
+    },
+  },
+  ko: {
+    火: {
+      火: { name: '질주하는 혜성', emoji: '☄️', copy: '망설임 없이 타오르는, 타고난 열정파', text: '겉도 속도 전력 질주. 마음먹은 순간이 곧 출발 신호이고, 그 기세가 주변을 끌어들입니다. 에너지의 근원도 쓰임새도 모두 「좋아하는 것」과 「설렘」으로 이루어져 있습니다.' },
+      地: { name: '대지에 선 불꽃', emoji: '🔥⛰️', copy: '화려해 보여도, 실은 두 발이 땅에 붙어 있다', text: '밖에서는 열정적으로 밀어붙이지만, 속마음은 놀랄 만큼 현실적입니다. 기세만으로 뛰어들지 않고 착지 지점을 계산하죠. 「뜨거운데 착실한」 최강의 조합입니다.' },
+      風: { name: '피어오르는 불꽃놀이', emoji: '🎆', copy: '열정적이면서, 마음은 한없이 가볍다', text: '밖에서는 뜨겁게 나아가면서 안에서는 늘 새로운 바람을 찾습니다. 한곳에 머물지 않는 호기심이 연료. 자리를 환하게 밝히는 타고난 화사함이 있습니다.' },
+      水: { name: '바다를 품은 불꽃', emoji: '🔥🌊', copy: '열정적인 사람 같지만, 마음은 무척 섬세하다', text: '밖에서는 당당히 타오르지만, 마음속은 감수성의 바다입니다. 남의 마음에 깊이 공명하기에, 그 열정에는 온기가 있죠. 강함과 다정함을 함께 지닌 사람입니다.' },
+    },
+    地: {
+      火: { name: '고요한 화산', emoji: '🌋', copy: '차분해 보여도, 속은 마그마', text: '평소에는 온화하고 착실하지만, 마음속에는 뜨거운 야망과 열정이 끓고 있습니다. 결정적인 순간의 폭발력은 평소와의 낙차로 주변을 놀라게 하죠.' },
+      地: { name: '흔들리지 않는 산', emoji: '⛰️', copy: '겉도 속도 든든하게 안정된 정통파', text: '보이는 그대로의 안정감. 쌓아 올린 것은 무너지지 않고, 신뢰는 한없이 두텁습니다. 시간을 들여 확실하게 정상에 다다르는 사람입니다.' },
+      風: { name: '바람을 듣는 큰 나무', emoji: '🌳', copy: '든든해 보여도, 마음은 자유롭게 날고 있다', text: '밖에서는 안정과 신뢰의 사람. 하지만 마음속은 호기심과 자유로운 발상으로 가득합니다. 뿌리를 내린 채 가지는 바람과 노는—현실감과 유연함의 양립이 매력입니다.' },
+      水: { name: '샘을 감춘 숲', emoji: '🌲💧', copy: '현실적으로 보여도, 마음은 깊고 다정하다', text: '밖에서는 냉정하고 믿음직한 존재. 그 안쪽에 풍부한 감수성과 공감력을 감추고 있습니다. 조용한 겉모습 속의 깊은 샘이 소중한 이를 치유합니다.' },
+    },
+    風: {
+      火: { name: '열기를 나르는 바람', emoji: '🌬️🔥', copy: '가벼워 보여도, 마음은 불덩이', text: '사교적이고 스마트한 겉모습 안쪽에 지기 싫어하는 열정이 타오릅니다. 말과 아이디어에 열기를 실어 사람을 움직이는 타입입니다.' },
+      地: { name: '나침반을 든 여행자', emoji: '🧭', copy: '자유로워 보여도, 제대로 착지한다', text: '가벼운 발걸음으로 어디든 갈 수 있으면서도, 마음속에는 확실한 현실 감각이 있습니다. 자유와 착실함의 조율사로, 「노는 듯하면서 결과를 내는 사람」이라 불립니다.' },
+      風: { name: '자유로운 철새', emoji: '🕊️', copy: '타고난 자유인, 마음까지 통풍 만점', text: '겉도 속도 가볍습니다. 지식과 대화를 양분 삼아 경계 없이 날아다니죠. 얽매이지 않는 삶의 방식 자체가 매력입니다.' },
+      水: { name: '달밤의 산들바람', emoji: '🌙', copy: '사교적으로 보여도, 마음은 정서의 사람', text: '누구와도 가볍게 이야기하면서도, 마음속은 섬세한 시인입니다. 사람 감정의 미묘함을 길어 올리는 힘이 있어, 그 말에는 신기하게도 온기가 깃듭니다.' },
+    },
+    水: {
+      火: { name: '심해의 화산', emoji: '🌊🌋', copy: '온화해 보여도, 심지는 누구보다 뜨겁다', text: '몸가짐이 부드럽고 공감력이 있지만, 마음 깊은 곳에는 격렬한 열정과 결의가 잠들어 있습니다. 고요한 바다 밑에서 계속 타는 불꽃은 쉽게 꺼지지 않습니다.' },
+      地: { name: '고요한 만', emoji: '⚓', copy: '다정하면서, 실은 야무진 사람', text: '감싸 안는 듯한 다정함 안쪽에, 두 발이 땅에 붙은 현실 감각이 있습니다. 감정에 휩쓸리지 않고 소중한 이의 「안전한 항구」가 되어 주는 사람입니다.' },
+      風: { name: '바람을 비추는 수면', emoji: '🪞', copy: '감수성이 풍부하고, 머리 회전도 빠르다', text: '남의 마음에 다가서면서도, 마음속에서는 생각이 자유롭게 헤엄칩니다. 공감과 객관을 오갈 수 있는, 유연한 지성의 소유자입니다.' },
+      水: { name: '심해의 달', emoji: '🌊🌕', copy: '느끼는 힘의 총아, 타고난 공감자', text: '겉도 속도 감수성 덩어리. 말로 표현되지 않는 것을 느끼고 살며시 다가서는 보기 드문 사람입니다. 그 깊이는 바다 밑에 비친 달과 같습니다.' },
     },
   },
 }

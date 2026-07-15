@@ -1,12 +1,16 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 
-export type Lang = 'ja' | 'en' | 'es'
+export type Lang = 'ja' | 'en' | 'es' | 'fr' | 'it' | 'pt' | 'ko'
 
 export const LANGS: { code: Lang; label: string }[] = [
   { code: 'ja', label: '日本語' },
   { code: 'en', label: 'EN' },
   { code: 'es', label: 'ES' },
+  { code: 'fr', label: 'FR' },
+  { code: 'it', label: 'IT' },
+  { code: 'pt', label: 'PT' },
+  { code: 'ko', label: '한국어' },
 ]
 
 /** AIに渡す言語名(応答言語の指定用) */
@@ -14,6 +18,10 @@ export const LANG_NAME: Record<Lang, string> = {
   ja: '日本語',
   en: 'English',
   es: 'Español (español)',
+  fr: 'Français (French)',
+  it: 'Italiano (Italian)',
+  pt: 'Português (Portuguese)',
+  ko: '한국어 (Korean)',
 }
 
 const STORAGE_KEY = 'starflect-lang'
@@ -25,17 +33,18 @@ const STORAGE_KEY = 'starflect-lang'
 let currentLang: Lang = 'ja'
 export const getLang = (): Lang => currentLang
 
+const SUPPORTED: Lang[] = ['ja', 'en', 'es', 'fr', 'it', 'pt', 'ko']
+
 function detectLang(): Lang {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved === 'ja' || saved === 'en' || saved === 'es') return saved
+    if (saved && (SUPPORTED as string[]).includes(saved)) return saved as Lang
   } catch {
     /* 無視 */
   }
   const n = (typeof navigator !== 'undefined' ? navigator.language : 'ja').toLowerCase()
-  if (n.startsWith('es')) return 'es'
-  if (n.startsWith('en')) return 'en'
-  return 'ja'
+  const hit = SUPPORTED.find((l) => l !== 'ja' && n.startsWith(l))
+  return hit ?? 'ja'
 }
 
 interface LangCtx {
