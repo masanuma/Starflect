@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { ChartData, PlanetKey } from '../lib/types'
 import { signIndex, degInSign } from '../lib/astro'
 import { signName, signSymbol } from '../lib/signs'
@@ -16,8 +16,11 @@ import HoshiKyaraMascot from './HoshiKyaraMascot'
 import SectionIcon from './SectionIcon'
 import { useLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
+import { track } from '../lib/analytics'
 
 const RETRO_SUFFIX: Record<string, string> = { ja: '(逆行)', en: '(retrograde)', es: '(retrógrado)' }
+
+const ELEMENT_SLUG: Record<string, string> = { 火: 'fire', 地: 'earth', 風: 'air', 水: 'water' }
 
 interface Props {
   data: ChartData
@@ -50,7 +53,20 @@ export default function Result({ data, onRetry, onHome }: Props) {
     { status: 'idle' } | { status: 'loading' } | { status: 'done'; text: string } | { status: 'error'; message: string }
   >({ status: 'idle' })
 
+  useEffect(() => {
+    track('diagnose_result', {
+      period: data.period,
+      has_time: ascLon !== undefined,
+      star_type: starType
+        ? `${ELEMENT_SLUG[starType.sunElement]}_${ELEMENT_SLUG[starType.moonElement]}`
+        : undefined,
+    })
+    // 結果表示ごとに1回だけ
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   async function handleAiReading() {
+    track('ai_reading_click')
     setAiState({ status: 'loading' })
     try {
       const text = await fetchAiReading({

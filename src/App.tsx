@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Stars from './components/Stars'
 import Home from './components/Home'
 import BirthForm from './components/BirthForm'
@@ -7,9 +7,12 @@ import PairForm from './components/PairForm'
 import PairResult from './components/PairResult'
 import About from './components/About'
 import LangSwitcher from './components/LangSwitcher'
+import ConsentBanner from './components/ConsentBanner'
 import type { ChartData } from './lib/types'
 import type { PairData } from './lib/compat'
 import { useUI } from './lib/ui'
+import { initAnalytics, getConsent, setConsent } from './lib/analytics'
+import type { Consent } from './lib/analytics'
 
 type Screen =
   | { page: 'home' }
@@ -21,7 +24,18 @@ type Screen =
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>({ page: 'home' })
+  const [consent, setConsentState] = useState<Consent | null>(() => getConsent())
   const t = useUI()
+
+  // 起動時、すでに許可済みなら解析を読み込む
+  useEffect(() => {
+    initAnalytics()
+  }, [])
+
+  function chooseConsent(c: Consent) {
+    setConsent(c)
+    setConsentState(c)
+  }
 
   return (
     <div className="app">
@@ -71,7 +85,11 @@ export default function App() {
       <footer className="footer">
         <span className="footer-star">✦</span>
         {t.footer}
+        <button className="consent-link" onClick={() => setConsentState(null)}>
+          {t.consent.settings}
+        </button>
       </footer>
+      {consent === null && <ConsentBanner onChoose={chooseConsent} />}
     </div>
   )
 }

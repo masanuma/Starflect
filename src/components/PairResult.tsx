@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { PairData, PairPerson } from '../lib/compat'
 import { compatOf, pairTip, relLabel } from '../lib/compat'
 import { readFortune, periodNoun, periodLabel } from '../lib/fortune'
@@ -12,6 +12,7 @@ import { useUI } from '../lib/ui'
 import AiReading from './AiReading'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import SectionIcon from './SectionIcon'
+import { track } from '../lib/analytics'
 
 interface Props {
   data: PairData
@@ -43,7 +44,13 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
     { status: 'idle' } | { status: 'loading' } | { status: 'done'; text: string } | { status: 'error'; message: string }
   >({ status: 'idle' })
 
+  useEffect(() => {
+    track('pair_result')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   async function handleAiReading() {
+    track('ai_pair_click')
     setAiState({ status: 'loading' })
     try {
       const natalOf = (p: PairPerson) =>

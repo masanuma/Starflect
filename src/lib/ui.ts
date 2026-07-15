@@ -147,6 +147,12 @@ export interface UIStrings {
     starters: Starter[]
   }
   footer: string
+  consent: {
+    message: string
+    allow: string
+    deny: string
+    settings: string
+  }
 }
 
 const UI: Record<Lang, UIStrings> = {
@@ -286,6 +292,12 @@ const UI: Record<Lang, UIStrings> = {
       ],
     },
     footer: '星の計算はすべてお使いの端末内で行われます。「AIに詳しく占ってもらう」を選んだときのみ、計算結果がAIに送信されます。',
+    consent: {
+      message: '匿名の利用状況を計測してもよいですか？(個人情報・生年月日は送信しません)',
+      allow: '許可する',
+      deny: 'しない',
+      settings: '計測設定',
+    },
   },
   en: {
     common: {
@@ -423,6 +435,12 @@ const UI: Record<Lang, UIStrings> = {
       ],
     },
     footer: 'All star calculations happen on your own device. Only when you choose “Get a detailed AI reading” are the results sent to the AI.',
+    consent: {
+      message: 'May we measure anonymous usage? (No personal data or birth dates are sent.)',
+      allow: 'Allow',
+      deny: 'No thanks',
+      settings: 'Analytics settings',
+    },
   },
   es: {
     common: {
@@ -560,6 +578,12 @@ const UI: Record<Lang, UIStrings> = {
       ],
     },
     footer: 'Todos los cálculos astrales ocurren en tu propio dispositivo. Solo al elegir “Obtener una lectura IA detallada” se envían los resultados a la IA.',
+    consent: {
+      message: '¿Podemos medir el uso de forma anónima? (No se envían datos personales ni fechas de nacimiento.)',
+      allow: 'Permitir',
+      deny: 'No, gracias',
+      settings: 'Ajustes de medición',
+    },
   },
 }
 

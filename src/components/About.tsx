@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
 import { useUI } from '../lib/ui'
 import { allStarTypes, ELEMENT_ORDER } from '../lib/startypes'
 import { elementLabel } from '../lib/signs'
 import type { Element } from '../lib/signs'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
+import { track } from '../lib/analytics'
 
 interface Props {
   onBack: () => void
@@ -35,6 +37,10 @@ function ElementIcon({ el }: { el: Element }) {
 export default function About({ onBack, onStart }: Props) {
   const t = useUI()
   const types = allStarTypes()
+
+  useEffect(() => {
+    track('about_view')
+  }, [])
 
   return (
     <div className="about-screen">

@@ -5,6 +5,7 @@ import { streamAiChat } from '../lib/aiChat'
 import { useLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
 import SectionIcon from './SectionIcon'
+import { track } from '../lib/analytics'
 
 interface Props {
   context: ChatChartContext
@@ -43,6 +44,7 @@ export default function AiChat({ context, storageKey }: Props) {
   async function send(text: string) {
     const q = text.trim()
     if (!q || streaming) return
+    track('chat_send')
     setError('')
     setInput('')
     setShowLog(true)
