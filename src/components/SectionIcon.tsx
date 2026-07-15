@@ -2,7 +2,7 @@ const V = '#8a63dd'
 const P = '#EA6596'
 const G = '#E8A93A'
 
-export type SectionIconName = 'fortune' | 'reading' | 'chat' | 'breakdown' | 'today' | 'pairReading'
+export type SectionIconName = 'fortune' | 'reading' | 'chat' | 'breakdown' | 'today' | 'pairReading' | 'feedback'
 
 /** セクション見出しの丸アイコン(統一SVG)。ブランド配色。 */
 export default function SectionIcon({ name, size = 26 }: { name: SectionIconName; size?: number }) {
@@ -63,6 +63,14 @@ function icon(name: SectionIconName) {
           <rect x="3" y="5.5" width="18" height="13" rx="2.2" fill="none" stroke={V} strokeWidth="1.8" />
           <path d="M3.6 6.5 L12 12.4 L20.4 6.5" fill="none" stroke={V} strokeWidth="1.8" strokeLinejoin="round" />
           <path d="M12 16.6 C8.6 14.1 8.6 11.4 10.3 11.4 C11.3 11.4 12 12.4 12 13.1 C12 12.4 12.7 11.4 13.7 11.4 C15.4 11.4 15.4 14.1 12 16.6 Z" fill={P} />
+        </>
+      )
+    case 'feedback': // フィードバック — ハート＋きらめき(気持ちを伝える)
+      return (
+        <>
+          <path d="M12 19.5 C5 14 5 8.5 8.2 8.5 C10 8.5 11.4 10 12 11 C12.6 10 14 8.5 15.8 8.5 C19 8.5 19 14 12 19.5 Z" fill={P} />
+          <path d="M19 3.2 l0.9 2.3 l2.3 0.9 l-2.3 0.9 l-0.9 2.3 l-0.9 -2.3 l-2.3 -0.9 l2.3 -0.9 z" fill={G} />
+          <path d="M4.6 5 l0.6 1.6 l1.6 0.6 l-1.6 0.6 l-0.6 1.6 l-0.6 -1.6 l-1.6 -0.6 l1.6 -0.6 z" fill={V} />
         </>
       )
   }

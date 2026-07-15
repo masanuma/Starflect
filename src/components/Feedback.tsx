@@ -39,7 +39,7 @@ export default function Feedback({ page, starType }: { page: string; starType?: 
     <section className="planet-card feedback-card">
       <header className="planet-head">
         <div className="planet-symbol" aria-hidden="true">
-          <SectionIcon name="chat" />
+          <SectionIcon name="feedback" />
         </div>
         <div>
           <p className="planet-title">{t.feedback.title}</p>
