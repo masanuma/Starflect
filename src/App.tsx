@@ -32,6 +32,11 @@ export default function App() {
     initAnalytics()
   }, [])
 
+  // 画面が切り替わったら常に一番上から表示する
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [screen.page])
+
   function chooseConsent(c: Consent) {
     setConsent(c)
     setConsentState(c)
