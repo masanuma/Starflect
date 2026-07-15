@@ -353,3 +353,43 @@ export function createAiHandlers(apiKey: string | undefined): {
     chat: createChatHandler(apiKey),
   }
 }
+
+/* ---------- フィードバック(Googleスプレッドシートへ転送) ---------- */
+
+/**
+ * ユーザーのフィードバックを Google Apps Script の Web アプリ(スプレッドシート)へ転送する。
+ * 転送先URLは環境変数 FEEDBACK_SHEET_URL(コミットしない)。未設定/失敗でもユーザーには成功を返す。
+ */
+export function createFeedbackHandler(sheetUrl: string | undefined): RawHandler {
+  return (req, res) => {
+    void (async () => {
+      if (req.method !== 'POST') return json(res, 405, { error: 'POST only' })
+      let payload: unknown
+      try {
+        payload = JSON.parse(await readBody(req))
+      } catch {
+        return json(res, 400, { error: 'リクエストの形式が不正です' })
+      }
+      const p = (payload ?? {}) as Record<string, unknown>
+      const record = {
+        rating: String(p.rating ?? '').slice(0, 20),
+        comment: String(p.comment ?? '').slice(0, 2000),
+        lang: String(p.lang ?? '').slice(0, 8),
+        starType: String(p.starType ?? '').slice(0, 40),
+        page: String(p.page ?? '').slice(0, 20),
+      }
+      if (!sheetUrl) return json(res, 200, { ok: true, stored: false })
+      try {
+        await fetch(sheetUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(record),
+        })
+        return json(res, 200, { ok: true })
+      } catch {
+        // 送信失敗はユーザー体験を止めない
+        return json(res, 200, { ok: true, stored: false })
+      }
+    })()
+  }
+}

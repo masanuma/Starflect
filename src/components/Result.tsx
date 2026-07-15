@@ -10,6 +10,7 @@ import { findNatalAspects } from '../lib/natalAspects'
 import { starTypeOf, elementPhrase } from '../lib/startypes'
 import AiChat from './AiChat'
 import AiReading from './AiReading'
+import Feedback from './Feedback'
 import type { ChatChartContext } from '../lib/aiChat'
 import PlanetMascot, { MASCOT_COLOR } from './PlanetMascot'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
@@ -53,13 +54,15 @@ export default function Result({ data, onRetry, onHome }: Props) {
     { status: 'idle' } | { status: 'loading' } | { status: 'done'; text: string } | { status: 'error'; message: string }
   >({ status: 'idle' })
 
+  const starSlug = starType
+    ? `${ELEMENT_SLUG[starType.sunElement]}_${ELEMENT_SLUG[starType.moonElement]}`
+    : undefined
+
   useEffect(() => {
     track('diagnose_result', {
       period: data.period,
       has_time: ascLon !== undefined,
-      star_type: starType
-        ? `${ELEMENT_SLUG[starType.sunElement]}_${ELEMENT_SLUG[starType.moonElement]}`
-        : undefined,
+      star_type: starSlug,
     })
     // 結果表示ごとに1回だけ
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -288,6 +291,8 @@ export default function Result({ data, onRetry, onHome }: Props) {
       </section>
 
       <AiChat context={chatContext} storageKey={chatStorageKey} />
+
+      <Feedback page="result" starType={starSlug} />
 
       {ascLon === undefined && (
         <div className="upsell">

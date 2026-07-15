@@ -166,6 +166,101 @@ body {
   color: var(--pink);
 }
 
+/* ---------- フィードバック欄 ---------- */
+.feedback-faces {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.feedback-face {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: #ffffff;
+  border: 1.5px solid var(--card-border);
+  border-radius: 16px;
+  padding: 12px 6px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+
+.feedback-face:hover {
+  border-color: var(--violet-soft);
+  transform: translateY(-1px);
+}
+
+.feedback-face.active {
+  border-color: var(--violet);
+  background: #f4eefb;
+}
+
+.feedback-face-emoji {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.feedback-face-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-sub);
+}
+
+.feedback-face.active .feedback-face-label {
+  color: var(--violet-strong);
+}
+
+.feedback-comment {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--card);
+  border: 1.5px solid #d6c9ec;
+  border-radius: 14px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 11px 14px;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feedback-comment:focus {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px rgba(138, 99, 221, 0.14);
+}
+
+.feedback-comment::placeholder {
+  color: #a294c6;
+}
+
+.feedback-send {
+  margin-top: 12px;
+}
+
+.feedback-send:disabled {
+  opacity: 0.45;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
+.feedback-thanks {
+  text-align: center;
+  font-family: var(--font-pop);
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(120deg, var(--pink) 0%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* ---------- アクセス解析の同意バナー ---------- */
 .consent-banner {
   position: fixed;

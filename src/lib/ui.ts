@@ -161,6 +161,16 @@ export interface UIStrings {
     deny: string
     settings: string
   }
+  feedback: {
+    title: string
+    sub: string
+    bad: string
+    good: string
+    great: string
+    placeholder: string
+    send: string
+    thanks: string
+  }
 }
 
 const UI: Record<Lang, UIStrings> = {
@@ -306,6 +316,16 @@ const UI: Record<Lang, UIStrings> = {
       deny: 'しない',
       settings: '計測設定',
     },
+    feedback: {
+      title: 'この診断はどうでしたか？',
+      sub: '感想や「ここ変」など、ひとことあると嬉しいです',
+      bad: 'いまひとつ',
+      good: 'よかった',
+      great: '最高',
+      placeholder: 'コメント(任意)',
+      send: '送信',
+      thanks: 'ありがとうございました！',
+    },
   },
   en: {
     common: {
@@ -448,6 +468,16 @@ const UI: Record<Lang, UIStrings> = {
       allow: 'Allow',
       deny: 'No thanks',
       settings: 'Analytics settings',
+    },
+    feedback: {
+      title: 'How was your reading?',
+      sub: 'A quick word — what you liked or what felt off — means a lot.',
+      bad: 'Meh',
+      good: 'Good',
+      great: 'Loved it',
+      placeholder: 'Comment (optional)',
+      send: 'Send',
+      thanks: 'Thank you!',
     },
   },
   es: {
@@ -592,6 +622,16 @@ const UI: Record<Lang, UIStrings> = {
       deny: 'No, gracias',
       settings: 'Ajustes de medición',
     },
+    feedback: {
+      title: '¿Qué te pareció?',
+      sub: 'Un comentario —lo que te gustó o lo que chirría— nos ayuda mucho.',
+      bad: 'Regular',
+      good: 'Bien',
+      great: 'Me encantó',
+      placeholder: 'Comentario (opcional)',
+      send: 'Enviar',
+      thanks: '¡Gracias!',
+    },
   },
   fr: {
     common: {
@@ -734,6 +774,16 @@ const UI: Record<Lang, UIStrings> = {
       allow: 'Autoriser',
       deny: 'Non merci',
       settings: 'Paramètres de mesure',
+    },
+    feedback: {
+      title: 'Alors, ce résultat ?',
+      sub: 'Un petit mot — ce qui t’a plu ou ce qui cloche — nous aide beaucoup.',
+      bad: 'Bof',
+      good: 'Bien',
+      great: 'Adoré',
+      placeholder: 'Commentaire (facultatif)',
+      send: 'Envoyer',
+      thanks: 'Merci !',
     },
   },
   it: {
@@ -878,6 +928,16 @@ const UI: Record<Lang, UIStrings> = {
       deny: 'No, grazie',
       settings: 'Impostazioni di misurazione',
     },
+    feedback: {
+      title: 'Com’è andata?',
+      sub: 'Due parole — cosa ti è piaciuto o cosa stona — ci aiutano molto.',
+      bad: 'Così così',
+      good: 'Bene',
+      great: 'Adorato',
+      placeholder: 'Commento (facoltativo)',
+      send: 'Invia',
+      thanks: 'Grazie!',
+    },
   },
   pt: {
     common: {
@@ -1021,6 +1081,16 @@ const UI: Record<Lang, UIStrings> = {
       deny: 'Não, obrigado',
       settings: 'Configurações de medição',
     },
+    feedback: {
+      title: 'O que achou?',
+      sub: 'Um comentário — o que gostou ou o que estranhou — ajuda muito.',
+      bad: 'Mais ou menos',
+      good: 'Gostei',
+      great: 'Amei',
+      placeholder: 'Comentário (opcional)',
+      send: 'Enviar',
+      thanks: 'Obrigado!',
+    },
   },
   ko: {
     common: {
@@ -1163,6 +1233,16 @@ const UI: Record<Lang, UIStrings> = {
       allow: '허용',
       deny: '아니요',
       settings: '측정 설정',
+    },
+    feedback: {
+      title: '진단은 어땠나요?',
+      sub: '감상이나 "여기 이상해요" 같은 한마디를 남겨 주시면 큰 힘이 돼요.',
+      bad: '그냥 그래요',
+      good: '좋았어요',
+      great: '최고예요',
+      placeholder: '코멘트(선택)',
+      send: '보내기',
+      thanks: '감사합니다!',
     },
   },
 }

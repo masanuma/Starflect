@@ -6,6 +6,6 @@ export default defineConfig(({ mode }) => {
   // .env の ANTHROPIC_API_KEY はサーバー側だけで使う(クライアントには渡さない)
   const env = loadEnv(mode, process.cwd(), '')
   return {
-    plugins: [react(), aiReadingPlugin(env.ANTHROPIC_API_KEY)],
+    plugins: [react(), aiReadingPlugin(env.ANTHROPIC_API_KEY, env.FEEDBACK_SHEET_URL)],
   }
 })

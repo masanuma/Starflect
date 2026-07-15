@@ -12,6 +12,7 @@ import { useUI } from '../lib/ui'
 import AiReading from './AiReading'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import SectionIcon from './SectionIcon'
+import Feedback from './Feedback'
 import { track } from '../lib/analytics'
 
 interface Props {
@@ -211,6 +212,8 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
           </>
         )}
       </section>
+
+      <Feedback page="pair" />
 
       {anyApprox && (
         <div className="upsell">
