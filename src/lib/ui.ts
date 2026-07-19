@@ -59,6 +59,10 @@ export interface UIStrings {
     pairDesc: string
     note: string
   }
+  faq: {
+    title: string
+    items: { q: string; a: string }[]
+  }
   about: {
     title: string
     lead: string
@@ -198,6 +202,35 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 ふたりの相性',
       pairDesc: 'ほしキャラの相性と「今日のふたり」を診断。相手の生年月日だけでOK',
       note: '計算は雑誌の12星座占いと同じ生年月日ベース。でも結果は、あなただけのもの。',
+    },
+    faq: {
+      title: 'よくある質問',
+      items: [
+        {
+          q: 'ほしキャラ診断とは何ですか？',
+          a: '生まれた瞬間の星の配置から、太陽星座(表の顔)と月星座(心の中)を掛け合わせて、あなたを16タイプの「ほしキャラ」に分類する無料の星占いです。さらに10天体の配置から性格や運勢も読み解きます。',
+        },
+        {
+          q: '無料で使えますか？',
+          a: 'はい。生年月日を入力するだけで、登録不要・無料で診断できます。',
+        },
+        {
+          q: '生年月日だけで診断できますか？生まれた時刻は必要ですか？',
+          a: '生年月日だけで診断できます。生まれた時刻を入れると上昇星座(アセンダント)まで計算され、より詳しい結果になります。分からなければ省略してかまいません。',
+        },
+        {
+          q: 'ふつうの12星座占いと何が違いますか？',
+          a: '雑誌の12星座占いは太陽星座だけを見ます。ほしキャラ診断は太陽星座に月星座を掛け合わせ、さらに10天体まで計算するので、あなただけの結果になります。',
+        },
+        {
+          q: '上昇星座(アセンダント)とは何ですか？',
+          a: '生まれた瞬間に東の地平線から昇っていた星座で、第一印象や生まれ持った雰囲気を表します。計算には生まれた時刻と場所が必要です。',
+        },
+        {
+          q: '相性診断もできますか？',
+          a: 'はい。相手の生年月日を入れると、ふたりのほしキャラ相性と「今日のふたり」を診断できます。',
+        },
+      ],
     },
     about: {
       title: 'ほしキャラとは？',
@@ -352,6 +385,35 @@ const UI: Record<Lang, UIStrings> = {
       pairDesc: 'Hoshi-Kyara compatibility plus “the two of you today.” Just their birth date needed.',
       note: 'The math uses the same birth date as magazine horoscopes—but the result is yours alone.',
     },
+    faq: {
+      title: 'Frequently asked questions',
+      items: [
+        {
+          q: 'What is Hoshi-Kyara diagnosis?',
+          a: 'It’s a free astrology reading that blends your Sun sign (outer face) and Moon sign (inner heart) to sort you into one of 16 “star characters,” then reads your personality and fortune from all 10 planets.',
+        },
+        {
+          q: 'Is it free?',
+          a: 'Yes. Just enter your birth date—no sign-up, completely free.',
+        },
+        {
+          q: 'Can I get a reading with only my birth date? Is birth time needed?',
+          a: 'Your birth date alone is enough. Adding your birth time also computes your Rising sign (Ascendant) for a more detailed result. If you don’t know it, you can leave it out.',
+        },
+        {
+          q: 'How is it different from ordinary 12-sign horoscopes?',
+          a: 'Magazine horoscopes look only at your Sun sign. Hoshi-Kyara blends in your Moon sign and calculates all 10 planets, so the result is yours alone.',
+        },
+        {
+          q: 'What is the Rising sign (Ascendant)?',
+          a: 'It’s the sign that was rising on the eastern horizon the moment you were born, reflecting your first impression and natural vibe. It needs your birth time and place to calculate.',
+        },
+        {
+          q: 'Can I check compatibility with someone?',
+          a: 'Yes. Enter their birth date to see your star-character compatibility and “the two of you today.”',
+        },
+      ],
+    },
     about: {
       title: 'What is Hoshi-Kyara?',
       lead: 'Your very own character, born from the stars at the moment you arrived.',
@@ -504,6 +566,35 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibilidad',
       pairDesc: 'Compatibilidad de Hoshi-Kyara y “vosotros dos hoy”. Solo hace falta su fecha de nacimiento.',
       note: 'El cálculo usa la misma fecha que los horóscopos de revista, pero el resultado es solo tuyo.',
+    },
+    faq: {
+      title: 'Preguntas frecuentes',
+      items: [
+        {
+          q: '¿Qué es el diagnóstico Hoshi-Kyara?',
+          a: 'Es un horóscopo gratuito que combina tu signo solar (tu cara externa) y tu signo lunar (tu interior) para clasificarte en uno de 16 “personajes estelares”, y luego lee tu personalidad y tu fortuna a partir de los 10 planetas.',
+        },
+        {
+          q: '¿Es gratis?',
+          a: 'Sí. Solo introduce tu fecha de nacimiento: sin registro y totalmente gratis.',
+        },
+        {
+          q: '¿Basta con la fecha de nacimiento? ¿Hace falta la hora?',
+          a: 'Con la fecha de nacimiento es suficiente. Si añades la hora, también se calcula tu ascendente para un resultado más detallado. Si no la sabes, puedes omitirla.',
+        },
+        {
+          q: '¿En qué se diferencia de los horóscopos de 12 signos?',
+          a: 'Los horóscopos de revista solo miran el signo solar. Hoshi-Kyara suma tu signo lunar y calcula los 10 planetas, así que el resultado es solo tuyo.',
+        },
+        {
+          q: '¿Qué es el ascendente?',
+          a: 'Es el signo que ascendía por el horizonte este en el momento de tu nacimiento; refleja tu primera impresión y tu aura natural. Para calcularlo se necesitan la hora y el lugar de nacimiento.',
+        },
+        {
+          q: '¿También puedo ver la compatibilidad con alguien?',
+          a: 'Sí. Introduce la fecha de nacimiento de la otra persona para ver la compatibilidad de vuestros personajes estelares y “vosotros dos hoy”.',
+        },
+      ],
     },
     about: {
       title: '¿Qué es Hoshi-Kyara?',
@@ -658,6 +749,35 @@ const UI: Record<Lang, UIStrings> = {
       pairDesc: 'La compatibilité des Hoshi-Kyara et « vous deux aujourd’hui ». Il suffit de sa date de naissance.',
       note: 'Le calcul part de la même date que les horoscopes de magazine, mais le résultat n’appartient qu’à toi.',
     },
+    faq: {
+      title: 'Questions fréquentes',
+      items: [
+        {
+          q: 'Qu’est-ce que le diagnostic Hoshi-Kyara ?',
+          a: 'C’est un horoscope gratuit qui combine ton signe solaire (ta face visible) et ton signe lunaire (ton for intérieur) pour te classer parmi 16 « personnages stellaires », puis lit ta personnalité et ta destinée à partir des 10 planètes.',
+        },
+        {
+          q: 'Est-ce gratuit ?',
+          a: 'Oui. Il suffit d’indiquer ta date de naissance : sans inscription et entièrement gratuit.',
+        },
+        {
+          q: 'La date de naissance suffit-elle ? L’heure est-elle nécessaire ?',
+          a: 'La date de naissance suffit. En ajoutant l’heure, on calcule aussi ton ascendant pour un résultat plus détaillé. Si tu ne la connais pas, tu peux l’omettre.',
+        },
+        {
+          q: 'Quelle différence avec les horoscopes à 12 signes ?',
+          a: 'Les horoscopes de magazine ne regardent que le signe solaire. Hoshi-Kyara y ajoute ton signe lunaire et calcule les 10 planètes : le résultat n’appartient qu’à toi.',
+        },
+        {
+          q: 'Qu’est-ce que l’ascendant ?',
+          a: 'C’est le signe qui se levait à l’horizon est au moment de ta naissance ; il reflète ta première impression et ton aura naturelle. Son calcul nécessite l’heure et le lieu de naissance.',
+        },
+        {
+          q: 'Peut-on aussi tester la compatibilité avec quelqu’un ?',
+          a: 'Oui. Saisis la date de naissance de l’autre personne pour découvrir la compatibilité de vos personnages stellaires et « vous deux aujourd’hui ».',
+        },
+      ],
+    },
     about: {
       title: 'C’est quoi Hoshi-Kyara ?',
       lead: 'Ton propre personnage, né des astres à l’instant où tu es arrivé·e.',
@@ -810,6 +930,35 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibilità',
       pairDesc: 'La compatibilità degli Hoshi-Kyara e « voi due oggi ». Basta la sua data di nascita.',
       note: 'Il calcolo usa la stessa data degli oroscopi delle riviste, ma il risultato è solo tuo.',
+    },
+    faq: {
+      title: 'Domande frequenti',
+      items: [
+        {
+          q: 'Che cos’è la diagnosi Hoshi-Kyara?',
+          a: 'È un oroscopo gratuito che combina il tuo segno solare (il volto esterno) e il segno lunare (il tuo interiore) per collocarti in uno dei 16 “personaggi stellari”, poi legge personalità e fortuna a partire dai 10 pianeti.',
+        },
+        {
+          q: 'È gratis?',
+          a: 'Sì. Basta inserire la data di nascita: senza registrazione e completamente gratis.',
+        },
+        {
+          q: 'Basta la data di nascita? Serve l’ora?',
+          a: 'La data di nascita è sufficiente. Aggiungendo l’ora si calcola anche l’ascendente per un risultato più dettagliato. Se non la conosci, puoi ometterla.',
+        },
+        {
+          q: 'In che cosa differisce dagli oroscopi a 12 segni?',
+          a: 'Gli oroscopi delle riviste guardano solo al segno solare. Hoshi-Kyara aggiunge il segno lunare e calcola tutti e 10 i pianeti, così il risultato è solo tuo.',
+        },
+        {
+          q: 'Che cos’è l’ascendente?',
+          a: 'È il segno che sorgeva sull’orizzonte est nel momento della tua nascita; riflette la prima impressione e l’aura naturale. Per calcolarlo servono ora e luogo di nascita.',
+        },
+        {
+          q: 'Posso vedere anche l’affinità con qualcuno?',
+          a: 'Sì. Inserisci la data di nascita dell’altra persona per scoprire l’affinità dei vostri personaggi stellari e “voi due oggi”.',
+        },
+      ],
     },
     about: {
       title: 'Cos’è Hoshi-Kyara?',
@@ -964,6 +1113,35 @@ const UI: Record<Lang, UIStrings> = {
       pairDesc: 'A compatibilidade dos Hoshi-Kyara e « vocês dois hoje ». Basta a data de nascimento da outra pessoa.',
       note: 'O cálculo usa a mesma data dos horóscopos de revista, mas o resultado é só seu.',
     },
+    faq: {
+      title: 'Perguntas frequentes',
+      items: [
+        {
+          q: 'O que é o diagnóstico Hoshi-Kyara?',
+          a: 'É um horóscopo gratuito que combina o seu signo solar (a face externa) e o signo lunar (o seu interior) para classificá-lo em um dos 16 “personagens estelares”, e depois lê a personalidade e a sorte a partir dos 10 planetas.',
+        },
+        {
+          q: 'É grátis?',
+          a: 'Sim. Basta informar a data de nascimento: sem cadastro e totalmente grátis.',
+        },
+        {
+          q: 'Só a data de nascimento basta? Precisa da hora?',
+          a: 'A data de nascimento já basta. Ao adicionar a hora, calcula-se também o ascendente para um resultado mais detalhado. Se não souber, pode omitir.',
+        },
+        {
+          q: 'Qual a diferença dos horóscopos de 12 signos?',
+          a: 'Os horóscopos de revista olham apenas o signo solar. O Hoshi-Kyara soma o signo lunar e calcula os 10 planetas, então o resultado é só seu.',
+        },
+        {
+          q: 'O que é o ascendente?',
+          a: 'É o signo que surgia no horizonte leste no momento do seu nascimento; reflete a primeira impressão e a aura natural. Para calcular, são necessários a hora e o local de nascimento.',
+        },
+        {
+          q: 'Também dá para ver a compatibilidade com alguém?',
+          a: 'Sim. Informe a data de nascimento da outra pessoa para ver a compatibilidade dos personagens estelares e “vocês dois hoje”.',
+        },
+      ],
+    },
     about: {
       title: 'O que é Hoshi-Kyara?',
       lead: 'O seu próprio personagem, nascido dos astros no instante em que você chegou.',
@@ -1116,6 +1294,35 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 궁합',
       pairDesc: 'Hoshi-Kyara 궁합과 「오늘의 두 사람」을 봐요. 상대의 생년월일만 있으면 OK.',
       note: '계산은 잡지 별자리 운세와 같은 생년월일 기반. 하지만 결과는 오직 당신만의 것.',
+    },
+    faq: {
+      title: '자주 묻는 질문',
+      items: [
+        {
+          q: '호시캐릭터 진단이란 무엇인가요?',
+          a: '태어난 순간의 별자리 배치에서 태양 별자리(겉모습)와 달 별자리(마음속)를 곱해 당신을 16가지 ‘호시캐릭터’로 분류하는 무료 별점입니다. 나아가 10개 행성 배치로 성격과 운세까지 풀이합니다.',
+        },
+        {
+          q: '무료인가요?',
+          a: '네. 생년월일만 입력하면 가입 없이 무료로 진단할 수 있습니다.',
+        },
+        {
+          q: '생년월일만으로 진단되나요? 태어난 시각이 필요한가요?',
+          a: '생년월일만으로 진단됩니다. 태어난 시각을 넣으면 상승궁(어센던트)까지 계산되어 더 자세해집니다. 모르면 생략해도 됩니다.',
+        },
+        {
+          q: '보통 12별자리 운세와 무엇이 다른가요?',
+          a: '잡지 별자리 운세는 태양 별자리만 봅니다. 호시캐릭터는 태양 별자리에 달 별자리를 곱하고 10개 행성까지 계산해 오직 당신만의 결과가 됩니다.',
+        },
+        {
+          q: '상승궁(어센던트)이란 무엇인가요?',
+          a: '태어난 순간 동쪽 지평선에서 떠오르던 별자리로, 첫인상과 타고난 분위기를 나타냅니다. 계산에는 태어난 시각과 장소가 필요합니다.',
+        },
+        {
+          q: '궁합도 볼 수 있나요?',
+          a: '네. 상대의 생년월일을 입력하면 두 사람의 호시캐릭터 궁합과 ‘오늘의 두 사람’을 진단할 수 있습니다.',
+        },
+      ],
     },
     about: {
       title: 'Hoshi-Kyara란?',

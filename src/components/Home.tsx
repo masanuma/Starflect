@@ -1,5 +1,6 @@
 import { useUI } from '../lib/ui'
 import BrandMascot from './BrandMascot'
+import Faq from './Faq'
 
 interface Props {
   onSelect: () => void
@@ -46,6 +47,8 @@ export default function Home({ onSelect, onSelectPair, onAbout }: Props) {
       </div>
 
       <p className="home-note">{t.home.note}</p>
+
+      <Faq />
     </div>
   )
 }

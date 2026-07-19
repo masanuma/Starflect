@@ -2,4 +2,26 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
+# AI回答エンジン/クローラーの許可を明示(検索AIに引用されやすくするため)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 Sitemap: https://starflect.asanuma.works/sitemap.xml
