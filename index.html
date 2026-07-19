@@ -4,14 +4,71 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#F8F5FD" />
-    <meta name="description" content="Starflect — あなたはどの「ほしキャラ」? 生まれた瞬間の星の配置でわかる、16キャラ×本格星占い" />
-    <title>ほしキャラ診断 〜Starflect〜</title>
+
+    <title>ほしキャラ診断 〜Starflect〜｜生まれた瞬間の星でわかる16キャラ占い</title>
+    <meta
+      name="description"
+      content="あなたはどの「ほしキャラ」? 生年月日を入れるだけ、生まれた瞬間の星の配置から16キャラ×本格西洋占星術で性格と運勢を無料診断。太陽・月・上昇星座であなたを読み解きます。"
+    />
+    <link rel="canonical" href="https://starflect.asanuma.works/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph (X / Facebook / LINE などのシェア用) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ほしキャラ診断 〜Starflect〜" />
+    <meta property="og:title" content="ほしキャラ診断 〜Starflect〜" />
+    <meta
+      property="og:description"
+      content="あなたはどの「ほしキャラ」? 生まれた瞬間の星の配置でわかる、16キャラ×本格星占い。生年月日を入れるだけ、無料。"
+    />
+    <meta property="og:url" content="https://starflect.asanuma.works/" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta property="og:locale:alternate" content="fr_FR" />
+    <meta property="og:locale:alternate" content="it_IT" />
+    <meta property="og:locale:alternate" content="pt_PT" />
+    <meta property="og:locale:alternate" content="ko_KR" />
+    <!-- TODO: 1200×630 の og:image(PNG)を用意したら下記を有効化し、twitter:card を summary_large_image に -->
+    <!-- <meta property="og:image" content="https://starflect.asanuma.works/ogp.png" /> -->
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="ほしキャラ診断 〜Starflect〜" />
+    <meta
+      name="twitter:description"
+      content="あなたはどの「ほしキャラ」? 生まれた瞬間の星の配置でわかる、16キャラ×本格星占い。"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "ほしキャラ診断 〜Starflect〜",
+        "alternateName": "Starflect",
+        "url": "https://starflect.asanuma.works/",
+        "description": "生まれた瞬間の星の配置から、あなたがどの「ほしキャラ」かを診断。16キャラ×本格西洋占星術で、太陽・月・上昇星座から性格と運勢を読み解く無料の星占い。",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Web",
+        "inLanguage": ["ja", "en", "es", "fr", "it", "pt", "ko"],
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" }
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Old+Mincho:wght@500;700&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- JS 読み込み前に検索クローラーへ見せる静的フォールバック(React マウント時に置換される) -->
+      <main style="max-width: 480px; margin: 0 auto; padding: 44px 20px; font-family: sans-serif; color: #4a4458; text-align: center; line-height: 1.8">
+        <h1>ほしキャラ診断 〜Starflect〜</h1>
+        <p>生まれた瞬間の星の配置から、あなたがどの「ほしキャラ」かを診断。16キャラ×本格西洋占星術で、太陽・月・上昇星座からあなたの性格と運勢を読み解きます。生年月日を入れるだけ、無料。</p>
+        <p>Discover your “star character” from the planetary positions at the moment you were born — 16 characters based on real Western astrology. Free, just enter your birth date.</p>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
