@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { CompanionState } from '../lib/companion'
-import { touchVisit, daysSinceLastVisit, markForecastSeen, todayColor } from '../lib/companion'
+import type { CompanionState, Mood, Domain } from '../lib/companion'
+import { touchVisit, daysSinceLastVisit, markForecastSeen, todayColor, todayKey, recordMood } from '../lib/companion'
 import { starTypeOf } from '../lib/startypes'
 import { readFortune } from '../lib/fortune'
 import type { PlanetKey } from '../lib/types'
@@ -19,9 +19,30 @@ interface Props {
  * ステップ2: 挨拶(罰なし・経過日数で出し分け)＋「今日の星」カード(readFortune の実データにテンプレ相棒口調)。
  * AIなし(A1)。TODO(step3〜): 夜の振り返りタップ・週末まとめ。
  */
+type TapPhase = 'mood' | 'domain' | 'done'
+
 export default function Companion({ state, onRetry, onHome }: Props) {
   const t = useUI()
   const [daysSince] = useState(() => daysSinceLastVisit(state))
+
+  // 夜の振り返り: 今日すでにタップ済みなら 'done' で復元(同日に何度も聞かない)
+  const todayEntry = state.daily[todayKey()]
+  const [phase, setPhase] = useState<TapPhase>(todayEntry?.mood ? 'done' : 'mood')
+  const [mood, setMood] = useState<Mood | undefined>(todayEntry?.mood)
+
+  function pickMood(m: Mood) {
+    setMood(m)
+    recordMood(state, m)
+    track('tap_mood', { mood: m, star_type: state.starType })
+    setPhase('domain')
+  }
+  function pickDomain(d?: Domain) {
+    if (mood) recordMood(state, mood, d)
+    if (d) track('tap_domain', { domain: d, mood })
+    setPhase('done')
+  }
+
+  const reaction = mood === 'good' ? t.companion.reactGood : mood === 'bad' ? t.companion.reactBad : t.companion.reactMeh
 
   useEffect(() => {
     touchVisit(state)
@@ -76,7 +97,49 @@ export default function Companion({ state, onRetry, onHome }: Props) {
         </div>
       </section>
 
-      <p className="companion-placeholder">（夜の振り返りは準備中）</p>
+      <section className="tap-card">
+        {phase === 'mood' && (
+          <>
+            <p className="tap-question">{t.companion.tapQuestion}</p>
+            <div className="tap-moods">
+              <button className="tap-btn" onClick={() => pickMood('good')}>
+                <span aria-hidden="true">😊</span> {t.companion.moodGood}
+              </button>
+              <button className="tap-btn" onClick={() => pickMood('meh')}>
+                <span aria-hidden="true">😐</span> {t.companion.moodMeh}
+              </button>
+              <button className="tap-btn" onClick={() => pickMood('bad')}>
+                <span aria-hidden="true">😔</span> {t.companion.moodBad}
+              </button>
+            </div>
+          </>
+        )}
+
+        {phase === 'domain' && (
+          <>
+            <p className="tap-question">{t.companion.domainQuestion}</p>
+            <div className="tap-domains">
+              <button className="tap-chip" onClick={() => pickDomain('work')}>
+                {t.companion.domWork}
+              </button>
+              <button className="tap-chip" onClick={() => pickDomain('love')}>
+                {t.companion.domLove}
+              </button>
+              <button className="tap-chip" onClick={() => pickDomain('people')}>
+                {t.companion.domPeople}
+              </button>
+              <button className="tap-chip" onClick={() => pickDomain('other')}>
+                {t.companion.domOther}
+              </button>
+              <button className="tap-chip tap-skip" onClick={() => pickDomain(undefined)}>
+                {t.companion.tapSkip}
+              </button>
+            </div>
+          </>
+        )}
+
+        {phase === 'done' && <p className="tap-reaction">{reaction}</p>}
+      </section>
 
       <div className="result-actions">
         <button className="ghost" onClick={onRetry}>

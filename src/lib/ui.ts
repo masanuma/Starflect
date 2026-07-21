@@ -185,6 +185,19 @@ export interface UIStrings {
     cardIntro: string
     colorLabel: string
     keywordLabel: string
+    tapQuestion: string
+    moodGood: string
+    moodMeh: string
+    moodBad: string
+    domainQuestion: string
+    domWork: string
+    domLove: string
+    domPeople: string
+    domOther: string
+    tapSkip: string
+    reactGood: string
+    reactMeh: string
+    reactBad: string
   }
 }
 
@@ -380,6 +393,19 @@ const UI: Record<Lang, UIStrings> = {
       cardIntro: '今日の星、見てみたよ。',
       colorLabel: '今日の色',
       keywordLabel: 'キーワード',
+      tapQuestion: '今日はどうだった？',
+      moodGood: 'いいことあった',
+      moodMeh: 'ふつう',
+      moodBad: 'しんどかった',
+      domainQuestion: 'どのあたり？',
+      domWork: '仕事',
+      domLove: '恋愛',
+      domPeople: '人間関係',
+      domOther: 'なんとなく',
+      tapSkip: 'スキップ',
+      reactGood: 'いい顔してる。その調子、ちゃんと見てるよ。',
+      reactMeh: 'そういう日もいい。何もない日をちゃんと過ごせるのも、実は強さだよ。',
+      reactBad: '教えてくれてありがとう。今日はもう、ゆっくり休んで。明日また星を読むね。',
     },
   },
   en: {
@@ -573,6 +599,19 @@ const UI: Record<Lang, UIStrings> = {
       cardIntro: 'I took a look at today’s sky for you.',
       colorLabel: 'Today’s color',
       keywordLabel: 'Keyword',
+      tapQuestion: 'How was today?',
+      moodGood: 'Something good',
+      moodMeh: 'So-so',
+      moodBad: 'It was rough',
+      domainQuestion: 'Which part?',
+      domWork: 'Work',
+      domLove: 'Love',
+      domPeople: 'People',
+      domOther: 'Just a feeling',
+      tapSkip: 'Skip',
+      reactGood: 'Love that. Keep it up—I see you.',
+      reactMeh: 'Those days count too. Getting through a quiet day is its own kind of strength.',
+      reactBad: 'Thanks for telling me. Rest easy tonight—I’ll read the stars again tomorrow.',
     },
   },
   es: {
@@ -766,6 +805,19 @@ const UI: Record<Lang, UIStrings> = {
       cardIntro: 'Miré el cielo de hoy por ti.',
       colorLabel: 'Color de hoy',
       keywordLabel: 'Palabra clave',
+      tapQuestion: '¿Qué tal hoy?',
+      moodGood: 'Algo bueno',
+      moodMeh: 'Normal',
+      moodBad: 'Fue duro',
+      domainQuestion: '¿En qué parte?',
+      domWork: 'Trabajo',
+      domLove: 'Amor',
+      domPeople: 'Relaciones',
+      domOther: 'Sin más',
+      tapSkip: 'Saltar',
+      reactGood: 'Me encanta. Sigue así, te veo.',
+      reactMeh: 'Esos días también cuentan. Pasar un día tranquilo es una fortaleza en sí.',
+      reactBad: 'Gracias por contármelo. Descansa esta noche; mañana volveré a leer las estrellas.',
     },
   },
   fr: {
@@ -959,6 +1011,19 @@ const UI: Record<Lang, UIStrings> = {
       cardIntro: 'J’ai regardé le ciel du jour pour toi.',
       colorLabel: 'Couleur du jour',
       keywordLabel: 'Mot-clé',
+      tapQuestion: 'Ça a été, aujourd’hui ?',
+      moodGood: 'Un bon moment',
+      moodMeh: 'Bof',
+      moodBad: 'Dur',
+      domainQuestion: 'Côté quoi ?',
+      domWork: 'Travail',
+      domLove: 'Amour',
+      domPeople: 'Relations',
+      domOther: 'Comme ça',
+      tapSkip: 'Passer',
+      reactGood: 'J’adore. Continue comme ça, je te vois.',
+      reactMeh: 'Ces jours-là comptent aussi. Traverser un jour calme, c’est déjà une force.',
+      reactBad: 'Merci de me l’avoir dit. Repose-toi ce soir ; je relirai les étoiles demain.',
     },
   },
   it: {
@@ -1152,6 +1217,19 @@ const UI: Record<Lang, UIStrings> = {
       cardIntro: 'Ho dato un’occhiata al cielo di oggi per te.',
       colorLabel: 'Colore di oggi',
       keywordLabel: 'Parola chiave',
+      tapQuestion: 'Com’è andata oggi?',
+      moodGood: 'Qualcosa di bello',
+      moodMeh: 'Così così',
+      moodBad: 'Pesante',
+      domainQuestion: 'In che ambito?',
+      domWork: 'Lavoro',
+      domLove: 'Amore',
+      domPeople: 'Relazioni',
+      domOther: 'Così',
+      tapSkip: 'Salta',
+      reactGood: 'Mi piace. Continua così, ti vedo.',
+      reactMeh: 'Anche quei giorni contano. Attraversare un giorno tranquillo è già una forza.',
+      reactBad: 'Grazie di avermelo detto. Stasera riposati; domani rileggerò le stelle.',
     },
   },
   pt: {
@@ -1345,6 +1423,19 @@ const UI: Record<Lang, UIStrings> = {
       cardIntro: 'Dei uma olhada no céu de hoje para você.',
       colorLabel: 'Cor de hoje',
       keywordLabel: 'Palavra-chave',
+      tapQuestion: 'Como foi hoje?',
+      moodGood: 'Algo bom',
+      moodMeh: 'Mais ou menos',
+      moodBad: 'Foi pesado',
+      domainQuestion: 'Em qual parte?',
+      domWork: 'Trabalho',
+      domLove: 'Amor',
+      domPeople: 'Relações',
+      domOther: 'Sei lá',
+      tapSkip: 'Pular',
+      reactGood: 'Adorei. Continua assim, eu te vejo.',
+      reactMeh: 'Esses dias também contam. Atravessar um dia calmo já é uma força.',
+      reactBad: 'Obrigado por me contar. Descanse hoje; amanhã leio as estrelas de novo.',
     },
   },
   ko: {
@@ -1538,6 +1629,19 @@ const UI: Record<Lang, UIStrings> = {
       cardIntro: '오늘 하늘을 살펴봤어.',
       colorLabel: '오늘의 색',
       keywordLabel: '키워드',
+      tapQuestion: '오늘은 어땠어?',
+      moodGood: '좋은 일 있었어',
+      moodMeh: '그냥 그래',
+      moodBad: '힘들었어',
+      domainQuestion: '어느 쪽이야?',
+      domWork: '일',
+      domLove: '연애',
+      domPeople: '인간관계',
+      domOther: '그냥',
+      tapSkip: '건너뛰기',
+      reactGood: '좋아 보여. 그 느낌 그대로, 내가 보고 있어.',
+      reactMeh: '그런 날도 좋아. 아무 일 없는 날을 잘 보내는 것도 강함이야.',
+      reactBad: '말해줘서 고마워. 오늘은 푹 쉬어. 내일 또 별을 읽을게.',
     },
   },
 }

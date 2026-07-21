@@ -662,6 +662,85 @@ body {
   color: var(--violet-strong);
 }
 
+/* ---------- 夜の振り返りタップ ---------- */
+.tap-card {
+  margin-top: 14px;
+  padding: 18px 18px 20px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.tap-question {
+  margin: 0 0 14px;
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.tap-moods {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tap-btn {
+  padding: 12px 14px;
+  border: 1.5px solid var(--card-border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-pop);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tap-btn:hover {
+  border-color: var(--pink-soft);
+  background: #ffffff;
+}
+
+.tap-domains {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tap-chip {
+  padding: 8px 16px;
+  border: 1.5px solid var(--card-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-pop);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--violet-strong);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tap-chip:hover {
+  border-color: var(--violet-soft);
+  background: #ffffff;
+}
+
+.tap-skip {
+  color: var(--ink-sub);
+}
+
+.tap-reaction {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--ink);
+}
+
 /* ---------- フォーム ---------- */
 .back-link {
   background: none;
