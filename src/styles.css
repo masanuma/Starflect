@@ -453,7 +453,7 @@ body {
 }
 
 .home-note {
-  text-align: center;
+  text-align: left;
   font-size: 13px;
   color: var(--ink-sub);
   margin-top: 24px;
@@ -578,10 +578,15 @@ body {
 
 .card-head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   margin-bottom: 14px;
   text-align: left;
+}
+
+/* タイトルが折り返してもマスコットと頭が揃うように */
+.card-head-icon {
+  margin-top: -2px;
 }
 
 .card-head-icon {
@@ -990,6 +995,7 @@ body {
 
 .tap-reaction {
   margin: 0;
+  text-align: left;
   font-size: 14px;
   line-height: 1.85;
   color: var(--ink);
@@ -1864,7 +1870,7 @@ body {
 .party-foot {
   font-size: 12px;
   color: var(--ink-sub);
-  text-align: center;
+  text-align: left;
   margin: 14px 0 0;
 }
 

@@ -116,9 +116,16 @@ export default function Result({ data, onHome, onPair }: Props) {
       )}
 
       <section className="party-card">
-        <div className="party-head">
-          <p className="party-title">{t.result.partyTitle(partyPlanets.length)}</p>
-          <p className="party-sub">{t.result.partySub}</p>
+        <div className="card-head">
+          {starType && (
+            <div className="card-head-icon" aria-hidden="true">
+              <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={52} />
+            </div>
+          )}
+          <div>
+            <p className="card-title">{t.result.partyTitle(partyPlanets.length)}</p>
+            <p className="card-sub">{t.result.partySub}</p>
+          </div>
         </div>
         <ul className="party-list">
           {visibleParty.map((p) => {
