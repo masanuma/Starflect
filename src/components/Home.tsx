@@ -45,14 +45,16 @@ export default function Home({ onSelect, onSelectPair, onAbout, onCompanion }: P
         {companion && cStar ? (
           // 相棒がいる = 診断済み。診断は初回のみなので「会話する」を主役に、変更は小リンク
           <>
-            <button className="companion-entry" onClick={onCompanion}>
-              <span className="companion-entry-mascot" aria-hidden="true">
-                <HoshiKyaraMascot sunElement={cStar.sunElement} moonElement={cStar.moonElement} size={48} />
-              </span>
-              <span className="companion-entry-label">{t.home.seeCompanion(cStar.type.name)}</span>
-              <span className="companion-entry-arrow" aria-hidden="true">
-                →
-              </span>
+            <button className="mode-card mode-companion" onClick={onCompanion}>
+              <div className="mode-head">
+                <span className="mode-name">
+                  <span className="mode-companion-icon" aria-hidden="true">
+                    <HoshiKyaraMascot sunElement={cStar.sunElement} moonElement={cStar.moonElement} size={26} />
+                  </span>
+                  {t.home.seeCompanion(cStar.type.name)}
+                </span>
+              </div>
+              <p className="mode-desc">{t.home.companionDesc}</p>
             </button>
             <button className="change-info-link" onClick={onSelect}>
               {t.home.changeInfo}
