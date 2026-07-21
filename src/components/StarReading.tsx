@@ -8,7 +8,8 @@ import HoshiKyaraMascot from './HoshiKyaraMascot'
 import { useUI } from '../lib/ui'
 
 type TabId = 'today' | 'tomorrow' | 'week' | 'nextweek' | 'month' | 'nextmonth'
-const TABS: TabId[] = ['today', 'tomorrow', 'week', 'nextweek', 'month', 'nextmonth']
+// 上段=今の期間(今日/今週/今月)、下段=次の期間(明日/来週/来月)。3列で折り返す。
+const TABS: TabId[] = ['today', 'week', 'month', 'tomorrow', 'nextweek', 'nextmonth']
 const PERIOD_OF: Record<TabId, PeriodKey> = {
   today: 'today',
   tomorrow: 'tomorrow',
