@@ -177,6 +177,15 @@ export interface UIStrings {
     send: string
     thanks: string
   }
+  companion: {
+    greetToday: string
+    greetDay: string
+    greetBack: string
+    cardTitle: string
+    cardIntro: string
+    colorLabel: string
+    keywordLabel: string
+  }
 }
 
 const UI: Record<Lang, UIStrings> = {
@@ -363,6 +372,15 @@ const UI: Record<Lang, UIStrings> = {
       send: '送信',
       thanks: 'ありがとうございました！',
     },
+    companion: {
+      greetToday: 'また来てくれたね',
+      greetDay: 'おかえり。今日の星、見にきた？',
+      greetBack: 'おかえり、ひさしぶり',
+      cardTitle: '今日の星',
+      cardIntro: '今日の星、見てみたよ。',
+      colorLabel: '今日の色',
+      keywordLabel: 'キーワード',
+    },
   },
   en: {
     common: {
@@ -546,6 +564,15 @@ const UI: Record<Lang, UIStrings> = {
       placeholder: 'Comment (optional)',
       send: 'Send',
       thanks: 'Thank you!',
+    },
+    companion: {
+      greetToday: 'Good to see you again',
+      greetDay: 'Welcome back. Here to see today’s sky?',
+      greetBack: 'Welcome back—it’s been a while',
+      cardTitle: 'Today’s sky',
+      cardIntro: 'I took a look at today’s sky for you.',
+      colorLabel: 'Today’s color',
+      keywordLabel: 'Keyword',
     },
   },
   es: {
@@ -731,6 +758,15 @@ const UI: Record<Lang, UIStrings> = {
       send: 'Enviar',
       thanks: '¡Gracias!',
     },
+    companion: {
+      greetToday: 'Qué bueno verte otra vez',
+      greetDay: 'Hola de nuevo. ¿Vienes a ver el cielo de hoy?',
+      greetBack: 'Bienvenida de nuevo, cuánto tiempo',
+      cardTitle: 'El cielo de hoy',
+      cardIntro: 'Miré el cielo de hoy por ti.',
+      colorLabel: 'Color de hoy',
+      keywordLabel: 'Palabra clave',
+    },
   },
   fr: {
     common: {
@@ -914,6 +950,15 @@ const UI: Record<Lang, UIStrings> = {
       placeholder: 'Commentaire (facultatif)',
       send: 'Envoyer',
       thanks: 'Merci !',
+    },
+    companion: {
+      greetToday: 'Contente de te revoir',
+      greetDay: 'Re-bonjour. Tu viens voir le ciel du jour ?',
+      greetBack: 'Re-bonjour, ça faisait longtemps',
+      cardTitle: 'Le ciel du jour',
+      cardIntro: 'J’ai regardé le ciel du jour pour toi.',
+      colorLabel: 'Couleur du jour',
+      keywordLabel: 'Mot-clé',
     },
   },
   it: {
@@ -1099,6 +1144,15 @@ const UI: Record<Lang, UIStrings> = {
       send: 'Invia',
       thanks: 'Grazie!',
     },
+    companion: {
+      greetToday: 'Bello rivederti',
+      greetDay: 'Bentornata. Vieni a vedere il cielo di oggi?',
+      greetBack: 'Bentornata, era un po’ che non ci vedevamo',
+      cardTitle: 'Il cielo di oggi',
+      cardIntro: 'Ho dato un’occhiata al cielo di oggi per te.',
+      colorLabel: 'Colore di oggi',
+      keywordLabel: 'Parola chiave',
+    },
   },
   pt: {
     common: {
@@ -1283,6 +1337,15 @@ const UI: Record<Lang, UIStrings> = {
       send: 'Enviar',
       thanks: 'Obrigado!',
     },
+    companion: {
+      greetToday: 'Que bom te ver de novo',
+      greetDay: 'Bem-vinda de volta. Veio ver o céu de hoje?',
+      greetBack: 'Bem-vinda de volta, quanto tempo',
+      cardTitle: 'O céu de hoje',
+      cardIntro: 'Dei uma olhada no céu de hoje para você.',
+      colorLabel: 'Cor de hoje',
+      keywordLabel: 'Palavra-chave',
+    },
   },
   ko: {
     common: {
@@ -1466,6 +1529,15 @@ const UI: Record<Lang, UIStrings> = {
       placeholder: '코멘트(선택)',
       send: '보내기',
       thanks: '감사합니다!',
+    },
+    companion: {
+      greetToday: '또 와줬네',
+      greetDay: '어서 와. 오늘의 별 보러 왔어?',
+      greetBack: '어서 와, 오랜만이야',
+      cardTitle: '오늘의 별',
+      cardIntro: '오늘 하늘을 살펴봤어.',
+      colorLabel: '오늘의 색',
+      keywordLabel: '키워드',
     },
   },
 }

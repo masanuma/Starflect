@@ -578,11 +578,88 @@ body {
 
 .companion-placeholder {
   color: var(--ink-sub);
-  font-size: 13px;
-  padding: 32px 16px;
+  font-size: 12.5px;
+  padding: 16px;
   border: 1px dashed var(--card-border);
   border-radius: 16px;
-  margin-bottom: 24px;
+  margin: 8px 0 24px;
+}
+
+.today-card {
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 20px 20px 18px;
+}
+
+.today-title {
+  margin: 0 0 10px;
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--violet-strong);
+}
+
+.today-star {
+  color: var(--gold);
+  margin-right: 6px;
+}
+
+.today-intro {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  color: var(--ink-sub);
+}
+
+.today-sky {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pink-strong);
+}
+
+.today-tone {
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: var(--ink);
+}
+
+.today-chips {
+  display: flex;
+  gap: 10px;
+}
+
+.today-chip {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--pink-faint);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+.chip-label {
+  font-size: 12px;
+  color: var(--ink-sub);
+}
+
+.chip-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.chip-keyword {
+  font-family: var(--font-pop);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--violet-strong);
 }
 
 /* ---------- フォーム ---------- */

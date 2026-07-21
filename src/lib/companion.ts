@@ -89,6 +89,27 @@ export function touchVisit(state: CompanionState, now: Date = new Date()): { sta
   return { state: next, daysSince }
 }
 
+/** 「今日の星」カードを見たことを記録(週末まとめ・解析用) */
+export function markForecastSeen(state: CompanionState, now: Date = new Date()): CompanionState {
+  const key = todayKey(now)
+  const prev = state.daily[key]
+  if (prev?.forecastSeen) return state
+  const next: CompanionState = {
+    ...state,
+    daily: { ...state.daily, [key]: { ...prev, forecastSeen: true } as DailyEntry },
+  }
+  saveCompanion(next)
+  return next
+}
+
+/** 日付から決定論的に「今日の色」を選ぶ(毎日変わる小さな報酬。テンプレ＝AIなし) */
+const DAY_COLORS = ['#EA6596', '#8A63DD', '#E8A93A', '#2FA2B0', '#C93B72', '#6A45C4', '#3E9B7A', '#D98324']
+export function todayColor(key: string = todayKey()): string {
+  let h = 0
+  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0
+  return DAY_COLORS[h % DAY_COLORS.length]
+}
+
 /** その日の気分タップを記録 */
 export function recordMood(
   state: CompanionState,
