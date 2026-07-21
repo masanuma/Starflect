@@ -51,6 +51,8 @@ export interface UIStrings {
     appTitle: string
     tagline1: string
     tagline2: string
+    greetNew: string
+    greetBack: string
     aboutLink: string
     soloName: string
     soloTime: string
@@ -246,6 +248,8 @@ const UI: Record<Lang, UIStrings> = {
       appTitle: 'ほしキャラ診断',
       tagline1: 'あなたはどの「ほしキャラ」?',
       tagline2: '生まれた瞬間の星の配置でわかる、16キャラ×本格星占い。',
+      greetNew: 'はじめまして、ほしキャラ診断です。',
+      greetBack: 'おかえりなさい。',
       aboutLink: 'ほしキャラとは？',
       soloName: '🌟 ほしキャラ診断',
       soloTime: '30秒',
@@ -253,8 +257,8 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 ふたりの相性',
       pairDesc: 'ほしキャラの相性と「今日のふたり」を診断。相手の生年月日だけでOK',
       note: '計算は雑誌の12星座占いと同じ生年月日ベース。でも結果は、あなただけのもの。',
-      seeCompanion: (name) => `${name}と会話する`,
-      companionDesc: 'あなたのほしキャラです。今日の運勢や気分、ちょっとした相談まで。毎日ここで会えます。',
+      seeCompanion: (name) => `あなたのほしキャラ「${name}」と会話する`,
+      companionDesc: '今日の運勢や気分、ちょっとした相談まで。毎日ここで会えます。',
       changeInfo: '自分の情報を変更する',
     },
     faq: {
@@ -480,6 +484,8 @@ const UI: Record<Lang, UIStrings> = {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Which “Hoshi-Kyara” (star character) are you?',
       tagline2: '16 characters × real astrology, from the sky at the moment you were born.',
+      greetNew: 'Hi, welcome to Hoshi-Kyara.',
+      greetBack: 'Welcome back.',
       aboutLink: 'What is Hoshi-Kyara?',
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 sec',
@@ -487,8 +493,8 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibility',
       pairDesc: 'Hoshi-Kyara compatibility plus “the two of you today.” Just their birth date needed.',
       note: 'The math uses the same birth date as magazine horoscopes—but the result is yours alone.',
-      seeCompanion: (name) => `Talk with ${name}`,
-      companionDesc: 'Your Hoshi-Kyara. Today’s stars, your mood, a little chat—here for you every day.',
+      seeCompanion: (name) => `Talk with your Hoshi-Kyara, “${name}”`,
+      companionDesc: 'Today’s stars, your mood, a little chat—here for you every day.',
       changeInfo: 'Edit your info',
     },
     faq: {
@@ -714,6 +720,8 @@ const UI: Record<Lang, UIStrings> = {
       appTitle: 'Hoshi-Kyara',
       tagline1: '¿Qué “Hoshi-Kyara” (personaje estelar) eres?',
       tagline2: '16 personajes × astrología real, según el cielo del momento en que naciste.',
+      greetNew: 'Hola, te damos la bienvenida a Hoshi-Kyara.',
+      greetBack: 'Bienvenida de nuevo.',
       aboutLink: '¿Qué es Hoshi-Kyara?',
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 s',
@@ -721,8 +729,8 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibilidad',
       pairDesc: 'Compatibilidad de Hoshi-Kyara y “vosotros dos hoy”. Solo hace falta su fecha de nacimiento.',
       note: 'El cálculo usa la misma fecha que los horóscopos de revista, pero el resultado es solo tuyo.',
-      seeCompanion: (name) => `Habla con ${name}`,
-      companionDesc: 'Tu Hoshi-Kyara. El cielo de hoy, tu ánimo o una charla: aquí cada día.',
+      seeCompanion: (name) => `Habla con tu Hoshi-Kyara, «${name}»`,
+      companionDesc: 'El cielo de hoy, tu ánimo o una charla: aquí cada día.',
       changeInfo: 'Editar tus datos',
     },
     faq: {
@@ -948,6 +956,8 @@ const UI: Record<Lang, UIStrings> = {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Quel « Hoshi-Kyara » (personnage stellaire) es-tu ?',
       tagline2: '16 personnages × vraie astrologie, d’après le ciel de l’instant de ta naissance.',
+      greetNew: 'Bonjour, bienvenue sur Hoshi-Kyara.',
+      greetBack: 'Bon retour.',
       aboutLink: 'C’est quoi Hoshi-Kyara ?',
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 s',
@@ -955,8 +965,8 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibilité',
       pairDesc: 'La compatibilité des Hoshi-Kyara et « vous deux aujourd’hui ». Il suffit de sa date de naissance.',
       note: 'Le calcul part de la même date que les horoscopes de magazine, mais le résultat n’appartient qu’à toi.',
-      seeCompanion: (name) => `Parle avec ${name}`,
-      companionDesc: 'Ton Hoshi-Kyara. Le ciel du jour, ton humeur, un petit échange : ici chaque jour.',
+      seeCompanion: (name) => `Parle avec ton Hoshi-Kyara, « ${name} »`,
+      companionDesc: 'Le ciel du jour, ton humeur, un petit échange : ici chaque jour.',
       changeInfo: 'Modifier mes infos',
     },
     faq: {
@@ -1182,6 +1192,8 @@ const UI: Record<Lang, UIStrings> = {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Quale « Hoshi-Kyara » (personaggio stellare) sei?',
       tagline2: '16 personaggi × astrologia vera, dal cielo dell’istante in cui sei nato/a.',
+      greetNew: 'Ciao, benvenuto/a su Hoshi-Kyara.',
+      greetBack: 'Bentornato/a.',
       aboutLink: 'Cos’è Hoshi-Kyara?',
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 s',
@@ -1189,8 +1201,8 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibilità',
       pairDesc: 'La compatibilità degli Hoshi-Kyara e « voi due oggi ». Basta la sua data di nascita.',
       note: 'Il calcolo usa la stessa data degli oroscopi delle riviste, ma il risultato è solo tuo.',
-      seeCompanion: (name) => `Parla con ${name}`,
-      companionDesc: 'Il tuo Hoshi-Kyara. Il cielo di oggi, il tuo umore, due parole: qui ogni giorno.',
+      seeCompanion: (name) => `Parla con il tuo Hoshi-Kyara, «${name}»`,
+      companionDesc: 'Il cielo di oggi, il tuo umore, due parole: qui ogni giorno.',
       changeInfo: 'Modifica i tuoi dati',
     },
     faq: {
@@ -1416,6 +1428,8 @@ const UI: Record<Lang, UIStrings> = {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Qual « Hoshi-Kyara » (personagem estelar) é você?',
       tagline2: '16 personagens × astrologia de verdade, a partir do céu no instante em que você nasceu.',
+      greetNew: 'Olá, boas-vindas ao Hoshi-Kyara.',
+      greetBack: 'Bem-vindo/a de volta.',
       aboutLink: 'O que é Hoshi-Kyara?',
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 s',
@@ -1423,8 +1437,8 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibilidade',
       pairDesc: 'A compatibilidade dos Hoshi-Kyara e « vocês dois hoje ». Basta a data de nascimento da outra pessoa.',
       note: 'O cálculo usa a mesma data dos horóscopos de revista, mas o resultado é só seu.',
-      seeCompanion: (name) => `Converse com ${name}`,
-      companionDesc: 'Seu Hoshi-Kyara. O céu de hoje, seu humor, um bate-papo: aqui todo dia.',
+      seeCompanion: (name) => `Converse com o seu Hoshi-Kyara, «${name}»`,
+      companionDesc: 'O céu de hoje, seu humor, um bate-papo: aqui todo dia.',
       changeInfo: 'Editar seus dados',
     },
     faq: {
@@ -1650,6 +1664,8 @@ const UI: Record<Lang, UIStrings> = {
       appTitle: 'Hoshi-Kyara',
       tagline1: '당신은 어떤 「Hoshi-Kyara」(별 캐릭터)인가요?',
       tagline2: '태어난 순간의 별자리로 보는, 16캐릭터 × 정통 별점.',
+      greetNew: '처음 뵙겠습니다, 호시캐릭터 진단이에요.',
+      greetBack: '어서 오세요.',
       aboutLink: 'Hoshi-Kyara란?',
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30초',
@@ -1657,8 +1673,8 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 궁합',
       pairDesc: 'Hoshi-Kyara 궁합과 「오늘의 두 사람」을 봐요. 상대의 생년월일만 있으면 OK.',
       note: '계산은 잡지 별자리 운세와 같은 생년월일 기반. 하지만 결과는 오직 당신만의 것.',
-      seeCompanion: (name) => `${name}와 대화하기`,
-      companionDesc: '당신의 호시캐릭터예요. 오늘의 운세와 기분, 가벼운 상담까지. 매일 여기서 만나요.',
+      seeCompanion: (name) => `당신의 호시캐릭터 「${name}」와 대화하기`,
+      companionDesc: '오늘의 운세와 기분, 가벼운 상담까지. 매일 여기서 만나요.',
       changeInfo: '내 정보 변경하기',
     },
     faq: {
@@ -1878,4 +1894,19 @@ export function useUI(): UIStrings {
 /** 現在言語のUI文字列(非フック用) */
 export function ui(): UIStrings {
   return UI[getLang()]
+}
+
+/** ほしキャラ名を言語別の括弧で囲む(名前表示は必ず括弧付きに) */
+const NAME_QUOTES: Record<Lang, [string, string]> = {
+  ja: ['「', '」'],
+  en: ['“', '”'],
+  es: ['«', '»'],
+  fr: ['« ', ' »'],
+  it: ['«', '»'],
+  pt: ['«', '»'],
+  ko: ['「', '」'],
+}
+export function quoted(name: string, lang: Lang = getLang()): string {
+  const [l, r] = NAME_QUOTES[lang] ?? NAME_QUOTES.ja
+  return `${l}${name}${r}`
 }

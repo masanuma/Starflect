@@ -25,6 +25,7 @@ export default function Home({ onSelect, onSelectPair, onAbout, onCompanion }: P
 
   return (
     <div className="home">
+      <p className="home-greet">{companion ? t.home.greetBack : t.home.greetNew}</p>
       <div className="hero">
         <div className="hero-mark" aria-hidden="true">
           <BrandMascot size={92} />

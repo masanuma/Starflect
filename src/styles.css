@@ -640,6 +640,15 @@ body {
   color: var(--pink-strong);
 }
 
+.home-greet {
+  text-align: center;
+  margin: 0 0 6px;
+  font-family: var(--font-head);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--violet);
+}
+
 .mode-companion {
   border-color: var(--violet-soft);
   background: linear-gradient(135deg, #efe7fc 0%, #fde5ee 100%);

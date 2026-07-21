@@ -8,7 +8,7 @@ import HoshiKyaraMascot from './HoshiKyaraMascot'
 import StarReading from './StarReading'
 import AiChat from './AiChat'
 import { buildChatContext, chatStorageKey } from '../lib/aiChat'
-import { useUI } from '../lib/ui'
+import { useUI, quoted } from '../lib/ui'
 import { track } from '../lib/analytics'
 
 interface Props {
@@ -102,7 +102,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
         </div>
       )}
       <p className="companion-greeting">{greeting}</p>
-      <h2 className="companion-name">{starType?.type.name ?? ''}</h2>
+      <h2 className="companion-name">{starType ? quoted(starType.type.name) : ''}</h2>
 
       <StarReading chart={state.chart} />
 

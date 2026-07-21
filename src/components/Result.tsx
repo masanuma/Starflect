@@ -13,7 +13,7 @@ import { buildChatContext, chatStorageKey } from '../lib/aiChat'
 import PlanetMascot, { MASCOT_COLOR } from './PlanetMascot'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import { useLang } from '../lib/i18n'
-import { useUI } from '../lib/ui'
+import { useUI, quoted } from '../lib/ui'
 import { track } from '../lib/analytics'
 
 const ELEMENT_SLUG: Record<string, string> = { 火: 'fire', 地: 'earth', 風: 'air', 水: 'water' }
@@ -79,7 +79,7 @@ export default function Result({ data, onHome, onPair }: Props) {
           <div className="type-mascot" aria-hidden="true">
             <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={96} />
           </div>
-          <h3 className="type-name">{starType.type.name}</h3>
+          <h3 className="type-name">{quoted(starType.type.name)}</h3>
           <p className="type-copy">{starType.type.copy}</p>
           <p className="type-text">{starType.type.text}</p>
           {synthesis && (
