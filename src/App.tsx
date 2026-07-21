@@ -6,11 +6,14 @@ import Result from './components/Result'
 import PairForm from './components/PairForm'
 import PairResult from './components/PairResult'
 import About from './components/About'
+import Companion from './components/Companion'
 import LangSwitcher from './components/LangSwitcher'
 import ConsentBanner from './components/ConsentBanner'
 import type { ChartData } from './lib/types'
 import type { PairData } from './lib/compat'
 import { useUI } from './lib/ui'
+import { hasCompanion, loadCompanion } from './lib/companion'
+import type { CompanionState } from './lib/companion'
 import { initAnalytics, getConsent, setConsent } from './lib/analytics'
 import type { Consent } from './lib/analytics'
 
@@ -21,9 +24,14 @@ type Screen =
   | { page: 'result'; data: ChartData }
   | { page: 'pairForm' }
   | { page: 'pairResult'; data: PairData }
+  | { page: 'companion'; state: CompanionState }
 
 export default function App() {
-  const [screen, setScreen] = useState<Screen>({ page: 'home' })
+  // 2回目以降(相棒がいる)は相棒ホームを起点にする
+  const [screen, setScreen] = useState<Screen>(() => {
+    const saved = hasCompanion() ? loadCompanion() : null
+    return saved ? { page: 'companion', state: saved } : { page: 'home' }
+  })
   const [consent, setConsentState] = useState<Consent | null>(() => getConsent())
   const t = useUI()
 
@@ -52,6 +60,10 @@ export default function App() {
             onSelect={() => setScreen({ page: 'form' })}
             onSelectPair={() => setScreen({ page: 'pairForm' })}
             onAbout={() => setScreen({ page: 'about' })}
+            onCompanion={() => {
+              const state = loadCompanion()
+              if (state) setScreen({ page: 'companion', state })
+            }}
           />
         )}
         {screen.page === 'about' && (
@@ -69,8 +81,15 @@ export default function App() {
         {screen.page === 'result' && (
           <Result
             data={screen.data}
-            onRetry={() => setScreen({ page: 'form' })}
             onHome={() => setScreen({ page: 'home' })}
+            onPair={() => setScreen({ page: 'pairForm' })}
+          />
+        )}
+        {screen.page === 'companion' && (
+          <Companion
+            state={screen.state}
+            onHome={() => setScreen({ page: 'home' })}
+            onPair={() => setScreen({ page: 'pairForm' })}
           />
         )}
         {screen.page === 'pairForm' && (

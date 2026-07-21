@@ -389,7 +389,7 @@ const NATAL_LABEL: Record<Lang, Record<PlanetKey, string>> = {
   },
 }
 
-type Quality = 'good' | 'hard' | 'conj'
+export type Quality = 'good' | 'hard' | 'conj'
 
 interface AspectDef {
   angle: number

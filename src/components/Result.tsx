@@ -3,44 +3,30 @@ import type { ChartData, PlanetKey } from '../lib/types'
 import { signIndex, degInSign } from '../lib/astro'
 import { signName, signSymbol } from '../lib/signs'
 import { synthesize } from '../lib/synthesis'
-import { readFortune, periodNoun, periodLabel } from '../lib/fortune'
-import { fetchAiReading } from '../lib/aiReading'
 import { getPlanet, signMannerOf } from '../lib/planets'
-import { findNatalAspects } from '../lib/natalAspects'
 import { starTypeOf, elementPhrase } from '../lib/startypes'
 import AiChat from './AiChat'
-import AiReading from './AiReading'
+import StarReading from './StarReading'
 import Feedback from './Feedback'
-import type { ChatChartContext } from '../lib/aiChat'
+import { createCompanion } from '../lib/companion'
+import { buildChatContext, chatStorageKey } from '../lib/aiChat'
 import PlanetMascot, { MASCOT_COLOR } from './PlanetMascot'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
-import SectionIcon from './SectionIcon'
 import { useLang } from '../lib/i18n'
-import { useUI } from '../lib/ui'
+import { useUI, quoted } from '../lib/ui'
 import { track } from '../lib/analytics'
-
-const RETRO_SUFFIX: Record<string, string> = {
-  ja: '(逆行)',
-  en: '(retrograde)',
-  es: '(retrógrado)',
-  fr: '(rétrograde)',
-  it: '(retrogrado)',
-  pt: '(retrógrado)',
-  ko: '(역행)',
-}
 
 const ELEMENT_SLUG: Record<string, string> = { 火: 'fire', 地: 'earth', 風: 'air', 水: 'water' }
 
 interface Props {
   data: ChartData
-  onRetry: () => void
   onHome: () => void
+  onPair: () => void
 }
 
-export default function Result({ data, onRetry, onHome }: Props) {
+export default function Result({ data, onHome, onPair }: Props) {
   const { lang } = useLang()
   const t = useUI()
-  const retroSuffix = RETRO_SUFFIX[lang] ?? RETRO_SUFFIX.ja
 
   const lonOf = (key: PlanetKey) => data.planets.find((p) => p.key === key)?.lon
   const sunLon = lonOf('sun')
@@ -51,16 +37,14 @@ export default function Result({ data, onRetry, onHome }: Props) {
       ? synthesize(sunLon, moonLon, ascLon)
       : null
 
-  const fortune = readFortune(data.planets, data.period)
-
   // ほしキャラを構成するパーティ = 計算した全天体(太陽・月・上昇星座を先頭に)
   const partyPlanets = data.planets
+  // 上昇星座までを表示し、残りは畳む(長すぎるため)。時刻なしで asc が無いときは 太陽・月 まで
+  const hasAsc = partyPlanets.some((p) => p.key === 'asc')
+  const partyShown = hasAsc ? 3 : 2
+  const [showAllParty, setShowAllParty] = useState(false)
+  const visibleParty = showAllParty ? partyPlanets : partyPlanets.slice(0, partyShown)
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
-  const natalAspects = findNatalAspects(data.planets)
-
-  const [aiState, setAiState] = useState<
-    { status: 'idle' } | { status: 'loading' } | { status: 'done'; text: string } | { status: 'error'; message: string }
-  >({ status: 'idle' })
 
   const starSlug = starType
     ? `${ELEMENT_SLUG[starType.sunElement]}_${ELEMENT_SLUG[starType.moonElement]}`
@@ -72,58 +56,14 @@ export default function Result({ data, onRetry, onHome }: Props) {
       has_time: ascLon !== undefined,
       star_type: starSlug,
     })
+    // 診断した時点で、このほしキャラを相棒として自動保存(次回から相棒ホームに戻る=毎日そばに)
+    createCompanion(data, starSlug ?? '')
     // 結果表示ごとに1回だけ
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  async function handleAiReading() {
-    track('ai_reading_click')
-    setAiState({ status: 'loading' })
-    try {
-      const text = await fetchAiReading({
-        name: data.name,
-        periodLabel: periodNoun(data.period),
-        dateLabel: data.dateLabel,
-        placeLabel: data.placeLabel,
-        natal: data.planets.map((p) => ({
-          label: getPlanet(p.key).name + (p.retro ? retroSuffix : ''),
-          sign: signName(signIndex(p.lon)),
-          deg: degInSign(p.lon),
-        })),
-        synthesis: synthesis ? [synthesis.intro, synthesis.balance, synthesis.relation] : undefined,
-        natalAspects: natalAspects.length ? natalAspects.map((a) => a.tech) : undefined,
-        toneLabel: fortune.toneLabel,
-        skyNote: fortune.skyNote,
-        aspects: fortune.items.map((i) => i.title),
-        lang,
-      })
-      setAiState({ status: 'done', text })
-    } catch (e) {
-      setAiState({ status: 'error', message: e instanceof Error ? e.message : t.common.unknownError })
-    }
-  }
-
-  // 相談チャットに渡すコンテキスト(鑑定済みならその文章も文脈に含める)
-  const chatContext: ChatChartContext = {
-    name: data.name,
-    dateLabel: data.dateLabel,
-    placeLabel: data.placeLabel,
-    starTypeName: starType?.type.name,
-    starTypeCopy: starType?.type.copy,
-    planets: data.planets.map((p) => ({
-      label: getPlanet(p.key).name,
-      sign: signName(signIndex(p.lon)),
-      deg: degInSign(p.lon),
-      retro: p.retro,
-    })),
-    natalAspects: natalAspects.length ? natalAspects.map((a) => a.tech) : undefined,
-    periodLabel: periodNoun(data.period),
-    skyNote: fortune.skyNote,
-    toneLabel: fortune.toneLabel,
-    transits: fortune.items.map((i) => i.title),
-    reading: aiState.status === 'done' ? aiState.text : undefined,
-  }
-  const chatStorageKey = `starflect-chat:${data.dateLabel}:${data.name}`
+  // 相談チャット(＝ほしキャラとの会話)に渡すコンテキスト
+  const chatContext = buildChatContext(data)
 
   return (
     <div className="result-screen">
@@ -139,7 +79,7 @@ export default function Result({ data, onRetry, onHome }: Props) {
           <div className="type-mascot" aria-hidden="true">
             <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={96} />
           </div>
-          <h3 className="type-name">{starType.type.name}</h3>
+          <h3 className="type-name">{quoted(starType.type.name)}</h3>
           <p className="type-copy">{starType.type.copy}</p>
           <p className="type-text">{starType.type.text}</p>
           {synthesis && (
@@ -176,12 +116,19 @@ export default function Result({ data, onRetry, onHome }: Props) {
       )}
 
       <section className="party-card">
-        <div className="party-head">
-          <p className="party-title">{t.result.partyTitle}</p>
-          <p className="party-sub">{t.result.partySub}</p>
+        <div className="card-head">
+          {starType && (
+            <div className="card-head-icon" aria-hidden="true">
+              <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={52} />
+            </div>
+          )}
+          <div>
+            <p className="card-title">{t.result.partyTitle(partyPlanets.length)}</p>
+            <p className="card-sub">{t.result.partySub}</p>
+          </div>
         </div>
         <ul className="party-list">
-          {partyPlanets.map((p) => {
+          {visibleParty.map((p) => {
             const info = getPlanet(p.key)
             const si = signIndex(p.lon)
             const color = MASCOT_COLOR[p.key]
@@ -221,86 +168,22 @@ export default function Result({ data, onRetry, onHome }: Props) {
             )
           })}
         </ul>
+        {partyPlanets.length > partyShown && (
+          <button
+            className={`party-toggle${showAllParty ? ' open' : ''}`}
+            onClick={() => setShowAllParty((v) => !v)}
+          >
+            {showAllParty ? t.result.partyLess : t.result.partyMore(partyPlanets.length - partyShown)}
+          </button>
+        )}
         <p className="party-foot">{t.result.partyFoot}</p>
       </section>
 
-      <section className="planet-card fortune-card">
-        <header className="planet-head">
-          <div className="planet-symbol" aria-hidden="true">
-            <SectionIcon name="fortune" />
-          </div>
-          <div>
-            <p className="planet-title">
-              {t.result.fortuneTitle(periodLabel(data.period))}
-              <span className="planet-deg">{fortune.skyNote}</span>
-            </p>
-            <p className="planet-sub">{t.result.fortuneSub(data.name ?? '')}</p>
-          </div>
-        </header>
-        <p className="fortune-tone">
-          <span className="tone-badge">{fortune.toneLabel}</span>
-          {fortune.toneText}
-        </p>
-        <ul className="fortune-list">
-          {fortune.items.map((item) => (
-            <li key={item.title} className={`fortune-item ${item.quality}`}>
-              <p className="fortune-item-title">
-                <span className="fortune-symbol" aria-hidden="true">
-                  {item.symbol}
-                </span>
-                {item.title}
-              </p>
-              <p className="fortune-item-text">{item.text}</p>
-            </li>
-          ))}
-        </ul>
-        <p className="sign-foot">{t.result.fortuneFoot(periodNoun(data.period))}</p>
-      </section>
+      <StarReading chart={data} />
 
-      <section className="planet-card ai-card">
-        <header className="planet-head">
-          <div className="planet-symbol" aria-hidden="true">
-            <SectionIcon name="reading" />
-          </div>
-          <div>
-            <p className="planet-title">{t.result.aiTitle}</p>
-            <p className="planet-sub">{t.result.aiSub(data.name ?? '')}</p>
-          </div>
-        </header>
+      <AiChat context={chatContext} storageKey={chatStorageKey(data)} chart={data} />
 
-        {aiState.status === 'idle' && (
-          <>
-            <button className="cta" onClick={handleAiReading}>
-              {t.result.aiCta}
-            </button>
-            <p className="ai-note">{t.result.aiNote}</p>
-          </>
-        )}
-
-        {aiState.status === 'loading' && (
-          <p className="ai-loading">
-            <span className="ai-spinner" aria-hidden="true">
-              ✦
-            </span>
-            {t.result.aiLoading}
-          </p>
-        )}
-
-        {aiState.status === 'done' && <AiReading text={aiState.text} />}
-
-        {aiState.status === 'error' && (
-          <>
-            <p className="form-error">{aiState.message}</p>
-            <button className="ghost" onClick={handleAiReading}>
-              {t.common.tryAgain}
-            </button>
-          </>
-        )}
-      </section>
-
-      <AiChat context={chatContext} storageKey={chatStorageKey} />
-
-      <Feedback page="result" starType={starSlug} />
+      <Feedback page="result" starType={starSlug} chart={data} />
 
       {ascLon === undefined && (
         <div className="upsell">
@@ -309,11 +192,11 @@ export default function Result({ data, onRetry, onHome }: Props) {
       )}
 
       <div className="result-actions">
-        <button className="cta" onClick={onRetry}>
-          {t.result.retry}
+        <button className="ghost" onClick={onPair}>
+          {t.companion.toPair}
         </button>
         <button className="ghost" onClick={onHome}>
-          {t.result.home}
+          {t.companion.toMenu}
         </button>
       </div>
     </div>

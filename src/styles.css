@@ -453,7 +453,7 @@ body {
 }
 
 .home-note {
-  text-align: center;
+  text-align: left;
   font-size: 13px;
   color: var(--ink-sub);
   margin-top: 24px;
@@ -531,6 +531,563 @@ body {
   font-size: 13.5px;
   line-height: 1.85;
   color: var(--ink-sub);
+}
+
+/* ---------- 星の相棒(迎え入れCTA / 相棒ホーム) ---------- */
+.adopt-card {
+  margin-top: 28px;
+  padding: 20px 18px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--pink-faint), var(--gold-faint));
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+}
+
+.adopt-lead {
+  margin: 0 0 8px;
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--violet-strong);
+}
+
+.adopt-promise {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--ink-sub);
+}
+
+/* ---------- ほしキャラが読む運勢(共有・期間タブ) ---------- */
+.reading-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 20px 20px 18px;
+  margin: 0 0 16px;
+  text-align: left;
+}
+
+.reading-voice {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--ink-sub);
+}
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+/* タイトルが折り返してもマスコットと頭が揃うように */
+.card-head-icon {
+  margin-top: -2px;
+}
+
+.card-head-icon {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.card-title {
+  margin: 0 0 3px;
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: linear-gradient(120deg, var(--pink) 0%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-sub {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-sub);
+}
+
+.reading-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 14px;
+  background: var(--pink-faint);
+  border-radius: 14px;
+  padding: 5px;
+}
+
+.reading-tab {
+  flex: 1 1 28%;
+  min-width: 0;
+  border: none;
+  background: none;
+  border-radius: 10px;
+  padding: 8px 4px;
+  font-family: var(--font-pop);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-sub);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.reading-tab.active {
+  background: linear-gradient(135deg, var(--pink) 0%, var(--violet) 100%);
+  color: #ffffff;
+}
+
+.reading-sky {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pink-strong);
+}
+
+.home-greet {
+  text-align: center;
+  margin: 0 0 6px;
+  font-family: var(--font-head);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--violet);
+}
+
+.mode-companion {
+  border-color: var(--violet-soft);
+  background: linear-gradient(135deg, #efe7fc 0%, #fde5ee 100%);
+}
+
+.mode-companion .mode-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--violet-strong);
+}
+
+.mode-companion-icon {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.change-info-link {
+  align-self: center;
+  margin-top: -4px;
+  border: none;
+  background: none;
+  font-family: var(--font-pop);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-sub);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.change-info-link:hover {
+  color: var(--violet);
+}
+
+.companion-screen {
+  text-align: center;
+  padding-top: 12px;
+}
+
+.companion-topbar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+}
+
+.companion-menu {
+  border: 1.5px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  color: var(--violet);
+  font-family: var(--font-pop);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.companion-menu::before {
+  content: '≡ ';
+}
+
+.companion-menu:hover {
+  border-color: var(--pink-soft);
+  background: #ffffff;
+}
+
+.companion-mascot {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.companion-greeting {
+  font-size: 14px;
+  color: var(--ink-sub);
+  margin: 0;
+}
+
+.companion-name {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--pink-strong);
+  margin: 4px 0 16px;
+}
+
+.companion-placeholder {
+  color: var(--ink-sub);
+  font-size: 12.5px;
+  padding: 16px;
+  border: 1px dashed var(--card-border);
+  border-radius: 16px;
+  margin: 8px 0 24px;
+}
+
+.today-card {
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 20px 20px 18px;
+}
+
+.today-title {
+  margin: 0 0 10px;
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--violet-strong);
+}
+
+.today-star {
+  color: var(--gold);
+  margin-right: 6px;
+}
+
+.today-intro {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  color: var(--ink-sub);
+}
+
+.today-sky {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pink-strong);
+}
+
+.today-tone {
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: var(--ink);
+}
+
+.today-chips {
+  display: flex;
+  gap: 10px;
+}
+
+.today-chip {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--pink-faint);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+.chip-label {
+  font-size: 12px;
+  color: var(--ink-sub);
+}
+
+.chip-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.chip-colorname {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-pop);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ラッキー/注意/注目 バッジ(アイコン＋文字) */
+.fortune-item-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.fortune-item-head .fortune-item-title {
+  margin: 0;
+}
+
+.qual-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 9px 2px 6px;
+  border-radius: 999px;
+}
+
+.qual-badge svg {
+  display: block;
+}
+
+.qual-good {
+  background: rgba(62, 155, 122, 0.16);
+  color: #2f7a60;
+}
+
+.qual-hard {
+  background: var(--gold-faint);
+  color: var(--gold);
+}
+
+.qual-conj {
+  background: rgba(138, 99, 221, 0.14);
+  color: var(--violet-strong);
+}
+
+.party-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin: 12px 0 2px;
+  padding: 13px;
+  border: 1.5px solid var(--pink-soft);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--pink-faint) 0%, var(--gold-faint) 100%);
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--pink-strong);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.party-toggle::after {
+  content: '▾';
+  font-size: 12px;
+}
+
+.party-toggle.open::after {
+  content: '▴';
+}
+
+.party-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--pink);
+}
+
+.chip-keyword {
+  font-family: var(--font-pop);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--violet-strong);
+}
+
+/* ---------- 夜の振り返りタップ ---------- */
+.tap-card {
+  margin: 0 0 16px;
+  padding: 18px 18px 20px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.tap-question {
+  margin: 0 0 14px;
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.tap-moods {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tap-btn {
+  padding: 12px 14px;
+  border: 1.5px solid var(--card-border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-pop);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tap-btn:hover {
+  border-color: var(--pink-soft);
+  background: #ffffff;
+}
+
+.tap-domains {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tap-chip {
+  padding: 8px 16px;
+  border: 1.5px solid var(--card-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-pop);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--violet-strong);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tap-chip:hover {
+  border-color: var(--violet-soft);
+  background: #ffffff;
+}
+
+.tap-skip {
+  color: var(--ink-sub);
+}
+
+.tap-reaction {
+  margin: 0;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--ink);
+}
+
+.companion-chat-open {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1.5px solid var(--card-border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-pop);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--violet-strong);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.companion-chat-open:hover {
+  border-color: var(--violet-soft);
+  background: #ffffff;
+}
+
+/* ---------- 週末まとめ＋翌週フォーキャスト ---------- */
+.weekend-card {
+  margin: 0 0 16px;
+  padding: 18px 20px 20px;
+  background: linear-gradient(135deg, var(--violet-soft) 0%, var(--pink-faint) 100%);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  text-align: left;
+}
+
+.weekend-title {
+  margin: 0 0 8px;
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--violet-strong);
+}
+
+.weekend-recap {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--ink);
+}
+
+.forecast-title {
+  margin: 0 0 6px;
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pink-strong);
+}
+
+.forecast-tone {
+  margin: 0 0 12px;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--ink);
+}
+
+.forecast-line {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.forecast-label {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.forecast-good .forecast-label {
+  background: rgba(62, 155, 122, 0.16);
+  color: #2f7a60;
+}
+
+.forecast-hard .forecast-label {
+  background: var(--gold-faint);
+  color: var(--gold);
 }
 
 /* ---------- フォーム ---------- */
@@ -724,7 +1281,7 @@ body {
   font-size: 12px;
   letter-spacing: 1em;
   text-indent: 1em;
-  margin: 14px 0 24px;
+  margin: 14px 0 16px;
   opacity: 0.7;
 }
 
@@ -763,9 +1320,9 @@ body {
 }
 
 .planet-title {
-  font-family: var(--font-pop);
+  font-family: var(--font-head);
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 800;
   letter-spacing: 0.04em;
   margin: 0;
   background: linear-gradient(120deg, var(--pink) 0%, var(--violet) 100%);
@@ -1197,9 +1754,9 @@ body {
 }
 
 .party-title {
-  font-family: var(--font-pop);
-  font-size: 19px;
-  font-weight: 900;
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 800;
   letter-spacing: 0.04em;
   margin: 0 0 4px;
   background: linear-gradient(120deg, var(--pink) 0%, var(--violet) 100%);
@@ -1313,7 +1870,7 @@ body {
 .party-foot {
   font-size: 12px;
   color: var(--ink-sub);
-  text-align: center;
+  text-align: left;
   margin: 14px 0 0;
 }
 
@@ -1683,6 +2240,7 @@ body {
     radial-gradient(120% 100% at 50% 0%, rgba(138, 99, 221, 0.08) 0%, rgba(234, 101, 150, 0.05) 60%),
     var(--card);
   border: 1.5px solid #e0d3f6;
+  text-align: left;
 }
 
 .chat-intro {
@@ -1908,7 +2466,7 @@ body {
   padding: 16px 18px;
   font-size: 14px;
   color: var(--ink-sub);
-  margin: 6px 0 4px;
+  margin: 0 0 16px;
 }
 
 .upsell strong {
@@ -1924,7 +2482,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 26px;
+  margin-top: 0;
 }
 
 /* ---------- ほしキャラとは？(About) ---------- */
