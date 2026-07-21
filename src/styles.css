@@ -604,23 +604,26 @@ body {
 
 .reading-tabs {
   display: flex;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 5px;
   margin-bottom: 14px;
   background: var(--pink-faint);
-  border-radius: 999px;
-  padding: 4px;
+  border-radius: 14px;
+  padding: 5px;
 }
 
 .reading-tab {
-  flex: 1;
+  flex: 1 1 28%;
+  min-width: 0;
   border: none;
   background: none;
-  border-radius: 999px;
-  padding: 7px 4px;
+  border-radius: 10px;
+  padding: 8px 4px;
   font-family: var(--font-pop);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--ink-sub);
+  white-space: nowrap;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
@@ -739,6 +742,80 @@ body {
   height: 20px;
   border-radius: 50%;
   border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.chip-colorname {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-pop);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ラッキー/注意/注目 バッジ(アイコン＋文字) */
+.fortune-item-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.fortune-item-head .fortune-item-title {
+  margin: 0;
+}
+
+.qual-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 9px 2px 6px;
+  border-radius: 999px;
+}
+
+.qual-badge svg {
+  display: block;
+}
+
+.qual-good {
+  background: rgba(62, 155, 122, 0.16);
+  color: #2f7a60;
+}
+
+.qual-hard {
+  background: var(--gold-faint);
+  color: var(--gold);
+}
+
+.qual-conj {
+  background: rgba(138, 99, 221, 0.14);
+  color: var(--violet-strong);
+}
+
+.party-toggle {
+  display: block;
+  width: 100%;
+  margin: 10px 0 2px;
+  padding: 10px;
+  border: 1.5px dashed var(--card-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-pop);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--violet-strong);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.party-toggle:hover {
+  border-color: var(--violet-soft);
+  background: #ffffff;
 }
 
 .chip-keyword {

@@ -1,4 +1,6 @@
 import type { ChartData } from './types'
+import { getLang } from './i18n'
+import type { Lang } from './i18n'
 
 /**
  * 「星の相棒」データ層(MVP v0.1)。
@@ -102,12 +104,27 @@ export function markForecastSeen(state: CompanionState, now: Date = new Date()):
   return next
 }
 
-/** 日付から決定論的に「今日の色」を選ぶ(毎日変わる小さな報酬。テンプレ＝AIなし) */
+/** 日付から決定論的に「今日のラッキーカラー」を選ぶ(毎日変わる小さな報酬。テンプレ＝AIなし) */
 const DAY_COLORS = ['#EA6596', '#8A63DD', '#E8A93A', '#2FA2B0', '#C93B72', '#6A45C4', '#3E9B7A', '#D98324']
-export function todayColor(key: string = todayKey()): string {
+const COLOR_NAMES: Record<Lang, string[]> = {
+  ja: ['ローズピンク', 'ラベンダー', 'ゴールド', 'ターコイズ', 'マゼンタ', 'バイオレット', 'エメラルド', 'オレンジ'],
+  en: ['rose pink', 'lavender', 'gold', 'turquoise', 'magenta', 'violet', 'emerald', 'orange'],
+  es: ['rosa', 'lavanda', 'dorado', 'turquesa', 'magenta', 'violeta', 'esmeralda', 'naranja'],
+  fr: ['rose', 'lavande', 'doré', 'turquoise', 'magenta', 'violet', 'émeraude', 'orange'],
+  it: ['rosa', 'lavanda', 'oro', 'turchese', 'magenta', 'viola', 'smeraldo', 'arancione'],
+  pt: ['rosa', 'lavanda', 'dourado', 'turquesa', 'magenta', 'violeta', 'esmeralda', 'laranja'],
+  ko: ['로즈핑크', '라벤더', '골드', '터콰이즈', '마젠타', '바이올렛', '에메랄드', '오렌지'],
+}
+function colorIndex(key: string): number {
   let h = 0
   for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0
-  return DAY_COLORS[h % DAY_COLORS.length]
+  return h % DAY_COLORS.length
+}
+export function todayColor(key: string = todayKey()): string {
+  return DAY_COLORS[colorIndex(key)]
+}
+export function todayColorName(key: string = todayKey(), lang: Lang = getLang()): string {
+  return (COLOR_NAMES[lang] ?? COLOR_NAMES.ja)[colorIndex(key)]
 }
 
 export interface WeekAggregate {

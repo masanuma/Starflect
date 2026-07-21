@@ -4,7 +4,6 @@ import { useUI } from '../lib/ui'
 import { sendFeedback } from '../lib/feedback'
 import type { FeedbackRating } from '../lib/feedback'
 import { track } from '../lib/analytics'
-import SectionIcon from './SectionIcon'
 
 /** 結果画面のフィードバック欄(評価＋任意コメント → スプレッドシート & GA4) */
 export default function Feedback({ page, starType }: { page: string; starType?: string }) {
@@ -38,9 +37,6 @@ export default function Feedback({ page, starType }: { page: string; starType?: 
   return (
     <section className="planet-card feedback-card">
       <header className="planet-head">
-        <div className="planet-symbol" aria-hidden="true">
-          <SectionIcon name="feedback" />
-        </div>
         <div>
           <p className="planet-title">{t.feedback.title}</p>
           <p className="planet-sub">{t.feedback.sub}</p>

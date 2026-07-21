@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type { ChartData, PlanetKey } from '../lib/types'
 import { signIndex, degInSign } from '../lib/astro'
 import { signName, signSymbol } from '../lib/signs'
@@ -39,6 +39,11 @@ export default function Result({ data, onHome, onPair }: Props) {
 
   // ほしキャラを構成するパーティ = 計算した全天体(太陽・月・上昇星座を先頭に)
   const partyPlanets = data.planets
+  // 上昇星座までを表示し、残りは畳む(長すぎるため)。時刻なしで asc が無いときは 太陽・月 まで
+  const hasAsc = partyPlanets.some((p) => p.key === 'asc')
+  const partyShown = hasAsc ? 3 : 2
+  const [showAllParty, setShowAllParty] = useState(false)
+  const visibleParty = showAllParty ? partyPlanets : partyPlanets.slice(0, partyShown)
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
 
   const starSlug = starType
@@ -112,11 +117,11 @@ export default function Result({ data, onHome, onPair }: Props) {
 
       <section className="party-card">
         <div className="party-head">
-          <p className="party-title">{t.result.partyTitle}</p>
+          <p className="party-title">{t.result.partyTitle(partyPlanets.length)}</p>
           <p className="party-sub">{t.result.partySub}</p>
         </div>
         <ul className="party-list">
-          {partyPlanets.map((p) => {
+          {visibleParty.map((p) => {
             const info = getPlanet(p.key)
             const si = signIndex(p.lon)
             const color = MASCOT_COLOR[p.key]
@@ -156,6 +161,11 @@ export default function Result({ data, onHome, onPair }: Props) {
             )
           })}
         </ul>
+        {partyPlanets.length > partyShown && (
+          <button className="party-toggle" onClick={() => setShowAllParty((v) => !v)}>
+            {showAllParty ? t.result.partyLess : t.result.partyMore}
+          </button>
+        )}
         <p className="party-foot">{t.result.partyFoot}</p>
       </section>
 
