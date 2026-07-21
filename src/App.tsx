@@ -12,7 +12,7 @@ import ConsentBanner from './components/ConsentBanner'
 import type { ChartData } from './lib/types'
 import type { PairData } from './lib/compat'
 import { useUI } from './lib/ui'
-import { hasCompanion, loadCompanion, createCompanion } from './lib/companion'
+import { hasCompanion, loadCompanion } from './lib/companion'
 import type { CompanionState } from './lib/companion'
 import { initAnalytics, getConsent, setConsent } from './lib/analytics'
 import type { Consent } from './lib/analytics'
@@ -75,22 +75,10 @@ export default function App() {
           />
         )}
         {screen.page === 'result' && (
-          <Result
-            data={screen.data}
-            onRetry={() => setScreen({ page: 'form' })}
-            onHome={() => setScreen({ page: 'home' })}
-            onAdopt={(starType) => {
-              const state = createCompanion((screen as { data: ChartData }).data, starType)
-              setScreen({ page: 'companion', state })
-            }}
-          />
+          <Result data={screen.data} onHome={() => setScreen({ page: 'home' })} />
         )}
         {screen.page === 'companion' && (
-          <Companion
-            state={screen.state}
-            onRetry={() => setScreen({ page: 'form' })}
-            onHome={() => setScreen({ page: 'home' })}
-          />
+          <Companion state={screen.state} onHome={() => setScreen({ page: 'home' })} />
         )}
         {screen.page === 'pairForm' && (
           <PairForm

@@ -1,35 +1,27 @@
 import { useEffect, useState } from 'react'
 import type { CompanionState, Mood, Domain } from '../lib/companion'
-import {
-  touchVisit,
-  daysSinceLastVisit,
-  markForecastSeen,
-  todayColor,
-  todayKey,
-  recordMood,
-  weekAggregate,
-} from '../lib/companion'
+import { touchVisit, daysSinceLastVisit, markForecastSeen, todayKey, recordMood, weekAggregate } from '../lib/companion'
 import { starTypeOf } from '../lib/startypes'
 import { readFortune } from '../lib/fortune'
 import type { PlanetKey } from '../lib/types'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
+import StarReading from './StarReading'
 import { useUI } from '../lib/ui'
 import { track } from '../lib/analytics'
 
 interface Props {
   state: CompanionState
-  onRetry: () => void
   onHome: () => void
 }
 
-/**
- * 星の相棒ホーム(MVP v0.1)。
- * ステップ2: 挨拶(罰なし・経過日数で出し分け)＋「今日の星」カード(readFortune の実データにテンプレ相棒口調)。
- * AIなし(A1)。TODO(step3〜): 夜の振り返りタップ・週末まとめ。
- */
 type TapPhase = 'mood' | 'domain' | 'done'
 
-export default function Companion({ state, onRetry, onHome }: Props) {
+/**
+ * 星の相棒ホーム(MVP v0.1)。2回目以降の起点。
+ * 挨拶(罰なし) + ほしキャラが読む運勢(StarReading・期間切替) + 夜の振り返りタップ + 週末まとめ。
+ * AIなし(A1/B1)。
+ */
+export default function Companion({ state, onHome }: Props) {
   const t = useUI()
   const [daysSince] = useState(() => daysSinceLastVisit(state))
 
@@ -90,11 +82,6 @@ export default function Companion({ state, onRetry, onHome }: Props) {
   const moonLon = lonOf('moon')
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
 
-  // 「今日の星」は実データ(トランジット)から。相棒画面では常に today を読む。
-  // readFortune は getLang() を都度参照するので、言語切替で再ローカライズさせるため毎レンダーで計算(Result と同じ方針)。
-  const fortune = readFortune(state.chart.planets, 'today')
-  const color = todayColor()
-
   const greeting =
     daysSince === 0 ? t.companion.greetToday : daysSince === 1 ? t.companion.greetDay : t.companion.greetBack
 
@@ -108,27 +95,7 @@ export default function Companion({ state, onRetry, onHome }: Props) {
       <p className="companion-greeting">{greeting}</p>
       <h2 className="companion-name">{starType?.type.name ?? ''}</h2>
 
-      <section className="today-card">
-        <p className="today-title">
-          <span className="today-star" aria-hidden="true">
-            ✦
-          </span>
-          {t.companion.cardTitle}
-        </p>
-        <p className="today-intro">{t.companion.cardIntro}</p>
-        <p className="today-sky">{fortune.skyNote}</p>
-        <p className="today-tone">{fortune.toneText}</p>
-        <div className="today-chips">
-          <div className="today-chip">
-            <span className="chip-label">{t.companion.colorLabel}</span>
-            <span className="chip-color" style={{ background: color }} aria-hidden="true" />
-          </div>
-          <div className="today-chip">
-            <span className="chip-label">{t.companion.keywordLabel}</span>
-            <span className="chip-keyword">{fortune.toneLabel}</span>
-          </div>
-        </div>
-      </section>
+      <StarReading chart={state.chart} starName={starType?.type.name ?? ''} />
 
       <section className="tap-card">
         {phase === 'mood' && (
@@ -199,11 +166,8 @@ export default function Companion({ state, onRetry, onHome }: Props) {
       )}
 
       <div className="result-actions">
-        <button className="ghost" onClick={onRetry}>
-          {t.result.retry}
-        </button>
         <button className="ghost" onClick={onHome}>
-          {t.result.home}
+          {t.companion.otherPerson}
         </button>
       </div>
     </div>

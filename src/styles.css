@@ -544,11 +544,71 @@ body {
 }
 
 .adopt-lead {
-  margin: 0 0 12px;
+  margin: 0 0 8px;
   font-family: var(--font-head);
   font-size: 15px;
   font-weight: 700;
   color: var(--violet-strong);
+}
+
+.adopt-promise {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--ink-sub);
+}
+
+/* ---------- ほしキャラが読む運勢(共有・期間タブ) ---------- */
+.reading-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 20px 20px 18px;
+  text-align: left;
+}
+
+.reading-title {
+  margin: 0 0 12px;
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--violet-strong);
+}
+
+.reading-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  background: var(--pink-faint);
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.reading-tab {
+  flex: 1;
+  border: none;
+  background: none;
+  border-radius: 999px;
+  padding: 7px 4px;
+  font-family: var(--font-pop);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-sub);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.reading-tab.active {
+  background: linear-gradient(135deg, var(--pink) 0%, var(--violet) 100%);
+  color: #ffffff;
+}
+
+.reading-sky {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pink-strong);
 }
 
 .companion-screen {

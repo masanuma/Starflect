@@ -206,6 +206,9 @@ export interface UIStrings {
     forecastTitle: string
     tailwindLabel: string
     cautionLabel: string
+    readsTitle: (name: string, period: string) => string
+    otherPerson: string
+    seeYouTomorrow: string
   }
 }
 
@@ -422,6 +425,9 @@ const UI: Record<Lang, UIStrings> = {
       forecastTitle: '来週の星',
       tailwindLabel: '追い風',
       cautionLabel: '注意',
+      readsTitle: (name, period) => `${name}が読む、${period}`,
+      otherPerson: '別の人を占う',
+      seeYouTomorrow: 'また明日も、ここで星を読んでるね。',
     },
   },
   en: {
@@ -636,6 +642,9 @@ const UI: Record<Lang, UIStrings> = {
       forecastTitle: 'Next week’s stars',
       tailwindLabel: 'Tailwind',
       cautionLabel: 'Heads-up',
+      readsTitle: (name, period) => `${period}, read by ${name}`,
+      otherPerson: 'Read someone else',
+      seeYouTomorrow: 'I’ll be here reading the stars tomorrow too.',
     },
   },
   es: {
@@ -850,6 +859,9 @@ const UI: Record<Lang, UIStrings> = {
       forecastTitle: 'Las estrellas de la próxima semana',
       tailwindLabel: 'Viento a favor',
       cautionLabel: 'Atención',
+      readsTitle: (name, period) => `${period}, leído por ${name}`,
+      otherPerson: 'Consultar a otra persona',
+      seeYouTomorrow: 'Mañana también estaré aquí leyendo las estrellas.',
     },
   },
   fr: {
@@ -1064,6 +1076,9 @@ const UI: Record<Lang, UIStrings> = {
       forecastTitle: 'Les étoiles de la semaine prochaine',
       tailwindLabel: 'Vent porteur',
       cautionLabel: 'Vigilance',
+      readsTitle: (name, period) => `${period}, lu par ${name}`,
+      otherPerson: 'Consulter une autre personne',
+      seeYouTomorrow: 'Je serai là demain aussi, à lire les étoiles.',
     },
   },
   it: {
@@ -1278,6 +1293,9 @@ const UI: Record<Lang, UIStrings> = {
       forecastTitle: 'Le stelle della prossima settimana',
       tailwindLabel: 'Vento a favore',
       cautionLabel: 'Attenzione',
+      readsTitle: (name, period) => `${period}, letto da ${name}`,
+      otherPerson: 'Consultare un’altra persona',
+      seeYouTomorrow: 'Domani sarò qui a leggere le stelle, come sempre.',
     },
   },
   pt: {
@@ -1492,6 +1510,9 @@ const UI: Record<Lang, UIStrings> = {
       forecastTitle: 'As estrelas da próxima semana',
       tailwindLabel: 'Vento a favor',
       cautionLabel: 'Atenção',
+      readsTitle: (name, period) => `${period}, lido por ${name}`,
+      otherPerson: 'Consultar outra pessoa',
+      seeYouTomorrow: 'Amanhã também estarei aqui lendo as estrelas.',
     },
   },
   ko: {
@@ -1706,6 +1727,9 @@ const UI: Record<Lang, UIStrings> = {
       forecastTitle: '다음 주의 별',
       tailwindLabel: '순풍',
       cautionLabel: '주의',
+      readsTitle: (name, period) => `${name}의 ${period}`,
+      otherPerson: '다른 사람 점치기',
+      seeYouTomorrow: '내일도 여기서 별을 읽고 있을게.',
     },
   },
 }

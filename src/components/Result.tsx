@@ -3,14 +3,16 @@ import type { ChartData, PlanetKey } from '../lib/types'
 import { signIndex, degInSign } from '../lib/astro'
 import { signName, signSymbol } from '../lib/signs'
 import { synthesize } from '../lib/synthesis'
-import { readFortune, periodNoun, periodLabel } from '../lib/fortune'
+import { readFortune, periodNoun } from '../lib/fortune'
 import { fetchAiReading } from '../lib/aiReading'
 import { getPlanet, signMannerOf } from '../lib/planets'
 import { findNatalAspects } from '../lib/natalAspects'
 import { starTypeOf, elementPhrase } from '../lib/startypes'
 import AiChat from './AiChat'
 import AiReading from './AiReading'
+import StarReading from './StarReading'
 import Feedback from './Feedback'
+import { createCompanion } from '../lib/companion'
 import type { ChatChartContext } from '../lib/aiChat'
 import PlanetMascot, { MASCOT_COLOR } from './PlanetMascot'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
@@ -33,12 +35,10 @@ const ELEMENT_SLUG: Record<string, string> = { 火: 'fire', 地: 'earth', 風: '
 
 interface Props {
   data: ChartData
-  onRetry: () => void
   onHome: () => void
-  onAdopt: (starType: string) => void
 }
 
-export default function Result({ data, onRetry, onHome, onAdopt }: Props) {
+export default function Result({ data, onHome }: Props) {
   const { lang } = useLang()
   const t = useUI()
   const retroSuffix = RETRO_SUFFIX[lang] ?? RETRO_SUFFIX.ja
@@ -73,6 +73,8 @@ export default function Result({ data, onRetry, onHome, onAdopt }: Props) {
       has_time: ascLon !== undefined,
       star_type: starSlug,
     })
+    // 診断した時点で、このほしキャラを相棒として自動保存(次回から相棒ホームに戻る=毎日そばに)
+    createCompanion(data, starSlug ?? '')
     // 結果表示ごとに1回だけ
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -225,38 +227,7 @@ export default function Result({ data, onRetry, onHome, onAdopt }: Props) {
         <p className="party-foot">{t.result.partyFoot}</p>
       </section>
 
-      <section className="planet-card fortune-card">
-        <header className="planet-head">
-          <div className="planet-symbol" aria-hidden="true">
-            <SectionIcon name="fortune" />
-          </div>
-          <div>
-            <p className="planet-title">
-              {t.result.fortuneTitle(periodLabel(data.period))}
-              <span className="planet-deg">{fortune.skyNote}</span>
-            </p>
-            <p className="planet-sub">{t.result.fortuneSub(data.name ?? '')}</p>
-          </div>
-        </header>
-        <p className="fortune-tone">
-          <span className="tone-badge">{fortune.toneLabel}</span>
-          {fortune.toneText}
-        </p>
-        <ul className="fortune-list">
-          {fortune.items.map((item) => (
-            <li key={item.title} className={`fortune-item ${item.quality}`}>
-              <p className="fortune-item-title">
-                <span className="fortune-symbol" aria-hidden="true">
-                  {item.symbol}
-                </span>
-                {item.title}
-              </p>
-              <p className="fortune-item-text">{item.text}</p>
-            </li>
-          ))}
-        </ul>
-        <p className="sign-foot">{t.result.fortuneFoot(periodNoun(data.period))}</p>
-      </section>
+      <StarReading chart={data} starName={starType?.type.name ?? ''} />
 
       <section className="planet-card ai-card">
         <header className="planet-head">
@@ -311,23 +282,12 @@ export default function Result({ data, onRetry, onHome, onAdopt }: Props) {
 
       <div className="adopt-card">
         <p className="adopt-lead">{t.result.adoptLead}</p>
-        <button
-          className="cta"
-          onClick={() => {
-            track('companion_adopt', { star_type: starSlug })
-            onAdopt(starSlug ?? '')
-          }}
-        >
-          {t.result.adoptCta}
-        </button>
+        <p className="adopt-promise">{t.companion.seeYouTomorrow}</p>
       </div>
 
       <div className="result-actions">
-        <button className="ghost" onClick={onRetry}>
-          {t.result.retry}
-        </button>
         <button className="ghost" onClick={onHome}>
-          {t.result.home}
+          {t.companion.otherPerson}
         </button>
       </div>
     </div>
