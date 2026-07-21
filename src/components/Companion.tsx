@@ -32,7 +32,6 @@ export default function Companion({ state, onHome, onPair }: Props) {
   const todayEntry = state.daily[todayKey()]
   const [phase, setPhase] = useState<TapPhase>(todayEntry?.mood ? 'done' : 'mood')
   const [mood, setMood] = useState<Mood | undefined>(todayEntry?.mood)
-  const [chatOpen, setChatOpen] = useState(false)
 
   function pickMood(m: Mood) {
     setMood(m)
@@ -106,6 +105,8 @@ export default function Companion({ state, onHome, onPair }: Props) {
 
       <StarReading chart={state.chart} />
 
+      <AiChat context={buildChatContext(state.chart)} storageKey={chatStorageKey(state.chart)} />
+
       <section className="tap-card">
         {phase === 'mood' && (
           <>
@@ -149,20 +150,6 @@ export default function Companion({ state, onHome, onPair }: Props) {
 
         {phase === 'done' && <p className="tap-reaction">{reaction}</p>}
       </section>
-
-      {chatOpen ? (
-        <AiChat context={buildChatContext(state.chart)} storageKey={chatStorageKey(state.chart)} />
-      ) : (
-        <button
-          className="companion-chat-open"
-          onClick={() => {
-            track('companion_chat_open', { star_type: state.starType })
-            setChatOpen(true)
-          }}
-        >
-          {t.companion.toChat}
-        </button>
-      )}
 
       {isWeekend && (
         <section className="weekend-card">
