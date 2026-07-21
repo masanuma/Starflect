@@ -35,9 +35,10 @@ interface Props {
   data: ChartData
   onRetry: () => void
   onHome: () => void
+  onAdopt: (starType: string) => void
 }
 
-export default function Result({ data, onRetry, onHome }: Props) {
+export default function Result({ data, onRetry, onHome, onAdopt }: Props) {
   const { lang } = useLang()
   const t = useUI()
   const retroSuffix = RETRO_SUFFIX[lang] ?? RETRO_SUFFIX.ja
@@ -308,8 +309,21 @@ export default function Result({ data, onRetry, onHome }: Props) {
         </div>
       )}
 
+      <div className="adopt-card">
+        <p className="adopt-lead">{t.result.adoptLead}</p>
+        <button
+          className="cta"
+          onClick={() => {
+            track('companion_adopt', { star_type: starSlug })
+            onAdopt(starSlug ?? '')
+          }}
+        >
+          {t.result.adoptCta}
+        </button>
+      </div>
+
       <div className="result-actions">
-        <button className="cta" onClick={onRetry}>
+        <button className="ghost" onClick={onRetry}>
           {t.result.retry}
         </button>
         <button className="ghost" onClick={onHome}>

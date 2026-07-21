@@ -533,6 +533,58 @@ body {
   color: var(--ink-sub);
 }
 
+/* ---------- 星の相棒(迎え入れCTA / 相棒ホーム) ---------- */
+.adopt-card {
+  margin-top: 28px;
+  padding: 20px 18px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--pink-faint), var(--gold-faint));
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+}
+
+.adopt-lead {
+  margin: 0 0 12px;
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--violet-strong);
+}
+
+.companion-screen {
+  text-align: center;
+  padding-top: 12px;
+}
+
+.companion-mascot {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.companion-greeting {
+  font-size: 14px;
+  color: var(--ink-sub);
+  margin: 0;
+}
+
+.companion-name {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--pink-strong);
+  margin: 4px 0 20px;
+}
+
+.companion-placeholder {
+  color: var(--ink-sub);
+  font-size: 13px;
+  padding: 32px 16px;
+  border: 1px dashed var(--card-border);
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
 /* ---------- フォーム ---------- */
 .back-link {
   background: none;

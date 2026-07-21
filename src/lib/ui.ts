@@ -125,6 +125,8 @@ export interface UIStrings {
     aiNote: string
     aiLoading: string
     upsell: string
+    adoptLead: string
+    adoptCta: string
     retry: string
     home: string
   }
@@ -303,6 +305,8 @@ const UI: Record<Lang, UIStrings> = {
       aiNote: '上記の計算結果(星座・角度)がAIに送信されます。鑑定には10〜30秒ほどかかります。',
       aiLoading: '星を読んでいます……(10〜30秒ほどお待ちください)',
       upsell: '生まれた時刻が分かると、上昇星座と3天体の総合分析まで占えます(月星座の精度も上がります)。母子手帳をチェックしてみて。',
+      adoptLead: 'このほしキャラを、毎日そばに。',
+      adoptCta: 'この子と毎日、星を見る',
       retry: 'もう一度占う',
       home: 'モード選択に戻る',
     },
@@ -485,6 +489,8 @@ const UI: Record<Lang, UIStrings> = {
       aiNote: 'The results above (signs and angles) are sent to the AI. A reading takes about 10–30 seconds.',
       aiLoading: 'Reading the stars… (please wait about 10–30 seconds)',
       upsell: 'With your birth time, we can add the Rising sign and a full three-body synthesis (and the Moon sign gets more accurate). Check your birth record.',
+      adoptLead: 'Keep this Hoshi-Kyara close, every day.',
+      adoptCta: 'Watch the stars together, daily',
       retry: 'Read again',
       home: 'Back to modes',
     },
@@ -667,6 +673,8 @@ const UI: Record<Lang, UIStrings> = {
       aiNote: 'Los resultados de arriba (signos y ángulos) se envían a la IA. La lectura tarda unos 10–30 segundos.',
       aiLoading: 'Leyendo las estrellas… (espera unos 10–30 segundos)',
       upsell: 'Con tu hora de nacimiento podemos añadir el Ascendente y una síntesis completa de tres astros (y el signo lunar gana precisión). Revisa tu partida de nacimiento.',
+      adoptLead: 'Lleva a este Hoshi-Kyara contigo cada día.',
+      adoptCta: 'Mirar las estrellas juntos cada día',
       retry: 'Leer de nuevo',
       home: 'Volver a los modos',
     },
@@ -849,6 +857,8 @@ const UI: Record<Lang, UIStrings> = {
       aiNote: 'Les résultats ci-dessus (signes et angles) sont envoyés à l’IA. La lecture prend environ 10–30 secondes.',
       aiLoading: 'Lecture des étoiles… (patiente environ 10–30 secondes)',
       upsell: 'Avec ton heure de naissance, on peut ajouter l’Ascendant et une synthèse complète de trois astres (et le signe lunaire gagne en précision). Vérifie ton acte de naissance.',
+      adoptLead: 'Garde ce Hoshi-Kyara près de toi, chaque jour.',
+      adoptCta: 'Regarder les étoiles ensemble, chaque jour',
       retry: 'Lire à nouveau',
       home: 'Retour aux modes',
     },
@@ -1031,6 +1041,8 @@ const UI: Record<Lang, UIStrings> = {
       aiNote: 'I risultati qui sopra (segni e angoli) vengono inviati all’IA. La lettura richiede circa 10–30 secondi.',
       aiLoading: 'Sto leggendo le stelle… (attendi circa 10–30 secondi)',
       upsell: 'Con la tua ora di nascita possiamo aggiungere l’Ascendente e una sintesi completa di tre astri (e il segno lunare guadagna precisione). Controlla il tuo certificato di nascita.',
+      adoptLead: 'Tieni questo Hoshi-Kyara vicino, ogni giorno.',
+      adoptCta: 'Guardare le stelle insieme, ogni giorno',
       retry: 'Leggere di nuovo',
       home: 'Torna ai modi',
     },
@@ -1213,6 +1225,8 @@ const UI: Record<Lang, UIStrings> = {
       aiNote: 'Os resultados acima (signos e ângulos) são enviados à IA. A leitura leva cerca de 10–30 segundos.',
       aiLoading: 'Lendo as estrelas… (aguarde cerca de 10–30 segundos)',
       upsell: 'Com a sua hora de nascimento, podemos acrescentar o Ascendente e uma síntese completa de três astros (e o signo lunar fica mais preciso). Confira a sua certidão de nascimento.',
+      adoptLead: 'Leve este Hoshi-Kyara com você todos os dias.',
+      adoptCta: 'Ver as estrelas juntos, todo dia',
       retry: 'Ler de novo',
       home: 'Voltar aos modos',
     },
@@ -1395,6 +1409,8 @@ const UI: Record<Lang, UIStrings> = {
       aiNote: '위 계산 결과(별자리·각도)가 AI로 전송돼요. 감정에는 10~30초 정도 걸려요.',
       aiLoading: '별을 읽고 있어요…… (10~30초 정도 기다려 주세요)',
       upsell: '태어난 시각을 알면 상승 별자리와 3천체 종합 분석까지 볼 수 있어요(달 별자리 정확도도 올라가요). 출생 기록을 확인해 보세요.',
+      adoptLead: '이 호시캐릭터와 매일 함께.',
+      adoptCta: '이 아이와 매일 별 보기',
       retry: '다시 점치기',
       home: '모드 선택으로',
     },
