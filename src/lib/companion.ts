@@ -110,6 +110,45 @@ export function todayColor(key: string = todayKey()): string {
   return DAY_COLORS[h % DAY_COLORS.length]
 }
 
+export interface WeekAggregate {
+  /** タップした日数(直近7日) */
+  total: number
+  good: number
+  meh: number
+  bad: number
+  /** しんどかった日にいちばん多かった領域(あれば) */
+  topBadDomain?: Domain
+}
+
+/** 直近7日のタップを集計(週末まとめ・簡易“見抜き”用)。相関統計はv0.2、ここは単純カウント。 */
+export function weekAggregate(state: CompanionState, now: Date = new Date()): WeekAggregate {
+  let good = 0
+  let meh = 0
+  let bad = 0
+  let total = 0
+  const badDomains: Partial<Record<Domain, number>> = {}
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i)
+    const e = state.daily[todayKey(d)]
+    if (!e?.mood) continue
+    total++
+    if (e.mood === 'good') good++
+    else if (e.mood === 'bad') {
+      bad++
+      if (e.domain) badDomains[e.domain] = (badDomains[e.domain] ?? 0) + 1
+    } else meh++
+  }
+  let topBadDomain: Domain | undefined
+  let max = 0
+  for (const [k, v] of Object.entries(badDomains)) {
+    if ((v ?? 0) > max) {
+      max = v ?? 0
+      topBadDomain = k as Domain
+    }
+  }
+  return { total, good, meh, bad, topBadDomain }
+}
+
 /** その日の気分タップを記録 */
 export function recordMood(
   state: CompanionState,

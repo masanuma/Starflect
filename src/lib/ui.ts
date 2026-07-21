@@ -198,6 +198,14 @@ export interface UIStrings {
     reactGood: string
     reactMeh: string
     reactBad: string
+    weekendTitle: string
+    recapNone: string
+    recapGood: string
+    recapCalm: string
+    recapTough: (domain: string) => string
+    forecastTitle: string
+    tailwindLabel: string
+    cautionLabel: string
   }
 }
 
@@ -406,6 +414,14 @@ const UI: Record<Lang, UIStrings> = {
       reactGood: 'いい顔してる。その調子、ちゃんと見てるよ。',
       reactMeh: 'そういう日もいい。何もない日をちゃんと過ごせるのも、実は強さだよ。',
       reactBad: '教えてくれてありがとう。今日はもう、ゆっくり休んで。明日また星を読むね。',
+      weekendTitle: '今週のふりかえり',
+      recapNone: '今週は静かだったね。また気が向いたら教えて。',
+      recapGood: '今週はいい調子だったね。その流れ、来週も。',
+      recapCalm: '今週もおつかれさま。よく続けてるね。',
+      recapTough: (domain) => `今週は「${domain}」の日に、しんどい日が多かったみたい。無理しすぎてないかな。`,
+      forecastTitle: '来週の星',
+      tailwindLabel: '追い風',
+      cautionLabel: '注意',
     },
   },
   en: {
@@ -612,6 +628,14 @@ const UI: Record<Lang, UIStrings> = {
       reactGood: 'Love that. Keep it up—I see you.',
       reactMeh: 'Those days count too. Getting through a quiet day is its own kind of strength.',
       reactBad: 'Thanks for telling me. Rest easy tonight—I’ll read the stars again tomorrow.',
+      weekendTitle: 'This week, looking back',
+      recapNone: 'A quiet week. Tell me anytime you feel like it.',
+      recapGood: 'A good week. Let’s carry that into the next one.',
+      recapCalm: 'Nice work this week. You’re keeping it up.',
+      recapTough: (domain) => `The tough days this week clustered around ${domain}. Hope you’re not pushing too hard.`,
+      forecastTitle: 'Next week’s stars',
+      tailwindLabel: 'Tailwind',
+      cautionLabel: 'Heads-up',
     },
   },
   es: {
@@ -818,6 +842,14 @@ const UI: Record<Lang, UIStrings> = {
       reactGood: 'Me encanta. Sigue así, te veo.',
       reactMeh: 'Esos días también cuentan. Pasar un día tranquilo es una fortaleza en sí.',
       reactBad: 'Gracias por contármelo. Descansa esta noche; mañana volveré a leer las estrellas.',
+      weekendTitle: 'Repaso de la semana',
+      recapNone: 'Semana tranquila. Cuéntame cuando quieras.',
+      recapGood: 'Buena semana. Sigamos así la próxima.',
+      recapCalm: 'Buen trabajo esta semana. Vas manteniéndolo.',
+      recapTough: (domain) => `Los días difíciles de esta semana se juntaron en «${domain}». Ojalá no te estés exigiendo de más.`,
+      forecastTitle: 'Las estrellas de la próxima semana',
+      tailwindLabel: 'Viento a favor',
+      cautionLabel: 'Atención',
     },
   },
   fr: {
@@ -1024,6 +1056,14 @@ const UI: Record<Lang, UIStrings> = {
       reactGood: 'J’adore. Continue comme ça, je te vois.',
       reactMeh: 'Ces jours-là comptent aussi. Traverser un jour calme, c’est déjà une force.',
       reactBad: 'Merci de me l’avoir dit. Repose-toi ce soir ; je relirai les étoiles demain.',
+      weekendTitle: 'Le bilan de la semaine',
+      recapNone: 'Une semaine calme. Dis-moi quand tu veux.',
+      recapGood: 'Une bonne semaine. Gardons cet élan la prochaine.',
+      recapCalm: 'Beau travail cette semaine. Tu tiens bon.',
+      recapTough: (domain) => `Les jours durs de la semaine se sont concentrés côté « ${domain} ». J’espère que tu ne forces pas trop.`,
+      forecastTitle: 'Les étoiles de la semaine prochaine',
+      tailwindLabel: 'Vent porteur',
+      cautionLabel: 'Vigilance',
     },
   },
   it: {
@@ -1230,6 +1270,14 @@ const UI: Record<Lang, UIStrings> = {
       reactGood: 'Mi piace. Continua così, ti vedo.',
       reactMeh: 'Anche quei giorni contano. Attraversare un giorno tranquillo è già una forza.',
       reactBad: 'Grazie di avermelo detto. Stasera riposati; domani rileggerò le stelle.',
+      weekendTitle: 'Il riepilogo della settimana',
+      recapNone: 'Settimana tranquilla. Dimmelo quando ti va.',
+      recapGood: 'Bella settimana. Portiamo questo slancio anche alla prossima.',
+      recapCalm: 'Bel lavoro questa settimana. Stai tenendo duro.',
+      recapTough: (domain) => `I giorni pesanti di questa settimana si sono concentrati su «${domain}». Spero tu non ti stia sforzando troppo.`,
+      forecastTitle: 'Le stelle della prossima settimana',
+      tailwindLabel: 'Vento a favore',
+      cautionLabel: 'Attenzione',
     },
   },
   pt: {
@@ -1436,6 +1484,14 @@ const UI: Record<Lang, UIStrings> = {
       reactGood: 'Adorei. Continua assim, eu te vejo.',
       reactMeh: 'Esses dias também contam. Atravessar um dia calmo já é uma força.',
       reactBad: 'Obrigado por me contar. Descanse hoje; amanhã leio as estrelas de novo.',
+      weekendTitle: 'A retrospectiva da semana',
+      recapNone: 'Uma semana tranquila. Me conta quando quiser.',
+      recapGood: 'Boa semana. Vamos levar esse ritmo para a próxima.',
+      recapCalm: 'Bom trabalho nesta semana. Você está mantendo.',
+      recapTough: (domain) => `Os dias difíceis desta semana se concentraram em «${domain}». Espero que não esteja se cobrando demais.`,
+      forecastTitle: 'As estrelas da próxima semana',
+      tailwindLabel: 'Vento a favor',
+      cautionLabel: 'Atenção',
     },
   },
   ko: {
@@ -1642,6 +1698,14 @@ const UI: Record<Lang, UIStrings> = {
       reactGood: '좋아 보여. 그 느낌 그대로, 내가 보고 있어.',
       reactMeh: '그런 날도 좋아. 아무 일 없는 날을 잘 보내는 것도 강함이야.',
       reactBad: '말해줘서 고마워. 오늘은 푹 쉬어. 내일 또 별을 읽을게.',
+      weekendTitle: '이번 주 돌아보기',
+      recapNone: '조용한 한 주였네. 마음 내킬 때 또 알려줘.',
+      recapGood: '이번 주 좋았어. 다음 주에도 그 흐름으로.',
+      recapCalm: '이번 주도 수고했어. 잘 이어가고 있어.',
+      recapTough: (domain) => `이번 주 힘든 날은 «${domain}» 쪽에 몰려 있었어. 너무 무리하는 건 아니지?`,
+      forecastTitle: '다음 주의 별',
+      tailwindLabel: '순풍',
+      cautionLabel: '주의',
     },
   },
 }

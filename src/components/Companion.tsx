@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react'
 import type { CompanionState, Mood, Domain } from '../lib/companion'
-import { touchVisit, daysSinceLastVisit, markForecastSeen, todayColor, todayKey, recordMood } from '../lib/companion'
+import {
+  touchVisit,
+  daysSinceLastVisit,
+  markForecastSeen,
+  todayColor,
+  todayKey,
+  recordMood,
+  weekAggregate,
+} from '../lib/companion'
 import { starTypeOf } from '../lib/startypes'
 import { readFortune } from '../lib/fortune'
 import type { PlanetKey } from '../lib/types'
@@ -44,10 +52,35 @@ export default function Companion({ state, onRetry, onHome }: Props) {
 
   const reaction = mood === 'good' ? t.companion.reactGood : mood === 'bad' ? t.companion.reactBad : t.companion.reactMeh
 
+  // 週末まとめ＋翌週フォーキャスト。土日に表示(ローカル開発時のみ ?weekend で強制確認できる)。
+  const now = new Date()
+  const forceWeekend =
+    new URLSearchParams(location.search).has('weekend') && /^(localhost|127\.)/.test(location.hostname)
+  const isWeekend = forceWeekend || now.getDay() === 0 || now.getDay() === 6
+
+  const agg = weekAggregate(state, now)
+  const domainLabel = (d?: Domain) =>
+    d === 'work' ? t.companion.domWork : d === 'love' ? t.companion.domLove : d === 'people' ? t.companion.domPeople : t.companion.domOther
+  const recap =
+    agg.total === 0
+      ? t.companion.recapNone
+      : agg.bad >= 2 && agg.topBadDomain
+        ? t.companion.recapTough(domainLabel(agg.topBadDomain))
+        : agg.good >= agg.bad && agg.good > 0
+          ? t.companion.recapGood
+          : t.companion.recapCalm
+
+  // 翌週の運行(未来にウエイト)。now+7 で来週のトランジットを読む。
+  const nextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7)
+  const nextFortune = readFortune(state.chart.planets, 'week', nextWeek)
+  const tailwind = nextFortune.items.find((i) => i.quality === 'good')
+  const caution = nextFortune.items.find((i) => i.quality === 'hard')
+
   useEffect(() => {
     touchVisit(state)
     markForecastSeen(state)
     track('companion_open', { days_since: daysSince, star_type: state.starType })
+    if (isWeekend) track('weekend_view', { star_type: state.starType })
     // マウント時に1回だけ
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -140,6 +173,30 @@ export default function Companion({ state, onRetry, onHome }: Props) {
 
         {phase === 'done' && <p className="tap-reaction">{reaction}</p>}
       </section>
+
+      {isWeekend && (
+        <section className="weekend-card">
+          <p className="weekend-title">{t.companion.weekendTitle}</p>
+          <p className="weekend-recap">{recap}</p>
+          <p className="forecast-title">
+            <span aria-hidden="true">✦ </span>
+            {t.companion.forecastTitle}
+          </p>
+          <p className="forecast-tone">{nextFortune.toneText}</p>
+          {tailwind && (
+            <p className="forecast-line forecast-good">
+              <span className="forecast-label">{t.companion.tailwindLabel}</span>
+              {tailwind.title}
+            </p>
+          )}
+          {caution && (
+            <p className="forecast-line forecast-hard">
+              <span className="forecast-label">{t.companion.cautionLabel}</span>
+              {caution.title}
+            </p>
+          )}
+        </section>
+      )}
 
       <div className="result-actions">
         <button className="ghost" onClick={onRetry}>
