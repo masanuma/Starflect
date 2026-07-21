@@ -576,12 +576,30 @@ body {
   color: var(--ink-sub);
 }
 
-.reading-title {
-  margin: 0 0 12px;
+.reading-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.reading-mascot {
+  flex-shrink: 0;
+}
+
+.reading-heading {
+  margin: 0 0 3px;
   font-family: var(--font-head);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--violet-strong);
+}
+
+.reading-intro {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-sub);
 }
 
 .reading-tabs {

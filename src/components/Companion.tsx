@@ -96,7 +96,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
       <p className="companion-greeting">{greeting}</p>
       <h2 className="companion-name">{starType?.type.name ?? ''}</h2>
 
-      <StarReading chart={state.chart} starName={starType?.type.name ?? ''} />
+      <StarReading chart={state.chart} />
 
       <section className="tap-card">
         {phase === 'mood' && (

@@ -1,23 +1,42 @@
 import { useState } from 'react'
-import type { ChartData, PeriodKey } from '../lib/types'
+import type { ChartData, PeriodKey, PlanetKey } from '../lib/types'
 import { readFortune, periodLabel } from '../lib/fortune'
 import { todayColor } from '../lib/companion'
+import { starTypeOf } from '../lib/startypes'
+import HoshiKyaraMascot from './HoshiKyaraMascot'
 import { useUI } from '../lib/ui'
 
 const TABS: PeriodKey[] = ['today', 'tomorrow', 'week']
 
 /**
  * ほしキャラが読む運勢(共有部品)。Result と Companion の両方で使う。
+ * 見出し＋ほしキャラの自己紹介＋小さめマスコットで「相棒が読んでいる」体を統一。
  * 画面遷移なしで 今日/明日/今週 を切り替える。中身は readFortune の実データ(AIなし)。
  */
-export default function StarReading({ chart, starName }: { chart: ChartData; starName: string }) {
+export default function StarReading({ chart }: { chart: ChartData }) {
   const t = useUI()
   const [period, setPeriod] = useState<PeriodKey>('today')
   const fortune = readFortune(chart.planets, period)
 
+  const lonOf = (key: PlanetKey) => chart.planets.find((p) => p.key === key)?.lon
+  const sunLon = lonOf('sun')
+  const moonLon = lonOf('moon')
+  const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
+  const name = starType?.type.name ?? ''
+
   return (
     <section className="reading-card">
-      <p className="reading-title">{t.companion.readsTitle(starName, periodLabel(period))}</p>
+      <div className="reading-head">
+        {starType && (
+          <div className="reading-mascot" aria-hidden="true">
+            <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={52} />
+          </div>
+        )}
+        <div>
+          <p className="reading-heading">{t.companion.readingHeading}</p>
+          <p className="reading-intro">{t.companion.readsIntro(name)}</p>
+        </div>
+      </div>
 
       <div className="reading-tabs" role="tablist">
         {TABS.map((p) => (
@@ -33,7 +52,6 @@ export default function StarReading({ chart, starName }: { chart: ChartData; sta
         ))}
       </div>
 
-      <p className="reading-voice">{t.companion.readingVoice}</p>
       <p className="reading-sky">{fortune.skyNote}</p>
       <p className="fortune-tone">
         <span className="tone-badge">{fortune.toneLabel}</span>

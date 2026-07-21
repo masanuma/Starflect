@@ -228,7 +228,7 @@ export default function Result({ data, onHome, onPair }: Props) {
         <p className="party-foot">{t.result.partyFoot}</p>
       </section>
 
-      <StarReading chart={data} starName={starType?.type.name ?? ''} />
+      <StarReading chart={data} />
 
       <section className="planet-card ai-card">
         <header className="planet-head">
