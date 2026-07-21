@@ -70,15 +70,15 @@ export default function StarReading({ chart }: { chart: ChartData }) {
 
   return (
     <section className="reading-card">
-      <div className="reading-head">
+      <div className="card-head">
         {starType && (
-          <div className="reading-mascot" aria-hidden="true">
+          <div className="card-head-icon" aria-hidden="true">
             <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={52} />
           </div>
         )}
         <div>
-          <p className="reading-heading">{t.companion.readingHeading}</p>
-          <p className="reading-intro">{t.companion.readsIntro(name)}</p>
+          <p className="card-title">{t.companion.readingHeading}</p>
+          <p className="card-sub">{t.companion.readsIntro(name)}</p>
         </div>
       </div>
 

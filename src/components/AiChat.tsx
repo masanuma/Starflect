@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import type { ChatChartContext, ChatMessage } from '../lib/aiChat'
 import { streamAiChat } from '../lib/aiChat'
+import type { ChartData, PlanetKey } from '../lib/types'
+import { starTypeOf } from '../lib/startypes'
+import HoshiKyaraMascot from './HoshiKyaraMascot'
 import { useLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
 import { track } from '../lib/analytics'
@@ -10,6 +13,8 @@ interface Props {
   context: ChatChartContext
   /** 会話を保存するlocalStorageキー(人ごとに分ける) */
   storageKey: string
+  /** 相談相手＝自分のほしキャラのマスコットを出すためのチャート */
+  chart?: ChartData
 }
 
 function loadMessages(key: string): ChatMessage[] {
@@ -21,9 +26,14 @@ function loadMessages(key: string): ChatMessage[] {
   }
 }
 
-export default function AiChat({ context, storageKey }: Props) {
+export default function AiChat({ context, storageKey, chart }: Props) {
   const { lang } = useLang()
   const t = useUI()
+  // 相談相手は自分のほしキャラ。ヘッダーにそのマスコットを出す
+  const lonOf = (key: PlanetKey) => chart?.planets.find((p) => p.key === key)?.lon
+  const cSun = lonOf('sun')
+  const cMoon = lonOf('moon')
+  const chatStar = cSun !== undefined && cMoon !== undefined ? starTypeOf(cSun, cMoon) : null
   const [messages, setMessages] = useState<ChatMessage[]>(() => loadMessages(storageKey))
   const [input, setInput] = useState('')
   const [streaming, setStreaming] = useState(false)
@@ -102,10 +112,15 @@ export default function AiChat({ context, storageKey }: Props) {
 
   return (
     <section className="planet-card chat-card">
-      <header className="planet-head">
+      <header className="card-head">
+        {chatStar && (
+          <div className="card-head-icon" aria-hidden="true">
+            <HoshiKyaraMascot sunElement={chatStar.sunElement} moonElement={chatStar.moonElement} size={52} />
+          </div>
+        )}
         <div>
-          <p className="planet-title">{t.chat.title}</p>
-          <p className="planet-sub">{t.chat.sub}</p>
+          <p className="card-title">{t.chat.title}</p>
+          <p className="card-sub">{t.chat.sub}</p>
         </div>
       </header>
 

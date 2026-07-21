@@ -174,9 +174,9 @@ export default function Result({ data, onHome, onPair }: Props) {
 
       <StarReading chart={data} />
 
-      <AiChat context={chatContext} storageKey={chatStorageKey(data)} />
+      <AiChat context={chatContext} storageKey={chatStorageKey(data)} chart={data} />
 
-      <Feedback page="result" starType={starSlug} />
+      <Feedback page="result" starType={starSlug} chart={data} />
 
       {ascLon === undefined && (
         <div className="upsell">

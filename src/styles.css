@@ -576,18 +576,20 @@ body {
   color: var(--ink-sub);
 }
 
-.reading-head {
+.card-head {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 14px;
+  text-align: left;
 }
 
-.reading-mascot {
+.card-head-icon {
   flex-shrink: 0;
+  display: flex;
 }
 
-.reading-heading {
+.card-title {
   margin: 0 0 3px;
   font-family: var(--font-head);
   font-size: 18px;
@@ -599,7 +601,7 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-.reading-intro {
+.card-sub {
   margin: 0;
   font-size: 13px;
   line-height: 1.7;
@@ -2232,6 +2234,7 @@ body {
     radial-gradient(120% 100% at 50% 0%, rgba(138, 99, 221, 0.08) 0%, rgba(234, 101, 150, 0.05) 60%),
     var(--card);
   border: 1.5px solid #e0d3f6;
+  text-align: left;
 }
 
 .chat-intro {

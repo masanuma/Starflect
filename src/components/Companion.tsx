@@ -105,7 +105,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
 
       <StarReading chart={state.chart} />
 
-      <AiChat context={buildChatContext(state.chart)} storageKey={chatStorageKey(state.chart)} />
+      <AiChat context={buildChatContext(state.chart)} storageKey={chatStorageKey(state.chart)} chart={state.chart} />
 
       <section className="tap-card">
         {phase === 'mood' && (
