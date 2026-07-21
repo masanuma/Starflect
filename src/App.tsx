@@ -60,6 +60,10 @@ export default function App() {
             onSelect={() => setScreen({ page: 'form' })}
             onSelectPair={() => setScreen({ page: 'pairForm' })}
             onAbout={() => setScreen({ page: 'about' })}
+            onCompanion={() => {
+              const state = loadCompanion()
+              if (state) setScreen({ page: 'companion', state })
+            }}
           />
         )}
         {screen.page === 'about' && (

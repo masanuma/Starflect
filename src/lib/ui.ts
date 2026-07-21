@@ -58,6 +58,7 @@ export interface UIStrings {
     pairName: string
     pairDesc: string
     note: string
+    seeCompanion: (name: string) => string
   }
   faq: {
     title: string
@@ -250,6 +251,7 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 ふたりの相性',
       pairDesc: 'ほしキャラの相性と「今日のふたり」を診断。相手の生年月日だけでOK',
       note: '計算は雑誌の12星座占いと同じ生年月日ベース。でも結果は、あなただけのもの。',
+      seeCompanion: (name) => `${name}に会いにいく`,
     },
     faq: {
       title: 'よくある質問',
@@ -481,6 +483,7 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibility',
       pairDesc: 'Hoshi-Kyara compatibility plus “the two of you today.” Just their birth date needed.',
       note: 'The math uses the same birth date as magazine horoscopes—but the result is yours alone.',
+      seeCompanion: (name) => `Visit ${name}`,
     },
     faq: {
       title: 'Frequently asked questions',
@@ -712,6 +715,7 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibilidad',
       pairDesc: 'Compatibilidad de Hoshi-Kyara y “vosotros dos hoy”. Solo hace falta su fecha de nacimiento.',
       note: 'El cálculo usa la misma fecha que los horóscopos de revista, pero el resultado es solo tuyo.',
+      seeCompanion: (name) => `Ver a ${name}`,
     },
     faq: {
       title: 'Preguntas frecuentes',
@@ -943,6 +947,7 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibilité',
       pairDesc: 'La compatibilité des Hoshi-Kyara et « vous deux aujourd’hui ». Il suffit de sa date de naissance.',
       note: 'Le calcul part de la même date que les horoscopes de magazine, mais le résultat n’appartient qu’à toi.',
+      seeCompanion: (name) => `Retrouver ${name}`,
     },
     faq: {
       title: 'Questions fréquentes',
@@ -1174,6 +1179,7 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibilità',
       pairDesc: 'La compatibilità degli Hoshi-Kyara e « voi due oggi ». Basta la sua data di nascita.',
       note: 'Il calcolo usa la stessa data degli oroscopi delle riviste, ma il risultato è solo tuo.',
+      seeCompanion: (name) => `Vai da ${name}`,
     },
     faq: {
       title: 'Domande frequenti',
@@ -1405,6 +1411,7 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 Compatibilidade',
       pairDesc: 'A compatibilidade dos Hoshi-Kyara e « vocês dois hoje ». Basta a data de nascimento da outra pessoa.',
       note: 'O cálculo usa a mesma data dos horóscopos de revista, mas o resultado é só seu.',
+      seeCompanion: (name) => `Visitar ${name}`,
     },
     faq: {
       title: 'Perguntas frequentes',
@@ -1636,6 +1643,7 @@ const UI: Record<Lang, UIStrings> = {
       pairName: '💞 궁합',
       pairDesc: 'Hoshi-Kyara 궁합과 「오늘의 두 사람」을 봐요. 상대의 생년월일만 있으면 OK.',
       note: '계산은 잡지 별자리 운세와 같은 생년월일 기반. 하지만 결과는 오직 당신만의 것.',
+      seeCompanion: (name) => `${name} 만나러 가기`,
     },
     faq: {
       title: '자주 묻는 질문',

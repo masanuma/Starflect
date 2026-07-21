@@ -1,15 +1,28 @@
 import { useUI } from '../lib/ui'
+import { loadCompanion } from '../lib/companion'
+import { starTypeOf } from '../lib/startypes'
+import type { PlanetKey } from '../lib/types'
 import BrandMascot from './BrandMascot'
+import HoshiKyaraMascot from './HoshiKyaraMascot'
 import Faq from './Faq'
 
 interface Props {
   onSelect: () => void
   onSelectPair: () => void
   onAbout: () => void
+  onCompanion: () => void
 }
 
-export default function Home({ onSelect, onSelectPair, onAbout }: Props) {
+export default function Home({ onSelect, onSelectPair, onAbout, onCompanion }: Props) {
   const t = useUI()
+
+  // 相棒がいれば「会いにいく」入口を出す(ここが相棒ホームへの導線)
+  const companion = loadCompanion()
+  const cLonOf = (key: PlanetKey) => companion?.chart.planets.find((p) => p.key === key)?.lon
+  const cSun = cLonOf('sun')
+  const cMoon = cLonOf('moon')
+  const cStar = cSun !== undefined && cMoon !== undefined ? starTypeOf(cSun, cMoon) : null
+
   return (
     <div className="home">
       <div className="hero">
@@ -27,6 +40,18 @@ export default function Home({ onSelect, onSelectPair, onAbout }: Props) {
           {t.home.aboutLink}
         </button>
       </div>
+
+      {companion && cStar && (
+        <button className="companion-entry" onClick={onCompanion}>
+          <span className="companion-entry-mascot" aria-hidden="true">
+            <HoshiKyaraMascot sunElement={cStar.sunElement} moonElement={cStar.moonElement} size={48} />
+          </span>
+          <span className="companion-entry-label">{t.home.seeCompanion(cStar.type.name)}</span>
+          <span className="companion-entry-arrow" aria-hidden="true">
+            →
+          </span>
+        </button>
+      )}
 
       <div className="mode-list">
         <button className="mode-card mode-detailed" onClick={onSelect}>
