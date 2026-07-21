@@ -565,7 +565,15 @@ body {
   border-radius: 20px;
   box-shadow: var(--shadow);
   padding: 20px 20px 18px;
+  margin: 16px 0;
   text-align: left;
+}
+
+.reading-voice {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--ink-sub);
 }
 
 .reading-title {

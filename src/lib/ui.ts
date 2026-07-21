@@ -207,7 +207,10 @@ export interface UIStrings {
     tailwindLabel: string
     cautionLabel: string
     readsTitle: (name: string, period: string) => string
+    readingVoice: string
     otherPerson: string
+    toMenu: string
+    toPair: string
     seeYouTomorrow: string
   }
 }
@@ -426,7 +429,10 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: '追い風',
       cautionLabel: '注意',
       readsTitle: (name, period) => `${name}が読む、${period}`,
+      readingVoice: '星の巡り、見ておいたよ。',
       otherPerson: '別の人を占う',
+      toMenu: 'メインメニューへ',
+      toPair: 'ふたりの相性を占う',
       seeYouTomorrow: 'また明日も、ここで星を読んでるね。',
     },
   },
@@ -643,7 +649,10 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: 'Tailwind',
       cautionLabel: 'Heads-up',
       readsTitle: (name, period) => `${period}, read by ${name}`,
+      readingVoice: 'I’ve looked over the stars for you.',
       otherPerson: 'Read someone else',
+      toMenu: 'Main menu',
+      toPair: 'Check compatibility',
       seeYouTomorrow: 'I’ll be here reading the stars tomorrow too.',
     },
   },
@@ -860,7 +869,10 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: 'Viento a favor',
       cautionLabel: 'Atención',
       readsTitle: (name, period) => `${period}, leído por ${name}`,
+      readingVoice: 'Ya miré cómo van las estrellas por ti.',
       otherPerson: 'Consultar a otra persona',
+      toMenu: 'Menú principal',
+      toPair: 'Ver compatibilidad',
       seeYouTomorrow: 'Mañana también estaré aquí leyendo las estrellas.',
     },
   },
@@ -1077,7 +1089,10 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: 'Vent porteur',
       cautionLabel: 'Vigilance',
       readsTitle: (name, period) => `${period}, lu par ${name}`,
+      readingVoice: 'J’ai jeté un œil aux étoiles pour toi.',
       otherPerson: 'Consulter une autre personne',
+      toMenu: 'Menu principal',
+      toPair: 'Tester la compatibilité',
       seeYouTomorrow: 'Je serai là demain aussi, à lire les étoiles.',
     },
   },
@@ -1294,7 +1309,10 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: 'Vento a favore',
       cautionLabel: 'Attenzione',
       readsTitle: (name, period) => `${period}, letto da ${name}`,
+      readingVoice: 'Ho dato un’occhiata alle stelle per te.',
       otherPerson: 'Consultare un’altra persona',
+      toMenu: 'Menu principale',
+      toPair: 'Vedi l’affinità',
       seeYouTomorrow: 'Domani sarò qui a leggere le stelle, come sempre.',
     },
   },
@@ -1511,7 +1529,10 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: 'Vento a favor',
       cautionLabel: 'Atenção',
       readsTitle: (name, period) => `${period}, lido por ${name}`,
+      readingVoice: 'Já dei uma olhada nas estrelas para você.',
       otherPerson: 'Consultar outra pessoa',
+      toMenu: 'Menu principal',
+      toPair: 'Ver compatibilidade',
       seeYouTomorrow: 'Amanhã também estarei aqui lendo as estrelas.',
     },
   },
@@ -1728,7 +1749,10 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: '순풍',
       cautionLabel: '주의',
       readsTitle: (name, period) => `${name}의 ${period}`,
+      readingVoice: '별의 흐름, 미리 봐 뒀어.',
       otherPerson: '다른 사람 점치기',
+      toMenu: '메인 메뉴로',
+      toPair: '궁합 보기',
       seeYouTomorrow: '내일도 여기서 별을 읽고 있을게.',
     },
   },

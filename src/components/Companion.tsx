@@ -12,6 +12,7 @@ import { track } from '../lib/analytics'
 interface Props {
   state: CompanionState
   onHome: () => void
+  onPair: () => void
 }
 
 type TapPhase = 'mood' | 'domain' | 'done'
@@ -21,7 +22,7 @@ type TapPhase = 'mood' | 'domain' | 'done'
  * 挨拶(罰なし) + ほしキャラが読む運勢(StarReading・期間切替) + 夜の振り返りタップ + 週末まとめ。
  * AIなし(A1/B1)。
  */
-export default function Companion({ state, onHome }: Props) {
+export default function Companion({ state, onHome, onPair }: Props) {
   const t = useUI()
   const [daysSince] = useState(() => daysSinceLastVisit(state))
 
@@ -166,8 +167,11 @@ export default function Companion({ state, onHome }: Props) {
       )}
 
       <div className="result-actions">
+        <button className="ghost" onClick={onPair}>
+          {t.companion.toPair}
+        </button>
         <button className="ghost" onClick={onHome}>
-          {t.companion.otherPerson}
+          {t.companion.toMenu}
         </button>
       </div>
     </div>

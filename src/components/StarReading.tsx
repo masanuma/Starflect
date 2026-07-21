@@ -33,6 +33,7 @@ export default function StarReading({ chart, starName }: { chart: ChartData; sta
         ))}
       </div>
 
+      <p className="reading-voice">{t.companion.readingVoice}</p>
       <p className="reading-sky">{fortune.skyNote}</p>
       <p className="fortune-tone">
         <span className="tone-badge">{fortune.toneLabel}</span>

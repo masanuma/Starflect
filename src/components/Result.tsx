@@ -36,9 +36,10 @@ const ELEMENT_SLUG: Record<string, string> = { 火: 'fire', 地: 'earth', 風: '
 interface Props {
   data: ChartData
   onHome: () => void
+  onPair: () => void
 }
 
-export default function Result({ data, onHome }: Props) {
+export default function Result({ data, onHome, onPair }: Props) {
   const { lang } = useLang()
   const t = useUI()
   const retroSuffix = RETRO_SUFFIX[lang] ?? RETRO_SUFFIX.ja
@@ -286,8 +287,11 @@ export default function Result({ data, onHome }: Props) {
       </div>
 
       <div className="result-actions">
+        <button className="ghost" onClick={onPair}>
+          {t.companion.toPair}
+        </button>
         <button className="ghost" onClick={onHome}>
-          {t.companion.otherPerson}
+          {t.companion.toMenu}
         </button>
       </div>
     </div>

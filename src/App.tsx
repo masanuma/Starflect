@@ -75,10 +75,18 @@ export default function App() {
           />
         )}
         {screen.page === 'result' && (
-          <Result data={screen.data} onHome={() => setScreen({ page: 'home' })} />
+          <Result
+            data={screen.data}
+            onHome={() => setScreen({ page: 'home' })}
+            onPair={() => setScreen({ page: 'pairForm' })}
+          />
         )}
         {screen.page === 'companion' && (
-          <Companion state={screen.state} onHome={() => setScreen({ page: 'home' })} />
+          <Companion
+            state={screen.state}
+            onHome={() => setScreen({ page: 'home' })}
+            onPair={() => setScreen({ page: 'pairForm' })}
+          />
         )}
         {screen.page === 'pairForm' && (
           <PairForm
