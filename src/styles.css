@@ -645,6 +645,34 @@ body {
   padding-top: 12px;
 }
 
+.companion-topbar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+}
+
+.companion-menu {
+  border: 1.5px solid var(--card-border);
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  color: var(--violet);
+  font-family: var(--font-pop);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.companion-menu::before {
+  content: '≡ ';
+}
+
+.companion-menu:hover {
+  border-color: var(--pink-soft);
+  background: #ffffff;
+}
+
 .companion-mascot {
   display: flex;
   justify-content: center;

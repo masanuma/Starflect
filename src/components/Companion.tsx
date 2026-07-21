@@ -91,6 +91,11 @@ export default function Companion({ state, onHome, onPair }: Props) {
 
   return (
     <div className="companion-screen">
+      <div className="companion-topbar">
+        <button className="companion-menu" onClick={onHome}>
+          {t.companion.toMenu}
+        </button>
+      </div>
       {starType && (
         <div className="companion-mascot" aria-hidden="true">
           <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={104} />
