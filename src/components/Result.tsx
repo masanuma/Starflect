@@ -162,8 +162,11 @@ export default function Result({ data, onHome, onPair }: Props) {
           })}
         </ul>
         {partyPlanets.length > partyShown && (
-          <button className="party-toggle" onClick={() => setShowAllParty((v) => !v)}>
-            {showAllParty ? t.result.partyLess : t.result.partyMore}
+          <button
+            className={`party-toggle${showAllParty ? ' open' : ''}`}
+            onClick={() => setShowAllParty((v) => !v)}
+          >
+            {showAllParty ? t.result.partyLess : t.result.partyMore(partyPlanets.length - partyShown)}
           </button>
         )}
         <p className="party-foot">{t.result.partyFoot}</p>

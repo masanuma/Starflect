@@ -590,9 +590,13 @@ body {
 .reading-heading {
   margin: 0 0 3px;
   font-family: var(--font-head);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--violet-strong);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: linear-gradient(120deg, var(--pink) 0%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .reading-intro {
@@ -870,24 +874,37 @@ body {
 }
 
 .party-toggle {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   width: 100%;
-  margin: 10px 0 2px;
-  padding: 10px;
-  border: 1.5px dashed var(--card-border);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.5);
-  font-family: var(--font-pop);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--violet-strong);
+  margin: 12px 0 2px;
+  padding: 13px;
+  border: 1.5px solid var(--pink-soft);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--pink-faint) 0%, var(--gold-faint) 100%);
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--pink-strong);
   cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.party-toggle::after {
+  content: '▾';
+  font-size: 12px;
+}
+
+.party-toggle.open::after {
+  content: '▴';
 }
 
 .party-toggle:hover {
-  border-color: var(--violet-soft);
-  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--pink);
 }
 
 .chip-keyword {
@@ -1295,9 +1312,9 @@ body {
 }
 
 .planet-title {
-  font-family: var(--font-pop);
+  font-family: var(--font-head);
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 800;
   letter-spacing: 0.04em;
   margin: 0;
   background: linear-gradient(120deg, var(--pink) 0%, var(--violet) 100%);
@@ -1729,9 +1746,9 @@ body {
 }
 
 .party-title {
-  font-family: var(--font-pop);
-  font-size: 19px;
-  font-weight: 900;
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 800;
   letter-spacing: 0.04em;
   margin: 0 0 4px;
   background: linear-gradient(120deg, var(--pink) 0%, var(--violet) 100%);

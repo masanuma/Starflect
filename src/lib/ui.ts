@@ -117,7 +117,7 @@ export interface UIStrings {
     typeCount: string
     partyTitle: (n: number) => string
     partySub: string
-    partyMore: string
+    partyMore: (hidden: number) => string
     partyLess: string
     domain: string
     quirk: string
@@ -348,7 +348,7 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'この組み合わせで、全16キャラ',
       partyTitle: (n) => `生まれた瞬間の、あなたの${n}の星`,
       partySub: '一つひとつが、あなたを動かすキャラです。担当と、いまの発揮のしかたを見てみて。',
-      partyMore: 'のこりの星も見る',
+      partyMore: (hidden) => `実はあと${hidden}人いる。ぜんぶ見る`,
       partyLess: '畳む',
       domain: '担当',
       quirk: 'クセ',
@@ -584,7 +584,7 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'One of 16 characters',
       partyTitle: (n) => `Your ${n} stars from the moment you were born`,
       partySub: 'Each one is a character that moves you. Here’s each one’s domain and how it shows now.',
-      partyMore: 'Show the rest',
+      partyMore: (hidden) => `${hidden} more are hiding—see them all`,
       partyLess: 'Collapse',
       domain: 'Domain',
       quirk: 'Style',
@@ -820,7 +820,7 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'Uno de 16 personajes',
       partyTitle: (n) => `Tus ${n} astros del momento en que naciste`,
       partySub: 'Cada uno es un personaje que te mueve. Aquí va el área de cada uno y cómo se manifiesta ahora.',
-      partyMore: 'Ver el resto',
+      partyMore: (hidden) => `Hay ${hidden} más escondidos: verlos todos`,
       partyLess: 'Contraer',
       domain: 'Área',
       quirk: 'Estilo',
@@ -1056,7 +1056,7 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'L’un des 16 personnages',
       partyTitle: (n) => `Tes ${n} astres de l’instant de ta naissance`,
       partySub: 'Chacun est un personnage qui te fait avancer. Voici le domaine de chacun et sa façon de s’exprimer aujourd’hui.',
-      partyMore: 'Voir le reste',
+      partyMore: (hidden) => `${hidden} autres se cachent — tout voir`,
       partyLess: 'Réduire',
       domain: 'Domaine',
       quirk: 'Style',
@@ -1292,7 +1292,7 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'Uno dei 16 personaggi',
       partyTitle: (n) => `I tuoi ${n} astri dell’istante in cui sei nato`,
       partySub: 'Ognuno è un personaggio che ti muove. Ecco l’ambito di ognuno e come si manifesta ora.',
-      partyMore: 'Vedi il resto',
+      partyMore: (hidden) => `Ce ne sono altri ${hidden} nascosti: vedili tutti`,
       partyLess: 'Comprimi',
       domain: 'Ambito',
       quirk: 'Stile',
@@ -1528,7 +1528,7 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'Um dos 16 personagens',
       partyTitle: (n) => `Os seus ${n} astros do instante em que você nasceu`,
       partySub: 'Cada um é um personagem que move você. Aqui está a área de cada um e como se manifesta agora.',
-      partyMore: 'Ver o resto',
+      partyMore: (hidden) => `Há mais ${hidden} escondidos: ver todos`,
       partyLess: 'Recolher',
       domain: 'Área',
       quirk: 'Estilo',
@@ -1764,7 +1764,7 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: '이 조합으로, 모두 16캐릭터',
       partyTitle: (n) => `태어난 순간의, 당신의 별 ${n}개`,
       partySub: '하나하나가 당신을 움직이는 캐릭터예요. 각자의 담당과 지금의 발휘 방식이에요.',
-      partyMore: '나머지 별도 보기',
+      partyMore: (hidden) => `사실 ${hidden}명 더 있어요. 모두 보기`,
       partyLess: '접기',
       domain: '담당',
       quirk: '스타일',
