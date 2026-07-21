@@ -1,21 +1,5 @@
 import type { Lang } from './i18n'
 
-/** サーバー(/api/ai-reading)に送る鑑定リクエスト。server/handlers.ts と対で管理する */
-export interface AiReadingRequest {
-  name: string
-  periodLabel: string
-  dateLabel: string
-  placeLabel?: string
-  natal: { label: string; sign: string; deg: number }[]
-  synthesis?: string[]
-  /** 出生天体同士のアスペクト(プロ級のみ) */
-  natalAspects?: string[]
-  toneLabel: string
-  skyNote: string
-  aspects: string[]
-  lang?: Lang
-}
-
 /** 相性鑑定リクエスト。server/aiReading.ts の AiPairRequest と対で管理する */
 export interface AiPairRequest {
   nameA: string
@@ -49,5 +33,4 @@ async function postJson<T>(url: string, body: T): Promise<string> {
   return data.text
 }
 
-export const fetchAiReading = (req: AiReadingRequest) => postJson('/api/ai-reading', req)
 export const fetchAiPairReading = (req: AiPairRequest) => postJson('/api/ai-pair', req)

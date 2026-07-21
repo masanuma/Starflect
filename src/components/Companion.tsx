@@ -6,6 +6,8 @@ import { readFortune } from '../lib/fortune'
 import type { PlanetKey } from '../lib/types'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import StarReading from './StarReading'
+import AiChat from './AiChat'
+import { buildChatContext, chatStorageKey } from '../lib/aiChat'
 import { useUI } from '../lib/ui'
 import { track } from '../lib/analytics'
 
@@ -30,6 +32,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
   const todayEntry = state.daily[todayKey()]
   const [phase, setPhase] = useState<TapPhase>(todayEntry?.mood ? 'done' : 'mood')
   const [mood, setMood] = useState<Mood | undefined>(todayEntry?.mood)
+  const [chatOpen, setChatOpen] = useState(false)
 
   function pickMood(m: Mood) {
     setMood(m)
@@ -141,6 +144,20 @@ export default function Companion({ state, onHome, onPair }: Props) {
 
         {phase === 'done' && <p className="tap-reaction">{reaction}</p>}
       </section>
+
+      {chatOpen ? (
+        <AiChat context={buildChatContext(state.chart)} storageKey={chatStorageKey(state.chart)} />
+      ) : (
+        <button
+          className="companion-chat-open"
+          onClick={() => {
+            track('companion_chat_open', { star_type: state.starType })
+            setChatOpen(true)
+          }}
+        >
+          {t.companion.toChat}
+        </button>
+      )}
 
       {isWeekend && (
         <section className="weekend-card">

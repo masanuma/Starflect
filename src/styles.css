@@ -827,6 +827,27 @@ body {
   color: var(--ink);
 }
 
+.companion-chat-open {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1.5px solid var(--card-border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-pop);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--violet-strong);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.companion-chat-open:hover {
+  border-color: var(--violet-soft);
+  background: #ffffff;
+}
+
 /* ---------- 週末まとめ＋翌週フォーキャスト ---------- */
 .weekend-card {
   margin-top: 14px;

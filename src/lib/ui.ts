@@ -213,6 +213,7 @@ export interface UIStrings {
     otherPerson: string
     toMenu: string
     toPair: string
+    toChat: string
     seeYouTomorrow: string
   }
 }
@@ -366,7 +367,7 @@ const UI: Record<Lang, UIStrings> = {
     },
     chat: {
       title: 'ほしキャラ相談室',
-      sub: 'あなたのほしキャラパーティをぜんぶ踏まえて、AIがなんでも相談にのります',
+      sub: 'あなたの星ぜんぶを踏まえて、あなたのほしキャラがなんでも相談にのります',
       historyCount: (n) => `これまでの相談 ${n}件`,
       hide: '非表示にする',
       show: '表示する',
@@ -377,6 +378,7 @@ const UI: Record<Lang, UIStrings> = {
       delAria: 'この質問と回答を削除',
       sendAria: '送信',
       starters: [
+        { label: '🌌 じっくり占って', q: 'いまの私を、星からじっくり占ってほしいな。' },
         { label: '💕 恋愛', q: 'いまの恋愛運と、恋愛で私が気をつけるといいことを教えて。' },
         { label: '💼 仕事', q: '仕事でいまの私が力を発揮するには、どう動くといい?' },
         { label: '🤝 人間関係', q: '人間関係で私が心地よくいるためのヒントがほしいな。' },
@@ -437,6 +439,7 @@ const UI: Record<Lang, UIStrings> = {
       otherPerson: '別の人を占う',
       toMenu: 'メインメニューへ',
       toPair: 'ふたりの相性を占う',
+      toChat: '相棒に相談する',
       seeYouTomorrow: 'また明日も、ここで星を読んでいますね。',
     },
   },
@@ -588,7 +591,7 @@ const UI: Record<Lang, UIStrings> = {
     },
     chat: {
       title: 'Hoshi-Kyara Room',
-      sub: 'With your whole Hoshi-Kyara party in mind, the AI is here for any question.',
+      sub: 'With your whole chart in mind, your Hoshi-Kyara is here for any question.',
       historyCount: (n) => `${n} past ${n === 1 ? 'question' : 'questions'}`,
       hide: 'Hide',
       show: 'Show',
@@ -599,6 +602,7 @@ const UI: Record<Lang, UIStrings> = {
       delAria: 'Delete this question and answer',
       sendAria: 'Send',
       starters: [
+        { label: '🌌 Full reading', q: 'Give me a proper reading of where I am right now, from my stars.' },
         { label: '💕 Love', q: 'What’s my love outlook right now, and what should I watch out for in love?' },
         { label: '💼 Work', q: 'How should I move to do my best at work right now?' },
         { label: '🤝 Relationships', q: 'I’d love some tips for feeling at ease in my relationships.' },
@@ -659,6 +663,7 @@ const UI: Record<Lang, UIStrings> = {
       otherPerson: 'Read someone else',
       toMenu: 'Main menu',
       toPair: 'Check compatibility',
+      toChat: 'Talk to your companion',
       seeYouTomorrow: 'I’ll be here reading the stars tomorrow too.',
     },
   },
@@ -810,7 +815,7 @@ const UI: Record<Lang, UIStrings> = {
     },
     chat: {
       title: 'Sala Hoshi-Kyara',
-      sub: 'Con todo tu grupo Hoshi-Kyara en mente, la IA responde lo que quieras.',
+      sub: 'Con toda tu carta en mente, tu Hoshi-Kyara responde lo que quieras.',
       historyCount: (n) => `${n} ${n === 1 ? 'consulta' : 'consultas'} anteriores`,
       hide: 'Ocultar',
       show: 'Mostrar',
@@ -821,6 +826,7 @@ const UI: Record<Lang, UIStrings> = {
       delAria: 'Eliminar esta pregunta y su respuesta',
       sendAria: 'Enviar',
       starters: [
+        { label: '🌌 Lectura completa', q: 'Hazme una lectura completa de cómo estoy ahora, según mis estrellas.' },
         { label: '💕 Amor', q: '¿Cómo está mi panorama amoroso ahora y qué debería cuidar en el amor?' },
         { label: '💼 Trabajo', q: '¿Cómo debería moverme para dar lo mejor en el trabajo ahora mismo?' },
         { label: '🤝 Relaciones', q: 'Me vendrían bien consejos para sentirme a gusto en mis relaciones.' },
@@ -881,6 +887,7 @@ const UI: Record<Lang, UIStrings> = {
       otherPerson: 'Consultar a otra persona',
       toMenu: 'Menú principal',
       toPair: 'Ver compatibilidad',
+      toChat: 'Hablar con tu compañero',
       seeYouTomorrow: 'Mañana también estaré aquí leyendo las estrellas.',
     },
   },
@@ -1032,7 +1039,7 @@ const UI: Record<Lang, UIStrings> = {
     },
     chat: {
       title: 'Salon Hoshi-Kyara',
-      sub: 'Avec toute ton équipe Hoshi-Kyara en tête, l’IA répond à tout.',
+      sub: 'Avec tout ton thème en tête, ton Hoshi-Kyara répond à tout.',
       historyCount: (n) => `${n} ${n === 1 ? 'question' : 'questions'} déjà posée${n === 1 ? '' : 's'}`,
       hide: 'Masquer',
       show: 'Afficher',
@@ -1043,6 +1050,7 @@ const UI: Record<Lang, UIStrings> = {
       delAria: 'Supprimer cette question et sa réponse',
       sendAria: 'Envoyer',
       starters: [
+        { label: '🌌 Lecture complète', q: 'Fais-moi une vraie lecture de là où j’en suis, d’après mes étoiles.' },
         { label: '💕 Amour', q: 'Comment se présente ma vie amoureuse en ce moment, et à quoi devrais-je faire attention en amour ?' },
         { label: '💼 Travail', q: 'Comment devrais-je agir pour donner le meilleur au travail en ce moment ?' },
         { label: '🤝 Relations', q: 'J’aimerais des conseils pour me sentir à l’aise dans mes relations.' },
@@ -1103,6 +1111,7 @@ const UI: Record<Lang, UIStrings> = {
       otherPerson: 'Consulter une autre personne',
       toMenu: 'Menu principal',
       toPair: 'Tester la compatibilité',
+      toChat: 'Parler à ton compagnon',
       seeYouTomorrow: 'Je serai là demain aussi, à lire les étoiles.',
     },
   },
@@ -1254,7 +1263,7 @@ const UI: Record<Lang, UIStrings> = {
     },
     chat: {
       title: 'Sala Hoshi-Kyara',
-      sub: 'Con tutto il tuo gruppo Hoshi-Kyara in mente, l’IA risponde a qualsiasi cosa.',
+      sub: 'Con tutto il tuo tema in mente, il tuo Hoshi-Kyara risponde a qualsiasi cosa.',
       historyCount: (n) => `${n} ${n === 1 ? 'domanda' : 'domande'} finora`,
       hide: 'Nascondi',
       show: 'Mostra',
@@ -1265,6 +1274,7 @@ const UI: Record<Lang, UIStrings> = {
       delAria: 'Elimina questa domanda e la risposta',
       sendAria: 'Invia',
       starters: [
+        { label: '🌌 Lettura completa', q: 'Fammi una lettura completa di come sto adesso, dalle mie stelle.' },
         { label: '💕 Amore', q: 'Com’è il mio momento in amore adesso e a cosa dovrei fare attenzione?' },
         { label: '💼 Lavoro', q: 'Come dovrei muovermi per dare il meglio sul lavoro in questo momento?' },
         { label: '🤝 Relazioni', q: 'Mi servirebbero consigli per stare a mio agio nelle relazioni.' },
@@ -1325,6 +1335,7 @@ const UI: Record<Lang, UIStrings> = {
       otherPerson: 'Consultare un’altra persona',
       toMenu: 'Menu principale',
       toPair: 'Vedi l’affinità',
+      toChat: 'Parla con il tuo compagno',
       seeYouTomorrow: 'Domani sarò qui a leggere le stelle, come sempre.',
     },
   },
@@ -1476,7 +1487,7 @@ const UI: Record<Lang, UIStrings> = {
     },
     chat: {
       title: 'Sala Hoshi-Kyara',
-      sub: 'Com todo o seu grupo Hoshi-Kyara em mente, a IA responde a qualquer coisa.',
+      sub: 'Com todo o seu mapa em mente, o seu Hoshi-Kyara responde a qualquer coisa.',
       historyCount: (n) => `${n} ${n === 1 ? 'consulta' : 'consultas'} até agora`,
       hide: 'Ocultar',
       show: 'Mostrar',
@@ -1487,6 +1498,7 @@ const UI: Record<Lang, UIStrings> = {
       delAria: 'Excluir esta pergunta e resposta',
       sendAria: 'Enviar',
       starters: [
+        { label: '🌌 Leitura completa', q: 'Me faça uma leitura completa de como estou agora, pelas minhas estrelas.' },
         { label: '💕 Amor', q: 'Como está a minha vida amorosa agora e com o que devo ter cuidado no amor?' },
         { label: '💼 Trabalho', q: 'Como devo agir para dar o meu melhor no trabalho neste momento?' },
         { label: '🤝 Relações', q: 'Eu queria umas dicas para me sentir à vontade nas minhas relações.' },
@@ -1547,6 +1559,7 @@ const UI: Record<Lang, UIStrings> = {
       otherPerson: 'Consultar outra pessoa',
       toMenu: 'Menu principal',
       toPair: 'Ver compatibilidade',
+      toChat: 'Conversar com seu companheiro',
       seeYouTomorrow: 'Amanhã também estarei aqui lendo as estrelas.',
     },
   },
@@ -1698,7 +1711,7 @@ const UI: Record<Lang, UIStrings> = {
     },
     chat: {
       title: 'Hoshi-Kyara 상담실',
-      sub: '당신의 Hoshi-Kyara 파티를 모두 고려해, AI가 무엇이든 상담해 드려요.',
+      sub: '당신의 별 전체를 고려해, 당신의 호시캐릭터가 무엇이든 상담해 드려요.',
       historyCount: (n) => `지금까지 상담 ${n}건`,
       hide: '숨기기',
       show: '보기',
@@ -1709,6 +1722,7 @@ const UI: Record<Lang, UIStrings> = {
       delAria: '이 질문과 답변 삭제',
       sendAria: '보내기',
       starters: [
+        { label: '🌌 자세히 봐줘', q: '지금의 저를 별로 자세히 봐 주세요.' },
         { label: '💕 연애', q: '지금의 연애운과 연애에서 제가 주의하면 좋을 점을 알려 주세요.' },
         { label: '💼 일', q: '지금의 제가 일에서 힘을 발휘하려면 어떻게 움직이면 좋을까요?' },
         { label: '🤝 인간관계', q: '인간관계에서 제가 편안하게 지낼 수 있는 힌트가 필요해요.' },
@@ -1769,6 +1783,7 @@ const UI: Record<Lang, UIStrings> = {
       otherPerson: '다른 사람 점치기',
       toMenu: '메인 메뉴로',
       toPair: '궁합 보기',
+      toChat: '상담하기',
       seeYouTomorrow: '내일도 여기서 별을 읽고 있을게요.',
     },
   },

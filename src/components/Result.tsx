@@ -1,35 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import type { ChartData, PlanetKey } from '../lib/types'
 import { signIndex, degInSign } from '../lib/astro'
 import { signName, signSymbol } from '../lib/signs'
 import { synthesize } from '../lib/synthesis'
-import { readFortune, periodNoun } from '../lib/fortune'
-import { fetchAiReading } from '../lib/aiReading'
 import { getPlanet, signMannerOf } from '../lib/planets'
-import { findNatalAspects } from '../lib/natalAspects'
 import { starTypeOf, elementPhrase } from '../lib/startypes'
 import AiChat from './AiChat'
-import AiReading from './AiReading'
 import StarReading from './StarReading'
 import Feedback from './Feedback'
 import { createCompanion } from '../lib/companion'
-import type { ChatChartContext } from '../lib/aiChat'
+import { buildChatContext, chatStorageKey } from '../lib/aiChat'
 import PlanetMascot, { MASCOT_COLOR } from './PlanetMascot'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
-import SectionIcon from './SectionIcon'
 import { useLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
 import { track } from '../lib/analytics'
-
-const RETRO_SUFFIX: Record<string, string> = {
-  ja: '(逆行)',
-  en: '(retrograde)',
-  es: '(retrógrado)',
-  fr: '(rétrograde)',
-  it: '(retrogrado)',
-  pt: '(retrógrado)',
-  ko: '(역행)',
-}
 
 const ELEMENT_SLUG: Record<string, string> = { 火: 'fire', 地: 'earth', 風: 'air', 水: 'water' }
 
@@ -42,7 +27,6 @@ interface Props {
 export default function Result({ data, onHome, onPair }: Props) {
   const { lang } = useLang()
   const t = useUI()
-  const retroSuffix = RETRO_SUFFIX[lang] ?? RETRO_SUFFIX.ja
 
   const lonOf = (key: PlanetKey) => data.planets.find((p) => p.key === key)?.lon
   const sunLon = lonOf('sun')
@@ -53,16 +37,9 @@ export default function Result({ data, onHome, onPair }: Props) {
       ? synthesize(sunLon, moonLon, ascLon)
       : null
 
-  const fortune = readFortune(data.planets, data.period)
-
   // ほしキャラを構成するパーティ = 計算した全天体(太陽・月・上昇星座を先頭に)
   const partyPlanets = data.planets
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
-  const natalAspects = findNatalAspects(data.planets)
-
-  const [aiState, setAiState] = useState<
-    { status: 'idle' } | { status: 'loading' } | { status: 'done'; text: string } | { status: 'error'; message: string }
-  >({ status: 'idle' })
 
   const starSlug = starType
     ? `${ELEMENT_SLUG[starType.sunElement]}_${ELEMENT_SLUG[starType.moonElement]}`
@@ -80,54 +57,8 @@ export default function Result({ data, onHome, onPair }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  async function handleAiReading() {
-    track('ai_reading_click')
-    setAiState({ status: 'loading' })
-    try {
-      const text = await fetchAiReading({
-        name: data.name,
-        periodLabel: periodNoun(data.period),
-        dateLabel: data.dateLabel,
-        placeLabel: data.placeLabel,
-        natal: data.planets.map((p) => ({
-          label: getPlanet(p.key).name + (p.retro ? retroSuffix : ''),
-          sign: signName(signIndex(p.lon)),
-          deg: degInSign(p.lon),
-        })),
-        synthesis: synthesis ? [synthesis.intro, synthesis.balance, synthesis.relation] : undefined,
-        natalAspects: natalAspects.length ? natalAspects.map((a) => a.tech) : undefined,
-        toneLabel: fortune.toneLabel,
-        skyNote: fortune.skyNote,
-        aspects: fortune.items.map((i) => i.title),
-        lang,
-      })
-      setAiState({ status: 'done', text })
-    } catch (e) {
-      setAiState({ status: 'error', message: e instanceof Error ? e.message : t.common.unknownError })
-    }
-  }
-
-  // 相談チャットに渡すコンテキスト(鑑定済みならその文章も文脈に含める)
-  const chatContext: ChatChartContext = {
-    name: data.name,
-    dateLabel: data.dateLabel,
-    placeLabel: data.placeLabel,
-    starTypeName: starType?.type.name,
-    starTypeCopy: starType?.type.copy,
-    planets: data.planets.map((p) => ({
-      label: getPlanet(p.key).name,
-      sign: signName(signIndex(p.lon)),
-      deg: degInSign(p.lon),
-      retro: p.retro,
-    })),
-    natalAspects: natalAspects.length ? natalAspects.map((a) => a.tech) : undefined,
-    periodLabel: periodNoun(data.period),
-    skyNote: fortune.skyNote,
-    toneLabel: fortune.toneLabel,
-    transits: fortune.items.map((i) => i.title),
-    reading: aiState.status === 'done' ? aiState.text : undefined,
-  }
-  const chatStorageKey = `starflect-chat:${data.dateLabel}:${data.name}`
+  // 相談チャット(＝ほしキャラとの会話)に渡すコンテキスト
+  const chatContext = buildChatContext(data)
 
   return (
     <div className="result-screen">
@@ -230,48 +161,7 @@ export default function Result({ data, onHome, onPair }: Props) {
 
       <StarReading chart={data} />
 
-      <section className="planet-card ai-card">
-        <header className="planet-head">
-          <div className="planet-symbol" aria-hidden="true">
-            <SectionIcon name="reading" />
-          </div>
-          <div>
-            <p className="planet-title">{t.result.aiTitle}</p>
-            <p className="planet-sub">{t.result.aiSub(data.name ?? '')}</p>
-          </div>
-        </header>
-
-        {aiState.status === 'idle' && (
-          <>
-            <button className="cta" onClick={handleAiReading}>
-              {t.result.aiCta}
-            </button>
-            <p className="ai-note">{t.result.aiNote}</p>
-          </>
-        )}
-
-        {aiState.status === 'loading' && (
-          <p className="ai-loading">
-            <span className="ai-spinner" aria-hidden="true">
-              ✦
-            </span>
-            {t.result.aiLoading}
-          </p>
-        )}
-
-        {aiState.status === 'done' && <AiReading text={aiState.text} />}
-
-        {aiState.status === 'error' && (
-          <>
-            <p className="form-error">{aiState.message}</p>
-            <button className="ghost" onClick={handleAiReading}>
-              {t.common.tryAgain}
-            </button>
-          </>
-        )}
-      </section>
-
-      <AiChat context={chatContext} storageKey={chatStorageKey} />
+      <AiChat context={chatContext} storageKey={chatStorageKey(data)} />
 
       <Feedback page="result" starType={starSlug} />
 
@@ -280,11 +170,6 @@ export default function Result({ data, onHome, onPair }: Props) {
           <p>{t.result.upsell}</p>
         </div>
       )}
-
-      <div className="adopt-card">
-        <p className="adopt-lead">{t.result.adoptLead}</p>
-        <p className="adopt-promise">{t.companion.seeYouTomorrow}</p>
-      </div>
 
       <div className="result-actions">
         <button className="ghost" onClick={onPair}>

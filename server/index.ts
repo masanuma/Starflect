@@ -14,7 +14,6 @@ const handlers = createAiHandlers(process.env.ANTHROPIC_API_KEY)
 const feedback = createFeedbackHandler(process.env.FEEDBACK_SHEET_URL)
 
 // APIルート(静的配信より前に登録する)
-app.post('/api/ai-reading', handlers.reading)
 app.post('/api/ai-pair', handlers.pair)
 app.post('/api/ai-chat', handlers.chat)
 app.post('/api/feedback', feedback)
