@@ -41,26 +41,33 @@ export default function Home({ onSelect, onSelectPair, onAbout, onCompanion }: P
         </button>
       </div>
 
-      {companion && cStar && (
-        <button className="companion-entry" onClick={onCompanion}>
-          <span className="companion-entry-mascot" aria-hidden="true">
-            <HoshiKyaraMascot sunElement={cStar.sunElement} moonElement={cStar.moonElement} size={48} />
-          </span>
-          <span className="companion-entry-label">{t.home.seeCompanion(cStar.type.name)}</span>
-          <span className="companion-entry-arrow" aria-hidden="true">
-            →
-          </span>
-        </button>
-      )}
-
       <div className="mode-list">
-        <button className="mode-card mode-detailed" onClick={onSelect}>
-          <div className="mode-head">
-            <span className="mode-name">{t.home.soloName}</span>
-            <span className="mode-time">{t.home.soloTime}</span>
-          </div>
-          <p className="mode-desc">{t.home.soloDesc}</p>
-        </button>
+        {companion && cStar ? (
+          // 相棒がいる = 診断済み。診断は初回のみなので「会話する」を主役に、変更は小リンク
+          <>
+            <button className="companion-entry" onClick={onCompanion}>
+              <span className="companion-entry-mascot" aria-hidden="true">
+                <HoshiKyaraMascot sunElement={cStar.sunElement} moonElement={cStar.moonElement} size={48} />
+              </span>
+              <span className="companion-entry-label">{t.home.seeCompanion(cStar.type.name)}</span>
+              <span className="companion-entry-arrow" aria-hidden="true">
+                →
+              </span>
+            </button>
+            <button className="change-info-link" onClick={onSelect}>
+              {t.home.changeInfo}
+            </button>
+          </>
+        ) : (
+          // 初回 = 診断を表示
+          <button className="mode-card mode-detailed" onClick={onSelect}>
+            <div className="mode-head">
+              <span className="mode-name">{t.home.soloName}</span>
+              <span className="mode-time">{t.home.soloTime}</span>
+            </div>
+            <p className="mode-desc">{t.home.soloDesc}</p>
+          </button>
+        )}
 
         <button className="mode-card mode-pair" onClick={onSelectPair}>
           <div className="mode-head">
