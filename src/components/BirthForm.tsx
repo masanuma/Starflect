@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
-import type { ChartData, PlanetPos, PeriodKey } from '../lib/types'
+import type { ChartData, PlanetPos } from '../lib/types'
 import { localToDate, ascendant, eclipticLongitude, isRetrograde } from '../lib/astro'
 import { COUNTRIES, countryByCode, countryName, detectDefaultCountry } from '../lib/countries'
 import { PREFECTURES, prefectureByCode, prefectureName, DEFAULT_PREFECTURE } from '../lib/prefectures'
-import { PERIODS, periodLabel } from '../lib/fortune'
 import { getPlanet, PRO_PLANETS } from '../lib/planets'
 import { useLang } from '../lib/i18n'
 import { useUI, formatBirthDate } from '../lib/ui'
@@ -20,7 +19,6 @@ interface SavedInput {
   time: string
   countryCode?: string
   prefectureCode?: string
-  period?: PeriodKey
 }
 
 const STORAGE_KEY = 'starflect-input'
@@ -43,7 +41,6 @@ export default function BirthForm({ onBack, onResult }: Props) {
   const [time, setTime] = useState(saved?.time ?? '')
   const [countryCode, setCountryCode] = useState(saved?.countryCode ?? detectDefaultCountry())
   const [prefectureCode, setPrefectureCode] = useState(saved?.prefectureCode ?? DEFAULT_PREFECTURE)
-  const [period, setPeriod] = useState<PeriodKey>(saved?.period ?? 'today')
   const [error, setError] = useState('')
 
   const sortedCountries = [...COUNTRIES].sort((a, b) =>
@@ -54,12 +51,12 @@ export default function BirthForm({ onBack, onResult }: Props) {
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ name, date, time, countryCode, prefectureCode, period } satisfies SavedInput),
+        JSON.stringify({ name, date, time, countryCode, prefectureCode } satisfies SavedInput),
       )
     } catch {
       /* 保存できない環境では無視 */
     }
-  }, [name, date, time, countryCode, prefectureCode, period])
+  }, [name, date, time, countryCode, prefectureCode])
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -100,7 +97,8 @@ export default function BirthForm({ onBack, onResult }: Props) {
 
     const dateLabel = formatBirthDate(date, hasTime ? time : undefined, lang)
 
-    onResult({ name: name.trim(), dateLabel, placeLabel, planets, period })
+    // 「いつを占う」はフォームでは選ばせない(運勢カードのタブで切替できる)。既定は今日
+    onResult({ name: name.trim(), dateLabel, placeLabel, planets, period: 'today' })
   }
 
   return (
@@ -166,25 +164,6 @@ export default function BirthForm({ onBack, onResult }: Props) {
             <span className="field-hint">{t.birth.prefectureHint}</span>
           </label>
         )}
-
-        <div className="field">
-          <span className="field-label">{t.common.when}</span>
-          <div className="period-row" role="radiogroup" aria-label={t.common.periodAria}>
-            {PERIODS.map((p) => (
-              <button
-                key={p.key}
-                type="button"
-                role="radio"
-                aria-checked={period === p.key}
-                className={`period-chip${period === p.key ? ' active' : ''}`}
-                onClick={() => setPeriod(p.key)}
-              >
-                {periodLabel(p.key)}
-              </button>
-            ))}
-          </div>
-          <span className="field-hint">{t.birth.periodHint}</span>
-        </div>
 
         {error && <p className="form-error">{error}</p>}
 
