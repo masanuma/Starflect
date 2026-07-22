@@ -148,7 +148,6 @@ export default function Result({ data, onHome, onPair }: Props) {
                       {info.symbol} {info.name}
                     </span>
                     {p.retro && <span className="retro-badge">℞</span>}
-                    {info.generational && <span className="gen-badge">{t.result.genBadge}</span>}
                   </p>
                   <span className="party-row-sign">
                     {signSymbol(si)} {signName(si)} {degInSign(p.lon).toFixed(1)}°
@@ -176,7 +175,6 @@ export default function Result({ data, onHome, onPair }: Props) {
             {showAllParty ? t.result.partyLess : t.result.partyMore(partyPlanets.length - partyShown)}
           </button>
         )}
-        <p className="party-foot">{t.result.partyFoot}</p>
       </section>
 
       <StarReading chart={data} />
