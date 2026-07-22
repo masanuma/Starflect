@@ -243,9 +243,8 @@ export interface UIStrings {
   map: {
     title: string
     sub: string
-    unit: string
-    progressLead: (signals: number) => string
-    toNext: (n: number) => string
+    progressLead: (name: string, level: number) => string
+    toNext: (n: number, nextName: string) => string
     allDone: string
     open: string
     close: string
@@ -497,10 +496,9 @@ const UI: Record<Lang, UIStrings> = {
     },
     map: {
       title: 'ほしキャラと深まる地図',
-      sub: '毎日ちょっと使うほど、あなただけの発見がひらいていきます。減ることはありません。',
-      unit: 'シグナル',
-      progressLead: (n) => `これまで ${n} シグナル`,
-      toNext: (n) => `つぎの発見まで、あと ${n}`,
+      sub: 'あなたを知るほど、占いはあなただけのものになる。',
+      progressLead: (name, n) => `${name}のあなた理解度：Lv.${n}`,
+      toNext: (n, nm) => `あと ${n} で〈${nm}〉に気づく`,
       allDone: 'すべての宝箱をひらきました。ここまで、よく続けましたね。',
       open: '見る',
       close: '閉じる',
@@ -758,10 +756,9 @@ const UI: Record<Lang, UIStrings> = {
     },
     map: {
       title: 'Your map with your Hoshi-Kyara',
-      sub: 'The more you drop by, the more discoveries about you open up. Nothing ever goes away.',
-      unit: 'signals',
-      progressLead: (n) => `${n} signals so far`,
-      toNext: (n) => `${n} more to your next discovery`,
+      sub: 'The more it knows you, the more the reading becomes yours alone.',
+      progressLead: (name, n) => `How well ${name} knows you: Lv.${n}`,
+      toNext: (n, nm) => `${n} more until it notices “${nm}”`,
       allDone: 'You’ve opened every chest. What a journey.',
       open: 'Open',
       close: 'Close',
@@ -1019,10 +1016,9 @@ const UI: Record<Lang, UIStrings> = {
     },
     map: {
       title: 'Tu mapa con tu Hoshi-Kyara',
-      sub: 'Cuanto más lo usas, más descubrimientos sobre ti se abren. Nunca se pierde nada.',
-      unit: 'señales',
-      progressLead: (n) => `${n} señales hasta ahora`,
-      toNext: (n) => `${n} más para tu próximo descubrimiento`,
+      sub: 'Cuanto más te conoce, más la lectura se vuelve solo tuya.',
+      progressLead: (name, n) => `Cuánto te conoce ${name}: Lv.${n}`,
+      toNext: (n, nm) => `${n} más para que descubra «${nm}»`,
       allDone: 'Has abierto todos los cofres. Qué viaje.',
       open: 'Ver',
       close: 'Cerrar',
@@ -1280,10 +1276,9 @@ const UI: Record<Lang, UIStrings> = {
     },
     map: {
       title: 'Ta carte avec ton Hoshi-Kyara',
-      sub: 'Plus tu passes, plus de découvertes sur toi s’ouvrent. Rien ne disparaît jamais.',
-      unit: 'signaux',
-      progressLead: (n) => `${n} signaux jusqu’ici`,
-      toNext: (n) => `encore ${n} avant ta prochaine découverte`,
+      sub: 'Plus il te connaît, plus la lecture devient rien qu’à toi.',
+      progressLead: (name, n) => `Ce que ${name} sait de toi : Lv.${n}`,
+      toNext: (n, nm) => `encore ${n} pour qu’il remarque « ${nm} »`,
       allDone: 'Tu as ouvert tous les coffres. Quel parcours.',
       open: 'Voir',
       close: 'Fermer',
@@ -1541,10 +1536,9 @@ const UI: Record<Lang, UIStrings> = {
     },
     map: {
       title: 'La tua mappa con il tuo Hoshi-Kyara',
-      sub: 'Più lo usi, più scoperte su di te si aprono. Non si perde mai nulla.',
-      unit: 'segnali',
-      progressLead: (n) => `${n} segnali finora`,
-      toNext: (n) => `ancora ${n} alla prossima scoperta`,
+      sub: 'Più ti conosce, più la lettura diventa solo tua.',
+      progressLead: (name, n) => `Quanto ${name} ti conosce: Lv.${n}`,
+      toNext: (n, nm) => `ancora ${n} perché noti «${nm}»`,
       allDone: 'Hai aperto tutti gli scrigni. Che viaggio.',
       open: 'Vedi',
       close: 'Chiudi',
@@ -1802,10 +1796,9 @@ const UI: Record<Lang, UIStrings> = {
     },
     map: {
       title: 'Seu mapa com seu Hoshi-Kyara',
-      sub: 'Quanto mais você usa, mais descobertas sobre você se abrem. Nada nunca se perde.',
-      unit: 'sinais',
-      progressLead: (n) => `${n} sinais até agora`,
-      toNext: (n) => `mais ${n} até sua próxima descoberta`,
+      sub: 'Quanto mais te conhece, mais a leitura se torna só sua.',
+      progressLead: (name, n) => `O quanto ${name} te conhece: Lv.${n}`,
+      toNext: (n, nm) => `mais ${n} para que perceba «${nm}»`,
       allDone: 'Você abriu todos os baús. Que jornada.',
       open: 'Ver',
       close: 'Fechar',
@@ -2063,10 +2056,9 @@ const UI: Record<Lang, UIStrings> = {
     },
     map: {
       title: '호시캐릭터와 깊어지는 지도',
-      sub: '매일 조금씩 쓸수록 당신만의 발견이 열립니다. 줄어드는 일은 없습니다.',
-      unit: '시그널',
-      progressLead: (n) => `지금까지 ${n} 시그널`,
-      toNext: (n) => `다음 발견까지 ${n} 남음`,
+      sub: '당신을 알수록, 운세는 당신만의 것이 되어 갑니다.',
+      progressLead: (name, n) => `${name}의 당신 이해도: Lv.${n}`,
+      toNext: (n, nm) => `${n} 더 모으면 〈${nm}〉를 알아차려요`,
       allDone: '모든 보물상자를 열었어요. 여기까지 정말 잘 이어왔네요.',
       open: '보기',
       close: '닫기',

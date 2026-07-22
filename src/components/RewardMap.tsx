@@ -50,8 +50,12 @@ export default function RewardMap({ signals, chart, starName }: Props) {
       </div>
 
       <p className="map-progress">
-        {t.map.progressLead(signals)}
-        {prog.next && <span className="map-progress-next"> · {t.map.toNext(prog.remaining)}</span>}
+        {t.map.progressLead(quoted(starName), signals)}
+        {prog.next ? (
+          <span className="map-progress-next"> · {t.map.toNext(prog.remaining, t.map.tiers[prog.next.key].name)}</span>
+        ) : (
+          <span className="map-progress-next"> · {t.map.allDone}</span>
+        )}
       </p>
 
       <ol className="map-track">
@@ -78,7 +82,7 @@ export default function RewardMap({ signals, chart, starName }: Props) {
                     <span className="map-node-cta">{isOpen ? t.map.close : t.map.open}</span>
                   ) : (
                     <span className="map-node-lock">
-                      {isNext ? t.map.lockedHint(prog.remaining) : `${tier.at} ${t.map.unit}`}
+                      {isNext ? t.map.lockedHint(prog.remaining) : `Lv.${tier.at}`}
                     </span>
                   )}
                 </button>
