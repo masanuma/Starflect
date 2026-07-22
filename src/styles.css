@@ -1813,16 +1813,33 @@ body {
 }
 
 .party-row-headline {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
   margin: 0 0 6px;
   font-family: var(--font-head);
-  font-size: 14.5px;
-  font-weight: 700;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.55;
   color: var(--ink);
+}
+
+.ph-role {
+  font-weight: 800;
+}
+
+.ph-planet {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.ph-sign {
+  font-weight: 800;
+  color: var(--pink-strong);
+  white-space: nowrap;
+}
+
+.ph-sep {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink-sub);
+  margin: 0 1px;
 }
 
 .party-row-class {

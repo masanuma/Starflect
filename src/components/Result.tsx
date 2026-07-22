@@ -142,13 +142,24 @@ export default function Result({ data, onHome, onPair }: Props) {
                   <PlanetMascot planetKey={p.key} size={58} />
                 </div>
                 <div className="party-row-body">
-                  <p className="party-row-headline">
-                    {info.symbol} {t.result.roleSign(info.role, info.name, signName(si), p.key === 'asc')}
-                    {p.retro && <span className="retro-badge">℞</span>}
-                  </p>
-                  <span className="party-row-sign">
-                    {signSymbol(si)} {degInSign(p.lon).toFixed(1)}°
-                  </span>
+                  {(() => {
+                    const parts = t.result.roleSign(info.role, info.name, signName(si), p.key === 'asc')
+                    return (
+                      <p className="party-row-headline">
+                        <span className="ph-role" style={{ color }}>
+                          {info.symbol} {parts.role}
+                        </span>
+                        <span className="ph-sep">{parts.sep1}</span>
+                        <span className="ph-planet">{parts.planetLabel}</span>
+                        <span className="ph-sep">{parts.sep2}</span>
+                        <span className="ph-sign">
+                          {signSymbol(si)} {parts.sign}
+                        </span>
+                        {p.retro && <span className="retro-badge"> ℞</span>}
+                      </p>
+                    )
+                  })()}
+                  <span className="party-row-sign">{degInSign(p.lon).toFixed(1)}°</span>
                   <dl className="party-facts">
                     <div>
                       <dt>{t.result.domain}</dt>
