@@ -158,7 +158,7 @@ export default function Result({ data, onHome, onPair }: Props) {
                           {signSymbol(si)} {parts.sign}
                         </span>
                         <span className="ph-deg">{degInSign(p.lon).toFixed(1)}°</span>
-                        {p.retro && <span className="retro-badge"> ℞</span>}
+                        {p.retro && <span className="retro-badge">{t.result.retro}</span>}
                       </p>
                     )
                   })()}

@@ -132,6 +132,7 @@ export interface UIStrings {
     roleSign: (role: string, planet: string, sign: string, isAsc: boolean) => RoleSignParts
     domain: string
     quirk: string
+    retro: string
     genBadge: string
     partyFoot: string
     fortuneTitle: (period: string) => string
@@ -364,6 +365,7 @@ const UI: Record<Lang, UIStrings> = {
       domain: '担当',
       roleSign: (role, planet, sign, isAsc) => ({ role, sep1: 'の', planetLabel: isAsc ? planet : `${planet}星座`, sep2: 'は', sign }),
       quirk: '特徴',
+      retro: '逆行',
       genBadge: '世代',
       partyFoot: '「世代」= 動きがゆっくりで、同世代に共通する時代の空気も映す天体です',
       fortuneTitle: (period) => `${period}の運勢`,
@@ -601,6 +603,7 @@ const UI: Record<Lang, UIStrings> = {
       domain: 'Domain',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' in ', sign }),
       quirk: 'Trait',
+      retro: 'Retrograde',
       genBadge: 'Gen',
       partyFoot: '“Gen” = slow-moving planets that also reflect the mood of your whole generation.',
       fortuneTitle: (period) => `${period}’s fortune`,
@@ -838,6 +841,7 @@ const UI: Record<Lang, UIStrings> = {
       domain: 'Área',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' en ', sign }),
       quirk: 'Rasgo',
+      retro: 'Retrógrado',
       genBadge: 'Gen',
       partyFoot: '“Gen” = planetas de movimiento lento que también reflejan el aire de toda tu generación.',
       fortuneTitle: (period) => `Fortuna: ${period}`,
@@ -1075,6 +1079,7 @@ const UI: Record<Lang, UIStrings> = {
       domain: 'Domaine',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' en ', sign }),
       quirk: 'Trait',
+      retro: 'Rétrograde',
       genBadge: 'Génér.',
       partyFoot: '« Génér. » = planètes lentes qui reflètent aussi l’air du temps de toute ta génération.',
       fortuneTitle: (period) => `Fortune : ${period}`,
@@ -1312,6 +1317,7 @@ const UI: Record<Lang, UIStrings> = {
       domain: 'Ambito',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' in ', sign }),
       quirk: 'Tratto',
+      retro: 'Retrogrado',
       genBadge: 'Gen',
       partyFoot: '« Gen » = pianeti lenti che riflettono anche l’aria di tutta la tua generazione.',
       fortuneTitle: (period) => `Fortuna: ${period}`,
@@ -1549,6 +1555,7 @@ const UI: Record<Lang, UIStrings> = {
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' em ', sign }),
       domain: 'Área',
       quirk: 'Traço',
+      retro: 'Retrógrado',
       genBadge: 'Ger.',
       partyFoot: '« Ger. » = planetas lentos que também refletem o clima de toda a sua geração.',
       fortuneTitle: (period) => `Fortuna: ${period}`,
@@ -1786,6 +1793,7 @@ const UI: Record<Lang, UIStrings> = {
       domain: '담당',
       roleSign: (role, planet, sign, isAsc) => ({ role, sep1: '의 ', planetLabel: isAsc ? planet : `${planet} 별자리`, sep2: isAsc ? '은 ' : '는 ', sign }),
       quirk: '특징',
+      retro: '역행',
       genBadge: '세대',
       partyFoot: '「세대」 = 움직임이 느리고, 같은 세대가 공유하는 시대 분위기도 비추는 행성이에요.',
       fortuneTitle: (period) => `${period}의 운세`,
