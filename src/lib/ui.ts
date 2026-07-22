@@ -496,7 +496,7 @@ const UI: Record<Lang, UIStrings> = {
     },
     map: {
       title: 'ほしキャラと深まる地図',
-      sub: 'あなたを知るほど、占いはあなただけのものになります。',
+      sub: 'ほしキャラがあなたを知るほど、占いはあなただけのものになります。',
       progressLead: (name, n) => `${name}のあなた理解度：Lv.${n}`,
       toNext: (n, nm) => `あと ${n} で〈${nm}〉に気づきます`,
       allDone: 'すべての宝箱をひらきました。ここまで、よく続けましたね。',
@@ -756,7 +756,7 @@ const UI: Record<Lang, UIStrings> = {
     },
     map: {
       title: 'Your map with your Hoshi-Kyara',
-      sub: 'The more it knows you, the more the reading becomes yours alone.',
+      sub: 'The more your Hoshi-Kyara knows you, the more the reading becomes yours alone.',
       progressLead: (name, n) => `How well ${name} knows you: Lv.${n}`,
       toNext: (n, nm) => `${n} more until it notices “${nm}”`,
       allDone: 'You’ve opened every chest. What a journey.',
@@ -2056,7 +2056,7 @@ const UI: Record<Lang, UIStrings> = {
     },
     map: {
       title: '호시캐릭터와 깊어지는 지도',
-      sub: '당신을 알수록, 운세는 당신만의 것이 되어 가요.',
+      sub: '호시캐릭터가 당신을 알수록, 운세는 당신만의 것이 되어 가요.',
       progressLead: (name, n) => `${name}의 당신 이해도: Lv.${n}`,
       toNext: (n, nm) => `${n} 더 모으면 〈${nm}〉를 알아차려요`,
       allDone: '모든 보물상자를 열었어요. 여기까지 정말 잘 이어왔네요.',
