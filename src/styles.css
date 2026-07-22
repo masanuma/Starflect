@@ -1812,6 +1812,19 @@ body {
   margin: 0 0 4px;
 }
 
+.party-row-headline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 0 0 6px;
+  font-family: var(--font-head);
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
 .party-row-class {
   font-family: var(--font-pop);
   font-size: 15.5px;

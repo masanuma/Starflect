@@ -142,15 +142,12 @@ export default function Result({ data, onHome, onPair }: Props) {
                   <PlanetMascot planetKey={p.key} size={58} />
                 </div>
                 <div className="party-row-body">
-                  <p className="party-row-top">
-                    <span className="party-row-class">{info.role}</span>
-                    <span className="party-row-planet">
-                      {info.symbol} {info.name}
-                    </span>
+                  <p className="party-row-headline">
+                    {info.symbol} {t.result.roleSign(info.role, info.name, signName(si), p.key === 'asc')}
                     {p.retro && <span className="retro-badge">℞</span>}
                   </p>
                   <span className="party-row-sign">
-                    {signSymbol(si)} {signName(si)} {degInSign(p.lon).toFixed(1)}°
+                    {signSymbol(si)} {degInSign(p.lon).toFixed(1)}°
                   </span>
                   <dl className="party-facts">
                     <div>

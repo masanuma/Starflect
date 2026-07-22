@@ -119,6 +119,8 @@ export interface UIStrings {
     partySub: string
     partyMore: (hidden: number) => string
     partyLess: string
+    /** 「主人公の太陽星座は牡牛座」のような一文。isAsc は上昇星座(名前に既に星座を含む)判定 */
+    roleSign: (role: string, planet: string, sign: string, isAsc: boolean) => string
     domain: string
     quirk: string
     genBadge: string
@@ -351,6 +353,7 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `のこりの${hidden}キャラも見てみて！`,
       partyLess: '畳む',
       domain: '担当',
+      roleSign: (role, planet, sign, isAsc) => isAsc ? `${role}の${planet}は${sign}` : `${role}の${planet}星座は${sign}`,
       quirk: '特徴',
       genBadge: '世代',
       partyFoot: '「世代」= 動きがゆっくりで、同世代に共通する時代の空気も映す天体です',
@@ -587,6 +590,7 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `See your other ${hidden} characters too!`,
       partyLess: 'Collapse',
       domain: 'Domain',
+      roleSign: (role, planet, sign) => `${role}: ${planet} in ${sign}`,
       quirk: 'Trait',
       genBadge: 'Gen',
       partyFoot: '“Gen” = slow-moving planets that also reflect the mood of your whole generation.',
@@ -823,6 +827,7 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `¡Mira también tus otros ${hidden} personajes!`,
       partyLess: 'Contraer',
       domain: 'Área',
+      roleSign: (role, planet, sign) => `${role}: ${planet} en ${sign}`,
       quirk: 'Rasgo',
       genBadge: 'Gen',
       partyFoot: '“Gen” = planetas de movimiento lento que también reflejan el aire de toda tu generación.',
@@ -1059,6 +1064,7 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `Découvre aussi tes ${hidden} autres personnages !`,
       partyLess: 'Réduire',
       domain: 'Domaine',
+      roleSign: (role, planet, sign) => `${role} : ${planet} en ${sign}`,
       quirk: 'Trait',
       genBadge: 'Génér.',
       partyFoot: '« Génér. » = planètes lentes qui reflètent aussi l’air du temps de toute ta génération.',
@@ -1295,6 +1301,7 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `Scopri anche gli altri tuoi ${hidden} personaggi!`,
       partyLess: 'Comprimi',
       domain: 'Ambito',
+      roleSign: (role, planet, sign) => `${role}: ${planet} in ${sign}`,
       quirk: 'Tratto',
       genBadge: 'Gen',
       partyFoot: '« Gen » = pianeti lenti che riflettono anche l’aria di tutta la tua generazione.',
@@ -1530,8 +1537,9 @@ const UI: Record<Lang, UIStrings> = {
       partySub: 'Os astros do instante do seu nascimento viraram os personagens que compõem você: do que cada um cuida e como ele é.',
       partyMore: (hidden) => `Veja também os seus outros ${hidden} personagens!`,
       partyLess: 'Recolher',
+      roleSign: (role, planet, sign) => `${role}: ${planet} em ${sign}`,
       domain: 'Área',
-      quirk: 'Rasgo',
+      quirk: 'Traço',
       genBadge: 'Ger.',
       partyFoot: '« Ger. » = planetas lentos que também refletem o clima de toda a sua geração.',
       fortuneTitle: (period) => `Fortuna: ${period}`,
@@ -1767,6 +1775,7 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `나머지 ${hidden} 캐릭터도 봐 봐요!`,
       partyLess: '접기',
       domain: '담당',
+      roleSign: (role, planet, sign, isAsc) => isAsc ? `${role}의 ${planet}은 ${sign}` : `${role}의 ${planet} 별자리는 ${sign}`,
       quirk: '특징',
       genBadge: '세대',
       partyFoot: '「세대」 = 움직임이 느리고, 같은 세대가 공유하는 시대 분위기도 비추는 행성이에요.',
