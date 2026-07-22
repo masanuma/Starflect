@@ -147,7 +147,9 @@ export default function Result({ data, onHome, onPair }: Props) {
                     return (
                       <p className="party-row-headline">
                         <span className="ph-role" style={{ color }}>
-                          {info.symbol} {parts.role}
+                          {/* 上昇星座の記号「ASC」は一般的でないので出さない */}
+                          {p.key !== 'asc' && `${info.symbol} `}
+                          {parts.role}
                         </span>
                         <span className="ph-sep">{parts.sep1}</span>
                         <span className="ph-planet">{parts.planetLabel}</span>
@@ -155,11 +157,11 @@ export default function Result({ data, onHome, onPair }: Props) {
                         <span className="ph-sign">
                           {signSymbol(si)} {parts.sign}
                         </span>
+                        <span className="ph-deg">{degInSign(p.lon).toFixed(1)}°</span>
                         {p.retro && <span className="retro-badge"> ℞</span>}
                       </p>
                     )
                   })()}
-                  <span className="party-row-sign">{degInSign(p.lon).toFixed(1)}°</span>
                   <dl className="party-facts">
                     <div>
                       <dt>{t.result.domain}</dt>

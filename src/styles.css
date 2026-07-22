@@ -1842,6 +1842,14 @@ body {
   margin: 0 1px;
 }
 
+.ph-deg {
+  margin-left: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-sub);
+  white-space: nowrap;
+}
+
 .party-row-class {
   font-family: var(--font-pop);
   font-size: 15.5px;
