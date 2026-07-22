@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import type { ChatChartContext, ChatMessage } from '../lib/aiChat'
 import { streamAiChat } from '../lib/aiChat'
+import { earnChatSignal } from '../lib/companion'
 import type { ChartData, PlanetKey } from '../lib/types'
 import { starTypeOf } from '../lib/startypes'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
@@ -15,6 +16,8 @@ interface Props {
   storageKey: string
   /** 相談相手＝自分のほしキャラのマスコットを出すためのチャート */
   chart?: ChartData
+  /** 1往復ごとに呼ばれる(ごほうび地図のシグナル更新など)。任意 */
+  onExchange?: () => void
 }
 
 function loadMessages(key: string): ChatMessage[] {
@@ -26,7 +29,7 @@ function loadMessages(key: string): ChatMessage[] {
   }
 }
 
-export default function AiChat({ context, storageKey, chart }: Props) {
+export default function AiChat({ context, storageKey, chart, onExchange }: Props) {
   const { lang } = useLang()
   const t = useUI()
   // 相談相手は自分のほしキャラ。ヘッダーにそのマスコットを出す
@@ -75,6 +78,9 @@ export default function AiChat({ context, storageKey, chart }: Props) {
         },
         lang,
       )
+      // 会話が成立したら、ごほうび地図のシグナルを +1(端末に加算して画面を更新)
+      earnChatSignal()
+      onExchange?.()
     } catch (e) {
       // 失敗したら空のアシスタント吹き出しを取り除き、ユーザー発言は残す
       setMessages((cur) => (cur.length && cur[cur.length - 1].role === 'assistant' && !cur[cur.length - 1].content ? cur.slice(0, -1) : cur))

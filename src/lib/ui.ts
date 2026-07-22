@@ -240,6 +240,21 @@ export interface UIStrings {
     toChat: string
     seeYouTomorrow: string
   }
+  map: {
+    title: string
+    sub: string
+    unit: string
+    progressLead: (signals: number) => string
+    toNext: (n: number) => string
+    allDone: string
+    open: string
+    close: string
+    lockedHint: (n: number) => string
+    soonNote: string
+    tiers: Record<string, { name: string; teaser: string }>
+    bornBody: (name: string) => string
+    moonBackBody: (moonSign: string, manner: string) => string
+  }
 }
 
 const UI: Record<Lang, UIStrings> = {
@@ -480,6 +495,29 @@ const UI: Record<Lang, UIStrings> = {
       toChat: 'ほしキャラに相談する',
       seeYouTomorrow: 'また明日も、ここで星を読んでいますね。',
     },
+    map: {
+      title: 'ほしキャラと深まる地図',
+      sub: '毎日ちょっと使うほど、あなただけの発見がひらいていきます。減ることはありません。',
+      unit: 'シグナル',
+      progressLead: (n) => `これまで ${n} シグナル`,
+      toNext: (n) => `つぎの発見まで、あと ${n}`,
+      allDone: 'すべての宝箱をひらきました。ここまで、よく続けましたね。',
+      open: '見る',
+      close: '閉じる',
+      lockedHint: (n) => `あと ${n} でひらく`,
+      soonNote: 'この発見はいま準備中です。もうすこしで会えます。',
+      tiers: {
+        birth: { name: 'ほしキャラ誕生', teaser: '太陽と月から生まれた、あなたのほしキャラ。ここが物語の出発点。' },
+        moonBack: { name: '月星座の裏側', teaser: '表の顔(太陽)とは別の、安心しているときの素のあなた。' },
+        partyDeep: { name: 'パーティの深掘り', teaser: '10人の星たちの、もう一歩踏み込んだ役割と読み。' },
+        moodTrend: { name: '気分のクセ', teaser: '記録がたまると見えてくる、あなたが揺れやすい曜日と場面。' },
+        hiddenSelf: { name: '隠れた自分レポート', teaser: '本来の星(出生図)と、実際の毎日とのギャップ。いちばんの発見。' },
+        trueBuddy: { name: 'ほんとうの相棒', teaser: 'あなたのすべてを踏まえて話す、ほしキャラの最終形。' },
+      },
+      bornBody: (name) => `${name}として、あなたの物語がはじまりました。この地図の出発点です。`,
+      moonBackBody: (moonSign, manner) =>
+        `あなたの月星座は「${moonSign}」。人前で見せる顔(太陽)とは別に、ひとりで安心しているときのあなたは「${manner}」。表からは見えない、素のスイッチです。`,
+    },
   },
   en: {
     common: {
@@ -717,6 +755,29 @@ const UI: Record<Lang, UIStrings> = {
       toPair: 'Check compatibility',
       toChat: 'Talk to your companion',
       seeYouTomorrow: 'I’ll be here reading the stars tomorrow too.',
+    },
+    map: {
+      title: 'Your map with your Hoshi-Kyara',
+      sub: 'The more you drop by, the more discoveries about you open up. Nothing ever goes away.',
+      unit: 'signals',
+      progressLead: (n) => `${n} signals so far`,
+      toNext: (n) => `${n} more to your next discovery`,
+      allDone: 'You’ve opened every chest. What a journey.',
+      open: 'Open',
+      close: 'Close',
+      lockedHint: (n) => `${n} more to unlock`,
+      soonNote: 'This discovery is still being prepared. Coming very soon.',
+      tiers: {
+        birth: { name: 'Your Hoshi-Kyara is born', teaser: 'Born from your Sun and Moon — the starting point of your story.' },
+        moonBack: { name: 'The other side of your Moon', teaser: 'The unguarded you when you feel safe, apart from your public face (the Sun).' },
+        partyDeep: { name: 'Your party, in depth', teaser: 'A closer read on the roles of all ten star characters.' },
+        moodTrend: { name: 'Your mood patterns', teaser: 'As records add up: the days and places where you tend to wobble.' },
+        hiddenSelf: { name: 'Your hidden-self report', teaser: 'The gap between your birth chart and your real days. The big one.' },
+        trueBuddy: { name: 'Your true companion', teaser: 'The final form of your Hoshi-Kyara, speaking with everything about you in mind.' },
+      },
+      bornBody: (name) => `Your story began as ${name}. This is where the map starts.`,
+      moonBackBody: (moonSign, manner) =>
+        `Your Moon sign is ${moonSign}. Apart from the face you show others (the Sun), the you that feels at ease alone is “${manner}.” It’s your quiet, off-stage switch.`,
     },
   },
   es: {
@@ -956,6 +1017,29 @@ const UI: Record<Lang, UIStrings> = {
       toChat: 'Hablar con tu compañero',
       seeYouTomorrow: 'Mañana también estaré aquí leyendo las estrellas.',
     },
+    map: {
+      title: 'Tu mapa con tu Hoshi-Kyara',
+      sub: 'Cuanto más lo usas, más descubrimientos sobre ti se abren. Nunca se pierde nada.',
+      unit: 'señales',
+      progressLead: (n) => `${n} señales hasta ahora`,
+      toNext: (n) => `${n} más para tu próximo descubrimiento`,
+      allDone: 'Has abierto todos los cofres. Qué viaje.',
+      open: 'Ver',
+      close: 'Cerrar',
+      lockedHint: (n) => `${n} más para abrir`,
+      soonNote: 'Este descubrimiento aún se está preparando. Llega muy pronto.',
+      tiers: {
+        birth: { name: 'Nace tu Hoshi-Kyara', teaser: 'Nacido de tu Sol y tu Luna: el punto de partida de tu historia.' },
+        moonBack: { name: 'El otro lado de tu Luna', teaser: 'El tú sin guardia cuando te sientes a salvo, aparte de tu cara pública (el Sol).' },
+        partyDeep: { name: 'Tu grupo, a fondo', teaser: 'Una lectura más cercana del papel de los diez personajes estelares.' },
+        moodTrend: { name: 'Tus patrones de ánimo', teaser: 'Cuando se acumulan los registros: los días y lugares donde sueles tambalear.' },
+        hiddenSelf: { name: 'Informe de tu yo oculto', teaser: 'La brecha entre tu carta natal y tus días reales. El descubrimiento clave.' },
+        trueBuddy: { name: 'Tu verdadero compañero', teaser: 'La forma final de tu Hoshi-Kyara: habla teniendo en cuenta todo sobre ti.' },
+      },
+      bornBody: (name) => `Tu historia comenzó como ${name}. Aquí empieza el mapa.`,
+      moonBackBody: (moonSign, manner) =>
+        `Tu signo lunar es ${moonSign}. Aparte de la cara que muestras a los demás (el Sol), el tú que está tranquilo a solas es «${manner}». Es tu interruptor discreto, fuera de escena.`,
+    },
   },
   fr: {
     common: {
@@ -1193,6 +1277,29 @@ const UI: Record<Lang, UIStrings> = {
       toPair: 'Tester la compatibilité',
       toChat: 'Parler à ton compagnon',
       seeYouTomorrow: 'Je serai là demain aussi, à lire les étoiles.',
+    },
+    map: {
+      title: 'Ta carte avec ton Hoshi-Kyara',
+      sub: 'Plus tu passes, plus de découvertes sur toi s’ouvrent. Rien ne disparaît jamais.',
+      unit: 'signaux',
+      progressLead: (n) => `${n} signaux jusqu’ici`,
+      toNext: (n) => `encore ${n} avant ta prochaine découverte`,
+      allDone: 'Tu as ouvert tous les coffres. Quel parcours.',
+      open: 'Voir',
+      close: 'Fermer',
+      lockedHint: (n) => `encore ${n} pour ouvrir`,
+      soonNote: 'Cette découverte est en préparation. Elle arrive très bientôt.',
+      tiers: {
+        birth: { name: 'Ton Hoshi-Kyara naît', teaser: 'Né de ton Soleil et de ta Lune : le point de départ de ton histoire.' },
+        moonBack: { name: 'L’autre face de ta Lune', teaser: 'Le toi sans défense quand tu te sens en sécurité, à part ton visage public (le Soleil).' },
+        partyDeep: { name: 'Ton équipe, en détail', teaser: 'Une lecture plus fine du rôle des dix personnages stellaires.' },
+        moodTrend: { name: 'Tes habitudes d’humeur', teaser: 'À mesure que les notes s’accumulent : les jours et lieux où tu vacilles.' },
+        hiddenSelf: { name: 'Le rapport sur ton toi caché', teaser: 'L’écart entre ton thème natal et tes journées réelles. La grande découverte.' },
+        trueBuddy: { name: 'Ton vrai compagnon', teaser: 'La forme ultime de ton Hoshi-Kyara : il parle en tenant compte de tout sur toi.' },
+      },
+      bornBody: (name) => `Ton histoire a commencé en tant que ${name}. C’est ici que la carte débute.`,
+      moonBackBody: (moonSign, manner) =>
+        `Ton signe lunaire est ${moonSign}. À part le visage que tu montres aux autres (le Soleil), le toi apaisé quand tu es seul est « ${manner} ». C’est ton interrupteur discret, en coulisses.`,
     },
   },
   it: {
@@ -1432,6 +1539,29 @@ const UI: Record<Lang, UIStrings> = {
       toChat: 'Parla con il tuo compagno',
       seeYouTomorrow: 'Domani sarò qui a leggere le stelle, come sempre.',
     },
+    map: {
+      title: 'La tua mappa con il tuo Hoshi-Kyara',
+      sub: 'Più lo usi, più scoperte su di te si aprono. Non si perde mai nulla.',
+      unit: 'segnali',
+      progressLead: (n) => `${n} segnali finora`,
+      toNext: (n) => `ancora ${n} alla prossima scoperta`,
+      allDone: 'Hai aperto tutti gli scrigni. Che viaggio.',
+      open: 'Vedi',
+      close: 'Chiudi',
+      lockedHint: (n) => `ancora ${n} per aprire`,
+      soonNote: 'Questa scoperta è in preparazione. Arriva prestissimo.',
+      tiers: {
+        birth: { name: 'Nasce il tuo Hoshi-Kyara', teaser: 'Nato dal tuo Sole e dalla tua Luna: il punto di partenza della tua storia.' },
+        moonBack: { name: 'L’altro lato della tua Luna', teaser: 'Il te senza difese quando ti senti al sicuro, oltre la tua faccia pubblica (il Sole).' },
+        partyDeep: { name: 'Il tuo gruppo, in profondità', teaser: 'Una lettura più ravvicinata del ruolo dei dieci personaggi stellari.' },
+        moodTrend: { name: 'Le tue tendenze d’umore', teaser: 'Man mano che i segni si accumulano: i giorni e i momenti in cui vacilli.' },
+        hiddenSelf: { name: 'Il rapporto sul tuo io nascosto', teaser: 'Il divario tra il tuo tema natale e le tue giornate reali. La scoperta più grande.' },
+        trueBuddy: { name: 'Il tuo vero compagno', teaser: 'La forma finale del tuo Hoshi-Kyara: parla tenendo conto di tutto su di te.' },
+      },
+      bornBody: (name) => `La tua storia è iniziata come ${name}. È qui che comincia la mappa.`,
+      moonBackBody: (moonSign, manner) =>
+        `Il tuo segno lunare è ${moonSign}. Oltre alla faccia che mostri agli altri (il Sole), il te sereno quando sei solo è «${manner}». È il tuo interruttore silenzioso, dietro le quinte.`,
+    },
   },
   pt: {
     common: {
@@ -1670,6 +1800,29 @@ const UI: Record<Lang, UIStrings> = {
       toChat: 'Conversar com seu companheiro',
       seeYouTomorrow: 'Amanhã também estarei aqui lendo as estrelas.',
     },
+    map: {
+      title: 'Seu mapa com seu Hoshi-Kyara',
+      sub: 'Quanto mais você usa, mais descobertas sobre você se abrem. Nada nunca se perde.',
+      unit: 'sinais',
+      progressLead: (n) => `${n} sinais até agora`,
+      toNext: (n) => `mais ${n} até sua próxima descoberta`,
+      allDone: 'Você abriu todos os baús. Que jornada.',
+      open: 'Ver',
+      close: 'Fechar',
+      lockedHint: (n) => `mais ${n} para abrir`,
+      soonNote: 'Esta descoberta ainda está sendo preparada. Chega muito em breve.',
+      tiers: {
+        birth: { name: 'Seu Hoshi-Kyara nasce', teaser: 'Nascido do seu Sol e da sua Lua: o ponto de partida da sua história.' },
+        moonBack: { name: 'O outro lado da sua Lua', teaser: 'O você sem defesas quando se sente seguro, além da sua face pública (o Sol).' },
+        partyDeep: { name: 'Seu grupo, a fundo', teaser: 'Uma leitura mais próxima do papel dos dez personagens estelares.' },
+        moodTrend: { name: 'Seus padrões de humor', teaser: 'Conforme os registros se acumulam: os dias e lugares em que você oscila.' },
+        hiddenSelf: { name: 'Relatório do seu eu oculto', teaser: 'A lacuna entre seu mapa natal e seus dias reais. A grande descoberta.' },
+        trueBuddy: { name: 'Seu verdadeiro companheiro', teaser: 'A forma final do seu Hoshi-Kyara: fala levando em conta tudo sobre você.' },
+      },
+      bornBody: (name) => `Sua história começou como ${name}. É aqui que o mapa começa.`,
+      moonBackBody: (moonSign, manner) =>
+        `Seu signo lunar é ${moonSign}. Além da face que você mostra aos outros (o Sol), o você tranquilo quando está sozinho é «${manner}». É seu interruptor discreto, fora dos holofotes.`,
+    },
   },
   ko: {
     common: {
@@ -1907,6 +2060,29 @@ const UI: Record<Lang, UIStrings> = {
       toPair: '궁합 보기',
       toChat: '상담하기',
       seeYouTomorrow: '내일도 여기서 별을 읽고 있을게요.',
+    },
+    map: {
+      title: '호시캐릭터와 깊어지는 지도',
+      sub: '매일 조금씩 쓸수록 당신만의 발견이 열립니다. 줄어드는 일은 없습니다.',
+      unit: '시그널',
+      progressLead: (n) => `지금까지 ${n} 시그널`,
+      toNext: (n) => `다음 발견까지 ${n} 남음`,
+      allDone: '모든 보물상자를 열었어요. 여기까지 정말 잘 이어왔네요.',
+      open: '보기',
+      close: '닫기',
+      lockedHint: (n) => `${n} 더 모으면 열림`,
+      soonNote: '이 발견은 지금 준비 중이에요. 곧 만나요.',
+      tiers: {
+        birth: { name: '호시캐릭터 탄생', teaser: '태양과 달에서 태어난 당신의 호시캐릭터. 이야기의 출발점.' },
+        moonBack: { name: '달 별자리의 이면', teaser: '겉으로 보이는 얼굴(태양)과는 다른, 안심할 때의 본래의 당신.' },
+        partyDeep: { name: '파티 깊이 보기', teaser: '열 별 캐릭터의 한 걸음 더 들어간 역할과 해석.' },
+        moodTrend: { name: '기분의 버릇', teaser: '기록이 쌓이면 보이는, 당신이 흔들리기 쉬운 요일과 상황.' },
+        hiddenSelf: { name: '숨은 나 리포트', teaser: '본래의 별(출생 차트)과 실제 하루의 간극. 가장 큰 발견.' },
+        trueBuddy: { name: '진짜 단짝', teaser: '당신의 모든 것을 바탕으로 이야기하는 호시캐릭터의 최종형.' },
+      },
+      bornBody: (name) => `${name}(으)로 당신의 이야기가 시작됐어요. 이 지도의 출발점이에요.`,
+      moonBackBody: (moonSign, manner) =>
+        `당신의 달 별자리는 「${moonSign}」. 남에게 보이는 얼굴(태양)과는 별개로, 혼자 안심하고 있을 때의 당신은 「${manner}」. 겉에서는 보이지 않는 본래의 스위치예요.`,
     },
   },
 }
