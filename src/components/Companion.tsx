@@ -1,11 +1,21 @@
 import { useEffect, useState } from 'react'
 import type { CompanionState, Mood, Domain } from '../lib/companion'
-import { touchVisit, daysSinceLastVisit, markForecastSeen, todayKey, recordMood, weekAggregate } from '../lib/companion'
+import {
+  touchVisit,
+  daysSinceLastVisit,
+  markForecastSeen,
+  todayKey,
+  recordMood,
+  weekAggregate,
+  currentSignals,
+  loadCompanion,
+} from '../lib/companion'
 import { starTypeOf } from '../lib/startypes'
 import { readFortune } from '../lib/fortune'
 import type { PlanetKey } from '../lib/types'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import StarReading from './StarReading'
+import RewardMap from './RewardMap'
 import AiChat from './AiChat'
 import { buildChatContext, chatStorageKey } from '../lib/aiChat'
 import { useUI, quoted } from '../lib/ui'
@@ -27,6 +37,9 @@ type TapPhase = 'mood' | 'domain' | 'done'
 export default function Companion({ state, onHome, onPair }: Props) {
   const t = useUI()
   const [daysSince] = useState(() => daysSinceLastVisit(state))
+  // ごほうび地図の現在シグナル。タップ・会話・運勢閲覧で増える(端末の最新を反映)
+  const [signals, setSignals] = useState(() => currentSignals(state))
+  const refreshSignals = () => setSignals(currentSignals(loadCompanion() ?? state))
 
   // 夜の振り返り: 今日すでにタップ済みなら 'done' で復元(同日に何度も聞かない)
   const todayEntry = state.daily[todayKey()]
@@ -36,6 +49,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
   function pickMood(m: Mood) {
     setMood(m)
     recordMood(state, m)
+    refreshSignals()
     track('tap_mood', { mood: m, star_type: state.starType })
     setPhase('domain')
   }
@@ -74,6 +88,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
   useEffect(() => {
     touchVisit(state)
     markForecastSeen(state)
+    refreshSignals()
     track('companion_open', { days_since: daysSince, star_type: state.starType })
     if (isWeekend) track('weekend_view', { star_type: state.starType })
     // マウント時に1回だけ
@@ -103,9 +118,16 @@ export default function Companion({ state, onHome, onPair }: Props) {
       <p className="companion-greeting">{greeting}</p>
       <h2 className="companion-name">{starType ? quoted(starType.type.name) : ''}</h2>
 
+      <RewardMap signals={signals} chart={state.chart} starName={starType?.type.name ?? ''} />
+
       <StarReading chart={state.chart} />
 
-      <AiChat context={buildChatContext(state.chart)} storageKey={chatStorageKey(state.chart)} chart={state.chart} />
+      <AiChat
+        context={buildChatContext(state.chart)}
+        storageKey={chatStorageKey(state.chart)}
+        chart={state.chart}
+        onExchange={refreshSignals}
+      />
 
       <section className="tap-card">
         {phase === 'mood' && (

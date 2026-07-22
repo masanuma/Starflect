@@ -2773,3 +2773,179 @@ body {
     font-size: 40px;
   }
 }
+
+/* ===== ごほうび地図(縦ロードマップ) ===== */
+.map-card {
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(159, 127, 232, 0.12) 0%, rgba(234, 101, 150, 0.06) 60%),
+    var(--card);
+  border: 1.5px solid #e5daf4;
+  border-radius: 22px;
+  padding: 20px 16px 18px;
+  margin: 0 0 16px;
+  box-shadow: var(--shadow);
+}
+
+.map-head-icon {
+  font-size: 22px;
+  line-height: 1;
+  color: var(--violet);
+}
+
+.map-progress {
+  margin: 2px 0 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--violet);
+  text-align: left;
+}
+
+.map-progress-next {
+  color: var(--ink-sub);
+  font-weight: 600;
+}
+
+.map-earn {
+  margin: -8px 0 16px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: rgba(159, 127, 232, 0.07);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-sub);
+  text-align: left;
+}
+
+.map-track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+/* 宝箱をつなぐ縦の道 */
+.map-track::before {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--violet) 0%, var(--pink) 100%);
+  opacity: 0.28;
+}
+
+.map-node {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 0 0 14px 0;
+}
+
+.map-node:last-child {
+  padding-bottom: 0;
+}
+
+.map-node-dot {
+  flex: none;
+  position: relative;
+  z-index: 1;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  background: var(--card);
+  border: 2px solid #d9c9f0;
+}
+
+.map-node.is-unlocked > .map-node-dot {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--pink) 0%, var(--violet) 100%);
+}
+
+.map-node.is-next > .map-node-dot {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 4px rgba(234, 101, 150, 0.16);
+}
+
+.map-node-body {
+  flex: 1;
+  min-width: 0;
+  padding-top: 1px;
+}
+
+.map-node-head {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.map-node-head:disabled {
+  cursor: default;
+}
+
+.map-node-name {
+  font-family: var(--font-head);
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.map-node.is-locked .map-node-name {
+  color: var(--ink-sub);
+}
+
+.map-node-cta {
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pink);
+}
+
+.map-node-lock {
+  flex: none;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-sub);
+  white-space: nowrap;
+}
+
+.map-node.is-next .map-node-lock {
+  color: var(--pink);
+}
+
+.map-node-teaser {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--ink-sub);
+  text-align: left;
+}
+
+.map-node-content {
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(159, 127, 232, 0.08);
+  border: 1px solid #e5daf4;
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--ink);
+  text-align: left;
+}
+
+.map-node-content.is-soon {
+  color: var(--ink-sub);
+  font-style: normal;
+}
