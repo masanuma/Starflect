@@ -58,6 +58,8 @@ export default function RewardMap({ signals, chart, starName }: Props) {
         )}
       </p>
 
+      <p className="map-earn">{t.map.earnHint}</p>
+
       <ol className="map-track">
         {prog.tiers.map((tier) => {
           const info = t.map.tiers[tier.key]

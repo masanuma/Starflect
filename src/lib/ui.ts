@@ -245,6 +245,7 @@ export interface UIStrings {
     sub: string
     progressLead: (name: string, level: number) => string
     toNext: (n: number, nextName: string) => string
+    earnHint: string
     allDone: string
     open: string
     close: string
@@ -499,6 +500,7 @@ const UI: Record<Lang, UIStrings> = {
       sub: 'ほしキャラがあなたを知るほど、占いはあなただけのものになります。',
       progressLead: (name, n) => `${name}のあなた理解度：Lv.${n}`,
       toNext: (n, nm) => `あと ${n} で〈${nm}〉に気づきます`,
+      earnHint: '理解度は、今日の運勢を見る・気分を残す・ほしキャラと話す、そのたびに上がります。',
       allDone: 'すべての宝箱をひらきました。ここまで、よく続けましたね。',
       open: '見る',
       close: '閉じる',
@@ -759,6 +761,7 @@ const UI: Record<Lang, UIStrings> = {
       sub: 'The more your Hoshi-Kyara knows you, the more the reading becomes yours alone.',
       progressLead: (name, n) => `How well ${name} knows you: Lv.${n}`,
       toNext: (n, nm) => `${n} more until it notices “${nm}”`,
+      earnHint: 'Your level goes up each time you check today’s reading, log how you feel, or chat with your Hoshi-Kyara.',
       allDone: 'You’ve opened every chest. What a journey.',
       open: 'Open',
       close: 'Close',
@@ -1019,6 +1022,7 @@ const UI: Record<Lang, UIStrings> = {
       sub: 'Cuanto más te conoce, más la lectura se vuelve solo tuya.',
       progressLead: (name, n) => `Cuánto te conoce ${name}: Lv.${n}`,
       toNext: (n, nm) => `${n} más para que descubra «${nm}»`,
+      earnHint: 'Tu nivel sube cada vez que ves la lectura de hoy, registras cómo te sientes o hablas con tu Hoshi-Kyara.',
       allDone: 'Has abierto todos los cofres. Qué viaje.',
       open: 'Ver',
       close: 'Cerrar',
@@ -1279,6 +1283,7 @@ const UI: Record<Lang, UIStrings> = {
       sub: 'Plus il te connaît, plus la lecture devient rien qu’à toi.',
       progressLead: (name, n) => `Ce que ${name} sait de toi : Lv.${n}`,
       toNext: (n, nm) => `encore ${n} pour qu’il remarque « ${nm} »`,
+      earnHint: 'Ton niveau monte chaque fois que tu consultes la lecture du jour, notes ton humeur ou discutes avec ton Hoshi-Kyara.',
       allDone: 'Tu as ouvert tous les coffres. Quel parcours.',
       open: 'Voir',
       close: 'Fermer',
@@ -1539,6 +1544,7 @@ const UI: Record<Lang, UIStrings> = {
       sub: 'Più ti conosce, più la lettura diventa solo tua.',
       progressLead: (name, n) => `Quanto ${name} ti conosce: Lv.${n}`,
       toNext: (n, nm) => `ancora ${n} perché noti «${nm}»`,
+      earnHint: 'Il tuo livello sale ogni volta che guardi la lettura di oggi, registri come ti senti o parli con il tuo Hoshi-Kyara.',
       allDone: 'Hai aperto tutti gli scrigni. Che viaggio.',
       open: 'Vedi',
       close: 'Chiudi',
@@ -1799,6 +1805,7 @@ const UI: Record<Lang, UIStrings> = {
       sub: 'Quanto mais te conhece, mais a leitura se torna só sua.',
       progressLead: (name, n) => `O quanto ${name} te conhece: Lv.${n}`,
       toNext: (n, nm) => `mais ${n} para que perceba «${nm}»`,
+      earnHint: 'Seu nível sobe cada vez que você vê a leitura de hoje, registra como se sente ou conversa com seu Hoshi-Kyara.',
       allDone: 'Você abriu todos os baús. Que jornada.',
       open: 'Ver',
       close: 'Fechar',
@@ -2059,6 +2066,7 @@ const UI: Record<Lang, UIStrings> = {
       sub: '호시캐릭터가 당신을 알수록, 운세는 당신만의 것이 되어 가요.',
       progressLead: (name, n) => `${name}의 당신 이해도: Lv.${n}`,
       toNext: (n, nm) => `${n} 더 모으면 〈${nm}〉를 알아차려요`,
+      earnHint: '오늘의 운세를 보거나, 기분을 남기거나, 호시캐릭터와 이야기할 때마다 이해도가 올라가요.',
       allDone: '모든 보물상자를 열었어요. 여기까지 정말 잘 이어왔네요.',
       open: '보기',
       close: '닫기',
