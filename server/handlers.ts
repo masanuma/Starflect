@@ -3,6 +3,12 @@ import Anthropic from '@anthropic-ai/sdk'
 
 type Lang = 'ja' | 'en' | 'es' | 'fr' | 'it' | 'pt' | 'ko'
 
+/**
+ * AI鑑定に使うモデル。占い(与えたデータに忠実な温かい文章)は Sonnet で十分＝コスト約4〜6割減。
+ * adaptive thinking / effort:'low' はそのまま使える(API面は Opus と同一)。
+ */
+const AI_MODEL = 'claude-sonnet-5'
+
 /** システムプロンプト末尾に足す、応答言語の指示 */
 const LANG_DIRECTIVE: Record<Lang, string> = {
   ja: '',
@@ -120,7 +126,7 @@ function makeHandler<T>(
       try {
         const client = new Anthropic({ apiKey })
         const response = await client.messages.create({
-          model: 'claude-opus-4-8',
+          model: AI_MODEL,
           max_tokens: 2000,
           thinking: { type: 'adaptive' },
           output_config: { effort: 'low' },
@@ -310,7 +316,7 @@ function createChatHandler(apiKey: string | undefined): RawHandler {
       try {
         const client = new Anthropic({ apiKey })
         const stream = client.messages.stream({
-          model: 'claude-opus-4-8',
+          model: AI_MODEL,
           max_tokens: 1500,
           thinking: { type: 'adaptive' },
           output_config: { effort: 'low' },
@@ -369,7 +375,7 @@ function createReportHandler(apiKey: string | undefined): RawHandler {
       try {
         const client = new Anthropic({ apiKey })
         const response = await client.messages.create({
-          model: 'claude-opus-4-8',
+          model: AI_MODEL,
           max_tokens: 1200,
           thinking: { type: 'adaptive' },
           output_config: { effort: 'low' },
