@@ -6,6 +6,7 @@
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import HoshiKyaraMascot from '../src/components/HoshiKyaraMascot'
+import BrandMascot from '../src/components/BrandMascot'
 import { CHARACTERS, CHAR_BY_SLUG, ELEMENT_WORD } from './characters'
 import type { Character, Element } from './characters'
 
@@ -21,8 +22,13 @@ body{font-family:'Zen Kaku Gothic New','Hiragino Sans',sans-serif;color:var(--in
 a{color:var(--violet);text-decoration:none}
 h1,h2,h3{font-family:'Zen Maru Gothic',sans-serif}
 .topbar{padding:16px 0}
-.brand{font-family:'Zen Maru Gothic';font-weight:800;font-size:18px;background:linear-gradient(120deg,var(--pink),var(--violet));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hero{text-align:center;padding:40px 0 28px}
+.brand{display:inline-flex;align-items:center;gap:7px}
+.brand-ic{flex:none;width:30px;height:30px}
+.brand-ic svg{display:block}
+.brand-tx{font-family:'Zen Maru Gothic';font-weight:800;font-size:18px;background:linear-gradient(120deg,var(--pink),var(--violet));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero{text-align:center;padding:24px 0 28px}
+.hero-mascot{width:116px;margin:0 auto 10px;filter:drop-shadow(0 10px 20px rgba(138,99,221,.28))}
+.hero-mascot svg{display:block}
 .hero h1{font-size:30px;font-weight:800;line-height:1.4;margin-bottom:12px}
 .hero .grad{background:linear-gradient(120deg,var(--pink),var(--violet));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{color:var(--ink-sub);font-size:15px;margin-bottom:22px}
@@ -66,6 +72,10 @@ function mascot(sun: Element, moon: Element, size: number): string {
   return renderToStaticMarkup(createElement(HoshiKyaraMascot, { sunElement: sun, moonElement: moon, size }))
 }
 
+function brand(size: number): string {
+  return renderToStaticMarkup(createElement(BrandMascot, { size }))
+}
+
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
 interface LayoutOpts {
@@ -95,7 +105,7 @@ function layout(o: LayoutOpts): string {
 <meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
 <meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="${esc(o.ogTitle)}"/><meta name="twitter:image" content="${o.ogImage}"/>
 ${FONTS}${redirect}<style>${CSS}</style></head>
-<body><div class="wrap"><div class="topbar"><a href="/" class="brand">✦ ほしキャラ診断</a></div>${o.body}
+<body><div class="wrap"><div class="topbar"><a href="/" class="brand"><span class="brand-ic">${brand(30)}</span><span class="brand-tx">ほしキャラ診断</span></a></div>${o.body}
 <div class="footer">星の計算はすべてお使いの端末内で行われます。<br/>© ほしキャラ診断 〜Starflect〜</div></div></body></html>`
 }
 
@@ -108,6 +118,7 @@ export function renderLP(): string {
   const grid = CHARACTERS.map(charCardHtml).join('')
   const body = `
 <div class="hero">
+  <div class="hero-mascot">${brand(116)}</div>
   <h1>あなたはどの<span class="grad">「ほしキャラ」</span>？</h1>
   <p>生まれた瞬間の星の配置でわかる、16キャラ×本格星占い。<br/>生年月日を入れるだけ・登録不要・無料。</p>
   <a class="cta" href="/app">無料で診断する →</a>
