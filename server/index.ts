@@ -3,55 +3,39 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import express from 'express'
 import { createAiHandlers, createFeedbackHandler } from './handlers'
+import { renderLP, renderCharPage } from './pages'
+import { CHAR_BY_SLUG } from './characters'
 
-// 本番サーバー: ビルド済みフロント(dist/)の配信 + AI鑑定APIを同一オリジンで提供する。
+// 本番サーバー: 静的な紹介LP( / ) とキャラ別ページ( /c/<slug> ) を配信し、
+// アプリ本体(SPA)は /app、AI鑑定APIは /api を同一オリジンで提供する。
 // Railway では ANTHROPIC_API_KEY を Variables に、PORT は自動で注入される。
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const distDir = path.resolve(__dirname, '../dist')
-
 const ORIGIN = 'https://starflect.asanuma.works'
-const DEFAULT_OG = `${ORIGIN}/ogp/default.png`
 
-// 16キャラ(slug → 名前)。共有URLの ?c=<slug> で og:image と og:title をキャラ別に差し替える。
-// slug = <太陽エレメント>_<月エレメント>。画像は public/ogp/<slug>.png(scripts/gen-ogp.tsx で生成)。
-const CHAR_NAME: Record<string, string> = {
-  fire_fire: '疾走する彗星', fire_earth: '大地に立つ炎', fire_air: '舞い上がる花火', fire_water: '内に海を抱く炎',
-  earth_fire: '静かな火山', earth_earth: '揺るがない山', earth_air: '風を聴く大樹', earth_water: '泉を隠す森',
-  air_fire: '熱を運ぶ風', air_earth: '羅針盤を持つ旅人', air_air: '自由な渡り鳥', air_water: '月夜のそよ風',
-  water_fire: '海底の火山', water_earth: '静かな入り江', water_air: '風をうつす水面', water_water: '深海の月',
-}
-
-// dist/index.html を起動時に読み込む(本番のみ。無ければ後述のフォールバックで都度読む)
-let INDEX_HTML = ''
+// アプリ本体(SPA)。検索の入口は LP と /c なので、/app は noindex にして重複を避ける。
+let APP_HTML = ''
 try {
-  INDEX_HTML = readFileSync(path.join(distDir, 'index.html'), 'utf8')
+  APP_HTML = readFileSync(path.join(distDir, 'index.html'), 'utf8')
+    .replace(
+      '<meta name="robots" content="index, follow, max-image-preview:large" />',
+      '<meta name="robots" content="noindex, follow" />',
+    )
+    .replace(
+      '<link rel="canonical" href="https://starflect.asanuma.works/" />',
+      '<link rel="canonical" href="https://starflect.asanuma.works/app" />',
+    )
 } catch {
-  /* 未ビルド時は空。sendIndex 側で都度読み込みを試みる */
+  /* 未ビルド時は空 */
 }
 
-/** SPA本体を返す。?c=<slug> が有効ならキャラ別のOGP画像・タイトルに差し替える */
-function sendIndex(req: express.Request, res: express.Response): void {
-  let html = INDEX_HTML
-  if (!html) {
-    try {
-      html = readFileSync(path.join(distDir, 'index.html'), 'utf8')
-    } catch {
-      res.status(404).send('Not built')
-      return
-    }
-  }
-  const c = typeof req.query.c === 'string' ? req.query.c : ''
-  const name = CHAR_NAME[c]
-  if (name) {
-    const img = `${ORIGIN}/ogp/${c}.png`
-    const title = `私のほしキャラは「${name}」｜ほしキャラ診断`
-    html = html
-      .split(DEFAULT_OG).join(img)
-      .replace('<meta property="og:title" content="ほしキャラ診断 〜Starflect〜" />', `<meta property="og:title" content="${title}" />`)
-      .replace('<meta name="twitter:title" content="ほしキャラ診断 〜Starflect〜" />', `<meta name="twitter:title" content="${title}" />`)
-  }
-  res.type('html').send(html)
+// 静的ページはデータ固定なので起動時に一度だけ生成してキャッシュする。
+const LP_HTML = renderLP()
+const CHAR_HTML: Record<string, string> = {}
+for (const slug of Object.keys(CHAR_BY_SLUG)) {
+  const h = renderCharPage(slug)
+  if (h) CHAR_HTML[slug] = h
 }
 
 const app = express()
@@ -64,11 +48,48 @@ app.post('/api/ai-chat', handlers.chat)
 app.post('/api/ai-report', handlers.report)
 app.post('/api/feedback', feedback)
 
-// ビルド済みの静的ファイル(index.html の自動配信は無効化し、下の sendIndex で ?c= を反映する)
+// 静的アセット(assets / ogp / favicon / sitemap.xml / robots.txt)。index.html の自動配信は無効。
 app.use(express.static(distDir, { index: false }))
 
-// SPAフォールバック: 未解決のGETは index.html を返す(?c=<slug> でOGPをキャラ別に差し替え)
-app.use(sendIndex)
+// 紹介LP( / )。旧シェア形式 /?c=<slug> は OGP だけキャラ別に差し替える(既存カード救済)。
+app.get('/', (req, res) => {
+  let html = LP_HTML
+  const c = typeof req.query.c === 'string' ? req.query.c : ''
+  const ch = CHAR_BY_SLUG[c]
+  if (ch) {
+    html = html
+      .split(`${ORIGIN}/ogp/default.png`)
+      .join(`${ORIGIN}/ogp/${c}.png`)
+      .replace(
+        '<meta property="og:title" content="ほしキャラ診断 〜Starflect〜"/>',
+        `<meta property="og:title" content="私のほしキャラは「${ch.name}」｜ほしキャラ診断"/>`,
+      )
+      .replace(
+        '<meta name="twitter:title" content="ほしキャラ診断 〜Starflect〜"/>',
+        `<meta name="twitter:title" content="私のほしキャラは「${ch.name}」｜ほしキャラ診断"/>`,
+      )
+  }
+  res.type('html').send(html)
+})
+
+// キャラ別ページ( /c/<slug> )。無効な slug はLPへ。
+app.get('/c/:slug', (req, res) => {
+  const html = CHAR_HTML[req.params.slug]
+  if (html) res.type('html').send(html)
+  else res.redirect(302, '/')
+})
+
+// アプリ本体(SPA)
+app.get(['/app', '/app/'], (_req, res) => {
+  if (APP_HTML) res.type('html').send(APP_HTML)
+  else res.status(404).send('Not built')
+})
+
+// その他の未知GETは紹介LPへ寄せる(ハード404を出さない)
+app.use((req, res) => {
+  if (req.method === 'GET') res.redirect(302, '/')
+  else res.status(404).send('Not found')
+})
 
 const port = Number(process.env.PORT) || 3000
 app.listen(port, () => {

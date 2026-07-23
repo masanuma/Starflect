@@ -19,7 +19,8 @@ export default function ShareButtons({ starTypeName, starSlug }: Props) {
   const t = useUI()
   const [copied, setCopied] = useState(false)
 
-  const url = `${location.origin}/${starSlug ? `?c=${encodeURIComponent(starSlug)}` : ''}`
+  // 共有の着地先はキャラ別ページ(読み物→診断CTA)。slug 不明時はトップLP
+  const url = starSlug ? `${location.origin}/c/${encodeURIComponent(starSlug)}` : `${location.origin}/`
   const parts: ShareParts = { text: t.share.text(starTypeName), url, hashtags: t.share.hashtags }
 
   async function onNative() {

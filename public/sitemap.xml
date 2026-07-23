@@ -2,8 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://starflect.asanuma.works/</loc>
-    <lastmod>2026-07-19</lastmod>
+    <lastmod>2026-07-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  <url><loc>https://starflect.asanuma.works/c/fire_fire</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/fire_earth</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/fire_air</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/fire_water</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/earth_fire</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/earth_earth</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/earth_air</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/earth_water</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/air_fire</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/air_earth</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/air_air</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/air_water</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/water_fire</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/water_earth</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/water_air</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
+  <url><loc>https://starflect.asanuma.works/c/water_water</loc><lastmod>2026-07-23</lastmod><priority>0.8</priority></url>
 </urlset>
