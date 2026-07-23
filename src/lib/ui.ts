@@ -258,6 +258,14 @@ export interface UIStrings {
     bornBody: (name: string) => string
     moonBackBody: (moonSign: string, manner: string) => string
   }
+  share: {
+    heading: string
+    text: (name: string) => string
+    hashtags: string[]
+    native: string
+    copy: string
+    copied: string
+  }
 }
 
 const UI: Record<Lang, UIStrings> = {
@@ -524,6 +532,14 @@ const UI: Record<Lang, UIStrings> = {
       moonBackBody: (moonSign, manner) =>
         `あなたの月星座は「${moonSign}」。人前で見せる顔(太陽)とは別に、ひとりで安心しているときのあなたは「${manner}」。表からは見えない、素のスイッチです。`,
     },
+    share: {
+      heading: '結果を友だちにもシェア',
+      text: (name) => `私のほしキャラは${name}でした✨ あなたは16キャラのどれ？`,
+      hashtags: ['ほしキャラ診断'],
+      native: 'シェアする',
+      copy: 'リンクをコピー',
+      copied: 'コピーしました ✓',
+    },
   },
   en: {
     common: {
@@ -787,6 +803,14 @@ const UI: Record<Lang, UIStrings> = {
       bornBody: (name) => `Your story began as ${name}. This is where the map starts.`,
       moonBackBody: (moonSign, manner) =>
         `Your Moon sign is ${moonSign}. Apart from the face you show others (the Sun), the you that feels at ease alone is “${manner}.” It’s your quiet, off-stage switch.`,
+    },
+    share: {
+      heading: 'Share your result with friends',
+      text: (name) => `My Hoshi-Kyara is ${name} ✨ Which of the 16 are you?`,
+      hashtags: ['HoshiKyara'],
+      native: 'Share',
+      copy: 'Copy link',
+      copied: 'Copied ✓',
     },
   },
   es: {
@@ -1052,6 +1076,14 @@ const UI: Record<Lang, UIStrings> = {
       moonBackBody: (moonSign, manner) =>
         `Tu signo lunar es ${moonSign}. Aparte de la cara que muestras a los demás (el Sol), el tú que está tranquilo a solas es «${manner}». Es tu interruptor discreto, fuera de escena.`,
     },
+    share: {
+      heading: 'Comparte tu resultado con amigos',
+      text: (name) => `Mi Hoshi-Kyara es ${name} ✨ ¿Cuál de los 16 eres tú?`,
+      hashtags: ['HoshiKyara'],
+      native: 'Compartir',
+      copy: 'Copiar enlace',
+      copied: 'Copiado ✓',
+    },
   },
   fr: {
     common: {
@@ -1315,6 +1347,14 @@ const UI: Record<Lang, UIStrings> = {
       bornBody: (name) => `Ton histoire a commencé en tant que ${name}. C’est ici que la carte débute.`,
       moonBackBody: (moonSign, manner) =>
         `Ton signe lunaire est ${moonSign}. À part le visage que tu montres aux autres (le Soleil), le toi apaisé quand tu es seul est « ${manner} ». C’est ton interrupteur discret, en coulisses.`,
+    },
+    share: {
+      heading: 'Partage ton résultat avec tes amis',
+      text: (name) => `Mon Hoshi-Kyara est ${name} ✨ Lequel des 16 es-tu ?`,
+      hashtags: ['HoshiKyara'],
+      native: 'Partager',
+      copy: 'Copier le lien',
+      copied: 'Copié ✓',
     },
   },
   it: {
@@ -1580,6 +1620,14 @@ const UI: Record<Lang, UIStrings> = {
       moonBackBody: (moonSign, manner) =>
         `Il tuo segno lunare è ${moonSign}. Oltre alla faccia che mostri agli altri (il Sole), il te sereno quando sei solo è «${manner}». È il tuo interruttore silenzioso, dietro le quinte.`,
     },
+    share: {
+      heading: 'Condividi il risultato con gli amici',
+      text: (name) => `Il mio Hoshi-Kyara è ${name} ✨ Quale dei 16 sei tu?`,
+      hashtags: ['HoshiKyara'],
+      native: 'Condividi',
+      copy: 'Copia link',
+      copied: 'Copiato ✓',
+    },
   },
   pt: {
     common: {
@@ -1844,6 +1892,14 @@ const UI: Record<Lang, UIStrings> = {
       moonBackBody: (moonSign, manner) =>
         `Seu signo lunar é ${moonSign}. Além da face que você mostra aos outros (o Sol), o você tranquilo quando está sozinho é «${manner}». É seu interruptor discreto, fora dos holofotes.`,
     },
+    share: {
+      heading: 'Compartilhe seu resultado com amigos',
+      text: (name) => `Meu Hoshi-Kyara é ${name} ✨ Qual dos 16 é você?`,
+      hashtags: ['HoshiKyara'],
+      native: 'Compartilhar',
+      copy: 'Copiar link',
+      copied: 'Copiado ✓',
+    },
   },
   ko: {
     common: {
@@ -2107,6 +2163,14 @@ const UI: Record<Lang, UIStrings> = {
       bornBody: (name) => `${name}(으)로 당신의 이야기가 시작됐어요. 이 지도의 출발점이에요.`,
       moonBackBody: (moonSign, manner) =>
         `당신의 달 별자리는 「${moonSign}」. 남에게 보이는 얼굴(태양)과는 별개로, 혼자 안심하고 있을 때의 당신은 「${manner}」. 겉에서는 보이지 않는 본래의 스위치예요.`,
+    },
+    share: {
+      heading: '결과를 친구에게 공유',
+      text: (name) => `내 호시캐릭터는 ${name} ✨ 당신은 16캐릭터 중 누구?`,
+      hashtags: ['호시캐릭터진단'],
+      native: '공유하기',
+      copy: '링크 복사',
+      copied: '복사됨 ✓',
     },
   },
 }

@@ -7,6 +7,7 @@ import { getPlanet, signMannerOf } from '../lib/planets'
 import { starTypeOf, elementPhrase } from '../lib/startypes'
 import AiChat from './AiChat'
 import StarReading from './StarReading'
+import ShareButtons from './ShareButtons'
 import Feedback from './Feedback'
 import { createCompanion } from '../lib/companion'
 import { buildChatContext, chatStorageKey } from '../lib/aiChat'
@@ -114,6 +115,8 @@ export default function Result({ data, onHome, onPair }: Props) {
           <p className="type-count">{t.result.typeCount}</p>
         </section>
       )}
+
+      {starType && <ShareButtons starTypeName={quoted(starType.type.name)} starSlug={starSlug} />}
 
       <section className="party-card">
         <div className="card-head">
