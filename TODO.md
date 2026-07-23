@@ -7,7 +7,17 @@
 
 ---
 
+## ⚠️ 重要な技術的注意（同じ轍を踏まない）
+- **サーバー(server/)から astronomy-engine を import しない**。`signs.ts`/`fortune.ts`/`planets.ts`/`astro.ts` は astronomy-engine を名前付きimportしており、Railway の **Node 18** ではESM解決に失敗して**起動クラッシュ**する（"does not provide an export named 'Body'"）。天体計算はクライアント専用。
+  - サーバーがキャラ名/エレメント等の言語別データを使うときは、astro非依存の `src/lib/starData.ts`（STAR_TYPES / ELEMENT_LABEL / ELEMENT_WORD_L）を参照する。`signs`/`startypes` を値importすると astro が芋づるで載るので注意。 — 事故と修正: `247ec68`（2026-07-23、本番ダウン→分離で復旧）
+- **ローカル検証**: Expressサーバーは起動時に `dist/index.html` をキャッシュする。再ビルドしたら**サーバー再起動が必要**（古いバンドル参照で /app が404→アプリ起動せず、になる）。本番はビルド→起動が順次なので問題なし。
+
+---
+
 ## ✅ 完了
+- **紹介LP/16キャラページを7言語化＋コンテンツ整理を本番リリース** — `c5fc199`＋`247ec68`（2026-07-23）
+  hreflang・言語スイッチャ・sitemap 119URL、エレメントマーク掲載、CTA統一、FAQ/説明/16キャラ紹介をLPに一本化、
+  アプリのFAQ撤去・About画面廃止(→LP)、FAQ「無料」表記を全言語除去、LP→アプリの言語引き継ぎ(?lang=)
 - スクロール最上部表示の修正（画面遷移で `window.scrollTo(0,0)`） — `35b2d46`
 - 逆行サフィックスの7言語対応（仏・伊・葡・韓を追加） — `aaaaf8a`
 - フィードバック専用アイコン（ハート＋きらめき）を追加し相談室と差別化
