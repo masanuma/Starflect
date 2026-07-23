@@ -6,7 +6,8 @@ import { getPlanet } from './planets'
 import { signName } from './signs'
 import { signIndex, degInSign } from './astro'
 import { findNatalAspects } from './natalAspects'
-import { readFortune, periodNoun } from './fortune'
+import { forecastSet } from './fortune'
+import type { PeriodBrief } from './fortune'
 import { starTypeOf } from './startypes'
 
 export interface ChatMessage {
@@ -22,10 +23,8 @@ export interface ChatChartContext {
   starTypeCopy?: string
   planets: { label: string; sign: string; deg: number; retro?: boolean }[]
   natalAspects?: string[]
-  periodLabel: string
-  skyNote: string
-  toneLabel: string
-  transits: string[]
+  /** 今日〜来月＋この先数か月まで、期間ごとのトランジット見通し(全期間ぶん渡す) */
+  periods: PeriodBrief[]
   reading?: string
 }
 
@@ -35,7 +34,6 @@ export function buildChatContext(chart: ChartData): ChatChartContext {
   const sunLon = lonOf('sun')
   const moonLon = lonOf('moon')
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
-  const fortune = readFortune(chart.planets, chart.period)
   const natalAspects = findNatalAspects(chart.planets)
   return {
     name: chart.name,
@@ -50,10 +48,8 @@ export function buildChatContext(chart: ChartData): ChatChartContext {
       retro: p.retro,
     })),
     natalAspects: natalAspects.length ? natalAspects.map((a) => a.tech) : undefined,
-    periodLabel: periodNoun(chart.period),
-    skyNote: fortune.skyNote,
-    toneLabel: fortune.toneLabel,
-    transits: fortune.items.map((i) => i.title),
+    // 今日〜来月＋この先数か月まで、全期間のトランジットを渡す(1期間しか無くて濁す問題を解消)
+    periods: forecastSet(chart.planets),
   }
 }
 

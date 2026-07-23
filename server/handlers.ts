@@ -155,6 +155,14 @@ export interface ChatMessage {
   content: string
 }
 
+/** 期間ごとの見通しダイジェスト(今日〜来月＋この先数か月) */
+export interface PeriodBrief {
+  label: string
+  sky: string
+  tone: string
+  items: string[]
+}
+
 /** チャットに渡す、その人の占星術データ一式 */
 export interface ChatChartContext {
   name: string
@@ -164,10 +172,8 @@ export interface ChatChartContext {
   starTypeCopy?: string
   planets: { label: string; sign: string; deg: number; retro?: boolean }[]
   natalAspects?: string[]
-  periodLabel: string
-  skyNote: string
-  toneLabel: string
-  transits: string[]
+  /** 今日〜来月＋この先数か月まで、期間ごとのトランジット見通し */
+  periods?: PeriodBrief[]
   /** すでに生成済みのAI鑑定文があれば渡す */
   reading?: string
 }
@@ -199,14 +205,25 @@ function buildChatSystem(c: ChatChartContext): string {
   if (c.natalAspects?.length) {
     lines.push('', '【出生図の注目の角度】', ...c.natalAspects.map((a) => `- ${a}`))
   }
-  lines.push('', `【いまの空の動き(${c.periodLabel}のトランジット)】`, `${c.skyNote}(全体の基調: ${c.toneLabel})`)
-  if (c.transits.length) lines.push(...c.transits.map((t) => `- ${t}`))
+  if (c.periods?.length) {
+    lines.push(
+      '',
+      '【いまの星の運行(期間ごとの見通し・すべて計算済みの確定データ)】',
+      '※各期間のトランジットはこの通り手元にあります。今日〜来月の相談は、必ず該当期間のこのデータで具体的に答えてください。',
+    )
+    for (const p of c.periods) {
+      lines.push('', `■ ${p.label}: ${p.sky}(全体の基調: ${p.tone})`)
+      lines.push(...p.items.map((t) => `  - ${t}`))
+    }
+  }
   if (c.reading) lines.push('', '【すでにこの人へ伝えた鑑定】', c.reading)
   lines.push(
     '',
     '相談への答え方:',
     '- 【最重要・厳守】星座名は上に書かれた確定データのみを使う。一字一句そのまま引用し、別の星座に言い換えたり、生年月日から自分で星座を推測し直したりは絶対にしない(例: 太陽が「獅子座」と書いてあれば、必ず「獅子座」と言う)',
-    '- 「出生の天体配置」はこの人の生まれ持った変わらない性質、「いまの空の動き」は今この時期だけの運行です。両者を絶対に混同しないこと。「あなたの太陽/月/火星…」と言うときは必ず"出生の"配置(不変)を指し、運行中の星と取り違えない',
+    '- 「出生の天体配置」はこの人の生まれ持った変わらない性質、「いまの星の運行」は各期間だけの運行です。両者を絶対に混同しないこと。「あなたの太陽/月/火星…」と言うときは必ず"出生の"配置(不変)を指し、運行中の星と取り違えない',
+    '- 【期間の扱い】今日/明日/今週/来週/今月/来月を聞かれたら、上の「星の運行」に各期間のデータが揃っています。必ず該当期間のトランジットを使って具体的に答える。「データが無い」「今日と明日の分しかない」等とは絶対に言わない(全期間ぶん渡してあります)',
+    '- それより先(数か月〜1年など)を聞かれたら、「この先2〜3か月の基調」と動きの遅い星(木星・土星)の流れから大きな見通しとして語る。細かな日付の断定はせず「大きな流れとしては〜」と前置きする。手元に無い細かなトランジットを勝手に作り出さない',
     '- 一般論で終わらせず、必ず上の具体的な配置に紐づけて答える(例:「あなたの火星は山羊座だから、焦らず段取りを組むほど力が出ます」)',
     '- 専門用語(トライン・スクエア・セクスタイル・オポジション・合・アスペクトなど)は使わず、「大きな追い風」「試練の角度」のように、良い配置か注意の配置かが一般の人にも伝わる言葉で説明する',
     '- あたたかく背中を押す口調で。でも実行できる具体的な行動やヒントを1つ添える',

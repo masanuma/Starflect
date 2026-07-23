@@ -613,3 +613,51 @@ export function readFortune(natal: PlanetPos[], period: PeriodKey, now = new Dat
 
   return { toneLabel: toneText.label, toneText: toneText.text, toneLevel: tone.level, skyNote, items }
 }
+
+/** 期間ごとの見通しダイジェスト(チャットに全期間ぶん渡すための軽量サマリ) */
+export interface PeriodBrief {
+  /** 表示ラベル(例: 今日 / 来週 / この先数か月) */
+  label: string
+  /** 空模様(太陽・月の運行) */
+  sky: string
+  /** 全体の基調(絶好調/追い風/…) */
+  tone: string
+  /** その期間の注目トランジット(タイトルのみ) */
+  items: string[]
+}
+
+const NEXT_LABEL: Record<Lang, { week: string; month: string; far: string }> = {
+  ja: { week: '来週', month: '来月', far: 'この先2〜3か月の基調' },
+  en: { week: 'Next week', month: 'Next month', far: 'The coming few months (broad trend)' },
+  es: { week: 'La próxima semana', month: 'El próximo mes', far: 'Los próximos 2-3 meses (tendencia general)' },
+  fr: { week: 'La semaine prochaine', month: 'Le mois prochain', far: 'Les 2-3 prochains mois (tendance générale)' },
+  it: { week: 'La prossima settimana', month: 'Il prossimo mese', far: 'I prossimi 2-3 mesi (tendenza generale)' },
+  pt: { week: 'Na próxima semana', month: 'No próximo mês', far: 'Os próximos 2-3 meses (tendência geral)' },
+  ko: { week: '다음 주', month: '다음 달', far: '앞으로 2~3개월의 큰 흐름' },
+}
+
+/**
+ * 今日〜来月＋この先数か月まで、複数期間の見通しを一括計算する。
+ * すべてローカルの天体暦(astronomy-engine)で算出=外部APIなしで任意の未来日付を出せる。
+ * 「ほしキャラが読む運勢」のタブ(今日/明日/今週/来週/今月/来月)と基準日を揃えている。
+ */
+export function forecastSet(natal: PlanetPos[], now = new Date()): PeriodBrief[] {
+  const lang = getLang()
+  const L = NEXT_LABEL[lang] ?? NEXT_LABEL.ja
+  const nextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7)
+  const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+  const far = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 75)
+  const slots: { label: string; period: PeriodKey; when: Date }[] = [
+    { label: periodLabel('today'), period: 'today', when: now },
+    { label: periodLabel('tomorrow'), period: 'tomorrow', when: now },
+    { label: periodLabel('week'), period: 'week', when: now },
+    { label: L.week, period: 'week', when: nextWeek },
+    { label: periodLabel('month'), period: 'month', when: now },
+    { label: L.month, period: 'month', when: nextMonth },
+    { label: L.far, period: 'month', when: far },
+  ]
+  return slots.map((s) => {
+    const f = readFortune(natal, s.period, s.when)
+    return { label: s.label, sky: f.skyNote, tone: f.toneLabel, items: f.items.map((i) => i.title) }
+  })
+}
