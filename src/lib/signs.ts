@@ -1,6 +1,7 @@
 import { signIndex } from './astro'
 import { getLang } from './i18n'
 import type { Lang } from './i18n'
+import { ELEMENT_LABEL } from './starData'
 
 export type Element = '火' | '地' | '風' | '水'
 
@@ -124,16 +125,6 @@ const SIGN_KEYWORDS: Record<Lang, string[][]> = {
 }
 
 /** エレメント名(言語別) */
-const ELEMENT_LABEL: Record<Lang, Record<Element, string>> = {
-  ja: { 火: '火', 地: '地', 風: '風', 水: '水' },
-  en: { 火: 'Fire', 地: 'Earth', 風: 'Air', 水: 'Water' },
-  es: { 火: 'Fuego', 地: 'Tierra', 風: 'Aire', 水: 'Agua' },
-  fr: { 火: 'Feu', 地: 'Terre', 風: 'Air', 水: 'Eau' },
-  it: { 火: 'Fuoco', 地: 'Terra', 風: 'Aria', 水: 'Acqua' },
-  pt: { 火: 'Fogo', 地: 'Terra', 風: 'Ar', 水: 'Água' },
-  ko: { 火: '불', 地: '흙', 風: '바람', 水: '물' },
-}
-
 /** エレメントの表示名(現在言語) */
 export const elementLabel = (el: Element): string => (ELEMENT_LABEL[getLang()] ?? ELEMENT_LABEL.ja)[el]
 

@@ -8,12 +8,12 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import HoshiKyaraMascot from '../src/components/HoshiKyaraMascot'
 import BrandMascot from '../src/components/BrandMascot'
-import { setLang, LANGS } from '../src/lib/i18n'
+import { setLang, getLang, LANGS } from '../src/lib/i18n'
 import type { Lang } from '../src/lib/i18n'
 import { ui, quoted } from '../src/lib/ui'
-import { allStarTypes, elementPhrase } from '../src/lib/startypes'
-import { elementLabel } from '../src/lib/signs'
-import type { Element } from '../src/lib/signs'
+// astro非依存の純データのみ参照(signs/startypes を読み込まない＝サーバーは astronomy-engine を読まない)
+import { STAR_TYPES, ELEMENT_LABEL, ELEMENT_WORD_L } from '../src/lib/starData'
+import type { StarType, Element } from '../src/lib/starData'
 import { PAGE_STRINGS, ELEMENT_ICON, ELEMENT_COLOR } from './pageStrings'
 import { SLUG, ELEMENT_ORDER } from './characters'
 
@@ -25,6 +25,24 @@ const lpHref = (l: Lang) => (l === 'ja' ? '/' : `/${l}`)
 const charHref = (l: Lang, slug: string) => (l === 'ja' ? `/c/${slug}` : `/${l}/c/${slug}`)
 const lpUrl = (l: Lang) => ORIGIN + (l === 'ja' ? '/' : `/${l}`)
 const charUrl = (l: Lang, slug: string) => ORIGIN + (l === 'ja' ? `/c/${slug}` : `/${l}/c/${slug}`)
+
+// signs/startypes と同じ挙動を純データで再実装(getLang() 参照。setLang(lang) 後に呼ぶ)
+const elementLabel = (el: Element): string => (ELEMENT_LABEL[getLang()] ?? ELEMENT_LABEL.ja)[el]
+const elementWord = (el: Element): string => (ELEMENT_WORD_L[getLang()] ?? ELEMENT_WORD_L.ja)[el]
+const elementPhrase = (el: Element): string =>
+  getLang() === 'ja' ? `${elementLabel(el)}の${elementWord(el)}` : `${elementLabel(el)} · ${elementWord(el)}`
+
+interface STItem {
+  type: StarType
+  sunElement: Element
+  moonElement: Element
+}
+function allStarTypes(): STItem[] {
+  const table = STAR_TYPES[getLang()] ?? STAR_TYPES.ja
+  const out: STItem[] = []
+  for (const sun of ELEMENT_ORDER) for (const moon of ELEMENT_ORDER) out.push({ type: table[sun][moon], sunElement: sun, moonElement: moon })
+  return out
+}
 
 const FONTS = `<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet" />`
 
