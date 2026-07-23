@@ -1,40 +1,67 @@
-import { useState } from 'react'
-import type { ChartData, PlanetKey } from '../lib/types'
-import { signIndex } from '../lib/astro'
-import { signName } from '../lib/signs'
-import { signMannerOf } from '../lib/planets'
-import { mapProgress } from '../lib/companion'
+import { useMemo, useState } from 'react'
+import type { ChartData } from '../lib/types'
+import { mapProgress, loadCompanion, behaviorBrief } from '../lib/companion'
+import { buildChatContext } from '../lib/aiChat'
+import { fetchAiReport, loadReport } from '../lib/aiReport'
+import type { ReportTopic } from '../lib/aiReport'
+import { useLang } from '../lib/i18n'
 import { useUI, quoted } from '../lib/ui'
 
 interface Props {
   /** 現在の累計シグナル(=地図の通貨)。使うほど増え、減らない */
   signals: number
-  /** 月星座の裏側などを組み立てるためのチャート */
+  /** 発見レポートの土台になるチャート */
   chart: ChartData
   /** ほしキャラ名(括弧なしの生の名前。表示時に言語別の括弧を付ける) */
   starName: string
 }
 
+interface ReportState {
+  loading?: boolean
+  text?: string
+  error?: boolean
+}
+
 /**
  * ごほうび地図(縦ロードマップ)。
  * 「使い込むほど、自分についての発見がひらく」を最初から見せておく＝アプリの売り。
- * 手に入れた宝箱は点灯・タップで中身、まだの宝箱は鍵つきで予告(あと◯シグナル)。減らない・罰しない。
+ * 宝箱を開くと、AIが出生図×行動ログからその人だけの発見レポートを生成(初回のみ・以降キャッシュ)。
+ * 減らない・罰しない。まだ実装していない宝箱は「準備中」。
  */
 export default function RewardMap({ signals, chart, starName }: Props) {
   const t = useUI()
+  const { lang } = useLang()
   const prog = mapProgress(signals)
   const [open, setOpen] = useState<string | null>(null)
+  const [reports, setReports] = useState<Record<string, ReportState>>({})
 
-  const lonOf = (key: PlanetKey) => chart.planets.find((p) => p.key === key)?.lon
-  const moonLon = lonOf('moon')
-  const moonSign = moonLon !== undefined ? signName(signIndex(moonLon)) : ''
-  const moonManner = moonLon !== undefined ? signMannerOf(moonLon) : ''
+  // 発見レポートに渡す占星術データ土台(全期間トランジット込み)。チャートが変わらない限り作り直さない
+  const context = useMemo(() => buildChatContext(chart), [chart])
 
-  function contentFor(key: string, content: 'ready' | 'soon'): string {
-    if (content === 'soon') return t.map.soonNote
-    if (key === 'birth') return t.map.bornBody(quoted(starName))
-    if (key === 'moonBack') return t.map.moonBackBody(moonSign, moonManner)
-    return t.map.soonNote
+  async function generate(topic: ReportTopic) {
+    const cached = loadReport(context, topic)
+    if (cached) {
+      setReports((r) => ({ ...r, [topic]: { text: cached } }))
+      return
+    }
+    setReports((r) => ({ ...r, [topic]: { loading: true } }))
+    try {
+      const state = loadCompanion()
+      const behavior = state ? behaviorBrief(state) : undefined
+      const text = await fetchAiReport(context, topic, behavior, lang)
+      setReports((r) => ({ ...r, [topic]: { text } }))
+    } catch {
+      setReports((r) => ({ ...r, [topic]: { error: true } }))
+    }
+  }
+
+  function toggle(key: string, content: 'ready' | 'ai' | 'soon') {
+    const next = open === key ? null : key
+    setOpen(next)
+    const rep = reports[key]
+    if (next && content === 'ai' && !rep?.text && !rep?.loading) {
+      void generate(key as ReportTopic)
+    }
   }
 
   return (
@@ -65,6 +92,7 @@ export default function RewardMap({ signals, chart, starName }: Props) {
           const info = t.map.tiers[tier.key]
           const isNext = prog.next?.key === tier.key
           const isOpen = open === tier.key
+          const rep = reports[tier.key]
           return (
             <li
               key={tier.key}
@@ -76,7 +104,7 @@ export default function RewardMap({ signals, chart, starName }: Props) {
               <div className="map-node-body">
                 <button
                   className="map-node-head"
-                  onClick={() => tier.unlocked && setOpen(isOpen ? null : tier.key)}
+                  onClick={() => tier.unlocked && toggle(tier.key, tier.content)}
                   disabled={!tier.unlocked}
                 >
                   <span className="map-node-name">{info.name}</span>
@@ -90,9 +118,26 @@ export default function RewardMap({ signals, chart, starName }: Props) {
                 </button>
                 <p className="map-node-teaser">{info.teaser}</p>
                 {isOpen && tier.unlocked && (
-                  <p className={`map-node-content${tier.content === 'soon' ? ' is-soon' : ''}`}>
-                    {contentFor(tier.key, tier.content)}
-                  </p>
+                  <>
+                    {tier.content === 'ai' ? (
+                      rep?.loading ? (
+                        <p className="map-node-content is-generating">{t.map.generating}</p>
+                      ) : rep?.error ? (
+                        <p className="map-node-content is-soon">
+                          {t.map.reportError}{' '}
+                          <button className="map-retry" onClick={() => void generate(tier.key as ReportTopic)}>
+                            {t.map.reportRetry}
+                          </button>
+                        </p>
+                      ) : (
+                        <p className="map-node-content">{rep?.text}</p>
+                      )
+                    ) : (
+                      <p className={`map-node-content${tier.content === 'soon' ? ' is-soon' : ''}`}>
+                        {tier.content === 'soon' ? t.map.soonNote : t.map.bornBody(quoted(starName))}
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </li>

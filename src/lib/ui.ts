@@ -251,6 +251,9 @@ export interface UIStrings {
     close: string
     lockedHint: (n: number) => string
     soonNote: string
+    generating: string
+    reportError: string
+    reportRetry: string
     tiers: Record<string, { name: string; teaser: string }>
     bornBody: (name: string) => string
     moonBackBody: (moonSign: string, manner: string) => string
@@ -506,6 +509,9 @@ const UI: Record<Lang, UIStrings> = {
       close: '閉じる',
       lockedHint: (n) => `あと ${n} でひらきます`,
       soonNote: 'この発見はいま準備中です。もうすこしで会えます。',
+      generating: 'あなただけの発見を、いま読んでいます…',
+      reportError: 'うまく読めませんでした。少し時間をおいて、もう一度ためしてね。',
+      reportRetry: 'もう一度',
       tiers: {
         birth: { name: 'ほしキャラ誕生', teaser: '太陽と月から生まれた、あなたのほしキャラ。ここが物語の出発点。' },
         moonBack: { name: '月星座の裏側', teaser: '表の顔(太陽)とは別の、安心しているときの素のあなた。' },
@@ -767,6 +773,9 @@ const UI: Record<Lang, UIStrings> = {
       close: 'Close',
       lockedHint: (n) => `${n} more to unlock`,
       soonNote: 'This discovery is still being prepared. Coming very soon.',
+      generating: 'Reading a discovery just for you…',
+      reportError: 'I couldn’t read it this time. Give it a moment and try again.',
+      reportRetry: 'Try again',
       tiers: {
         birth: { name: 'Your Hoshi-Kyara is born', teaser: 'Born from your Sun and Moon — the starting point of your story.' },
         moonBack: { name: 'The other side of your Moon', teaser: 'The unguarded you when you feel safe, apart from your public face (the Sun).' },
@@ -1028,6 +1037,9 @@ const UI: Record<Lang, UIStrings> = {
       close: 'Cerrar',
       lockedHint: (n) => `${n} más para abrir`,
       soonNote: 'Este descubrimiento aún se está preparando. Llega muy pronto.',
+      generating: 'Estoy leyendo un descubrimiento solo para ti…',
+      reportError: 'No pude leerlo esta vez. Espera un momento y vuelve a intentarlo.',
+      reportRetry: 'Reintentar',
       tiers: {
         birth: { name: 'Nace tu Hoshi-Kyara', teaser: 'Nacido de tu Sol y tu Luna: el punto de partida de tu historia.' },
         moonBack: { name: 'El otro lado de tu Luna', teaser: 'El tú sin guardia cuando te sientes a salvo, aparte de tu cara pública (el Sol).' },
@@ -1289,6 +1301,9 @@ const UI: Record<Lang, UIStrings> = {
       close: 'Fermer',
       lockedHint: (n) => `encore ${n} pour ouvrir`,
       soonNote: 'Cette découverte est en préparation. Elle arrive très bientôt.',
+      generating: 'Je lis une découverte rien que pour toi…',
+      reportError: 'Je n’ai pas réussi à la lire cette fois. Attends un instant et réessaie.',
+      reportRetry: 'Réessayer',
       tiers: {
         birth: { name: 'Ton Hoshi-Kyara naît', teaser: 'Né de ton Soleil et de ta Lune : le point de départ de ton histoire.' },
         moonBack: { name: 'L’autre face de ta Lune', teaser: 'Le toi sans défense quand tu te sens en sécurité, à part ton visage public (le Soleil).' },
@@ -1550,6 +1565,9 @@ const UI: Record<Lang, UIStrings> = {
       close: 'Chiudi',
       lockedHint: (n) => `ancora ${n} per aprire`,
       soonNote: 'Questa scoperta è in preparazione. Arriva prestissimo.',
+      generating: 'Sto leggendo una scoperta solo per te…',
+      reportError: 'Non sono riuscita a leggerla stavolta. Aspetta un attimo e riprova.',
+      reportRetry: 'Riprova',
       tiers: {
         birth: { name: 'Nasce il tuo Hoshi-Kyara', teaser: 'Nato dal tuo Sole e dalla tua Luna: il punto di partenza della tua storia.' },
         moonBack: { name: 'L’altro lato della tua Luna', teaser: 'Il te senza difese quando ti senti al sicuro, oltre la tua faccia pubblica (il Sole).' },
@@ -1811,6 +1829,9 @@ const UI: Record<Lang, UIStrings> = {
       close: 'Fechar',
       lockedHint: (n) => `mais ${n} para abrir`,
       soonNote: 'Esta descoberta ainda está sendo preparada. Chega muito em breve.',
+      generating: 'Estou lendo uma descoberta só para você…',
+      reportError: 'Não consegui ler desta vez. Espere um momento e tente de novo.',
+      reportRetry: 'Tentar de novo',
       tiers: {
         birth: { name: 'Seu Hoshi-Kyara nasce', teaser: 'Nascido do seu Sol e da sua Lua: o ponto de partida da sua história.' },
         moonBack: { name: 'O outro lado da sua Lua', teaser: 'O você sem defesas quando se sente seguro, além da sua face pública (o Sol).' },
@@ -2072,6 +2093,9 @@ const UI: Record<Lang, UIStrings> = {
       close: '닫기',
       lockedHint: (n) => `${n} 더 모으면 열림`,
       soonNote: '이 발견은 지금 준비 중이에요. 곧 만나요.',
+      generating: '당신만을 위한 발견을 지금 읽고 있어요…',
+      reportError: '이번엔 잘 읽지 못했어요. 잠시 뒤에 다시 시도해 주세요.',
+      reportRetry: '다시 시도',
       tiers: {
         birth: { name: '호시캐릭터 탄생', teaser: '태양과 달에서 태어난 당신의 호시캐릭터. 이야기의 출발점.' },
         moonBack: { name: '달 별자리의 이면', teaser: '겉으로 보이는 얼굴(태양)과는 다른, 안심할 때의 본래의 당신.' },

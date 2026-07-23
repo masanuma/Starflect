@@ -13,6 +13,7 @@ export function aiReadingPlugin(apiKey: string | undefined, feedbackUrl?: string
     configureServer(server) {
       server.middlewares.use('/api/ai-pair', handlers.pair)
       server.middlewares.use('/api/ai-chat', handlers.chat)
+      server.middlewares.use('/api/ai-report', handlers.report)
       server.middlewares.use('/api/feedback', feedback)
     },
   }

@@ -210,17 +210,56 @@ export function weekAggregate(state: CompanionState, now: Date = new Date()): We
 export interface Milestone {
   at: number
   key: string
-  content: 'ready' | 'soon'
+  /** ready=テンプレ即表示 / ai=AIが専用レポートを生成 / soon=準備中(未実装) */
+  content: 'ready' | 'ai' | 'soon'
 }
 
 export const MILESTONES: Milestone[] = [
   { at: 0, key: 'birth', content: 'ready' },
-  { at: 3, key: 'moonBack', content: 'ready' },
-  { at: 10, key: 'partyDeep', content: 'soon' },
-  { at: 25, key: 'moodTrend', content: 'soon' },
-  { at: 50, key: 'hiddenSelf', content: 'soon' },
+  { at: 3, key: 'moonBack', content: 'ai' },
+  { at: 10, key: 'partyDeep', content: 'ai' },
+  { at: 25, key: 'moodTrend', content: 'ai' },
+  { at: 50, key: 'hiddenSelf', content: 'ai' },
   { at: 100, key: 'trueBuddy', content: 'soon' },
 ]
+
+/** 発見レポート(気分のクセ・隠れた自分)に渡す、行動ログの実測サマリ */
+export interface BehaviorBrief {
+  days: number
+  good: number
+  meh: number
+  bad: number
+  topDomains: string[]
+  sinceDays: number
+}
+
+const DOMAIN_JA: Record<Domain, string> = { work: '仕事', love: '恋愛', people: '人間関係', other: 'その他' }
+
+/** これまでの気分タップを集計(全期間)。AI発見レポートの「行動の実測」として使う */
+export function behaviorBrief(state: CompanionState, now: Date = new Date()): BehaviorBrief {
+  let good = 0
+  let meh = 0
+  let bad = 0
+  let days = 0
+  const dom: Partial<Record<Domain, number>> = {}
+  for (const e of Object.values(state.daily)) {
+    if (!e.mood) continue
+    days++
+    if (e.mood === 'good') good++
+    else if (e.mood === 'bad') bad++
+    else meh++
+    if (e.domain) dom[e.domain] = (dom[e.domain] ?? 0) + 1
+  }
+  const topDomains = Object.entries(dom)
+    .sort((a, b) => (b[1] ?? 0) - (a[1] ?? 0))
+    .slice(0, 2)
+    .map(([k]) => DOMAIN_JA[k as Domain])
+  const created = new Date(state.createdAt)
+  const sinceDays = isNaN(created.getTime())
+    ? 0
+    : Math.max(0, Math.round((now.getTime() - created.getTime()) / 86_400_000))
+  return { days, good, meh, bad, topDomains, sinceDays }
+}
 
 export interface MapProgress {
   signals: number

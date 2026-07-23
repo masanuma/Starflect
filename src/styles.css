@@ -2943,9 +2943,31 @@ body {
   line-height: 1.85;
   color: var(--ink);
   text-align: left;
+  white-space: pre-wrap;
 }
 
 .map-node-content.is-soon {
   color: var(--ink-sub);
   font-style: normal;
+}
+
+.map-node-content.is-generating {
+  color: var(--violet);
+  animation: map-pulse 1.3s ease-in-out infinite;
+}
+
+@keyframes map-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+.map-retry {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--pink);
+  font-weight: 700;
+  font-size: 12.5px;
+  cursor: pointer;
+  text-decoration: underline;
 }

@@ -184,6 +184,43 @@ export interface ChatRequest {
   lang?: Lang
 }
 
+/** ごほうび地図の「発見レポート」リクエスト */
+export type ReportTopic = 'moonBack' | 'partyDeep' | 'moodTrend' | 'hiddenSelf'
+export interface BehaviorBrief {
+  days: number
+  good: number
+  meh: number
+  bad: number
+  topDomains: string[]
+  sinceDays: number
+}
+export interface AiReportRequest {
+  context: ChatChartContext
+  topic: ReportTopic
+  behavior?: BehaviorBrief
+  lang?: Lang
+}
+
+/** 発見レポートの依頼文(ユーザーメッセージ)。人格・データ土台は buildChatSystem を再利用する */
+function buildReportPrompt(topic: ReportTopic, behavior?: BehaviorBrief): string {
+  const b = behavior
+  const bLine = b
+    ? `【これまでの記録(行動の実測)】記録した日数 ${b.days}日 / いい ${b.good}・ふつう ${b.meh}・しんどい ${b.bad}${b.topDomains.length ? ` / よく選ぶ領域: ${b.topDomains.join('・')}` : ''} / 迎えてから ${b.sinceDays}日`
+    : '【これまでの記録】まだ記録は少なめです。'
+  const common =
+    'これは「ごほうび地図」で相手が解放した、特別な発見レポートです。占い師の一般論ではなく、わたし(あなたのほしキャラ)が、あなただけに見つけた発見として書きます。見出しや箇条書きは使わず、地の文で。専門用語は使わない。断定的な予言や重大な決断の煽りはしない。文末に定型のまとめや次回予告はつけない。'
+  switch (topic) {
+    case 'moonBack':
+      return `${common}\nテーマ:「月星座の裏側」。出生の月星座に注目し、太陽(人前で見せる表の顔)との違い＝安心しているときやひとりのときに出る“素のあなた”を、具体的な場面を交えて3〜4文で。表からは見えないスイッチを言い当てる感を出す。`
+    case 'partyDeep':
+      return `${common}\nテーマ:「パーティの深掘り」。出生の天体のうち、効いている角度を持つ星や特徴的な配置を2〜3個選び、その人ならではの役割・強み・クセを掘り下げる。太陽星座だけでは分からない発見を4〜5文で。`
+    case 'moodTrend':
+      return `${common}\n${bLine}\nテーマ:「気分のクセ」。上の行動の実測から、あなたが揺れやすい場面や気分の傾向を読み、出生図の該当天体と結びつけて「こういうときに揺れやすい/元気が出る」を4〜5文で。データが少なければ、少ない中で見える兆しを「〜かも」と控えめに。`
+    case 'hiddenSelf':
+      return `${common}\n${bLine}\nテーマ:「隠れた自分レポート」(いちばん特別な発見)。出生図が示す“本来こういう人”という建前と、上の行動の実測とのギャップに注目し、「星ではこう出ているけれど、あなたは実際こう動いている」という隠れた一面を、驚きとともに5〜6文で。決めつけず、やさしく。データが少なければ、今わかる範囲でそっと。`
+  }
+}
+
 function buildChatSystem(c: ChatChartContext): string {
   // 名前があれば「◯◯さん」、無ければ「あなた」(「あなたさん」を避ける)
   const who = c.name ? `${c.name}さん` : 'あなた'
@@ -307,14 +344,60 @@ function createChatHandler(apiKey: string | undefined): RawHandler {
   }
 }
 
-/** 相性鑑定・相談チャットのAPIハンドラを生成する(相棒との会話がAIの窓口を担う) */
+/** ごほうび地図の発見レポート(非ストリーミング。初回だけ生成しクライアントがキャッシュする) */
+function createReportHandler(apiKey: string | undefined): RawHandler {
+  return (req, res) => {
+    void (async () => {
+      if (req.method !== 'POST') return json(res, 405, { error: 'POST only' })
+      if (!apiKey || apiKey.includes('ここに')) {
+        return json(res, 500, {
+          error:
+            'APIキーが未設定です。サーバーの環境変数 ANTHROPIC_API_KEY を設定してください(ローカルは .env、本番は Railway の Variables)。',
+        })
+      }
+
+      let payload: AiReportRequest
+      try {
+        payload = JSON.parse(await readBody(req)) as AiReportRequest
+      } catch {
+        return json(res, 400, { error: 'リクエストの形式が不正です' })
+      }
+      if (!payload?.context || !payload.topic) {
+        return json(res, 400, { error: 'データが不足しています' })
+      }
+
+      try {
+        const client = new Anthropic({ apiKey })
+        const response = await client.messages.create({
+          model: 'claude-opus-4-8',
+          max_tokens: 1200,
+          thinking: { type: 'adaptive' },
+          output_config: { effort: 'low' },
+          system: buildChatSystem(payload.context) + LANG_DIRECTIVE[langOf(payload)],
+          messages: [{ role: 'user', content: buildReportPrompt(payload.topic, payload.behavior) }],
+        })
+        const text = response.content
+          .filter((b): b is Anthropic.TextBlock => b.type === 'text')
+          .map((b) => b.text)
+          .join('\n')
+        return json(res, 200, { text })
+      } catch (err) {
+        return chatErrorJson(res, err)
+      }
+    })()
+  }
+}
+
+/** 相性鑑定・相談チャット・発見レポートのAPIハンドラを生成する(相棒との会話がAIの窓口を担う) */
 export function createAiHandlers(apiKey: string | undefined): {
   pair: RawHandler
   chat: RawHandler
+  report: RawHandler
 } {
   return {
     pair: makeHandler<AiPairRequest>(apiKey, PAIR_SYSTEM_PROMPT, buildPairPrompt),
     chat: createChatHandler(apiKey),
+    report: createReportHandler(apiKey),
   }
 }
 
