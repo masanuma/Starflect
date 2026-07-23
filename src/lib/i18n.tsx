@@ -33,9 +33,32 @@ const STORAGE_KEY = 'starflect-lang'
 let currentLang: Lang = 'ja'
 export const getLang = (): Lang => currentLang
 
+/**
+ * 現在言語を明示的に切り替える。主にサーバーサイドの静的ページ生成で使う
+ * (setLang(lang) してから ui()/allStarTypes()/elementLabel() 等を呼ぶと、その言語で返る)。
+ * ブラウザでは LangProvider が同期更新するため通常は使わない。
+ */
+export const setLang = (l: Lang): void => {
+  currentLang = l
+}
+
 const SUPPORTED: Lang[] = ['ja', 'en', 'es', 'fr', 'it', 'pt', 'ko']
 
 function detectLang(): Lang {
+  // 紹介LP( /en など )から /app?lang=xx で来たら、その言語を最優先(＋保存してsticky化)
+  try {
+    const q = typeof location !== 'undefined' ? new URLSearchParams(location.search).get('lang') : null
+    if (q && (SUPPORTED as string[]).includes(q)) {
+      try {
+        localStorage.setItem(STORAGE_KEY, q)
+      } catch {
+        /* 無視 */
+      }
+      return q as Lang
+    }
+  } catch {
+    /* 無視 */
+  }
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved && (SUPPORTED as string[]).includes(saved)) return saved as Lang

@@ -5,13 +5,13 @@ import BirthForm from './components/BirthForm'
 import Result from './components/Result'
 import PairForm from './components/PairForm'
 import PairResult from './components/PairResult'
-import About from './components/About'
 import Companion from './components/Companion'
 import LangSwitcher from './components/LangSwitcher'
 import ConsentBanner from './components/ConsentBanner'
 import type { ChartData } from './lib/types'
 import type { PairData } from './lib/compat'
 import { useUI } from './lib/ui'
+import { getLang } from './lib/i18n'
 import { hasCompanion, loadCompanion } from './lib/companion'
 import type { CompanionState } from './lib/companion'
 import { initAnalytics, getConsent, setConsent } from './lib/analytics'
@@ -19,7 +19,6 @@ import type { Consent } from './lib/analytics'
 
 type Screen =
   | { page: 'home' }
-  | { page: 'about' }
   | { page: 'form' }
   | { page: 'result'; data: ChartData }
   | { page: 'pairForm' }
@@ -59,17 +58,15 @@ export default function App() {
           <Home
             onSelect={() => setScreen({ page: 'form' })}
             onSelectPair={() => setScreen({ page: 'pairForm' })}
-            onAbout={() => setScreen({ page: 'about' })}
+            onAbout={() => {
+              // 「ほしキャラとは」は紹介LPに一本化。現在の言語のLPへ。相棒があってもリダイレクトされないよう ?stay
+              const l = getLang()
+              window.location.href = (l === 'ja' ? '/' : `/${l}`) + '?stay=1'
+            }}
             onCompanion={() => {
               const state = loadCompanion()
               if (state) setScreen({ page: 'companion', state })
             }}
-          />
-        )}
-        {screen.page === 'about' && (
-          <About
-            onBack={() => setScreen({ page: 'home' })}
-            onStart={() => setScreen({ page: 'form' })}
           />
         )}
         {screen.page === 'form' && (

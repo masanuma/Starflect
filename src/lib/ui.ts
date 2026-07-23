@@ -304,11 +304,7 @@ const UI: Record<Lang, UIStrings> = {
       items: [
         {
           q: 'ほしキャラ診断とは何ですか？',
-          a: '生まれた瞬間の星の配置から、太陽星座(表の顔)と月星座(心の中)を掛け合わせて、あなたを16タイプの「ほしキャラ」に分類する無料の星占いです。さらに10天体の配置から性格や運勢も読み解きます。',
-        },
-        {
-          q: '無料で使えますか？',
-          a: 'はい。生年月日を入力するだけで、登録不要・無料で診断できます。',
+          a: '生まれた瞬間の星の配置から、太陽星座(表の顔)と月星座(心の中)を掛け合わせて、あなたを16タイプの「ほしキャラ」に分類する星占いです。さらに10天体の配置から性格や運勢も読み解きます。',
         },
         {
           q: '生年月日だけで診断できますか？生まれた時刻は必要ですか？',
@@ -576,11 +572,7 @@ const UI: Record<Lang, UIStrings> = {
       items: [
         {
           q: 'What is Hoshi-Kyara diagnosis?',
-          a: 'It’s a free astrology reading that blends your Sun sign (outer face) and Moon sign (inner heart) to sort you into one of 16 “star characters,” then reads your personality and fortune from all 10 planets.',
-        },
-        {
-          q: 'Is it free?',
-          a: 'Yes. Just enter your birth date—no sign-up, completely free.',
+          a: 'It’s an astrology reading that blends your Sun sign (outer face) and Moon sign (inner heart) to sort you into one of 16 “star characters,” then reads your personality and fortune from all 10 planets.',
         },
         {
           q: 'Can I get a reading with only my birth date? Is birth time needed?',
@@ -848,11 +840,7 @@ const UI: Record<Lang, UIStrings> = {
       items: [
         {
           q: '¿Qué es el diagnóstico Hoshi-Kyara?',
-          a: 'Es un horóscopo gratuito que combina tu signo solar (tu cara externa) y tu signo lunar (tu interior) para clasificarte en uno de 16 “personajes estelares”, y luego lee tu personalidad y tu fortuna a partir de los 10 planetas.',
-        },
-        {
-          q: '¿Es gratis?',
-          a: 'Sí. Solo introduce tu fecha de nacimiento: sin registro y totalmente gratis.',
+          a: 'Es un horóscopo que combina tu signo solar (tu cara externa) y tu signo lunar (tu interior) para clasificarte en uno de 16 “personajes estelares”, y luego lee tu personalidad y tu fortuna a partir de los 10 planetas.',
         },
         {
           q: '¿Basta con la fecha de nacimiento? ¿Hace falta la hora?',
@@ -1120,11 +1108,7 @@ const UI: Record<Lang, UIStrings> = {
       items: [
         {
           q: 'Qu’est-ce que le diagnostic Hoshi-Kyara ?',
-          a: 'C’est un horoscope gratuit qui combine ton signe solaire (ta face visible) et ton signe lunaire (ton for intérieur) pour te classer parmi 16 « personnages stellaires », puis lit ta personnalité et ta destinée à partir des 10 planètes.',
-        },
-        {
-          q: 'Est-ce gratuit ?',
-          a: 'Oui. Il suffit d’indiquer ta date de naissance : sans inscription et entièrement gratuit.',
+          a: 'C’est un horoscope qui combine ton signe solaire (ta face visible) et ton signe lunaire (ton for intérieur) pour te classer parmi 16 « personnages stellaires », puis lit ta personnalité et ta destinée à partir des 10 planètes.',
         },
         {
           q: 'La date de naissance suffit-elle ? L’heure est-elle nécessaire ?',
@@ -1392,11 +1376,7 @@ const UI: Record<Lang, UIStrings> = {
       items: [
         {
           q: 'Che cos’è la diagnosi Hoshi-Kyara?',
-          a: 'È un oroscopo gratuito che combina il tuo segno solare (il volto esterno) e il segno lunare (il tuo interiore) per collocarti in uno dei 16 “personaggi stellari”, poi legge personalità e fortuna a partire dai 10 pianeti.',
-        },
-        {
-          q: 'È gratis?',
-          a: 'Sì. Basta inserire la data di nascita: senza registrazione e completamente gratis.',
+          a: 'È un oroscopo che combina il tuo segno solare (il volto esterno) e il segno lunare (il tuo interiore) per collocarti in uno dei 16 “personaggi stellari”, poi legge personalità e fortuna a partire dai 10 pianeti.',
         },
         {
           q: 'Basta la data di nascita? Serve l’ora?',
@@ -1664,11 +1644,7 @@ const UI: Record<Lang, UIStrings> = {
       items: [
         {
           q: 'O que é o diagnóstico Hoshi-Kyara?',
-          a: 'É um horóscopo gratuito que combina o seu signo solar (a face externa) e o signo lunar (o seu interior) para classificá-lo em um dos 16 “personagens estelares”, e depois lê a personalidade e a sorte a partir dos 10 planetas.',
-        },
-        {
-          q: 'É grátis?',
-          a: 'Sim. Basta informar a data de nascimento: sem cadastro e totalmente grátis.',
+          a: 'É um horóscopo que combina o seu signo solar (a face externa) e o signo lunar (o seu interior) para classificá-lo em um dos 16 “personagens estelares”, e depois lê a personalidade e a sorte a partir dos 10 planetas.',
         },
         {
           q: 'Só a data de nascimento basta? Precisa da hora?',
@@ -1936,11 +1912,7 @@ const UI: Record<Lang, UIStrings> = {
       items: [
         {
           q: '호시캐릭터 진단이란 무엇인가요?',
-          a: '태어난 순간의 별자리 배치에서 태양 별자리(겉모습)와 달 별자리(마음속)를 곱해 당신을 16가지 ‘호시캐릭터’로 분류하는 무료 별점입니다. 나아가 10개 행성 배치로 성격과 운세까지 풀이합니다.',
-        },
-        {
-          q: '무료인가요?',
-          a: '네. 생년월일만 입력하면 가입 없이 무료로 진단할 수 있습니다.',
+          a: '태어난 순간의 별자리 배치에서 태양 별자리(겉모습)와 달 별자리(마음속)를 곱해 당신을 16가지 ‘호시캐릭터’로 분류하는 별점입니다. 나아가 10개 행성 배치로 성격과 운세까지 풀이합니다.',
         },
         {
           q: '생년월일만으로 진단되나요? 태어난 시각이 필요한가요?',

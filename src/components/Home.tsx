@@ -4,7 +4,6 @@ import { starTypeOf } from '../lib/startypes'
 import type { PlanetKey } from '../lib/types'
 import BrandMascot from './BrandMascot'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
-import Faq from './Faq'
 
 interface Props {
   onSelect: () => void
@@ -82,8 +81,6 @@ export default function Home({ onSelect, onSelectPair, onAbout, onCompanion }: P
       </div>
 
       <p className="home-note">{t.home.note}</p>
-
-      <Faq />
     </div>
   )
 }
