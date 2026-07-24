@@ -128,6 +128,8 @@ export interface UIStrings {
     partySub: string
     partyMore: (hidden: number) => string
     partyLess: string
+    /** 完全に畳んだ状態から全員を開くボタン(相棒ホーム用) */
+    partyReveal: (total: number) => string
     /** 「主人公の太陽星座は牡牛座」を色分け表示するためのパーツ。isAsc は上昇星座(名前に既に星座を含む)判定 */
     roleSign: (role: string, planet: string, sign: string, isAsc: boolean) => RoleSignParts
     domain: string
@@ -384,6 +386,7 @@ const UI: Record<Lang, UIStrings> = {
       partySub: '生まれた瞬間の星たちが、あなたをかたちづくるキャラになりました。それぞれの担当と特徴です。',
       partyMore: (hidden) => `のこりの${hidden}キャラも見てみて！`,
       partyLess: '畳む',
+      partyReveal: (total) => `${total}人のパーティを見る`,
       domain: '担当',
       roleSign: (role, planet, sign, isAsc) => ({ role, sep1: 'の', planetLabel: isAsc ? planet : `${planet}星座`, sep2: 'は', sign }),
       quirk: '特徴',
@@ -652,6 +655,7 @@ const UI: Record<Lang, UIStrings> = {
       partySub: 'The stars at the moment you were born became the characters that make you who you are—here’s what each one handles, and what it’s like.',
       partyMore: (hidden) => `See your other ${hidden} characters too!`,
       partyLess: 'Collapse',
+      partyReveal: (total) => `See your party of ${total}`,
       domain: 'Domain',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' in ', sign }),
       quirk: 'Trait',
@@ -920,6 +924,7 @@ const UI: Record<Lang, UIStrings> = {
       partySub: 'Los astros del momento de tu nacimiento se volvieron los personajes que te componen: de qué se encarga cada uno y cómo es.',
       partyMore: (hidden) => `¡Mira también tus otros ${hidden} personajes!`,
       partyLess: 'Contraer',
+      partyReveal: (total) => `Ver tu grupo de ${total}`,
       domain: 'Área',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' en ', sign }),
       quirk: 'Rasgo',
@@ -1188,6 +1193,7 @@ const UI: Record<Lang, UIStrings> = {
       partySub: 'Les astres de l’instant de ta naissance sont devenus les personnages qui te composent : ce dont chacun s’occupe et son caractère.',
       partyMore: (hidden) => `Découvre aussi tes ${hidden} autres personnages !`,
       partyLess: 'Réduire',
+      partyReveal: (total) => `Voir ton équipe de ${total}`,
       domain: 'Domaine',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' en ', sign }),
       quirk: 'Trait',
@@ -1456,6 +1462,7 @@ const UI: Record<Lang, UIStrings> = {
       partySub: 'Gli astri dell’istante della tua nascita sono diventati i personaggi che ti compongono: di cosa si occupa ognuno e com’è fatto.',
       partyMore: (hidden) => `Scopri anche gli altri tuoi ${hidden} personaggi!`,
       partyLess: 'Comprimi',
+      partyReveal: (total) => `Vedi il tuo gruppo di ${total}`,
       domain: 'Ambito',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' in ', sign }),
       quirk: 'Tratto',
@@ -1724,6 +1731,7 @@ const UI: Record<Lang, UIStrings> = {
       partySub: 'Os astros do instante do seu nascimento viraram os personagens que compõem você: do que cada um cuida e como ele é.',
       partyMore: (hidden) => `Veja também os seus outros ${hidden} personagens!`,
       partyLess: 'Recolher',
+      partyReveal: (total) => `Ver o seu grupo de ${total}`,
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' em ', sign }),
       domain: 'Área',
       quirk: 'Traço',
@@ -1992,6 +2000,7 @@ const UI: Record<Lang, UIStrings> = {
       partySub: '태어난 순간의 별들이 당신을 이루는 캐릭터가 되었어요. 각자의 담당과 특징이에요.',
       partyMore: (hidden) => `나머지 ${hidden} 캐릭터도 봐 봐요!`,
       partyLess: '접기',
+      partyReveal: (total) => `${total}명의 파티 보기`,
       domain: '담당',
       roleSign: (role, planet, sign, isAsc) => ({ role, sep1: '의 ', planetLabel: isAsc ? planet : `${planet} 별자리`, sep2: isAsc ? '은 ' : '는 ', sign }),
       quirk: '특징',

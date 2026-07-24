@@ -15,6 +15,7 @@ import { readFortune } from '../lib/fortune'
 import type { PlanetKey } from '../lib/types'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import StarReading from './StarReading'
+import PartyCard from './PartyCard'
 import RewardMap from './RewardMap'
 import AiChat from './AiChat'
 import { buildChatContext, chatStorageKey } from '../lib/aiChat'
@@ -119,6 +120,8 @@ export default function Companion({ state, onHome, onPair }: Props) {
       <h2 className="companion-name">{starType ? quoted(starType.type.name) : ''}</h2>
 
       <RewardMap signals={signals} chart={state.chart} starName={starType?.type.name ?? ''} />
+
+      <PartyCard data={state.chart} collapsedByDefault />
 
       <StarReading chart={state.chart} />
 

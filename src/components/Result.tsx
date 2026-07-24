@@ -1,19 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import type { ChartData, PlanetKey } from '../lib/types'
-import { signIndex, degInSign } from '../lib/astro'
-import { signName, signSymbol } from '../lib/signs'
 import { synthesize } from '../lib/synthesis'
-import { getPlanet, signMannerOf } from '../lib/planets'
 import { starTypeOf, elementPhrase } from '../lib/startypes'
 import AiChat from './AiChat'
 import StarReading from './StarReading'
+import PartyCard from './PartyCard'
 import ShareButtons from './ShareButtons'
 import Feedback from './Feedback'
 import { createCompanion } from '../lib/companion'
 import { buildChatContext, chatStorageKey } from '../lib/aiChat'
-import PlanetMascot, { MASCOT_COLOR } from './PlanetMascot'
+import PlanetMascot from './PlanetMascot'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
-import { useLang } from '../lib/i18n'
 import { useUI, quoted } from '../lib/ui'
 import { track } from '../lib/analytics'
 
@@ -26,7 +23,6 @@ interface Props {
 }
 
 export default function Result({ data, onHome, onPair }: Props) {
-  const { lang } = useLang()
   const t = useUI()
 
   const lonOf = (key: PlanetKey) => data.planets.find((p) => p.key === key)?.lon
@@ -38,13 +34,6 @@ export default function Result({ data, onHome, onPair }: Props) {
       ? synthesize(sunLon, moonLon, ascLon)
       : null
 
-  // ほしキャラを構成するパーティ = 計算した全天体(太陽・月・上昇星座を先頭に)
-  const partyPlanets = data.planets
-  // 上昇星座までを表示し、残りは畳む(長すぎるため)。時刻なしで asc が無いときは 太陽・月 まで
-  const hasAsc = partyPlanets.some((p) => p.key === 'asc')
-  const partyShown = hasAsc ? 3 : 2
-  const [showAllParty, setShowAllParty] = useState(false)
-  const visibleParty = showAllParty ? partyPlanets : partyPlanets.slice(0, partyShown)
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
 
   const starSlug = starType
@@ -118,77 +107,7 @@ export default function Result({ data, onHome, onPair }: Props) {
 
       {starType && <ShareButtons starTypeName={quoted(starType.type.name)} starSlug={starSlug} />}
 
-      <section className="party-card">
-        <div className="card-head">
-          {starType && (
-            <div className="card-head-icon" aria-hidden="true">
-              <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={52} />
-            </div>
-          )}
-          <div>
-            <p className="card-title">{t.result.partyTitle(partyPlanets.length)}</p>
-            <p className="card-sub">{t.result.partySub}</p>
-          </div>
-        </div>
-        <ul className="party-list">
-          {visibleParty.map((p) => {
-            const info = getPlanet(p.key)
-            const si = signIndex(p.lon)
-            const color = MASCOT_COLOR[p.key]
-            return (
-              <li
-                key={p.key}
-                className="party-row"
-                style={{ background: `${color}14`, borderColor: `${color}44` }}
-              >
-                <div className="party-row-av" style={{ background: `${color}2e` }}>
-                  <PlanetMascot planetKey={p.key} size={58} />
-                </div>
-                <div className="party-row-body">
-                  {(() => {
-                    const parts = t.result.roleSign(info.role, info.name, signName(si), p.key === 'asc')
-                    return (
-                      <p className="party-row-headline">
-                        <span className="ph-role" style={{ color }}>
-                          {/* 上昇星座の記号「ASC」は一般的でないので出さない */}
-                          {p.key !== 'asc' && `${info.symbol} `}
-                          {parts.role}
-                        </span>
-                        <span className="ph-sep">{parts.sep1}</span>
-                        <span className="ph-planet">{parts.planetLabel}</span>
-                        <span className="ph-sep">{parts.sep2}</span>
-                        <span className="ph-sign">
-                          {signSymbol(si)} {parts.sign}
-                        </span>
-                        <span className="ph-deg">{degInSign(p.lon).toFixed(1)}°</span>
-                        {p.retro && <span className="retro-badge">{t.result.retro}</span>}
-                      </p>
-                    )
-                  })()}
-                  <dl className="party-facts">
-                    <div>
-                      <dt>{t.result.domain}</dt>
-                      <dd>{info.domain}</dd>
-                    </div>
-                    <div>
-                      <dt>{t.result.quirk}</dt>
-                      <dd>{lang === 'ja' ? `「${signMannerOf(p.lon)}」` : signMannerOf(p.lon)}</dd>
-                    </div>
-                  </dl>
-                </div>
-              </li>
-            )
-          })}
-        </ul>
-        {partyPlanets.length > partyShown && (
-          <button
-            className={`party-toggle${showAllParty ? ' open' : ''}`}
-            onClick={() => setShowAllParty((v) => !v)}
-          >
-            {showAllParty ? t.result.partyLess : t.result.partyMore(partyPlanets.length - partyShown)}
-          </button>
-        )}
-      </section>
+      <PartyCard data={data} />
 
       <StarReading chart={data} />
 
