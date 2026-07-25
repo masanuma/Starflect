@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import type { PairData, PairPerson } from '../lib/compat'
 import { compatOf, pairTip, relLabel } from '../lib/compat'
-import { readFortune, periodNoun, periodLabel } from '../lib/fortune'
+import type { FortuneTab } from '../lib/fortune'
+import { readFortune, periodNoun, periodLabel, FORTUNE_TABS, PERIOD_OF_TAB, fortuneTabDate } from '../lib/fortune'
 import { starTypeOf } from '../lib/startypes'
 import { fetchAiPairReading } from '../lib/aiReading'
 import { getPlanet } from '../lib/planets'
@@ -35,9 +36,13 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
   const typeB = personType(b)
   const compat = compatOf(a, b)
 
-  const fortuneA = readFortune(a.planets, data.period)
-  const fortuneB = readFortune(b.planets, data.period)
+  // 期間は結果画面でも切り替えられる(今日/明日/今週/来週/今月/来月)。すべてローカル計算=AIコストなし。
+  const [tab, setTab] = useState<FortuneTab>(data.period)
+  const fortuneA = readFortune(a.planets, PERIOD_OF_TAB[tab], fortuneTabDate(tab))
+  const fortuneB = readFortune(b.planets, PERIOD_OF_TAB[tab], fortuneTabDate(tab))
   const tip = pairTip(fortuneA.toneLevel, fortuneB.toneLevel, a.name, b.name)
+  const tabLabel = (id: FortuneTab) =>
+    id === 'nextweek' ? t.companion.tabNextWeek : id === 'nextmonth' ? t.companion.tabNextMonth : periodLabel(PERIOD_OF_TAB[id])
 
   const anyApprox = a.approxTime || b.approxTime
 
@@ -69,7 +74,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
         details: compat.details.map((d) => `${d.title}: ${d.text}`),
         natalA: natalOf(a),
         natalB: natalOf(b),
-        periodLabel: periodNoun(data.period),
+        periodLabel: periodNoun(PERIOD_OF_TAB[tab]),
         skyNote: fortuneA.skyNote,
         toneA: fortuneA.toneLabel,
         toneB: fortuneB.toneLabel,
@@ -151,10 +156,24 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
             <SectionIcon name="today" />
           </div>
           <div>
-            <p className="planet-title">{t.pairResult.todayTitle(periodLabel(data.period))}</p>
+            <p className="planet-title">{t.pairResult.todayTitle(tabLabel(tab))}</p>
             <p className="planet-sub">{t.pairResult.todaySub(fortuneA.skyNote)}</p>
           </div>
         </header>
+
+        <div className="reading-tabs" role="tablist">
+          {FORTUNE_TABS.map((id) => (
+            <button
+              key={id}
+              role="tab"
+              aria-selected={id === tab}
+              className={`reading-tab ${id === tab ? 'active' : ''}`}
+              onClick={() => setTab(id)}
+            >
+              {tabLabel(id)}
+            </button>
+          ))}
+        </div>
 
         <div className="pair-tones">
           <div className="pair-tone">

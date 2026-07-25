@@ -28,6 +28,7 @@ interface SavedPair {
 }
 
 const STORAGE_KEY = 'starflect-pair'
+const SELF_KEY = 'starflect-input'
 const EMPTY: PersonInput = { name: '', date: '', time: '' }
 
 function loadSaved(): SavedPair | null {
@@ -37,6 +38,25 @@ function loadSaved(): SavedPair | null {
   } catch {
     return null
   }
+}
+
+/** 診断で入力済みの「自分」の生年月日を、相性の1人目に引き継ぐ(再入力させない) */
+function loadSelf(): PersonInput | null {
+  try {
+    const raw = localStorage.getItem(SELF_KEY)
+    if (!raw) return null
+    const s = JSON.parse(raw) as { name?: string; date?: string; time?: string }
+    if (!s.date) return null
+    return { name: s.name ?? '', date: s.date, time: s.time ?? '' }
+  } catch {
+    return null
+  }
+}
+
+/** 入力された個人名に敬称を付ける。日本語は「さん」、他言語は敬称文化が異なるためそのまま。
+ *  空欄時のフォールバック(「あなた」「相手」等)には付けない。 */
+function withHonorific(name: string, lang: Lang): string {
+  return lang === 'ja' ? `${name}さん` : name
 }
 
 function buildPerson(
@@ -54,8 +74,9 @@ function buildPerson(
     { key: 'sun', lon: sunLongitude(d) },
     { key: 'moon', lon: moonLongitude(d) },
   ]
+  const entered = input.name.trim()
   return {
-    name: input.name.trim() || fallbackName,
+    name: entered ? withHonorific(entered, lang) : fallbackName,
     dateLabel: formatBirthDate(input.date, undefined, lang),
     approxTime: !input.time,
     planets,
@@ -109,7 +130,8 @@ export default function PairForm({ onBack, onResult }: Props) {
   const { lang } = useLang()
   const t = useUI()
   const saved = loadSaved()
-  const [a, setA] = useState<PersonInput>(saved?.a ?? EMPTY)
+  // 1人目=自分。前回の相性入力があればそれを、無ければ診断で入れた自分の情報を引き継ぐ。
+  const [a, setA] = useState<PersonInput>(saved?.a?.date ? saved.a : (loadSelf() ?? saved?.a ?? EMPTY))
   const [b, setB] = useState<PersonInput>(saved?.b ?? EMPTY)
   const [period, setPeriod] = useState<PeriodKey>(saved?.period ?? 'today')
   const [error, setError] = useState('')

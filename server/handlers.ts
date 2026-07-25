@@ -67,22 +67,23 @@ function readBody(req: IncomingMessage): Promise<string> {
 }
 
 function buildPairPrompt(r: AiPairRequest): string {
+  // nameA/nameB は表示名(日本語は敬称「さん」込み)。ここで さん を足すと二重敬称になるのでそのまま使う。
   const lines = [
-    `ふたり: ${r.nameA}さん × ${r.nameB}さん`,
+    `ふたり: ${r.nameA} × ${r.nameB}`,
     '',
-    `■ ${r.nameA}さんのチャート(ほしキャラ: ${r.typeA})`,
+    `■ ${r.nameA}のチャート(ほしキャラ: ${r.typeA})`,
     ...r.natalA.map((n) => `- ${n.label}: ${n.sign}`),
     '',
-    `■ ${r.nameB}さんのチャート(ほしキャラ: ${r.typeB})`,
+    `■ ${r.nameB}のチャート(ほしキャラ: ${r.typeB})`,
     ...r.natalB.map((n) => `- ${n.label}: ${n.sign}`),
     '',
     `■ ほしキャラ相性: ${r.percent}%「${r.nickname}」`,
     ...r.details.map((d) => `- ${d}`),
     '',
     `■ 占う期間: ${r.periodLabel}(${r.skyNote})`,
-    `■ ${r.nameA}さんの基調: ${r.toneA}`,
+    `■ ${r.nameA}の基調: ${r.toneA}`,
     ...r.aspectsA.map((a) => `  - ${a}`),
-    `■ ${r.nameB}さんの基調: ${r.toneB}`,
+    `■ ${r.nameB}の基調: ${r.toneB}`,
     ...r.aspectsB.map((a) => `  - ${a}`),
     '',
     `以上のデータをもとに、ふたりの${r.periodLabel}の相性を鑑定してください。`,
@@ -227,9 +228,14 @@ function buildReportPrompt(topic: ReportTopic, behavior?: BehaviorBrief): string
   }
 }
 
-function buildChatSystem(c: ChatChartContext): string {
-  // 名前があれば「◯◯さん」、無ければ「あなた」(「あなたさん」を避ける)
-  const who = c.name ? `${c.name}さん` : 'あなた'
+/** 個人名の敬称。日本語は「さん」、他言語は敬称文化が異なるためそのまま(相性フォームと同ルール)。 */
+function honorificName(name: string, lang: Lang): string {
+  return lang === 'ja' ? `${name}さん` : name
+}
+
+function buildChatSystem(c: ChatChartContext, lang: Lang): string {
+  // 名前があれば敬称つき(日本語=「◯◯さん」)、無ければ「あなた」(「あなたさん」を避ける)
+  const who = c.name ? honorificName(c.name, lang) : 'あなた'
   const me = c.starTypeName ?? 'ほしキャラ'
   const lines = [
     `あなたは「${me}」。${who}が生まれた瞬間の星から生まれた、${who}専属の「ほしキャラ」です。占い師やカウンセラーのような第三者ではなく、${who}自身の星から生まれたもう一人の味方として、一人称「わたし」で話します。`,
@@ -321,7 +327,7 @@ function createChatHandler(apiKey: string | undefined): RawHandler {
           max_tokens: 1500,
           thinking: { type: 'adaptive' },
           output_config: { effort: 'low' },
-          system: buildChatSystem(payload.context) + LANG_DIRECTIVE[langOf(payload)],
+          system: buildChatSystem(payload.context, langOf(payload)) + LANG_DIRECTIVE[langOf(payload)],
           messages: payload.messages.map((m) => ({ role: m.role, content: m.content })),
         })
 
@@ -380,7 +386,7 @@ function createReportHandler(apiKey: string | undefined): RawHandler {
           max_tokens: 1200,
           thinking: { type: 'adaptive' },
           output_config: { effort: 'low' },
-          system: buildChatSystem(payload.context) + LANG_DIRECTIVE[langOf(payload)],
+          system: buildChatSystem(payload.context, langOf(payload)) + LANG_DIRECTIVE[langOf(payload)],
           messages: [{ role: 'user', content: buildReportPrompt(payload.topic, payload.behavior) }],
         })
         const text = response.content

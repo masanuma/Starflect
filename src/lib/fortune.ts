@@ -25,6 +25,26 @@ export const PERIODS: PeriodDef[] = [
 
 export const periodDef = (key: PeriodKey) => PERIODS.find((p) => p.key === key) ?? PERIODS[0]
 
+/** 運勢の期間タブ(表示用)。今の期間(今日/今週/今月)＋次の期間(明日/来週/来月)。 */
+export type FortuneTab = 'today' | 'tomorrow' | 'week' | 'nextweek' | 'month' | 'nextmonth'
+// 上段=今の期間、下段=次の期間。3列で折り返す。
+export const FORTUNE_TABS: FortuneTab[] = ['today', 'week', 'month', 'tomorrow', 'nextweek', 'nextmonth']
+export const PERIOD_OF_TAB: Record<FortuneTab, PeriodKey> = {
+  today: 'today',
+  tomorrow: 'tomorrow',
+  week: 'week',
+  nextweek: 'week',
+  month: 'month',
+  nextmonth: 'month',
+}
+/** そのタブの期間を読むための基準日(来週=+7日、来月=翌月1日、他=今日) */
+export function fortuneTabDate(id: FortuneTab): Date {
+  const n = new Date()
+  if (id === 'nextweek') return new Date(n.getFullYear(), n.getMonth(), n.getDate() + 7)
+  if (id === 'nextmonth') return new Date(n.getFullYear(), n.getMonth() + 1, 1)
+  return n
+}
+
 const PERIOD_TEXT: Record<Lang, Record<PeriodKey, { label: string; noun: string }>> = {
   ja: {
     today: { label: '今日', noun: '今日' },

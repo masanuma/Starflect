@@ -1,31 +1,11 @@
 import { useState } from 'react'
-import type { ChartData, PeriodKey, PlanetKey } from '../lib/types'
-import type { Quality } from '../lib/fortune'
-import { readFortune, periodLabel } from '../lib/fortune'
+import type { ChartData, PlanetKey } from '../lib/types'
+import type { Quality, FortuneTab } from '../lib/fortune'
+import { readFortune, periodLabel, FORTUNE_TABS, PERIOD_OF_TAB, fortuneTabDate } from '../lib/fortune'
 import { todayColor, todayColorName } from '../lib/companion'
 import { starTypeOf } from '../lib/startypes'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import { useUI } from '../lib/ui'
-
-type TabId = 'today' | 'tomorrow' | 'week' | 'nextweek' | 'month' | 'nextmonth'
-// 上段=今の期間(今日/今週/今月)、下段=次の期間(明日/来週/来月)。3列で折り返す。
-const TABS: TabId[] = ['today', 'week', 'month', 'tomorrow', 'nextweek', 'nextmonth']
-const PERIOD_OF: Record<TabId, PeriodKey> = {
-  today: 'today',
-  tomorrow: 'tomorrow',
-  week: 'week',
-  nextweek: 'week',
-  month: 'month',
-  nextmonth: 'month',
-}
-
-/** その期間を読むための基準日(来週=+7日、来月=翌月1日) */
-function tabDate(id: TabId): Date {
-  const n = new Date()
-  if (id === 'nextweek') return new Date(n.getFullYear(), n.getMonth(), n.getDate() + 7)
-  if (id === 'nextmonth') return new Date(n.getFullYear(), n.getMonth() + 1, 1)
-  return n
-}
 
 /** 良し悪しをアイコン(文字入り)で示す。ピンク/ブルーだけでは伝わりにくいので明示。 */
 function QualBadge({ quality }: { quality: Quality }) {
@@ -56,8 +36,8 @@ function QualBadge({ quality }: { quality: Quality }) {
  */
 export default function StarReading({ chart }: { chart: ChartData }) {
   const t = useUI()
-  const [tab, setTab] = useState<TabId>('today')
-  const fortune = readFortune(chart.planets, PERIOD_OF[tab], tabDate(tab))
+  const [tab, setTab] = useState<FortuneTab>('today')
+  const fortune = readFortune(chart.planets, PERIOD_OF_TAB[tab], fortuneTabDate(tab))
 
   const lonOf = (key: PlanetKey) => chart.planets.find((p) => p.key === key)?.lon
   const sunLon = lonOf('sun')
@@ -65,8 +45,8 @@ export default function StarReading({ chart }: { chart: ChartData }) {
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
   const name = starType?.type.name ?? ''
 
-  const tabLabel = (id: TabId) =>
-    id === 'nextweek' ? t.companion.tabNextWeek : id === 'nextmonth' ? t.companion.tabNextMonth : periodLabel(PERIOD_OF[id])
+  const tabLabel = (id: FortuneTab) =>
+    id === 'nextweek' ? t.companion.tabNextWeek : id === 'nextmonth' ? t.companion.tabNextMonth : periodLabel(PERIOD_OF_TAB[id])
 
   return (
     <section className="reading-card">
@@ -83,7 +63,7 @@ export default function StarReading({ chart }: { chart: ChartData }) {
       </div>
 
       <div className="reading-tabs" role="tablist">
-        {TABS.map((id) => (
+        {FORTUNE_TABS.map((id) => (
           <button
             key={id}
             role="tab"
