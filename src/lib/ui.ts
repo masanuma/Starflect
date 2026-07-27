@@ -66,6 +66,8 @@ export interface UIStrings {
     soloName: string
     soloTime: string
     soloDesc: string
+    /** 初回の診断カードに出す誘導ラベル(初めての人向け) */
+    soloFirstHint: string
     pairName: string
     pairDesc: string
     note: string
@@ -291,6 +293,7 @@ const UI: Record<Lang, UIStrings> = {
       soloName: '🌟 ほしキャラ診断',
       soloTime: '30秒',
       soloDesc: '生年月日だけでOK。あなたのほしキャラ(全16キャラ)と、あなたの中に住む星のキャラたちまで分析',
+      soloFirstHint: '初めての方はこちらから！',
       pairName: '💞 ふたりの相性',
       pairDesc: 'ほしキャラの相性と「今日のふたり」を診断。相手の生年月日だけでOK',
       note: '計算は雑誌の12星座占いと同じ生年月日ベース。でも結果は、あなただけのもの。',
@@ -560,6 +563,7 @@ const UI: Record<Lang, UIStrings> = {
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 sec',
       soloDesc: 'Just your birth date. We analyze your Hoshi-Kyara (1 of 16) and the planet-characters living inside you.',
+      soloFirstHint: 'New here? Start with this!',
       pairName: '💞 Compatibility',
       pairDesc: 'Hoshi-Kyara compatibility plus “the two of you today.” Just their birth date needed.',
       note: 'The math uses the same birth date as magazine horoscopes—but the result is yours alone.',
@@ -829,6 +833,7 @@ const UI: Record<Lang, UIStrings> = {
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 s',
       soloDesc: 'Solo tu fecha de nacimiento. Analizamos tu Hoshi-Kyara (1 de 16) y los planetas-personaje que viven en ti.',
+      soloFirstHint: '¿Es tu primera vez? ¡Empieza aquí!',
       pairName: '💞 Compatibilidad',
       pairDesc: 'Compatibilidad de Hoshi-Kyara y “vosotros dos hoy”. Solo hace falta su fecha de nacimiento.',
       note: 'El cálculo usa la misma fecha que los horóscopos de revista, pero el resultado es solo tuyo.',
@@ -1098,6 +1103,7 @@ const UI: Record<Lang, UIStrings> = {
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 s',
       soloDesc: 'Juste ta date de naissance. On analyse ton Hoshi-Kyara (1 sur 16) et les planètes-personnages qui vivent en toi.',
+      soloFirstHint: 'Première fois ? Commence ici !',
       pairName: '💞 Compatibilité',
       pairDesc: 'La compatibilité des Hoshi-Kyara et « vous deux aujourd’hui ». Il suffit de sa date de naissance.',
       note: 'Le calcul part de la même date que les horoscopes de magazine, mais le résultat n’appartient qu’à toi.',
@@ -1367,6 +1373,7 @@ const UI: Record<Lang, UIStrings> = {
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 s',
       soloDesc: 'Basta la tua data di nascita. Analizziamo il tuo Hoshi-Kyara (1 su 16) e i pianeti-personaggio che vivono in te.',
+      soloFirstHint: 'È la prima volta? Inizia da qui!',
       pairName: '💞 Compatibilità',
       pairDesc: 'La compatibilità degli Hoshi-Kyara e « voi due oggi ». Basta la sua data di nascita.',
       note: 'Il calcolo usa la stessa data degli oroscopi delle riviste, ma il risultato è solo tuo.',
@@ -1636,6 +1643,7 @@ const UI: Record<Lang, UIStrings> = {
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30 s',
       soloDesc: 'Só a sua data de nascimento. Analisamos o seu Hoshi-Kyara (1 de 16) e os planetas-personagem que vivem em você.',
+      soloFirstHint: 'Primeira vez? Comece por aqui!',
       pairName: '💞 Compatibilidade',
       pairDesc: 'A compatibilidade dos Hoshi-Kyara e « vocês dois hoje ». Basta a data de nascimento da outra pessoa.',
       note: 'O cálculo usa a mesma data dos horóscopos de revista, mas o resultado é só seu.',
@@ -1905,6 +1913,7 @@ const UI: Record<Lang, UIStrings> = {
       soloName: '🌟 Hoshi-Kyara',
       soloTime: '30초',
       soloDesc: '생년월일만 있으면 OK. 당신의 Hoshi-Kyara(16종 중 하나)와 당신 안에 사는 행성 캐릭터까지 분석해요.',
+      soloFirstHint: '처음이신가요? 여기서 시작하세요!',
       pairName: '💞 궁합',
       pairDesc: 'Hoshi-Kyara 궁합과 「오늘의 두 사람」을 봐요. 상대의 생년월일만 있으면 OK.',
       note: '계산은 잡지 별자리 운세와 같은 생년월일 기반. 하지만 결과는 오직 당신만의 것.',

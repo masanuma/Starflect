@@ -61,8 +61,9 @@ export default function Home({ onSelect, onSelectPair, onAbout, onCompanion }: P
             </button>
           </>
         ) : (
-          // 初回 = 診断を表示
-          <button className="mode-card mode-detailed" onClick={onSelect}>
+          // 初回 = 診断を表示。初めての人向けに「ここから！」の誘導ラベルを添える
+          <button className="mode-card mode-detailed mode-first" onClick={onSelect}>
+            <span className="mode-first-hint">✦ {t.home.soloFirstHint}</span>
             <div className="mode-head">
               <span className="mode-name">{t.home.soloName}</span>
               <span className="mode-time">{t.home.soloTime}</span>

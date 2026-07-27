@@ -1413,6 +1413,25 @@ body {
   padding: 3px 12px;
 }
 
+/* 初回ユーザー向けの診断カード。「初めての方はこちらから！」で入口を明示する */
+.mode-first {
+  border-color: rgba(228, 111, 176, 0.45);
+  box-shadow: 0 6px 22px rgba(200, 120, 200, 0.16);
+}
+
+.mode-first-hint {
+  display: block;
+  font-family: var(--font-pop);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, var(--pink), var(--violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .pair-person {
   background: var(--card);
   border: 1.5px solid var(--card-border);
