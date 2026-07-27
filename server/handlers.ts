@@ -26,37 +26,6 @@ const langOf = (payload: unknown): Lang => {
   return l && SERVER_LANGS.includes(l) ? (l as Lang) : 'ja'
 }
 
-/** 相性鑑定リクエスト */
-export interface AiPairRequest {
-  nameA: string
-  nameB: string
-  typeA: string
-  typeB: string
-  percent: number
-  nickname: string
-  details: string[]
-  natalA: { label: string; sign: string }[]
-  natalB: { label: string; sign: string }[]
-  periodLabel: string
-  skyNote: string
-  toneA: string
-  toneB: string
-  aspectsA: string[]
-  aspectsB: string[]
-  lang?: Lang
-}
-
-const PAIR_SYSTEM_PROMPT = `あなたは関係性・相性を専門とする経験豊富な西洋占星術師です。ふたりの出生チャートの相性と、実際の天体の運行から計算されたデータをもとに、日本語で相性鑑定を書きます。
-
-書き方のルール:
-- 明るくポップに、でも中身は具体的に。恋愛にも友情にも読める書き方にする
-- 渡された相性データ・角度に忠実に。書かれていない配置を勝手に作らない
-- 専門用語(トライン・スクエア・セクスタイル・オポジション・合・アスペクトなど)は使わず、「大きな追い風」「試練の角度」のように、良い配置か注意の配置かが一般の人にも伝わる言葉で説明する
-- どちらか一方を悪者にしない。違いは「組み合わせの面白さ」として書く
-- 断定的な予言や、別れ・重大な決断を促す表現はしない
-- 構成: 「ふたりの化学反応」→「この期間のふたり」→「うまくいくヒント」の3部構成。各見出しは【】で囲む
-- 全体で400〜600字程度`
-
 function readBody(req: IncomingMessage): Promise<string> {
   return new Promise((resolve, reject) => {
     let body = ''
@@ -64,31 +33,6 @@ function readBody(req: IncomingMessage): Promise<string> {
     req.on('end', () => resolve(body))
     req.on('error', reject)
   })
-}
-
-function buildPairPrompt(r: AiPairRequest): string {
-  // nameA/nameB は表示名(日本語は敬称「さん」込み)。ここで さん を足すと二重敬称になるのでそのまま使う。
-  const lines = [
-    `ふたり: ${r.nameA} × ${r.nameB}`,
-    '',
-    `■ ${r.nameA}のチャート(ほしキャラ: ${r.typeA})`,
-    ...r.natalA.map((n) => `- ${n.label}: ${n.sign}`),
-    '',
-    `■ ${r.nameB}のチャート(ほしキャラ: ${r.typeB})`,
-    ...r.natalB.map((n) => `- ${n.label}: ${n.sign}`),
-    '',
-    `■ ほしキャラ相性: ${r.percent}%「${r.nickname}」`,
-    ...r.details.map((d) => `- ${d}`),
-    '',
-    `■ 占う期間: ${r.periodLabel}(${r.skyNote})`,
-    `■ ${r.nameA}の基調: ${r.toneA}`,
-    ...r.aspectsA.map((a) => `  - ${a}`),
-    `■ ${r.nameB}の基調: ${r.toneB}`,
-    ...r.aspectsB.map((a) => `  - ${a}`),
-    '',
-    `以上のデータをもとに、ふたりの${r.periodLabel}の相性を鑑定してください。`,
-  ]
-  return lines.join('\n')
 }
 
 function json(res: ServerResponse, status: number, data: unknown) {
@@ -99,61 +43,6 @@ function json(res: ServerResponse, status: number, data: unknown) {
 
 /** 生のNode req/res で動くハンドラ。Viteのミドルウェアでも Express でも共用できる */
 export type RawHandler = (req: IncomingMessage, res: ServerResponse) => void
-
-function makeHandler<T>(
-  apiKey: string | undefined,
-  system: string,
-  buildPrompt: (payload: T) => string,
-): RawHandler {
-  return (req, res) => {
-    void (async () => {
-      if (req.method !== 'POST') {
-        return json(res, 405, { error: 'POST only' })
-      }
-      if (!apiKey || apiKey.includes('ここに')) {
-        return json(res, 500, {
-          error:
-            'APIキーが未設定です。サーバーの環境変数 ANTHROPIC_API_KEY を設定してください(ローカルは .env、本番は Railway の Variables)。',
-        })
-      }
-
-      let payload: T
-      try {
-        payload = JSON.parse(await readBody(req)) as T
-      } catch {
-        return json(res, 400, { error: 'リクエストの形式が不正です' })
-      }
-
-      try {
-        const client = new Anthropic({ apiKey })
-        const response = await client.messages.create({
-          model: AI_MODEL,
-          max_tokens: 2000,
-          thinking: { type: 'adaptive' },
-          output_config: { effort: 'low' },
-          system: system + LANG_DIRECTIVE[langOf(payload)],
-          messages: [{ role: 'user', content: buildPrompt(payload) }],
-        })
-        const text = response.content
-          .filter((b): b is Anthropic.TextBlock => b.type === 'text')
-          .map((b) => b.text)
-          .join('\n')
-        return json(res, 200, { text })
-      } catch (err) {
-        if (err instanceof Anthropic.AuthenticationError) {
-          return json(res, 500, { error: 'APIキーが無効です。環境変数 ANTHROPIC_API_KEY を確認してください。' })
-        }
-        if (err instanceof Anthropic.RateLimitError) {
-          return json(res, 429, { error: 'リクエストが集中しています。少し待ってからお試しください。' })
-        }
-        if (err instanceof Anthropic.APIError) {
-          return json(res, 500, { error: `Claude APIエラー: ${err.message}` })
-        }
-        return json(res, 500, { error: '鑑定の生成中にエラーが発生しました' })
-      }
-    })()
-  }
-}
 
 /* ---------- 相談チャット(ストリーミング) ---------- */
 
@@ -481,13 +370,11 @@ function createReportHandler(apiKey: string | undefined): RawHandler {
 
 /** 相性鑑定・相談チャット・発見レポートのAPIハンドラを生成する(相棒との会話がAIの窓口を担う) */
 export function createAiHandlers(apiKey: string | undefined): {
-  pair: RawHandler
   pairChat: RawHandler
   chat: RawHandler
   report: RawHandler
 } {
   return {
-    pair: makeHandler<AiPairRequest>(apiKey, PAIR_SYSTEM_PROMPT, buildPairPrompt),
     pairChat: createPairChatHandler(apiKey),
     chat: createChatHandler(apiKey),
     report: createReportHandler(apiKey),

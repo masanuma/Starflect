@@ -63,7 +63,6 @@ const app = express()
 const handlers = createAiHandlers(process.env.ANTHROPIC_API_KEY)
 const feedback = createFeedbackHandler(process.env.FEEDBACK_SHEET_URL)
 
-app.post('/api/ai-pair', handlers.pair)
 app.post('/api/ai-pair-chat', handlers.pairChat)
 app.post('/api/ai-chat', handlers.chat)
 app.post('/api/ai-report', handlers.report)

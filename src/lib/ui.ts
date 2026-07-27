@@ -140,11 +140,6 @@ export interface UIStrings {
     fortuneTitle: (period: string) => string
     fortuneSub: (name: string) => string
     fortuneFoot: (noun: string) => string
-    aiTitle: string
-    aiSub: (name: string) => string
-    aiCta: string
-    aiNote: string
-    aiLoading: string
     upsell: string
     adoptLead: string
     adoptCta: string
@@ -158,11 +153,6 @@ export interface UIStrings {
     breakdownSub: string
     todayTitle: (period: string) => string
     todaySub: (skyNote: string) => string
-    aiTitle: string
-    aiSub: (a: string, b: string) => string
-    aiCta: string
-    aiNote: string
-    aiLoading: string
     upsell: string
     retry: string
     home: string
@@ -403,11 +393,6 @@ const UI: Record<Lang, UIStrings> = {
       fortuneTitle: (period) => `${period}の運勢`,
       fortuneSub: (name) => `いまの星の運行と${name ? `${name}さん` : 'あなた'}のほしキャラから読んでいます`,
       fortuneFoot: (noun) => `${noun}の空をゆく星々と、生まれた瞬間の星の配置との角度をもとにしています。`,
-      aiTitle: 'AI占星術師の詳しいほしキャラ鑑定',
-      aiSub: (name) => `AIが${name ? `${name}さん` : 'あなた'}のチャートと星の運行を読み解きます`,
-      aiCta: 'AIに詳しく占ってもらう',
-      aiNote: '上記の計算結果(星座・角度)がAIに送信されます。鑑定には10〜30秒ほどかかります。',
-      aiLoading: '星を読んでいます……(10〜30秒ほどお待ちください)',
       upsell: '生まれた時刻が分かると、上昇星座と3天体の総合分析まで占えます(月星座の精度も上がります)。母子手帳をチェックしてみて。',
       adoptLead: 'このほしキャラを、毎日そばに。',
       adoptCta: 'この子と毎日、星を見る',
@@ -421,11 +406,6 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: '太陽(表の顔)と月(心)、4つの組み合わせから',
       todayTitle: (period) => `${period}のふたり`,
       todaySub: (skyNote) => `${skyNote} — その星がふたりに吹かせる風は?`,
-      aiTitle: 'AI占星術師のふたり鑑定',
-      aiSub: (a, b) => `AIが${a}と${b}の星を読み解きます`,
-      aiCta: 'AIにふたりを詳しく占ってもらう',
-      aiNote: '上記の計算結果(星座・相性・角度)がAIに送信されます。鑑定には10〜30秒ほどかかります。',
-      aiLoading: 'ふたりの星を読んでいます……(10〜30秒ほどお待ちください)',
       upsell: '生まれた時刻が分かると月星座の精度が上がり、相性の判定もより正確になります(現在は正午で近似しています)。',
       retry: '条件を変えて占う',
       home: 'モード選択に戻る',
@@ -682,11 +662,6 @@ const UI: Record<Lang, UIStrings> = {
       fortuneTitle: (period) => `${period}’s fortune`,
       fortuneSub: (name) => `Read from the current transits and ${name ? `${name}’s` : 'your'} Hoshi-Kyara`,
       fortuneFoot: (noun) => `Based on the angles between the stars moving across the sky ${noun} and your birth chart.`,
-      aiTitle: 'AI astrologer’s in-depth Hoshi-Kyara reading',
-      aiSub: (name) => `The AI reads ${name ? `${name}’s` : 'your'} chart and the current transits`,
-      aiCta: 'Get a detailed AI reading',
-      aiNote: 'The results above (signs and angles) are sent to the AI. A reading takes about 10–30 seconds.',
-      aiLoading: 'Reading the stars… (please wait about 10–30 seconds)',
       upsell: 'With your birth time, we can add the Rising sign and a full three-body synthesis (and the Moon sign gets more accurate). Check your birth record.',
       adoptLead: 'Keep this Hoshi-Kyara close, every day.',
       adoptCta: 'Watch the stars together, daily',
@@ -700,11 +675,6 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: 'From four combinations of Sun (outer face) and Moon (heart)',
       todayTitle: (period) => `The two of you: ${period}`,
       todaySub: (skyNote) => `${skyNote} — what wind does that stir up for you two?`,
-      aiTitle: 'AI astrologer’s couple reading',
-      aiSub: (a, b) => `The AI reads the stars of ${a} and ${b}`,
-      aiCta: 'Get a detailed AI reading for two',
-      aiNote: 'The results above (signs, match and angles) are sent to the AI. A reading takes about 10–30 seconds.',
-      aiLoading: 'Reading the stars of you two… (please wait about 10–30 seconds)',
       upsell: 'With birth times, the Moon signs get more accurate and the match becomes more precise (currently approximated at noon).',
       retry: 'Change details and retry',
       home: 'Back to modes',
@@ -961,11 +931,6 @@ const UI: Record<Lang, UIStrings> = {
       fortuneTitle: (period) => `Fortuna: ${period}`,
       fortuneSub: (name) => `Leído a partir de los tránsitos actuales y ${name ? `el Hoshi-Kyara de ${name}` : 'tu Hoshi-Kyara'}`,
       fortuneFoot: (noun) => `Basado en los ángulos entre los astros que cruzan el cielo (${noun}) y tu carta natal.`,
-      aiTitle: 'Lectura Hoshi-Kyara detallada del astrólogo IA',
-      aiSub: (name) => `La IA lee ${name ? `la carta de ${name}` : 'tu carta'} y los tránsitos actuales`,
-      aiCta: 'Obtener una lectura IA detallada',
-      aiNote: 'Los resultados de arriba (signos y ángulos) se envían a la IA. La lectura tarda unos 10–30 segundos.',
-      aiLoading: 'Leyendo las estrellas… (espera unos 10–30 segundos)',
       upsell: 'Con tu hora de nacimiento podemos añadir el Ascendente y una síntesis completa de tres astros (y el signo lunar gana precisión). Revisa tu partida de nacimiento.',
       adoptLead: 'Lleva a este Hoshi-Kyara contigo cada día.',
       adoptCta: 'Mirar las estrellas juntos cada día',
@@ -979,11 +944,6 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: 'A partir de cuatro combinaciones de Sol (cara externa) y Luna (corazón)',
       todayTitle: (period) => `Vosotros dos: ${period}`,
       todaySub: (skyNote) => `${skyNote} — ¿qué viento sopla eso para vosotros dos?`,
-      aiTitle: 'Lectura de pareja del astrólogo IA',
-      aiSub: (a, b) => `La IA lee las estrellas de ${a} y ${b}`,
-      aiCta: 'Obtener una lectura IA detallada para dos',
-      aiNote: 'Los resultados de arriba (signos, afinidad y ángulos) se envían a la IA. La lectura tarda unos 10–30 segundos.',
-      aiLoading: 'Leyendo las estrellas de vosotros dos… (espera unos 10–30 segundos)',
       upsell: 'Con las horas de nacimiento, los signos lunares ganan precisión y la afinidad se afina (ahora se aproxima al mediodía).',
       retry: 'Cambiar datos y repetir',
       home: 'Volver a los modos',
@@ -1240,11 +1200,6 @@ const UI: Record<Lang, UIStrings> = {
       fortuneTitle: (period) => `Fortune : ${period}`,
       fortuneSub: (name) => `Lu à partir des transits actuels et ${name ? `du Hoshi-Kyara de ${name}` : 'de ton Hoshi-Kyara'}`,
       fortuneFoot: (noun) => `D’après les angles entre les astres qui traversent le ciel (${noun}) et ton thème de naissance.`,
-      aiTitle: 'Lecture Hoshi-Kyara détaillée de l’astrologue IA',
-      aiSub: (name) => `L’IA lit ${name ? `le thème de ${name}` : 'ton thème'} et les transits actuels`,
-      aiCta: 'Obtenir une lecture IA détaillée',
-      aiNote: 'Les résultats ci-dessus (signes et angles) sont envoyés à l’IA. La lecture prend environ 10–30 secondes.',
-      aiLoading: 'Lecture des étoiles… (patiente environ 10–30 secondes)',
       upsell: 'Avec ton heure de naissance, on peut ajouter l’Ascendant et une synthèse complète de trois astres (et le signe lunaire gagne en précision). Vérifie ton acte de naissance.',
       adoptLead: 'Garde ce Hoshi-Kyara près de toi, chaque jour.',
       adoptCta: 'Regarder les étoiles ensemble, chaque jour',
@@ -1258,11 +1213,6 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: 'À partir de quatre combinaisons de Soleil (visage extérieur) et Lune (cœur)',
       todayTitle: (period) => `Vous deux : ${period}`,
       todaySub: (skyNote) => `${skyNote} — quel vent cela souffle-t-il sur vous deux ?`,
-      aiTitle: 'Lecture de couple de l’astrologue IA',
-      aiSub: (a, b) => `L’IA lit les étoiles de ${a} et ${b}`,
-      aiCta: 'Obtenir une lecture IA détaillée pour deux',
-      aiNote: 'Les résultats ci-dessus (signes, affinité et angles) sont envoyés à l’IA. La lecture prend environ 10–30 secondes.',
-      aiLoading: 'Lecture des étoiles de vous deux… (patiente environ 10–30 secondes)',
       upsell: 'Avec les heures de naissance, les signes lunaires gagnent en précision et l’affinité s’affine (actuellement approximée à midi).',
       retry: 'Changer les détails et recommencer',
       home: 'Retour aux modes',
@@ -1519,11 +1469,6 @@ const UI: Record<Lang, UIStrings> = {
       fortuneTitle: (period) => `Fortuna: ${period}`,
       fortuneSub: (name) => `Letto dai transiti attuali e ${name ? `dall’Hoshi-Kyara di ${name}` : 'dal tuo Hoshi-Kyara'}`,
       fortuneFoot: (noun) => `Basato sugli angoli tra gli astri che attraversano il cielo (${noun}) e il tuo tema natale.`,
-      aiTitle: 'Lettura Hoshi-Kyara dettagliata dell’astrologo IA',
-      aiSub: (name) => `L’IA legge ${name ? `il tema di ${name}` : 'il tuo tema'} e i transiti attuali`,
-      aiCta: 'Ottieni una lettura IA dettagliata',
-      aiNote: 'I risultati qui sopra (segni e angoli) vengono inviati all’IA. La lettura richiede circa 10–30 secondi.',
-      aiLoading: 'Sto leggendo le stelle… (attendi circa 10–30 secondi)',
       upsell: 'Con la tua ora di nascita possiamo aggiungere l’Ascendente e una sintesi completa di tre astri (e il segno lunare guadagna precisione). Controlla il tuo certificato di nascita.',
       adoptLead: 'Tieni questo Hoshi-Kyara vicino, ogni giorno.',
       adoptCta: 'Guardare le stelle insieme, ogni giorno',
@@ -1537,11 +1482,6 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: 'Da quattro combinazioni di Sole (volto esterno) e Luna (cuore)',
       todayTitle: (period) => `Voi due: ${period}`,
       todaySub: (skyNote) => `${skyNote} — che vento fa soffiare questo su di voi due?`,
-      aiTitle: 'Lettura di coppia dell’astrologo IA',
-      aiSub: (a, b) => `L’IA legge le stelle di ${a} e ${b}`,
-      aiCta: 'Ottieni una lettura IA dettagliata per due',
-      aiNote: 'I risultati qui sopra (segni, affinità e angoli) vengono inviati all’IA. La lettura richiede circa 10–30 secondi.',
-      aiLoading: 'Sto leggendo le stelle di voi due… (attendi circa 10–30 secondi)',
       upsell: 'Con le ore di nascita i segni lunari guadagnano precisione e l’affinità si affina (ora approssimata a mezzogiorno).',
       retry: 'Cambia i dati e riprova',
       home: 'Torna ai modi',
@@ -1798,11 +1738,6 @@ const UI: Record<Lang, UIStrings> = {
       fortuneTitle: (period) => `Fortuna: ${period}`,
       fortuneSub: (name) => `Lido a partir dos trânsitos atuais e ${name ? `do Hoshi-Kyara de ${name}` : 'do seu Hoshi-Kyara'}`,
       fortuneFoot: (noun) => `Baseado nos ângulos entre os astros que cruzam o céu (${noun}) e o seu mapa natal.`,
-      aiTitle: 'Leitura Hoshi-Kyara detalhada do astrólogo IA',
-      aiSub: (name) => `A IA lê ${name ? `o mapa de ${name}` : 'o seu mapa'} e os trânsitos atuais`,
-      aiCta: 'Obter uma leitura IA detalhada',
-      aiNote: 'Os resultados acima (signos e ângulos) são enviados à IA. A leitura leva cerca de 10–30 segundos.',
-      aiLoading: 'Lendo as estrelas… (aguarde cerca de 10–30 segundos)',
       upsell: 'Com a sua hora de nascimento, podemos acrescentar o Ascendente e uma síntese completa de três astros (e o signo lunar fica mais preciso). Confira a sua certidão de nascimento.',
       adoptLead: 'Leve este Hoshi-Kyara com você todos os dias.',
       adoptCta: 'Ver as estrelas juntos, todo dia',
@@ -1816,11 +1751,6 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: 'A partir de quatro combinações de Sol (rosto externo) e Lua (coração)',
       todayTitle: (period) => `Vocês dois: ${period}`,
       todaySub: (skyNote) => `${skyNote} — que vento isso sopra para vocês dois?`,
-      aiTitle: 'Leitura de casal do astrólogo IA',
-      aiSub: (a, b) => `A IA lê as estrelas de ${a} e ${b}`,
-      aiCta: 'Obter uma leitura IA detalhada para dois',
-      aiNote: 'Os resultados acima (signos, afinidade e ângulos) são enviados à IA. A leitura leva cerca de 10–30 segundos.',
-      aiLoading: 'Lendo as estrelas de vocês dois… (aguarde cerca de 10–30 segundos)',
       upsell: 'Com as horas de nascimento, os signos lunares ficam mais precisos e a afinidade se afina (agora aproximada ao meio-dia).',
       retry: 'Mudar os dados e repetir',
       home: 'Voltar aos modos',
@@ -2077,11 +2007,6 @@ const UI: Record<Lang, UIStrings> = {
       fortuneTitle: (period) => `${period}의 운세`,
       fortuneSub: (name) => `지금의 별 운행과 ${name ? `${name}님의` : '당신의'} Hoshi-Kyara로 읽고 있어요`,
       fortuneFoot: (noun) => `${noun}의 하늘을 지나는 별들과 태어난 순간의 별자리 배치 사이의 각도를 바탕으로 해요.`,
-      aiTitle: 'AI 점성술사의 자세한 Hoshi-Kyara 감정',
-      aiSub: (name) => `AI가 ${name ? `${name}님의` : '당신의'} 차트와 별의 운행을 읽어 드려요`,
-      aiCta: 'AI에게 자세히 점쳐 보기',
-      aiNote: '위 계산 결과(별자리·각도)가 AI로 전송돼요. 감정에는 10~30초 정도 걸려요.',
-      aiLoading: '별을 읽고 있어요…… (10~30초 정도 기다려 주세요)',
       upsell: '태어난 시각을 알면 상승 별자리와 3천체 종합 분석까지 볼 수 있어요(달 별자리 정확도도 올라가요). 출생 기록을 확인해 보세요.',
       adoptLead: '이 호시캐릭터와 매일 함께.',
       adoptCta: '이 아이와 매일 별 보기',
@@ -2095,11 +2020,6 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: '태양(겉모습)과 달(마음), 네 가지 조합에서',
       todayTitle: (period) => `${period}의 두 사람`,
       todaySub: (skyNote) => `${skyNote} — 그 별이 두 사람에게 부는 바람은?`,
-      aiTitle: 'AI 점성술사의 두 사람 감정',
-      aiSub: (a, b) => `AI가 ${a}와 ${b}의 별을 읽어 드려요`,
-      aiCta: 'AI에게 두 사람을 자세히 점쳐 보기',
-      aiNote: '위 계산 결과(별자리·궁합·각도)가 AI로 전송돼요. 감정에는 10~30초 정도 걸려요.',
-      aiLoading: '두 사람의 별을 읽고 있어요…… (10~30초 정도 기다려 주세요)',
       upsell: '태어난 시각을 알면 달 별자리 정확도가 올라가 궁합 판정도 더 정확해져요(현재는 정오로 근사하고 있어요).',
       retry: '조건 바꿔 다시 점치기',
       home: '모드 선택으로',
