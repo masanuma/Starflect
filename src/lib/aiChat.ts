@@ -56,20 +56,30 @@ export function buildChatContext(chart: ChartData): ChatChartContext {
 /** 会話履歴を保存する localStorage キー(人ごとに分ける) */
 export const chatStorageKey = (chart: ChartData) => `starflect-chat:${chart.dateLabel}:${chart.name}`
 
-/**
- * 相談チャットをストリーミングで受け取る。
- * サーバーは text/plain を逐次送ってくるので、届いた断片ごとに onDelta を呼ぶ。
- */
-export async function streamAiChat(
-  context: ChatChartContext,
-  messages: ChatMessage[],
-  onDelta: (text: string) => void,
-  lang?: Lang,
-): Promise<void> {
-  const res = await fetch('/api/ai-chat', {
+/** 相性チャットに渡すふたりのデータ一式(server/handlers.ts の PairChatContext と対) */
+export interface PairChatContext {
+  nameA: string
+  nameB: string
+  typeA: string
+  typeB: string
+  natalA: { label: string; sign: string }[]
+  natalB: { label: string; sign: string }[]
+  percent: number
+  nickname: string
+  details: string[]
+  skyNote: string
+  toneA: string
+  toneB: string
+  aspectsA: string[]
+  aspectsB: string[]
+}
+
+/** text/plain を逐次読み込む共通処理。届いた断片ごとに onDelta を呼ぶ。 */
+async function postStream(url: string, body: unknown, onDelta: (text: string) => void): Promise<void> {
+  const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ context, messages, lang }),
+    body: JSON.stringify(body),
   })
 
   if (!res.ok || !res.body) {
@@ -85,4 +95,24 @@ export async function streamAiChat(
     const chunk = decoder.decode(value, { stream: true })
     if (chunk) onDelta(chunk)
   }
+}
+
+/** 相談チャット(ほしキャラ本人)をストリーミングで受け取る。 */
+export async function streamAiChat(
+  context: ChatChartContext,
+  messages: ChatMessage[],
+  onDelta: (text: string) => void,
+  lang?: Lang,
+): Promise<void> {
+  await postStream('/api/ai-chat', { context, messages, lang }, onDelta)
+}
+
+/** 相性チャット(ふたりの相性について)をストリーミングで受け取る。 */
+export async function streamAiPairChat(
+  context: PairChatContext,
+  messages: ChatMessage[],
+  onDelta: (text: string) => void,
+  lang?: Lang,
+): Promise<void> {
+  await postStream('/api/ai-pair-chat', { context, messages, lang }, onDelta)
 }

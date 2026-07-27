@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
-import type { PeriodKey, PlanetPos } from '../lib/types'
+import type { PlanetPos } from '../lib/types'
 import type { PairData, PairPerson } from '../lib/compat'
 import { localToDate, sunLongitude, moonLongitude } from '../lib/astro'
 import { countryByCode, detectDefaultCountry } from '../lib/countries'
-import { PERIODS, periodLabel } from '../lib/fortune'
 import { useLang } from '../lib/i18n'
 import type { Lang } from '../lib/i18n'
 import { useUI, formatBirthDate } from '../lib/ui'
@@ -24,7 +23,6 @@ interface PersonInput {
 interface SavedPair {
   a: PersonInput
   b: PersonInput
-  period?: PeriodKey
 }
 
 const STORAGE_KEY = 'starflect-pair'
@@ -133,16 +131,15 @@ export default function PairForm({ onBack, onResult }: Props) {
   // 1人目=自分。前回の相性入力があればそれを、無ければ診断で入れた自分の情報を引き継ぐ。
   const [a, setA] = useState<PersonInput>(saved?.a?.date ? saved.a : (loadSelf() ?? saved?.a ?? EMPTY))
   const [b, setB] = useState<PersonInput>(saved?.b ?? EMPTY)
-  const [period, setPeriod] = useState<PeriodKey>(saved?.period ?? 'today')
   const [error, setError] = useState('')
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ a, b, period } satisfies SavedPair))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ a, b } satisfies SavedPair))
     } catch {
       /* 保存できない環境では無視 */
     }
-  }, [a, b, period])
+  }, [a, b])
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -155,7 +152,8 @@ export default function PairForm({ onBack, onResult }: Props) {
     const pb = buildPerson(b, t.pair.partnerName, offset, t, lang)
     if (typeof pb === 'string') return setError(pb)
 
-    onResult({ a: pa, b: pb, period })
+    // 期間は結果画面で切り替えられるので、初期値は「今日」で開く
+    onResult({ a: pa, b: pb, period: 'today' })
   }
 
   return (
@@ -170,24 +168,6 @@ export default function PairForm({ onBack, onResult }: Props) {
       <form className="birth-form" onSubmit={handleSubmit}>
         <PersonFields label={t.pair.you} value={a} onChange={setA} t={t} />
         <PersonFields label={t.pair.partner} value={b} onChange={setB} t={t} />
-
-        <div className="field">
-          <span className="field-label">{t.common.when}</span>
-          <div className="period-row" role="radiogroup" aria-label={t.common.periodAria}>
-            {PERIODS.map((p) => (
-              <button
-                key={p.key}
-                type="button"
-                role="radio"
-                aria-checked={period === p.key}
-                className={`period-chip${period === p.key ? ' active' : ''}`}
-                onClick={() => setPeriod(p.key)}
-              >
-                {periodLabel(p.key)}
-              </button>
-            ))}
-          </div>
-        </div>
 
         {error && <p className="form-error">{error}</p>}
 

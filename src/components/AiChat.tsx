@@ -1,21 +1,37 @@
 import { useEffect, useRef, useState } from 'react'
-import type { KeyboardEvent } from 'react'
+import type { KeyboardEvent, ReactNode } from 'react'
 import type { ChatChartContext, ChatMessage } from '../lib/aiChat'
 import { streamAiChat } from '../lib/aiChat'
 import { earnChatSignal } from '../lib/companion'
 import type { ChartData, PlanetKey } from '../lib/types'
+import type { Lang } from '../lib/i18n'
 import { starTypeOf } from '../lib/startypes'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import { useLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
 import { track } from '../lib/analytics'
 
+/** 見出し・導入・スターター(質問チップ)の上書き。相性チャットなど別用途で差し替える。 */
+export interface ChatCopy {
+  title: string
+  sub: string
+  intro: string
+  starters: { label: string; q: string }[]
+}
+
 interface Props {
-  context: ChatChartContext
-  /** 会話を保存するlocalStorageキー(人ごとに分ける) */
+  /** 会話を保存するlocalStorageキー(会話ごとに分ける) */
   storageKey: string
+  /** 既定(ほしキャラ相談室): context を渡すと streamAiChat を使う */
+  context?: ChatChartContext
   /** 相談相手＝自分のほしキャラのマスコットを出すためのチャート */
   chart?: ChartData
+  /** カスタムのストリーム関数(相性チャット等)。渡すと context の代わりにこれを使う */
+  stream?: (messages: ChatMessage[], onDelta: (text: string) => void, lang: Lang) => Promise<void>
+  /** ヘッダーに出すアイコン(未指定なら chart のほしキャラマスコット) */
+  headerIcon?: ReactNode
+  /** 見出し・導入・スターターの上書き(未指定なら相談室の文言) */
+  copy?: ChatCopy
   /** 1往復ごとに呼ばれる(ごほうび地図のシグナル更新など)。任意 */
   onExchange?: () => void
 }
@@ -29,7 +45,7 @@ function loadMessages(key: string): ChatMessage[] {
   }
 }
 
-export default function AiChat({ context, storageKey, chart, onExchange }: Props) {
+export default function AiChat({ context, storageKey, chart, stream, headerIcon, copy, onExchange }: Props) {
   const { lang } = useLang()
   const t = useUI()
   // 相談相手は自分のほしキャラ。ヘッダーにそのマスコットを出す
@@ -37,6 +53,12 @@ export default function AiChat({ context, storageKey, chart, onExchange }: Props
   const cSun = lonOf('sun')
   const cMoon = lonOf('moon')
   const chatStar = cSun !== undefined && cMoon !== undefined ? starTypeOf(cSun, cMoon) : null
+  // 見出し等は copy 上書き優先、無ければ相談室の既定文言
+  const cp: ChatCopy = copy ?? { title: t.chat.title, sub: t.chat.sub, intro: t.chat.intro, starters: t.chat.starters }
+  // ストリームは stream 上書き優先、無ければ context を使う既定チャット
+  const runStream = stream ?? ((msgs: ChatMessage[], onDelta: (t: string) => void, l: Lang) => streamAiChat(context as ChatChartContext, msgs, onDelta, l))
+  // ヘッダーアイコン: 上書き優先、無ければ自分のほしキャラマスコット
+  const icon: ReactNode = headerIcon ?? (chatStar ? <HoshiKyaraMascot sunElement={chatStar.sunElement} moonElement={chatStar.moonElement} size={52} /> : null)
   const [messages, setMessages] = useState<ChatMessage[]>(() => loadMessages(storageKey))
   const [input, setInput] = useState('')
   const [streaming, setStreaming] = useState(false)
@@ -65,8 +87,7 @@ export default function AiChat({ context, storageKey, chart, onExchange }: Props
     setMessages([...base, { role: 'assistant', content: '' }])
     setStreaming(true)
     try {
-      await streamAiChat(
-        context,
+      await runStream(
         base,
         (delta) => {
           setMessages((cur) => {
@@ -119,14 +140,14 @@ export default function AiChat({ context, storageKey, chart, onExchange }: Props
   return (
     <section className="planet-card chat-card">
       <header className="card-head">
-        {chatStar && (
+        {icon && (
           <div className="card-head-icon" aria-hidden="true">
-            <HoshiKyaraMascot sunElement={chatStar.sunElement} moonElement={chatStar.moonElement} size={52} />
+            {icon}
           </div>
         )}
         <div>
-          <p className="card-title">{t.chat.title}</p>
-          <p className="card-sub">{t.chat.sub}</p>
+          <p className="card-title">{cp.title}</p>
+          <p className="card-sub">{cp.sub}</p>
         </div>
       </header>
 
@@ -158,10 +179,10 @@ export default function AiChat({ context, storageKey, chart, onExchange }: Props
         </div>
       )}
 
-      {!hasChat && <p className="chat-intro">{t.chat.intro}</p>}
+      {!hasChat && <p className="chat-intro">{cp.intro}</p>}
 
       <div className="chat-starters">
-        {t.chat.starters.map((s) => (
+        {cp.starters.map((s) => (
           <button key={s.label} className="chat-chip" disabled={streaming} onClick={() => void send(s.q)}>
             {s.label}
           </button>

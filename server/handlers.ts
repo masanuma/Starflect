@@ -286,6 +286,65 @@ function buildChatSystem(c: ChatChartContext, lang: Lang): string {
   return lines.join('\n')
 }
 
+/* ---------- 相性チャット(ふたりの相性を会話で相談) ---------- */
+
+/** 相性チャットに渡すふたりのデータ一式(src/lib/aiChat.ts の PairChatContext と対) */
+export interface PairChatContext {
+  nameA: string
+  nameB: string
+  typeA: string
+  typeB: string
+  natalA: { label: string; sign: string }[]
+  natalB: { label: string; sign: string }[]
+  percent: number
+  nickname: string
+  details: string[]
+  skyNote: string
+  toneA: string
+  toneB: string
+  aspectsA: string[]
+  aspectsB: string[]
+}
+
+export interface PairChatRequest {
+  context: PairChatContext
+  messages: ChatMessage[]
+  lang?: Lang
+}
+
+function buildPairChatSystem(c: PairChatContext): string {
+  // nameA/nameB は表示名(日本語は敬称「さん」込み)。ここでは足さない(二重敬称回避)。
+  const lines = [
+    `あなたは、${c.nameA} と ${c.nameB} の相性をよく知る、あたたかくて聡明な西洋占星術師です。ふたりの相談に、会話形式で丁寧に答えます。`,
+    '口調は丁寧だけれど親しみやすく(です・ます調)。以下のふたりのデータに必ず基づいて答え、どちらか一方を悪者にせず、違いは「組み合わせの面白さ」として前向きに伝えてください。',
+    '',
+    `【${c.nameA}(ほしキャラ: ${c.typeA})の出生の星座】`,
+    ...c.natalA.map((n) => `- ${n.label}: ${n.sign}`),
+    '',
+    `【${c.nameB}(ほしキャラ: ${c.typeB})の出生の星座】`,
+    ...c.natalB.map((n) => `- ${n.label}: ${n.sign}`),
+    '',
+    `【ふたりのほしキャラ相性】${c.percent}%「${c.nickname}」`,
+    ...c.details.map((d) => `- ${d}`),
+    '',
+    `【いまのふたりの空模様】${c.skyNote}`,
+    `- ${c.nameA}の基調: ${c.toneA}`,
+    ...c.aspectsA.map((a) => `  - ${a}`),
+    `- ${c.nameB}の基調: ${c.toneB}`,
+    ...c.aspectsB.map((a) => `  - ${a}`),
+    '',
+    '答え方:',
+    '- 上のデータ(星座・相性・角度)に忠実に。書かれていない配置を勝手に作らない',
+    '- 星座名は上の表記をそのまま使い、生年月日から推測し直さない',
+    '- 専門用語(トライン・スクエア・セクスタイル・オポジション・合・アスペクトなど)は使わず、「大きな追い風」「試練の角度」のように、良い配置か注意の配置かが一般の人にも伝わる言葉で説明する',
+    '- 断定的な予言(「必ず〜になる」)や、別れ・重大な決断を促す言い方はしない',
+    '- 恋愛にも友情・仕事の関係にも読めるように、決めつけず前向きに',
+    '- 1回の返答は2〜4文程度で簡潔に。会話のテンポを保つ',
+    '- ふたりを名前で呼ぶときは上の表記をそのまま使う(敬称の付け外しをしない)',
+  ]
+  return lines.join('\n')
+}
+
 function chatErrorJson(res: ServerResponse, err: unknown) {
   if (err instanceof Anthropic.AuthenticationError) {
     return json(res, 500, { error: 'APIキーが無効です。環境変数 ANTHROPIC_API_KEY を確認してください。' })
@@ -299,7 +358,14 @@ function chatErrorJson(res: ServerResponse, err: unknown) {
   return json(res, 500, { error: '応答の生成中にエラーが発生しました' })
 }
 
-function createChatHandler(apiKey: string | undefined): RawHandler {
+/**
+ * ストリーミング会話ハンドラの共通実装。相談チャット(ほしキャラ本人)と相性チャット(ふたり)で
+ * ストリーム処理は同一。system プロンプトの作り方だけ buildSystem で差し替える。
+ */
+function createStreamingChatHandler<T extends { context?: unknown; messages?: ChatMessage[]; lang?: Lang }>(
+  apiKey: string | undefined,
+  buildSystem: (payload: T) => string,
+): RawHandler {
   return (req, res) => {
     void (async () => {
       if (req.method !== 'POST') return json(res, 405, { error: 'POST only' })
@@ -310,9 +376,9 @@ function createChatHandler(apiKey: string | undefined): RawHandler {
         })
       }
 
-      let payload: ChatRequest
+      let payload: T
       try {
-        payload = JSON.parse(await readBody(req)) as ChatRequest
+        payload = JSON.parse(await readBody(req)) as T
       } catch {
         return json(res, 400, { error: 'リクエストの形式が不正です' })
       }
@@ -327,7 +393,7 @@ function createChatHandler(apiKey: string | undefined): RawHandler {
           max_tokens: 1500,
           thinking: { type: 'adaptive' },
           output_config: { effort: 'low' },
-          system: buildChatSystem(payload.context, langOf(payload)) + LANG_DIRECTIVE[langOf(payload)],
+          system: buildSystem(payload),
           messages: payload.messages.map((m) => ({ role: m.role, content: m.content })),
         })
 
@@ -356,6 +422,18 @@ function createChatHandler(apiKey: string | undefined): RawHandler {
     })()
   }
 }
+
+const createChatHandler = (apiKey: string | undefined): RawHandler =>
+  createStreamingChatHandler<ChatRequest>(
+    apiKey,
+    (p) => buildChatSystem(p.context, langOf(p)) + LANG_DIRECTIVE[langOf(p)],
+  )
+
+const createPairChatHandler = (apiKey: string | undefined): RawHandler =>
+  createStreamingChatHandler<PairChatRequest>(
+    apiKey,
+    (p) => buildPairChatSystem(p.context) + LANG_DIRECTIVE[langOf(p)],
+  )
 
 /** ごほうび地図の発見レポート(非ストリーミング。初回だけ生成しクライアントがキャッシュする) */
 function createReportHandler(apiKey: string | undefined): RawHandler {
@@ -404,11 +482,13 @@ function createReportHandler(apiKey: string | undefined): RawHandler {
 /** 相性鑑定・相談チャット・発見レポートのAPIハンドラを生成する(相棒との会話がAIの窓口を担う) */
 export function createAiHandlers(apiKey: string | undefined): {
   pair: RawHandler
+  pairChat: RawHandler
   chat: RawHandler
   report: RawHandler
 } {
   return {
     pair: makeHandler<AiPairRequest>(apiKey, PAIR_SYSTEM_PROMPT, buildPairPrompt),
+    pairChat: createPairChatHandler(apiKey),
     chat: createChatHandler(apiKey),
     report: createReportHandler(apiKey),
   }

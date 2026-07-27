@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react'
 import type { PairData, PairPerson } from '../lib/compat'
 import { compatOf, pairTip, relLabel } from '../lib/compat'
 import type { FortuneTab } from '../lib/fortune'
-import { readFortune, periodNoun, periodLabel, FORTUNE_TABS, PERIOD_OF_TAB, fortuneTabDate } from '../lib/fortune'
+import { readFortune, periodLabel, FORTUNE_TABS, PERIOD_OF_TAB, fortuneTabDate } from '../lib/fortune'
 import { starTypeOf } from '../lib/startypes'
-import { fetchAiPairReading } from '../lib/aiReading'
+import type { PairChatContext } from '../lib/aiChat'
+import { streamAiPairChat } from '../lib/aiChat'
 import { getPlanet } from '../lib/planets'
 import { signName } from '../lib/signs'
 import { signIndex } from '../lib/astro'
-import { useLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
-import AiReading from './AiReading'
+import AiChat from './AiChat'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import SectionIcon from './SectionIcon'
 import Feedback from './Feedback'
@@ -29,7 +29,6 @@ function personType(p: PairPerson) {
 }
 
 export default function PairResult({ data, onRetry, onHome }: Props) {
-  const { lang } = useLang()
   const t = useUI()
   const { a, b } = data
   const typeA = personType(a)
@@ -46,46 +45,29 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
 
   const anyApprox = a.approxTime || b.approxTime
 
-  const [aiState, setAiState] = useState<
-    { status: 'idle' } | { status: 'loading' } | { status: 'done'; text: string } | { status: 'error'; message: string }
-  >({ status: 'idle' })
-
   useEffect(() => {
     track('pair_result')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  async function handleAiReading() {
-    track('ai_pair_click')
-    setAiState({ status: 'loading' })
-    try {
-      const natalOf = (p: PairPerson) =>
-        p.planets.map((pp) => ({
-          label: getPlanet(pp.key).name,
-          sign: signName(signIndex(pp.lon)),
-        }))
-      const text = await fetchAiPairReading({
-        nameA: a.name,
-        nameB: b.name,
-        typeA: typeA.type.name,
-        typeB: typeB.type.name,
-        percent: compat.percent,
-        nickname: compat.nickname,
-        details: compat.details.map((d) => `${d.title}: ${d.text}`),
-        natalA: natalOf(a),
-        natalB: natalOf(b),
-        periodLabel: periodNoun(PERIOD_OF_TAB[tab]),
-        skyNote: fortuneA.skyNote,
-        toneA: fortuneA.toneLabel,
-        toneB: fortuneB.toneLabel,
-        aspectsA: fortuneA.items.map((i) => i.title),
-        aspectsB: fortuneB.items.map((i) => i.title),
-        lang,
-      })
-      setAiState({ status: 'done', text })
-    } catch (e) {
-      setAiState({ status: 'error', message: e instanceof Error ? e.message : t.common.unknownError })
-    }
+  // 相性チャット(相談室)に渡すふたりのデータ。選択中の期間の空模様を反映する。
+  const natalOf = (p: PairPerson) =>
+    p.planets.map((pp) => ({ label: getPlanet(pp.key).name, sign: signName(signIndex(pp.lon)) }))
+  const pairChatContext: PairChatContext = {
+    nameA: a.name,
+    nameB: b.name,
+    typeA: typeA.type.name,
+    typeB: typeB.type.name,
+    natalA: natalOf(a),
+    natalB: natalOf(b),
+    percent: compat.percent,
+    nickname: compat.nickname,
+    details: compat.details.map((d) => `${d.title}: ${d.text}`),
+    skyNote: fortuneA.skyNote,
+    toneA: fortuneA.toneLabel,
+    toneB: fortuneB.toneLabel,
+    aspectsA: fortuneA.items.map((i) => i.title),
+    aspectsB: fortuneB.items.map((i) => i.title),
   }
 
   return (
@@ -191,46 +173,12 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
         <p className="pair-tip">{tip}</p>
       </section>
 
-      <section className="planet-card ai-card">
-        <header className="planet-head">
-          <div className="planet-symbol" aria-hidden="true">
-            <SectionIcon name="pairReading" />
-          </div>
-          <div>
-            <p className="planet-title">{t.pairResult.aiTitle}</p>
-            <p className="planet-sub">{t.pairResult.aiSub(a.name, b.name)}</p>
-          </div>
-        </header>
-
-        {aiState.status === 'idle' && (
-          <>
-            <button className="cta" onClick={handleAiReading}>
-              {t.pairResult.aiCta}
-            </button>
-            <p className="ai-note">{t.pairResult.aiNote}</p>
-          </>
-        )}
-
-        {aiState.status === 'loading' && (
-          <p className="ai-loading">
-            <span className="ai-spinner" aria-hidden="true">
-              ✦
-            </span>
-            {t.pairResult.aiLoading}
-          </p>
-        )}
-
-        {aiState.status === 'done' && <AiReading text={aiState.text} />}
-
-        {aiState.status === 'error' && (
-          <>
-            <p className="form-error">{aiState.message}</p>
-            <button className="ghost" onClick={handleAiReading}>
-              {t.common.tryAgain}
-            </button>
-          </>
-        )}
-      </section>
+      <AiChat
+        storageKey={`starflect-pairchat:${a.dateLabel}:${b.dateLabel}`}
+        stream={(msgs, onDelta, l) => streamAiPairChat(pairChatContext, msgs, onDelta, l)}
+        headerIcon={<SectionIcon name="pairReading" />}
+        copy={t.pairChat}
+      />
 
       <Feedback page="pair" />
 

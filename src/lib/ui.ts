@@ -181,6 +181,13 @@ export interface UIStrings {
     sendAria: string
     starters: Starter[]
   }
+  /** 相性チャット(ふたりの相談室)の見出し・導入・スターター。それ以外の文言は chat を流用 */
+  pairChat: {
+    title: string
+    sub: string
+    intro: string
+    starters: Starter[]
+  }
   footer: string
   consent: {
     message: string
@@ -442,6 +449,16 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🤝 人間関係', q: '人間関係で私が心地よくいるためのヒントがほしいな。' },
         { label: '🌱 性格', q: '星から見て、私って結局どういう性格の持ち主?' },
         { label: '🔮 この先', q: 'これからの私に、星はどんな流れを用意してる?' },
+      ],
+    },
+    pairChat: {
+      title: 'ふたりの相談室',
+      sub: 'ふたりの相性について、なんでも聞いてください',
+      intro: '気になることを聞いてみてください。相性のコツ・すれ違いの理由・この先のふたり——ふたりの星の配置と相性から、いっしょに考えます。',
+      starters: [
+        { label: '💞 相性のコツ', q: 'ふたりがうまくいくコツを教えて' },
+        { label: '⚡ すれ違い', q: 'ふたりがすれ違いやすいのはどんなとき？' },
+        { label: '🔮 この先', q: 'この先のふたりの関係はどうなりそう？' },
       ],
     },
     footer: '星の計算はすべてお使いの端末内で行われます。相談室でほしキャラに相談したときだけ、計算結果が送信されます。',
@@ -713,6 +730,16 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 What’s ahead', q: 'What kind of flow do the stars have in store for me ahead?' },
       ],
     },
+    pairChat: {
+      title: 'Your two-person chat',
+      sub: 'Ask anything about the two of you',
+      intro: 'Ask whatever’s on your mind — tips for getting along, why you clash, where things are headed. We’ll think it through from both charts and your compatibility.',
+      starters: [
+        { label: '💞 What works', q: 'What’s the secret to us getting along?' },
+        { label: '⚡ Friction', q: 'When are we most likely to clash?' },
+        { label: '🔮 Ahead', q: 'Where is our relationship headed?' },
+      ],
+    },
     footer: 'All star calculations happen on your own device. Results are sent only when you talk to your Hoshi-Kyara in the chat room.',
     consent: {
       message: 'May we measure anonymous usage? (No personal data or birth dates are sent.)',
@@ -980,6 +1007,16 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🤝 Relaciones', q: 'Me vendrían bien consejos para sentirme a gusto en mis relaciones.' },
         { label: '🌱 Personalidad', q: 'Según las estrellas, ¿qué tipo de personalidad tengo en realidad?' },
         { label: '🔮 Lo que viene', q: '¿Qué clase de corriente me preparan las estrellas de cara al futuro?' },
+      ],
+    },
+    pairChat: {
+      title: 'La sala de los dos',
+      sub: 'Pregunta lo que quieras sobre ustedes dos',
+      intro: 'Pregunta lo que tengas en mente: claves para llevarse bien, por qué chocan, hacia dónde va la relación. Lo pensamos desde ambas cartas y su compatibilidad.',
+      starters: [
+        { label: '💞 Claves', q: '¿Cuál es la clave para que nos llevemos bien?' },
+        { label: '⚡ Roces', q: '¿Cuándo es más probable que choquemos?' },
+        { label: '🔮 El futuro', q: '¿Hacia dónde va nuestra relación?' },
       ],
     },
     footer: 'Todos los cálculos astrales ocurren en tu propio dispositivo. Los resultados solo se envían cuando hablas con tu Hoshi-Kyara en la sala de consulta.',
@@ -1251,6 +1288,16 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 L’avenir', q: 'Quel genre de courant les étoiles me réservent-elles pour la suite ?' },
       ],
     },
+    pairChat: {
+      title: 'Le salon à deux',
+      sub: 'Pose toutes tes questions sur vous deux',
+      intro: 'Pose ce qui te préoccupe : les clés pour bien vous entendre, pourquoi vous vous heurtez, où va votre relation. On y réfléchit à partir des deux thèmes et de votre compatibilité.',
+      starters: [
+        { label: '💞 Les clés', q: 'Quelle est la clé pour bien nous entendre ?' },
+        { label: '⚡ Frictions', q: 'Quand risque-t-on le plus de se heurter ?' },
+        { label: '🔮 L’avenir', q: 'Où va notre relation ?' },
+      ],
+    },
     footer: 'Tous les calculs astraux se font sur ton propre appareil. Les résultats ne sont envoyés que lorsque tu parles à ton Hoshi-Kyara dans le salon.',
     consent: {
       message: 'Pouvons-nous mesurer l’usage de façon anonyme ? (Aucune donnée personnelle ni date de naissance n’est envoyée.)',
@@ -1518,6 +1565,16 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🤝 Relazioni', q: 'Mi servirebbero consigli per stare a mio agio nelle relazioni.' },
         { label: '🌱 Personalità', q: 'Secondo le stelle, che tipo di personalità ho davvero?' },
         { label: '🔮 Il futuro', q: 'Che tipo di corrente mi preparano le stelle per il futuro?' },
+      ],
+    },
+    pairChat: {
+      title: 'Il salotto in due',
+      sub: 'Chiedi tutto quello che vuoi su voi due',
+      intro: 'Chiedi ciò che ti sta a cuore: come andare d’accordo, perché vi scontrate, dove sta andando la relazione. Ci ragioniamo dai due temi e dalla vostra affinità.',
+      starters: [
+        { label: '💞 Le chiavi', q: 'Qual è il segreto per andare d’accordo?' },
+        { label: '⚡ Attriti', q: 'Quando è più probabile che ci scontriamo?' },
+        { label: '🔮 Il futuro', q: 'Dove sta andando la nostra relazione?' },
       ],
     },
     footer: 'Tutti i calcoli astrali avvengono sul tuo dispositivo. I risultati vengono inviati solo quando parli con il tuo Hoshi-Kyara nella sala consulti.',
@@ -1789,6 +1846,16 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 O que vem', q: 'Que tipo de fluxo as estrelas têm reservado para mim daqui para frente?' },
       ],
     },
+    pairChat: {
+      title: 'A sala dos dois',
+      sub: 'Pergunte o que quiser sobre vocês dois',
+      intro: 'Pergunte o que estiver na sua mente: dicas para se darem bem, por que vocês se desentendem, para onde a relação vai. Pensamos a partir dos dois mapas e da compatibilidade de vocês.',
+      starters: [
+        { label: '💞 Dicas', q: 'Qual é o segredo para nos darmos bem?' },
+        { label: '⚡ Atritos', q: 'Quando é mais provável que a gente se desentenda?' },
+        { label: '🔮 O futuro', q: 'Para onde vai a nossa relação?' },
+      ],
+    },
     footer: 'Todos os cálculos astrais acontecem no seu próprio dispositivo. Os resultados só são enviados quando você conversa com o seu Hoshi-Kyara na sala de consulta.',
     consent: {
       message: 'Podemos medir o uso de forma anônima? (Nenhum dado pessoal ou data de nascimento é enviado.)',
@@ -2056,6 +2123,16 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🤝 인간관계', q: '인간관계에서 제가 편안하게 지낼 수 있는 힌트가 필요해요.' },
         { label: '🌱 성격', q: '별로 보면 저는 결국 어떤 성격의 사람인가요?' },
         { label: '🔮 앞날', q: '앞으로의 저에게 별은 어떤 흐름을 준비해 두었나요?' },
+      ],
+    },
+    pairChat: {
+      title: '둘의 상담실',
+      sub: '두 사람의 궁합에 대해 무엇이든 물어보세요',
+      intro: '궁금한 걸 물어보세요. 잘 지내는 비결, 부딪히는 이유, 앞으로의 두 사람——두 사람의 별자리 배치와 궁합을 바탕으로 함께 생각해요.',
+      starters: [
+        { label: '💞 잘 지내는 비결', q: '두 사람이 잘 지내는 비결을 알려줘요' },
+        { label: '⚡ 엇갈림', q: '두 사람이 엇갈리기 쉬운 건 어떤 때예요?' },
+        { label: '🔮 앞으로', q: '앞으로 두 사람 관계는 어떻게 될까요?' },
       ],
     },
     footer: '별 계산은 모두 사용 중인 기기 안에서 이루어져요. 상담실에서 호시캐릭터에게 상담할 때만 계산 결과가 전송돼요.',

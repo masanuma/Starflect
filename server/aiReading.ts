@@ -12,6 +12,7 @@ export function aiReadingPlugin(apiKey: string | undefined, feedbackUrl?: string
     name: 'starflect-ai-reading',
     configureServer(server) {
       server.middlewares.use('/api/ai-pair', handlers.pair)
+      server.middlewares.use('/api/ai-pair-chat', handlers.pairChat)
       server.middlewares.use('/api/ai-chat', handlers.chat)
       server.middlewares.use('/api/ai-report', handlers.report)
       server.middlewares.use('/api/feedback', feedback)
