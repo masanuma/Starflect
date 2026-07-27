@@ -248,11 +248,58 @@ function chatErrorJson(res: ServerResponse, err: unknown) {
 }
 
 /**
+ * モデル別の料金($/100万トークン)。ここは Sonnet 5 の「標準価格」。
+ * ※導入価格(〜2026-08-31)は入力$2/出力$10でこの約⅔。ログのcostは標準価格の概算で、
+ *   生トークン(in/out)も残すので、後から任意の単価で再計算できる。
+ */
+const PRICING: Record<string, { in: number; out: number }> = {
+  'claude-sonnet-5': { in: 3, out: 15 },
+  'claude-opus-4-8': { in: 5, out: 25 },
+  'claude-haiku-4-5': { in: 1, out: 5 },
+}
+
+/**
+ * AI呼び出しごとにトークン使用量と概算コストを1行JSONで記録する(Railwayログに残る)。
+ * `AI_USAGE ` プレフィックスで grep/集計しやすくしてある。
+ */
+function logUsage(endpoint: string, model: string, usage: unknown, lang: Lang): void {
+  const u = (usage ?? {}) as {
+    input_tokens?: number
+    output_tokens?: number
+    cache_read_input_tokens?: number
+    cache_creation_input_tokens?: number
+  }
+  const p = PRICING[model] ?? PRICING['claude-sonnet-5']
+  const inTok = u.input_tokens ?? 0
+  const outTok = u.output_tokens ?? 0
+  const cacheRead = u.cache_read_input_tokens ?? 0
+  const cacheWrite = u.cache_creation_input_tokens ?? 0
+  // キャッシュ読み=入力の0.1倍、キャッシュ書き=1.25倍(将来プロンプトキャッシュ導入時に効く)
+  const costUsd =
+    (inTok * p.in + cacheRead * p.in * 0.1 + cacheWrite * p.in * 1.25 + outTok * p.out) / 1_000_000
+  console.log(
+    'AI_USAGE ' +
+      JSON.stringify({
+        ts: new Date().toISOString(),
+        endpoint,
+        model,
+        lang,
+        in: inTok,
+        out: outTok,
+        cache_read: cacheRead,
+        cache_write: cacheWrite,
+        cost_usd: Number(costUsd.toFixed(5)),
+      }),
+  )
+}
+
+/**
  * ストリーミング会話ハンドラの共通実装。相談チャット(ほしキャラ本人)と相性チャット(ふたり)で
  * ストリーム処理は同一。system プロンプトの作り方だけ buildSystem で差し替える。
  */
 function createStreamingChatHandler<T extends { context?: unknown; messages?: ChatMessage[]; lang?: Lang }>(
   apiKey: string | undefined,
+  endpoint: string,
   buildSystem: (payload: T) => string,
 ): RawHandler {
   return (req, res) => {
@@ -298,7 +345,8 @@ function createStreamingChatHandler<T extends { context?: unknown; messages?: Ch
           res.write(delta)
         })
 
-        await stream.finalMessage()
+        const fm = await stream.finalMessage()
+        logUsage(endpoint, AI_MODEL, fm.usage, langOf(payload))
         if (!res.headersSent) {
           res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' })
         }
@@ -315,12 +363,14 @@ function createStreamingChatHandler<T extends { context?: unknown; messages?: Ch
 const createChatHandler = (apiKey: string | undefined): RawHandler =>
   createStreamingChatHandler<ChatRequest>(
     apiKey,
+    'chat',
     (p) => buildChatSystem(p.context, langOf(p)) + LANG_DIRECTIVE[langOf(p)],
   )
 
 const createPairChatHandler = (apiKey: string | undefined): RawHandler =>
   createStreamingChatHandler<PairChatRequest>(
     apiKey,
+    'pair-chat',
     (p) => buildPairChatSystem(p.context) + LANG_DIRECTIVE[langOf(p)],
   )
 
@@ -356,6 +406,7 @@ function createReportHandler(apiKey: string | undefined): RawHandler {
           system: buildChatSystem(payload.context, langOf(payload)) + LANG_DIRECTIVE[langOf(payload)],
           messages: [{ role: 'user', content: buildReportPrompt(payload.topic, payload.behavior) }],
         })
+        logUsage('report', AI_MODEL, response.usage, langOf(payload))
         const text = response.content
           .filter((b): b is Anthropic.TextBlock => b.type === 'text')
           .map((b) => b.text)
