@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type { ChartData, PlanetKey } from '../lib/types'
 import { synthesize } from '../lib/synthesis'
 import { starTypeOf, elementPhrase } from '../lib/startypes'
@@ -7,7 +7,8 @@ import StarReading from './StarReading'
 import PartyCard from './PartyCard'
 import ShareButtons from './ShareButtons'
 import Feedback from './Feedback'
-import { createCompanion } from '../lib/companion'
+import ResultReveal from './ResultReveal'
+import { createCompanion, loadCompanion } from '../lib/companion'
 import { buildChatContext, chatStorageKey } from '../lib/aiChat'
 import PlanetMascot from './PlanetMascot'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
@@ -40,6 +41,16 @@ export default function Result({ data, onHome, onPair }: Props) {
     ? `${ELEMENT_SLUG[starType.sunElement]}_${ELEMENT_SLUG[starType.moonElement]}`
     : undefined
 
+  // リビール演出は「はじめての診断」だけ。情報を変更しての再診断や、動きが苦手な設定では出さない。
+  // (createCompanion より前＝レンダー中に判定する必要があるので useState の初期化で見る)
+  const [revealing, setRevealing] = useState(() => {
+    if (typeof window === 'undefined') return false
+    if (new URLSearchParams(window.location.search).has('reveal')) return true // 確認用の強制再生
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return false
+    return loadCompanion() === null
+  })
+  const [played, setPlayed] = useState(false)
+
   useEffect(() => {
     track('diagnose_result', {
       period: data.period,
@@ -56,7 +67,21 @@ export default function Result({ data, onHome, onPair }: Props) {
   const chatContext = buildChatContext(data)
 
   return (
-    <div className="result-screen">
+    <>
+      {revealing && starType && (
+        <ResultReveal
+          sunElement={starType.sunElement}
+          moonElement={starType.moonElement}
+          name={quoted(starType.type.name)}
+          copy={starType.type.copy}
+          onFadeStart={() => setPlayed(true)}
+          onDone={() => {
+            setRevealing(false)
+            setPlayed(true)
+          }}
+        />
+      )}
+      <div className={`result-screen${played ? ' is-revealed' : ''}${revealing && !played ? ' is-veiled' : ''}`}>
       <p className="result-lead">{t.result.born(data.dateLabel)}</p>
       {data.placeLabel && <p className="result-place">{data.placeLabel}</p>}
       <h2 className="screen-title">{t.result.title(data.name ?? '')}</h2>
@@ -67,19 +92,11 @@ export default function Result({ data, onHome, onPair }: Props) {
       {starType && (
         <section className="type-card">
           <div className="type-mascot" aria-hidden="true">
-            <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={96} />
+            <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={150} />
           </div>
           <h3 className="type-name">{quoted(starType.type.name)}</h3>
           <p className="type-copy">{starType.type.copy}</p>
-          <p className="type-text">{starType.type.text}</p>
-          {synthesis && (
-            <div className="type-synth">
-              <p className="type-synth-label">{t.result.synthLabel}</p>
-              <p className="type-text">{synthesis.intro}</p>
-              <p className="type-text">{synthesis.balance}</p>
-              <p className="type-text">{synthesis.relation}</p>
-            </div>
-          )}
+          {/* 太陽×月の式は「どこから生まれたか」の答え。登場演出の直後に置いて余韻をつなぐ */}
           <div className="type-formula">
             <div className="type-formula-side">
               <PlanetMascot planetKey="sun" size={42} />
@@ -102,6 +119,18 @@ export default function Result({ data, onHome, onPair }: Props) {
             </div>
           </div>
           <p className="type-count">{t.result.typeCount}</p>
+
+          <div className="type-detail">
+            <p className="type-text">{starType.type.text}</p>
+            {synthesis && (
+              <div className="type-synth">
+                <p className="type-synth-label">{t.result.synthLabel}</p>
+                <p className="type-text">{synthesis.intro}</p>
+                <p className="type-text">{synthesis.balance}</p>
+                <p className="type-text">{synthesis.relation}</p>
+              </div>
+            )}
+          </div>
         </section>
       )}
 
@@ -129,6 +158,7 @@ export default function Result({ data, onHome, onPair }: Props) {
           {t.companion.toMenu}
         </button>
       </div>
-    </div>
+      </div>
+    </>
   )
 }

@@ -11,6 +11,7 @@ import { signName } from '../lib/signs'
 import { signIndex } from '../lib/astro'
 import { useUI } from '../lib/ui'
 import AiChat from './AiChat'
+import PairReveal from './PairReveal'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import SectionIcon from './SectionIcon'
 import Feedback from './Feedback'
@@ -27,6 +28,9 @@ function personType(p: PairPerson) {
   const moon = p.planets.find((pp) => pp.key === 'moon')!
   return starTypeOf(sun.lon, moon.lon)
 }
+
+/** 直前にリビール演出を見せた組み合わせ(同じふたりでの占い直しでは再生しない) */
+const PAIR_REVEALED_KEY = 'starflect-pair-revealed'
 
 export default function PairResult({ data, onRetry, onHome }: Props) {
   const t = useUI()
@@ -45,8 +49,28 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
 
   const anyApprox = a.approxTime || b.approxTime
 
+  // リビール演出は「はじめて見る組み合わせ」のときだけ。
+  // 同じふたりで条件を変えて占い直したときに毎回再生されると煩わしいので、直前の組み合わせを覚えておく。
+  const pairKey = `${a.dateLabel}|${b.dateLabel}`
+  const [revealing, setRevealing] = useState(() => {
+    if (typeof window === 'undefined') return false
+    if (new URLSearchParams(window.location.search).has('reveal')) return true // 確認用の強制再生
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return false
+    try {
+      return localStorage.getItem(PAIR_REVEALED_KEY) !== pairKey
+    } catch {
+      return true
+    }
+  })
+  const [played, setPlayed] = useState(false)
+
   useEffect(() => {
     track('pair_result')
+    try {
+      localStorage.setItem(PAIR_REVEALED_KEY, pairKey)
+    } catch {
+      /* 保存できない環境では毎回再生されるだけなので無視 */
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -71,7 +95,24 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
   }
 
   return (
-    <div className="result-screen pair-screen">
+    <>
+      {revealing && (
+        <PairReveal
+          a={{ sunElement: typeA.sunElement, moonElement: typeA.moonElement, name: a.name }}
+          b={{ sunElement: typeB.sunElement, moonElement: typeB.moonElement, name: b.name }}
+          percent={compat.percent}
+          nickname={compat.nickname}
+          emoji={compat.emoji}
+          onFadeStart={() => setPlayed(true)}
+          onDone={() => {
+            setRevealing(false)
+            setPlayed(true)
+          }}
+        />
+      )}
+      <div
+        className={`result-screen pair-screen${played ? ' is-revealed' : ''}${revealing && !played ? ' is-veiled' : ''}`}
+      >
       <p className="result-lead">
         {a.name} × {b.name}
       </p>
@@ -196,6 +237,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
           {t.pairResult.home}
         </button>
       </div>
-    </div>
+      </div>
+    </>
   )
 }

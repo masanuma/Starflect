@@ -126,6 +126,10 @@ export interface UIStrings {
     outerFace: string
     innerHeart: string
     typeCount: string
+    /** 初回診断のリビール演出。星を読んでいる「タメ」の文言 */
+    revealReading: string
+    /** リビール演出でキャラ名の直前に出る一言 */
+    revealIntro: string
     partyTitle: (n: number) => string
     partySub: string
     partyMore: (hidden: number) => string
@@ -151,6 +155,8 @@ export interface UIStrings {
   pairResult: {
     title: string
     matchLabel: string
+    /** 相性のリビール演出。ふたりの星を読んでいる「タメ」の文言 */
+    revealReading: string
     breakdownTitle: string
     breakdownSub: string
     todayTitle: (period: string) => string
@@ -382,6 +388,8 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: '表の顔',
       innerHeart: '心の中',
       typeCount: 'この組み合わせで、全16キャラ',
+      revealReading: '星を読んでいます…',
+      revealIntro: 'あなたのほしキャラは',
       partyTitle: (n) => `ほしキャラを構成する、${n}人のパーティ`,
       partySub: '生まれた瞬間の星たちが、あなたをかたちづくるキャラになりました。それぞれの担当と特徴です。',
       partyMore: (hidden) => `のこりの${hidden}キャラも見てみて！`,
@@ -405,6 +413,7 @@ const UI: Record<Lang, UIStrings> = {
     pairResult: {
       title: 'ふたりの相性',
       matchLabel: '相性',
+      revealReading: 'ふたりの星を読んでいます…',
       breakdownTitle: '相性の内訳',
       breakdownSub: '太陽(表の顔)と月(心)、4つの組み合わせから',
       todayTitle: (period) => `${period}のふたり`,
@@ -652,6 +661,8 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: 'Outer face',
       innerHeart: 'Inner heart',
       typeCount: 'One of 16 characters',
+      revealReading: 'Reading the stars…',
+      revealIntro: 'Your Hoshi-Kyara is',
       partyTitle: (n) => `Your Hoshi-Kyara’s party of ${n}`,
       partySub: 'The stars at the moment you were born became the characters that make you who you are—here’s what each one handles, and what it’s like.',
       partyMore: (hidden) => `See your other ${hidden} characters too!`,
@@ -675,6 +686,7 @@ const UI: Record<Lang, UIStrings> = {
     pairResult: {
       title: 'Compatibility',
       matchLabel: 'Match',
+      revealReading: 'Reading both your stars…',
       breakdownTitle: 'Compatibility breakdown',
       breakdownSub: 'From four combinations of Sun (outer face) and Moon (heart)',
       todayTitle: (period) => `The two of you: ${period}`,
@@ -922,6 +934,8 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: 'Cara externa',
       innerHeart: 'Interior',
       typeCount: 'Uno de 16 personajes',
+      revealReading: 'Leyendo las estrellas…',
+      revealIntro: 'Tu Hoshi-Kyara es',
       partyTitle: (n) => `El grupo de ${n} tras tu Hoshi-Kyara`,
       partySub: 'Los astros del momento de tu nacimiento se volvieron los personajes que te componen: de qué se encarga cada uno y cómo es.',
       partyMore: (hidden) => `¡Mira también tus otros ${hidden} personajes!`,
@@ -945,6 +959,7 @@ const UI: Record<Lang, UIStrings> = {
     pairResult: {
       title: 'Compatibilidad',
       matchLabel: 'Afinidad',
+      revealReading: 'Leyendo las estrellas de ambos…',
       breakdownTitle: 'Desglose de la afinidad',
       breakdownSub: 'A partir de cuatro combinaciones de Sol (cara externa) y Luna (corazón)',
       todayTitle: (period) => `Vosotros dos: ${period}`,
@@ -1192,6 +1207,8 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: 'Visage extérieur',
       innerHeart: 'Cœur intérieur',
       typeCount: 'L’un des 16 personnages',
+      revealReading: 'Lecture des étoiles…',
+      revealIntro: 'Ton Hoshi-Kyara est',
       partyTitle: (n) => `L’équipe de ${n} derrière ton Hoshi-Kyara`,
       partySub: 'Les astres de l’instant de ta naissance sont devenus les personnages qui te composent : ce dont chacun s’occupe et son caractère.',
       partyMore: (hidden) => `Découvre aussi tes ${hidden} autres personnages !`,
@@ -1215,6 +1232,7 @@ const UI: Record<Lang, UIStrings> = {
     pairResult: {
       title: 'Compatibilité',
       matchLabel: 'Affinité',
+      revealReading: 'Lecture de vos étoiles à tous les deux…',
       breakdownTitle: 'Détail de l’affinité',
       breakdownSub: 'À partir de quatre combinaisons de Soleil (visage extérieur) et Lune (cœur)',
       todayTitle: (period) => `Vous deux : ${period}`,
@@ -1462,6 +1480,8 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: 'Volto esterno',
       innerHeart: 'Cuore interiore',
       typeCount: 'Uno dei 16 personaggi',
+      revealReading: 'Sto leggendo le stelle…',
+      revealIntro: 'Il tuo Hoshi-Kyara è',
       partyTitle: (n) => `Il gruppo di ${n} dietro il tuo Hoshi-Kyara`,
       partySub: 'Gli astri dell’istante della tua nascita sono diventati i personaggi che ti compongono: di cosa si occupa ognuno e com’è fatto.',
       partyMore: (hidden) => `Scopri anche gli altri tuoi ${hidden} personaggi!`,
@@ -1485,6 +1505,7 @@ const UI: Record<Lang, UIStrings> = {
     pairResult: {
       title: 'Compatibilità',
       matchLabel: 'Affinità',
+      revealReading: 'Sto leggendo le stelle di entrambi…',
       breakdownTitle: 'Dettaglio dell’affinità',
       breakdownSub: 'Da quattro combinazioni di Sole (volto esterno) e Luna (cuore)',
       todayTitle: (period) => `Voi due: ${period}`,
@@ -1732,6 +1753,8 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: 'Rosto externo',
       innerHeart: 'Coração interior',
       typeCount: 'Um dos 16 personagens',
+      revealReading: 'Lendo as estrelas…',
+      revealIntro: 'O seu Hoshi-Kyara é',
       partyTitle: (n) => `O grupo de ${n} por trás do seu Hoshi-Kyara`,
       partySub: 'Os astros do instante do seu nascimento viraram os personagens que compõem você: do que cada um cuida e como ele é.',
       partyMore: (hidden) => `Veja também os seus outros ${hidden} personagens!`,
@@ -1755,6 +1778,7 @@ const UI: Record<Lang, UIStrings> = {
     pairResult: {
       title: 'Compatibilidade',
       matchLabel: 'Afinidade',
+      revealReading: 'Lendo as estrelas de vocês dois…',
       breakdownTitle: 'Detalhe da afinidade',
       breakdownSub: 'A partir de quatro combinações de Sol (rosto externo) e Lua (coração)',
       todayTitle: (period) => `Vocês dois: ${period}`,
@@ -2002,6 +2026,8 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: '겉모습',
       innerHeart: '속마음',
       typeCount: '이 조합으로, 모두 16캐릭터',
+      revealReading: '별을 읽고 있어요…',
+      revealIntro: '당신의 호시캐릭터는',
       partyTitle: (n) => `호시캐릭터를 이루는 ${n}명의 파티`,
       partySub: '태어난 순간의 별들이 당신을 이루는 캐릭터가 되었어요. 각자의 담당과 특징이에요.',
       partyMore: (hidden) => `나머지 ${hidden} 캐릭터도 봐 봐요!`,
@@ -2025,6 +2051,7 @@ const UI: Record<Lang, UIStrings> = {
     pairResult: {
       title: '궁합',
       matchLabel: '궁합',
+      revealReading: '두 사람의 별을 읽고 있어요…',
       breakdownTitle: '궁합 내역',
       breakdownSub: '태양(겉모습)과 달(마음), 네 가지 조합에서',
       todayTitle: (period) => `${period}의 두 사람`,

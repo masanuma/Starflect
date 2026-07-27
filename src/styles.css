@@ -1747,6 +1747,316 @@ body {
   margin: 10px 0 0;
 }
 
+/* 主役(キャラ+名前)を大きく、続きの読み物は一段下げて余白で区切る */
+.type-detail {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--pink-soft);
+}
+
+.type-detail .type-synth {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 6px;
+}
+
+/* ===== 初回診断のリビール演出 ===== */
+.reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: pointer;
+  /* 完全に不透明にする。透けると結果のキャラ名が先に読めてしまい、驚きが台無しになる。
+     フェードインもしない(フェード中の一瞬だけ結果が透けて見える=ネタバレになるため) */
+  background: radial-gradient(120% 90% at 50% 38%, #fff6fc 0%, #f0eaff 55%, #e2dcfa 100%);
+}
+
+.reveal.is-out {
+  animation: revealOut 0.4s ease both;
+  pointer-events: none;
+}
+
+/* 演出中は背面の結果を描かない。ベールの描画が一瞬でも遅れたときのネタバレ止め */
+.result-screen.is-veiled {
+  visibility: hidden;
+}
+
+@keyframes revealOut {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+.reveal-inner {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+/* --- タメ：星が中心に吸い込まれる --- */
+.reveal-sparks {
+  position: relative;
+  height: 132px;
+}
+
+.reveal-spark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 17px;
+  color: var(--violet);
+  animation: sparkFall 1.6s ease-in-out infinite;
+}
+
+@keyframes sparkFall {
+  0% { opacity: 0; transform: rotate(var(--deg)) translateX(112px) scale(0.6); }
+  35% { opacity: 0.9; }
+  100% { opacity: 0; transform: rotate(var(--deg)) translateX(8px) scale(1.15); }
+}
+
+.reveal-reading {
+  font-family: var(--font-pop);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--violet);
+  margin: 4px 0 0;
+  animation: revealBreathe 1.7s ease-in-out infinite;
+}
+
+@keyframes revealBreathe {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* --- 誕生：太陽と月が寄って、ほしキャラが生まれる --- */
+.reveal-stage {
+  position: relative;
+  height: 196px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reveal-planet {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -28px 0 0 -28px;
+}
+
+.reveal-sun {
+  animation: joinFromLeft 1.05s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.reveal-moon {
+  animation: joinFromRight 1.05s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* 寄ってきて“並ぶ”ところで一拍おき、最後に中心へ吸い込まれて溶ける
+   (最後まで重ねると2体が団子になって何が起きたか読めない) */
+@keyframes joinFromLeft {
+  0% { opacity: 0; transform: translateX(-124px) scale(0.85); }
+  25% { opacity: 1; }
+  62% { opacity: 1; transform: translateX(-30px) scale(1); }
+  78% { opacity: 1; transform: translateX(-30px) scale(1); }
+  100% { opacity: 0; transform: translateX(0) scale(0.5); }
+}
+
+@keyframes joinFromRight {
+  0% { opacity: 0; transform: translateX(124px) scale(0.85); }
+  25% { opacity: 1; }
+  62% { opacity: 1; transform: translateX(30px) scale(1); }
+  78% { opacity: 1; transform: translateX(30px) scale(1); }
+  100% { opacity: 0; transform: translateX(0) scale(0.5); }
+}
+
+.reveal-burst {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 214, 236, 0.7) 42%, rgba(179, 153, 255, 0) 72%);
+  animation: revealBurst 0.75s ease-out both;
+}
+
+@keyframes revealBurst {
+  0% { opacity: 0; transform: scale(0.4); }
+  28% { opacity: 1; }
+  100% { opacity: 0; transform: scale(7); }
+}
+
+/* 少し行き過ぎて戻る＝「ぽんっ」と現れる手ざわり */
+.reveal-mascot {
+  animation: mascotPop 0.75s cubic-bezier(0.2, 1.35, 0.35, 1) both;
+}
+
+@keyframes mascotPop {
+  0% { opacity: 0; transform: scale(0.35) translateY(12px); }
+  55% { opacity: 1; }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* --- 出会い：ふたりのほしキャラが左右から寄ってきて並ぶ --- */
+.reveal-pairstage {
+  position: relative;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.reveal-pair-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.reveal-pair-a {
+  animation: pairInLeft 1s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.reveal-pair-b {
+  animation: pairInRight 1s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+@keyframes pairInLeft {
+  0% { opacity: 0; transform: translateX(-120px) scale(0.85); }
+  55% { opacity: 1; }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes pairInRight {
+  0% { opacity: 0; transform: translateX(120px) scale(0.85); }
+  55% { opacity: 1; }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+.reveal-pair-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-sub);
+  max-width: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reveal-pair-x {
+  font-family: var(--font-pop);
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--violet);
+  margin-bottom: 18px;
+  animation: revealRise 0.45s ease both 0.5s;
+}
+
+/* ふたりの中央で弾けさせる(pairstage は gap 配置なので位置を明示する) */
+.reveal-burst.is-center {
+  left: 50%;
+  top: 50%;
+  margin: -22px 0 0 -22px;
+}
+
+.reveal-score {
+  font-family: var(--font-head);
+  font-size: 52px;
+  font-weight: 900;
+  line-height: 1;
+  margin: 0 0 10px;
+  background: linear-gradient(135deg, #ee7ca8 0%, var(--pink) 45%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: mascotPop 0.7s cubic-bezier(0.2, 1.35, 0.35, 1) both 0.15s;
+}
+
+.reveal-score-unit {
+  font-size: 26px;
+  margin-left: 2px;
+}
+
+.reveal-nickname {
+  font-size: 16.5px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0;
+  animation: revealRise 0.6s ease both 0.55s;
+}
+
+.reveal-caption {
+  margin-top: 2px;
+}
+
+.reveal-intro {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--ink-sub);
+  margin: 0 0 8px;
+  animation: revealRise 0.5s ease both 0.2s;
+}
+
+.reveal-name {
+  font-family: var(--font-head);
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  margin: 0 0 12px;
+  background: linear-gradient(135deg, #ee7ca8 0%, var(--pink) 45%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: revealRise 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) both 0.32s;
+}
+
+.reveal-copy {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+  animation: revealRise 0.6s ease both 0.58s;
+}
+
+@keyframes revealRise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* --- 演出のあと、結果カードが順に立ち上がる --- */
+.result-screen.is-revealed > * {
+  animation: cardRise 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+.result-screen.is-revealed > *:nth-child(1) { animation-delay: 0s; }
+.result-screen.is-revealed > *:nth-child(2) { animation-delay: 0.05s; }
+.result-screen.is-revealed > *:nth-child(3) { animation-delay: 0.1s; }
+.result-screen.is-revealed > *:nth-child(4) { animation-delay: 0.15s; }
+.result-screen.is-revealed > *:nth-child(5) { animation-delay: 0.2s; }
+.result-screen.is-revealed > *:nth-child(6) { animation-delay: 0.28s; }
+.result-screen.is-revealed > *:nth-child(7) { animation-delay: 0.36s; }
+.result-screen.is-revealed > *:nth-child(8) { animation-delay: 0.44s; }
+.result-screen.is-revealed > *:nth-child(n + 9) { animation-delay: 0.52s; }
+
+@keyframes cardRise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* 動きが苦手な人には出さない(演出自体も呼び出し側でスキップ) */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal *,
+  .result-screen.is-revealed > * {
+    animation: none !important;
+  }
+}
+
 .planet-symbol-char {
   width: 54px;
   height: 54px;
