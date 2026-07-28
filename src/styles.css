@@ -914,6 +914,41 @@ body {
   border-color: var(--pink);
 }
 
+/* 相棒ホームで地図を畳んでいるときの開閉ボタン(パーティの開閉と同じ手ざわりに揃える) */
+.map-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin: 12px 0 2px;
+  padding: 13px;
+  border: 1.5px solid var(--pink-soft);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--pink-faint) 0%, var(--gold-faint) 100%);
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--pink-strong);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.map-toggle::after {
+  content: '▾';
+  font-size: 12px;
+}
+
+.map-toggle.open::after {
+  content: '▴';
+}
+
+.map-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--pink);
+}
+
 .chip-keyword {
   font-family: var(--font-pop);
   font-size: 13px;
@@ -1747,6 +1782,56 @@ body {
   margin: 10px 0 0;
 }
 
+/* 初回だけ出す「この画面の歩き方」。情報量の多い結果画面で現在地と主役を示す */
+.guide-card {
+  background: linear-gradient(135deg, var(--pink-faint) 0%, var(--gold-faint) 100%);
+  border: 1.5px solid var(--pink-soft);
+  border-radius: 20px;
+  padding: 18px 20px 20px;
+  margin: 0 0 16px;
+  box-shadow: 0 4px 16px rgba(200, 120, 200, 0.1);
+}
+
+.guide-title {
+  font-family: var(--font-pop);
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin: 0 0 8px;
+  background: linear-gradient(90deg, var(--pink) 0%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.guide-body {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--ink);
+  text-align: left;
+  margin: 0 0 14px;
+}
+
+.guide-cta {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--pink) 0%, var(--violet) 100%);
+  color: #ffffff;
+  font-family: var(--font-head);
+  font-size: 14.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.guide-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(180, 120, 200, 0.28);
+}
+
 /* 主役(キャラ+名前)を大きく、続きの読み物は一段下げて余白で区切る */
 .type-detail {
   margin-top: 22px;
@@ -2131,6 +2216,8 @@ body {
 .party-row-body {
   flex: 1;
   min-width: 0;
+  /* 画面全体の中央寄せを継承すると、折り返した「特徴」がガタつく。行の本文は左揃えで読ませる */
+  text-align: left;
 }
 
 .party-row-top {
@@ -2232,6 +2319,20 @@ body {
   margin: 0;
   font-size: 13.5px;
   line-height: 1.6;
+}
+
+.party-learn {
+  display: block;
+  text-align: center;
+  margin: 12px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--violet);
+  text-decoration: none;
+}
+
+.party-learn:hover {
+  text-decoration: underline;
 }
 
 .party-foot {

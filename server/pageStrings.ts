@@ -18,6 +18,18 @@ export interface PageStrings {
   charTitle: (name: string) => string
   otherTitle: string
   backToTop: string
+  /** 10天体と12星座の説明ページ(/stars) */
+  starsLink: string
+  starsTitle: string
+  starsLead: string
+  planetsTitle: string
+  planetsLead: string
+  signsTitle: string
+  signsLead: string
+  howReadTitle: string
+  howReadLead: string
+  whoLabel: string
+  howLabel: string
 }
 
 export const PAGE_STRINGS: Record<Lang, PageStrings> = {
@@ -33,6 +45,17 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     charTitle: (n) => `「${n}」ってどんな人？`,
     otherTitle: 'ほかのほしキャラ',
     backToTop: '← ほしキャラ診断トップへ',
+    starsLink: '10天体と12星座のこと',
+    starsTitle: '10天体と12星座のこと',
+    starsLead: '診断結果に出てくる「太陽星座」「月星座」、そしてあなたを構成する10天体のパーティ。それぞれが何を担当しているのかをまとめました。',
+    planetsTitle: 'あなたをかたちづくる星たち',
+    planetsLead: '生まれた瞬間、それぞれの星がどの星座にいたか。星が「誰が」を、星座が「どんなふうに」を表します。上昇星座を入れて全11キャラです。',
+    signsTitle: '12星座と4つのエレメント',
+    signsLead: '星座は12種類。火・地・風・水の4つのエレメントに分かれ、性質のベースになります。',
+    howReadTitle: '結果の読み方',
+    howReadLead: '天体が「誰が」を、星座が「どんなふうに」を表します。ふたつを合わせて、こんな一文になります。',
+    whoLabel: '天体 ＝ 誰が',
+    howLabel: '星座 ＝ どんなふうに',
   },
   en: {
     cta: 'Start your Hoshi-Kyara diagnosis!',
@@ -46,6 +69,17 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     charTitle: (n) => `What is “${n}” like?`,
     otherTitle: 'Other Hoshi-Kyara',
     backToTop: '← Back to Hoshi-Kyara home',
+    starsLink: 'About the 10 planets and 12 signs',
+    starsTitle: 'About the 10 planets and 12 signs',
+    starsLead: 'Your Sun sign, your Moon sign, and the party of ten planets that make you who you are — here is what each one is in charge of.',
+    planetsTitle: 'The stars that shape you',
+    planetsLead: 'Where each star stood the moment you were born. The planet says "who", the sign says "in what way". With the Rising sign, that makes eleven characters.',
+    signsTitle: 'The 12 signs and 4 elements',
+    signsLead: 'There are twelve signs, grouped into four elements — fire, earth, air and water — which form the base of their nature.',
+    howReadTitle: 'How to read your result',
+    howReadLead: 'The planet tells you "who", the sign tells you "in what way". Put the two together and you get a sentence like this.',
+    whoLabel: 'Planet = who',
+    howLabel: 'Sign = in what way',
   },
   es: {
     cta: '¡Empieza tu diagnóstico Hoshi-Kyara!',
@@ -59,6 +93,17 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     charTitle: (n) => `¿Cómo es «${n}»?`,
     otherTitle: 'Otros Hoshi-Kyara',
     backToTop: '← Volver al inicio de Hoshi-Kyara',
+    starsLink: 'Sobre los 10 planetas y 12 signos',
+    starsTitle: 'Sobre los 10 planetas y 12 signos',
+    starsLead: 'Tu signo solar, tu signo lunar y el grupo de diez planetas que te componen: esto es de lo que se encarga cada uno.',
+    planetsTitle: 'Los astros que te forman',
+    planetsLead: 'Dónde estaba cada astro en el momento de tu nacimiento. El planeta dice "quién" y el signo dice "de qué manera". Con el Ascendente son once personajes.',
+    signsTitle: 'Los 12 signos y los 4 elementos',
+    signsLead: 'Hay doce signos, repartidos en cuatro elementos — fuego, tierra, aire y agua — que son la base de su carácter.',
+    howReadTitle: 'Cómo leer tu resultado',
+    howReadLead: 'El planeta dice "quién" y el signo dice "de qué manera". Al juntarlos, sale una frase así.',
+    whoLabel: 'Planeta = quién',
+    howLabel: 'Signo = de qué manera',
   },
   fr: {
     cta: 'Commencer le diagnostic Hoshi-Kyara !',
@@ -72,6 +117,17 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     charTitle: (n) => `Qui est « ${n} » ?`,
     otherTitle: 'Autres Hoshi-Kyara',
     backToTop: '← Retour à l’accueil Hoshi-Kyara',
+    starsLink: 'À propos des 10 planètes et 12 signes',
+    starsTitle: 'À propos des 10 planètes et 12 signes',
+    starsLead: 'Ton signe solaire, ton signe lunaire et l’équipe de dix planètes qui te composent : voici ce dont chacun s’occupe.',
+    planetsTitle: 'Les astres qui te façonnent',
+    planetsLead: 'Où se trouvait chaque astre à l’instant de ta naissance. La planète dit « qui », le signe dit « de quelle manière ». Avec l’Ascendant, cela fait onze personnages.',
+    signsTitle: 'Les 12 signes et les 4 éléments',
+    signsLead: 'Il y a douze signes, répartis en quatre éléments — feu, terre, air et eau — qui forment la base de leur nature.',
+    howReadTitle: 'Comment lire ton résultat',
+    howReadLead: 'La planète dit « qui », le signe dit « de quelle manière ». Ensemble, cela donne une phrase comme celle-ci.',
+    whoLabel: 'Planète = qui',
+    howLabel: 'Signe = de quelle manière',
   },
   it: {
     cta: 'Inizia la tua diagnosi Hoshi-Kyara!',
@@ -85,6 +141,17 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     charTitle: (n) => `Com’è «${n}»?`,
     otherTitle: 'Altri Hoshi-Kyara',
     backToTop: '← Torna alla home di Hoshi-Kyara',
+    starsLink: 'I 10 pianeti e i 12 segni',
+    starsTitle: 'I 10 pianeti e i 12 segni',
+    starsLead: 'Il tuo segno solare, il tuo segno lunare e il gruppo di dieci pianeti che ti compone: ecco di cosa si occupa ognuno.',
+    planetsTitle: 'Gli astri che ti formano',
+    planetsLead: 'Dove si trovava ogni astro nell’istante della tua nascita. Il pianeta dice "chi", il segno dice "in che modo". Con l’Ascendente sono undici personaggi.',
+    signsTitle: 'I 12 segni e i 4 elementi',
+    signsLead: 'I segni sono dodici, divisi in quattro elementi — fuoco, terra, aria e acqua — che sono la base del loro carattere.',
+    howReadTitle: 'Come leggere il risultato',
+    howReadLead: 'Il pianeta dice "chi", il segno dice "in che modo". Insieme formano una frase come questa.',
+    whoLabel: 'Pianeta = chi',
+    howLabel: 'Segno = in che modo',
   },
   pt: {
     cta: 'Começar o diagnóstico Hoshi-Kyara!',
@@ -98,6 +165,17 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     charTitle: (n) => `Como é «${n}»?`,
     otherTitle: 'Outros Hoshi-Kyara',
     backToTop: '← Voltar ao início de Hoshi-Kyara',
+    starsLink: 'Sobre os 10 planetas e 12 signos',
+    starsTitle: 'Sobre os 10 planetas e 12 signos',
+    starsLead: 'O seu signo solar, o seu signo lunar e o grupo de dez planetas que compõe você: veja do que cada um cuida.',
+    planetsTitle: 'Os astros que formam você',
+    planetsLead: 'Onde cada astro estava no instante do seu nascimento. O planeta diz "quem" e o signo diz "de que jeito". Com o Ascendente, são onze personagens.',
+    signsTitle: 'Os 12 signos e os 4 elementos',
+    signsLead: 'São doze signos, divididos em quatro elementos — fogo, terra, ar e água — que formam a base da sua natureza.',
+    howReadTitle: 'Como ler o seu resultado',
+    howReadLead: 'O planeta diz "quem" e o signo diz "de que jeito". Juntando os dois, sai uma frase assim.',
+    whoLabel: 'Planeta = quem',
+    howLabel: 'Signo = de que jeito',
   },
   ko: {
     cta: '호시캐릭터 진단 시작하기!',
@@ -111,6 +189,17 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     charTitle: (n) => `「${n}」은 어떤 사람?`,
     otherTitle: '다른 호시캐릭터',
     backToTop: '← 호시캐릭터 진단 홈으로',
+    starsLink: '10행성과 12별자리 이야기',
+    starsTitle: '10행성과 12별자리 이야기',
+    starsLead: '진단 결과에 나오는 태양 별자리와 달 별자리, 그리고 당신을 이루는 10행성 파티. 각자 무엇을 담당하는지 정리했어요.',
+    planetsTitle: '당신을 이루는 별들',
+    planetsLead: '태어난 순간 각 별이 어느 별자리에 있었는지. 행성이 "누가"를, 별자리가 "어떤 식으로"를 나타내요. 상승궁까지 더해 모두 11캐릭터예요.',
+    signsTitle: '12별자리와 4원소',
+    signsLead: '별자리는 12가지. 불·흙·바람·물 네 원소로 나뉘며, 성질의 바탕이 돼요.',
+    howReadTitle: '결과를 읽는 법',
+    howReadLead: '행성이 "누가"를, 별자리가 "어떤 식으로"를 나타내요. 둘을 합치면 이런 한 문장이 돼요.',
+    whoLabel: '행성 = 누가',
+    howLabel: '별자리 = 어떤 식으로',
   },
 }
 

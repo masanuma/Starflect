@@ -8,14 +8,20 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import HoshiKyaraMascot from '../src/components/HoshiKyaraMascot'
 import BrandMascot from '../src/components/BrandMascot'
+import PlanetMascot, { MASCOT_COLOR } from '../src/components/PlanetMascot'
 import { setLang, getLang, LANGS } from '../src/lib/i18n'
 import type { Lang } from '../src/lib/i18n'
 import { ui, quoted } from '../src/lib/ui'
 // astro非依存の純データのみ参照(signs/startypes を読み込まない＝サーバーは astronomy-engine を読まない)
 import { STAR_TYPES, ELEMENT_LABEL, ELEMENT_WORD_L } from '../src/lib/starData'
 import type { StarType, Element } from '../src/lib/starData'
+import type { PlanetKey } from '../src/lib/types'
 import { PAGE_STRINGS, ELEMENT_ICON, ELEMENT_COLOR } from './pageStrings'
 import { SLUG, ELEMENT_ORDER } from './characters'
+import {
+  PLANET_ORDER, PLANET_SYMBOL, PLANET_NAME, PLANET_ROLE, PLANET_DOMAIN,
+  SIGN_NAMES, SIGN_SYMBOLS, SIGN_KEYWORDS, SIGN_ELEMENTS,
+} from '../src/lib/astroText'
 
 const ORIGIN = 'https://starflect.asanuma.works'
 export const CONTENT_LANGS: Lang[] = ['ja', 'en', 'es', 'fr', 'it', 'pt', 'ko']
@@ -25,6 +31,8 @@ const lpHref = (l: Lang) => (l === 'ja' ? '/' : `/${l}`)
 const charHref = (l: Lang, slug: string) => (l === 'ja' ? `/c/${slug}` : `/${l}/c/${slug}`)
 const lpUrl = (l: Lang) => ORIGIN + (l === 'ja' ? '/' : `/${l}`)
 const charUrl = (l: Lang, slug: string) => ORIGIN + (l === 'ja' ? `/c/${slug}` : `/${l}/c/${slug}`)
+const starsHref = (l: Lang) => (l === 'ja' ? '/stars' : `/${l}/stars`)
+const starsUrl = (l: Lang) => ORIGIN + starsHref(l)
 
 // signs/startypes と同じ挙動を純データで再実装(getLang() 参照。setLang(lang) 後に呼ぶ)
 const elementLabel = (el: Element): string => (ELEMENT_LABEL[getLang()] ?? ELEMENT_LABEL.ja)[el]
@@ -71,7 +79,7 @@ h1,h2,h3{font-family:'Zen Maru Gothic',sans-serif}
 .note{font-size:12px;color:var(--ink-sub);margin-top:12px}
 section{margin:36px 0}
 section h2{font-size:20px;font-weight:800;text-align:center;margin-bottom:8px}
-section .lead{text-align:center;color:var(--ink-sub);font-size:14px;margin-bottom:20px}
+section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:20px;line-height:1.9}
 .prose{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;font-size:15px}
 .prose p{margin-bottom:12px}.prose p:last-child{margin-bottom:0}
 .tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
@@ -101,7 +109,28 @@ section .lead{text-align:center;color:var(--ink-sub);font-size:14px;margin-botto
 .chero .av{width:150px;height:150px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center}
 .chero h1{font-size:30px;font-weight:900}
 .chero .cp{color:var(--ink-sub);font-size:15px;margin-top:6px}
+.chero .cp.left{text-align:left;line-height:1.9;margin-top:12px}
 .back{display:inline-block;margin:8px 0;font-size:13px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.pcard{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;border:1.5px solid;border-radius:16px;padding:14px 12px}
+.pav{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:2px}
+.pname{font-family:'Zen Maru Gothic';font-size:15px}
+.prole{font-size:12.5px;font-weight:700}
+.pdom{font-size:12px;color:var(--ink-sub);line-height:1.6}
+.egroup{border:1.5px solid;border-radius:18px;padding:14px 15px;margin-top:12px;background:var(--card)}
+.ehead{display:flex;align-items:center;gap:11px;margin-bottom:10px}
+.ehead b{font-family:'Zen Maru Gothic';font-size:15px;display:block}
+.edesc{font-size:12.5px;color:var(--ink-sub)}
+.schips{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.schip{background:#faf7ff;border:1px solid var(--line);border-radius:12px;padding:9px 8px;text-align:center}
+.schip b{font-family:'Zen Maru Gothic';font-size:13.5px;display:block;margin-bottom:2px}
+.schip span{font-size:10.5px;color:var(--ink-sub);line-height:1.5;display:block}
+.exline{text-align:center;margin-top:14px;font-size:15px;font-family:'Zen Maru Gothic';background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.ex-role{color:var(--pink-strong);font-weight:800}
+.ex-planet{font-weight:700}
+.ex-sign{color:var(--violet);font-weight:800}
+@media(max-width:380px){.schips{grid-template-columns:1fr 1fr}}
+.starslink{display:block;text-align:center;margin:8px 0 0;font-size:13.5px}
 .footer{text-align:center;color:var(--ink-sub);font-size:12px;padding:32px 0;border-top:1px solid var(--line);margin-top:40px;line-height:1.9}
 @media(max-width:400px){.tgrid{grid-template-columns:1fr}}
 `
@@ -110,6 +139,8 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const mascot = (sun: Element, moon: Element, size: number) =>
   renderToStaticMarkup(createElement(HoshiKyaraMascot, { sunElement: sun, moonElement: moon, size }))
 const brand = (size: number) => renderToStaticMarkup(createElement(BrandMascot, { size }))
+const planetMascot = (key: PlanetKey, size: number) =>
+  renderToStaticMarkup(createElement(PlanetMascot, { planetKey: key, size }))
 const elMark = (el: Element) =>
   `<span class="elmark" style="background:${ELEMENT_COLOR[el]}"><svg width="18" height="18" viewBox="0 0 24 24">${ELEMENT_ICON[el]}</svg></span>`
 
@@ -120,15 +151,17 @@ interface LayoutOpts {
   ogTitle: string
   ogImage: string
   body: string
-  kind: 'lp' | 'char'
+  kind: 'lp' | 'char' | 'stars'
   slug?: string
   redirectIfCompanion?: boolean
 }
 
 function layout(o: LayoutOpts): string {
-  const canonical = o.kind === 'lp' ? lpUrl(o.lang) : charUrl(o.lang, o.slug!)
-  const alt = (l: Lang) => (o.kind === 'lp' ? lpUrl(l) : charUrl(l, o.slug!))
-  const href = (l: Lang) => (o.kind === 'lp' ? lpHref(l) : charHref(l, o.slug!))
+  const urlOf = (l: Lang) => (o.kind === 'lp' ? lpUrl(l) : o.kind === 'stars' ? starsUrl(l) : charUrl(l, o.slug!))
+  const hrefOf = (l: Lang) => (o.kind === 'lp' ? lpHref(l) : o.kind === 'stars' ? starsHref(l) : charHref(l, o.slug!))
+  const canonical = urlOf(o.lang)
+  const alt = urlOf
+  const href = hrefOf
   const alternates =
     CONTENT_LANGS.map((l) => `<link rel="alternate" hreflang="${l}" href="${alt(l)}"/>`).join('') +
     `<link rel="alternate" hreflang="x-default" href="${alt('ja')}"/>`
@@ -212,6 +245,7 @@ export function renderLP(lang: Lang): string {
   <h2>${esc(P.howTo)}</h2>
   <div class="steps">${steps}</div>
   <div class="cta-block"><a class="cta" href="/app?lang=${lang}">${esc(P.cta)}</a></div>
+  <a class="starslink" href="${starsHref(lang)}">${esc(P.starsLink)} →</a>
 </section>
 
 <section class="faq">
@@ -258,6 +292,7 @@ export function renderCharPage(lang: Lang, slug: string): string | null {
 <div class="cta-block">
   <a class="cta" href="/app?lang=${lang}">${esc(P.cta)}</a>
   <p class="note">${esc(P.heroNote)}</p>
+  <a class="starslink" href="${starsHref(lang)}">${esc(P.starsLink)} →</a>
 </div>
 
 <section>
@@ -277,5 +312,101 @@ export function renderCharPage(lang: Lang, slug: string): string | null {
     body,
     kind: 'char',
     slug,
+  })
+}
+
+/** 10天体と12星座の説明ページ(/stars)。アプリで突然出てくる用語の受け皿 */
+export function renderStarsPage(lang: Lang): string {
+  setLang(lang)
+  const t = ui()
+  const P = PAGE_STRINGS[lang]
+  const nm = PLANET_NAME[lang] ?? PLANET_NAME.ja
+  const role = PLANET_ROLE[lang] ?? PLANET_ROLE.ja
+  const dom = PLANET_DOMAIN[lang] ?? PLANET_DOMAIN.ja
+  const signNames = SIGN_NAMES[lang] ?? SIGN_NAMES.ja
+  const signKw = SIGN_KEYWORDS[lang] ?? SIGN_KEYWORDS.ja
+
+  // 読み方の例: アプリのパーティ行と同じ組み立て(太陽 × しし座)を見せて、結果画面の読み方を教える
+  const exIdx = 4 // しし座
+  const ex = t.result.roleSign(role.sun, nm.sun, signNames[exIdx], false)
+  const example =
+    `<p class="exline">` +
+    `<span class="ex-role">${esc(PLANET_SYMBOL.sun)} ${esc(ex.role)}</span>${esc(ex.sep1)}` +
+    `<span class="ex-planet">${esc(ex.planetLabel)}</span>${esc(ex.sep2)}` +
+    `<span class="ex-sign">${esc(SIGN_SYMBOLS[exIdx])} ${esc(ex.sign)}</span></p>`
+
+  // 11天体はマスコット付きのカードで(アプリで会うキャラと同じ顔にする)
+  const planets = PLANET_ORDER.map((k) => {
+    const c = MASCOT_COLOR[k]
+    return (
+      `<div class="pcard" style="background:${c}12;border-color:${c}44">` +
+      `<span class="pav" style="background:${c}2e">${planetMascot(k, 52)}</span>` +
+      `<b class="pname">${esc(nm[k])}</b>` +
+      `<span class="prole" style="color:${c}">${esc(role[k])}</span>` +
+      `<span class="pdom">${esc(dom[k])}</span>` +
+      `</div>`
+    )
+  }).join('')
+
+  // 12星座はエレメントごとに3つずつまとめる(4×3の関係が一目で分かる)
+  const groups = ELEMENT_ORDER.map((el) => {
+    const chips = signNames
+      .map((n, i) => ({ n, i }))
+      .filter(({ i }) => SIGN_ELEMENTS[i] === el)
+      .map(
+        ({ n, i }) =>
+          `<div class="schip"><b>${esc(SIGN_SYMBOLS[i])} ${esc(n)}</b><span>${esc(signKw[i].join(' · '))}</span></div>`,
+      )
+      .join('')
+    return (
+      `<section class="egroup" style="border-color:${ELEMENT_COLOR[el]}55">` +
+      `<div class="ehead">${elMark(el)}<span><b>${esc(elementPhrase(el))}</b><span class="edesc">${esc(t.about.elements[el])}</span></span></div>` +
+      `<div class="schips">${chips}</div></section>`
+    )
+  }).join('')
+
+  const body = `
+<div class="chero">
+  <h1><span class="grad">${esc(P.starsTitle)}</span></h1>
+  <p class="cp left">${esc(P.starsLead)}</p>
+</div>
+
+<section>
+  <h2>${esc(P.howReadTitle)}</h2>
+  <p class="lead">${esc(P.howReadLead)}</p>
+  <div class="formula">
+    <div class="fbox"><div class="lb">${esc(P.whoLabel)}</div><div class="el">${planetMascot('sun', 44)}</div></div>
+    <div class="fbox"><div class="lb">${esc(P.howLabel)}</div><div class="el">${esc(SIGN_SYMBOLS[exIdx])}</div></div>
+  </div>
+  ${example}
+</section>
+
+<section>
+  <h2>${esc(P.planetsTitle)}</h2>
+  <p class="lead">${esc(P.planetsLead)}</p>
+  <div class="pgrid">${planets}</div>
+</section>
+
+<section>
+  <h2>${esc(P.signsTitle)}</h2>
+  <p class="lead">${esc(P.signsLead)}</p>
+  ${groups}
+</section>
+
+<div class="cta-block">
+  <a class="cta" href="/app?lang=${lang}">${esc(P.cta)}</a>
+  <p class="note">${esc(P.heroNote)}</p>
+</div>
+
+<a class="back" href="${lpHref(lang)}">${esc(P.backToTop)}</a>
+`
+  return layout({
+    lang,
+    title: `${P.starsTitle}｜${t.home.appTitle}`,
+    description: P.starsLead,
+    ogTitle: `${P.starsTitle}｜${t.home.appTitle}`,
+    ogImage: `${ORIGIN}/ogp/default.png`,
+    body,
+    kind: 'stars',
   })
 }

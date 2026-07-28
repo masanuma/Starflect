@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import express from 'express'
 import { createAiHandlers, createFeedbackHandler } from './handlers'
-import { renderLP, renderCharPage, CONTENT_LANGS } from './pages'
+import { renderLP, renderCharPage, renderStarsPage, CONTENT_LANGS } from './pages'
 import { CHAR_BY_SLUG } from './characters'
 import type { Lang } from '../src/lib/i18n'
 
@@ -35,9 +35,11 @@ try {
 
 // 静的ページはデータ固定なので起動時に一度だけ全言語ぶん生成してキャッシュする。
 const LP_HTML: Record<string, string> = {}
+const STARS_HTML: Record<string, string> = {}
 const CHAR_HTML: Record<string, Record<string, string>> = {}
 for (const lang of CONTENT_LANGS) {
   LP_HTML[lang] = renderLP(lang)
+  STARS_HTML[lang] = renderStarsPage(lang)
   CHAR_HTML[lang] = {}
   for (const slug of SLUGS) {
     const h = renderCharPage(lang, slug)
@@ -51,6 +53,7 @@ function sitemapXml(): string {
     urls.push(`  <url><loc>${loc}</loc><lastmod>2026-07-23</lastmod><priority>${prio}</priority></url>`)
   for (const lang of CONTENT_LANGS) {
     push(ORIGIN + (lang === 'ja' ? '/' : `/${lang}`), lang === 'ja' ? '1.0' : '0.9')
+    push(ORIGIN + (lang === 'ja' ? '/stars' : `/${lang}/stars`), '0.6')
     for (const slug of SLUGS) {
       push(ORIGIN + (lang === 'ja' ? `/c/${slug}` : `/${lang}/c/${slug}`), '0.7')
     }
@@ -108,12 +111,23 @@ app.get(['/app', '/app/'], (_req, res) => {
   else res.status(404).send('Not built')
 })
 
+// 10天体と12星座の説明ページ(ja)
+app.get('/stars', (_req, res) => sendHtml(res, STARS_HTML.ja))
+
 // 他言語の紹介LP( /<lang> )
 app.get('/:lang', (req, res, next) => {
   const l = req.params.lang
   if (l === 'ja') return res.redirect(301, '/')
   if (isLang(l) && NONJA.includes(l)) return sendHtml(res, LP_HTML[l])
   return next()
+})
+
+// 他言語の説明ページ( /<lang>/stars )
+app.get('/:lang/stars', (req, res) => {
+  const l = req.params.lang
+  if (l === 'ja') return res.redirect(301, '/stars')
+  if (isLang(l) && STARS_HTML[l]) return sendHtml(res, STARS_HTML[l])
+  return res.redirect(302, '/')
 })
 
 // 他言語のキャラ別ページ( /<lang>/c/<slug> )

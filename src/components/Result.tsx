@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ChartData, PlanetKey } from '../lib/types'
 import { synthesize } from '../lib/synthesis'
 import { starTypeOf, elementPhrase } from '../lib/startypes'
@@ -41,15 +41,20 @@ export default function Result({ data, onHome, onPair }: Props) {
     ? `${ELEMENT_SLUG[starType.sunElement]}_${ELEMENT_SLUG[starType.moonElement]}`
     : undefined
 
-  // リビール演出は「はじめての診断」だけ。情報を変更しての再診断や、動きが苦手な設定では出さない。
+  // 「はじめての診断」かどうか。リビール演出と「歩き方」案内は初回だけ出す。
   // (createCompanion より前＝レンダー中に判定する必要があるので useState の初期化で見る)
-  const [revealing, setRevealing] = useState(() => {
+  const [isFirst] = useState(() => {
     if (typeof window === 'undefined') return false
-    if (new URLSearchParams(window.location.search).has('reveal')) return true // 確認用の強制再生
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return false
+    if (new URLSearchParams(window.location.search).has('reveal')) return true // 確認用の強制表示
     return loadCompanion() === null
   })
+  // 動きが苦手な設定では演出を再生しない(案内は出す)
+  const [revealing, setRevealing] = useState(
+    () => isFirst && !(typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches),
+  )
   const [played, setPlayed] = useState(false)
+  // 「歩き方」案内から相談室へ運ぶ
+  const chatRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     track('diagnose_result', {
@@ -134,13 +139,34 @@ export default function Result({ data, onHome, onPair }: Props) {
         </section>
       )}
 
-      {starType && <ShareButtons starTypeName={quoted(starType.type.name)} starSlug={starSlug} />}
+      {/* 初回は情報量が多いので、この画面の歩き方と“いちばんのおすすめ”を先に示す */}
+      {isFirst && (
+        <section className="guide-card">
+          <p className="guide-title">✦ {t.result.guideTitle}</p>
+          <p className="guide-body">{t.result.guideBody(data.planets.length)}</p>
+          <button
+            className="guide-cta"
+            onClick={() => {
+              // 動きが苦手な設定のときは滑らせずに一気に運ぶ
+              const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+              chatRef.current?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+            }}
+          >
+            {t.result.guideCta} ↓
+          </button>
+        </section>
+      )}
 
+      {/* 「自分は何者か」を見てから人に見せる流れにする(パーティ→シェア) */}
       <PartyCard data={data} />
+
+      {starType && <ShareButtons starTypeName={quoted(starType.type.name)} starSlug={starSlug} />}
 
       <StarReading chart={data} />
 
-      <AiChat context={chatContext} storageKey={chatStorageKey(data)} chart={data} />
+      <div ref={chatRef}>
+        <AiChat context={chatContext} storageKey={chatStorageKey(data)} chart={data} />
+      </div>
 
       <Feedback page="result" starType={starSlug} chart={data} />
 

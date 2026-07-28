@@ -14,6 +14,12 @@ interface Props {
   chart: ChartData
   /** ほしキャラ名(括弧なしの生の名前。表示時に言語別の括弧を付ける) */
   starName: string
+  /**
+   * 宝箱の一覧を畳んでおく(相棒ホーム用)。
+   * 見出しと Lv の進捗だけ残すので「どこまで深まったか」は毎日目に入りつつ、
+   * 毎日は見ない宝箱一覧が一等地を占めなくなる。
+   */
+  collapsible?: boolean
 }
 
 interface ReportState {
@@ -28,12 +34,13 @@ interface ReportState {
  * 宝箱を開くと、AIが出生図×行動ログからその人だけの発見レポートを生成(初回のみ・以降キャッシュ)。
  * 減らない・罰しない。まだ実装していない宝箱は「準備中」。
  */
-export default function RewardMap({ signals, chart, starName }: Props) {
+export default function RewardMap({ signals, chart, starName, collapsible = false }: Props) {
   const t = useUI()
   const { lang } = useLang()
   const prog = mapProgress(signals)
   const [open, setOpen] = useState<string | null>(null)
   const [reports, setReports] = useState<Record<string, ReportState>>({})
+  const [expanded, setExpanded] = useState(!collapsible)
 
   // 発見レポートに渡す占星術データ土台(全期間トランジット込み)。チャートが変わらない限り作り直さない
   const context = useMemo(() => buildChatContext(chart), [chart])
@@ -85,6 +92,14 @@ export default function RewardMap({ signals, chart, starName }: Props) {
         )}
       </p>
 
+      {collapsible && (
+        <button className={`map-toggle${expanded ? ' open' : ''}`} onClick={() => setExpanded((v) => !v)}>
+          {expanded ? t.map.collapseMap : t.map.expandMap}
+        </button>
+      )}
+
+      {expanded && (
+      <>
       <p className="map-earn">{t.map.earnHint}</p>
 
       <ol className="map-track">
@@ -144,6 +159,8 @@ export default function RewardMap({ signals, chart, starName }: Props) {
           )
         })}
       </ol>
+      </>
+      )}
     </section>
   )
 }

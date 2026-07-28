@@ -119,10 +119,8 @@ export default function Companion({ state, onHome, onPair }: Props) {
       <p className="companion-greeting">{greeting}</p>
       <h2 className="companion-name">{starType ? quoted(starType.type.name) : ''}</h2>
 
-      <RewardMap signals={signals} chart={state.chart} starName={starType?.type.name ?? ''} />
-
-      <PartyCard data={state.chart} collapsedByDefault />
-
+      {/* 毎日ひらく理由＝今日の運勢。ここを一等地に置く。
+          地図やパーティは「たまに見る」ものなので、相談室・振り返りより下へ送る */}
       <StarReading chart={state.chart} />
 
       <AiChat
@@ -199,6 +197,11 @@ export default function Companion({ state, onHome, onPair }: Props) {
           )}
         </section>
       )}
+
+      {/* 進み具合(Lv)は見出しに残しつつ、宝箱一覧は畳んでおく */}
+      <RewardMap signals={signals} chart={state.chart} starName={starType?.type.name ?? ''} collapsible />
+
+      <PartyCard data={state.chart} collapsedByDefault />
 
       <div className="result-actions">
         <button className="ghost" onClick={onPair}>

@@ -6,7 +6,7 @@ import { getPlanet, signMannerOf } from '../lib/planets'
 import { starTypeOf } from '../lib/startypes'
 import PlanetMascot, { MASCOT_COLOR } from './PlanetMascot'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
-import { useLang } from '../lib/i18n'
+import { getLang } from '../lib/i18n'
 import { useUI } from '../lib/ui'
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
  * - collapsedByDefault(相棒ホーム): 見出しだけで畳んでおき、タップで全員を開く。
  */
 export default function PartyCard({ data, collapsedByDefault = false }: Props) {
-  const { lang } = useLang()
+  // 言語切替の再描画は useUI() が内部で useLang() を呼ぶことで担保される
   const t = useUI()
 
   const partyPlanets = data.planets
@@ -97,7 +97,7 @@ export default function PartyCard({ data, collapsedByDefault = false }: Props) {
                   </div>
                   <div>
                     <dt>{t.result.quirk}</dt>
-                    <dd>{lang === 'ja' ? `「${signMannerOf(p.lon)}」` : signMannerOf(p.lon)}</dd>
+                    <dd>{signMannerOf(p.lon)}</dd>
                   </div>
                 </dl>
               </div>
@@ -123,6 +123,11 @@ export default function PartyCard({ data, collapsedByDefault = false }: Props) {
           </button>
         )
       )}
+
+      {/* 天体や星座の用語が急に出てくるので、説明ページ(静的・別ページ)へ逃がす */}
+      <a className="party-learn" href={`${getLang() === 'ja' ? '' : `/${getLang()}`}/stars`}>
+        {t.result.partyLearn} →
+      </a>
     </section>
   )
 }

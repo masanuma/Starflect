@@ -130,12 +130,18 @@ export interface UIStrings {
     revealReading: string
     /** リビール演出でキャラ名の直前に出る一言 */
     revealIntro: string
+    /** 初回だけ出す「この画面の歩き方」案内。見出し・本文(パーティ人数)・相談室へ飛ぶボタン */
+    guideTitle: string
+    guideBody: (partyCount: number) => string
+    guideCta: string
     partyTitle: (n: number) => string
     partySub: string
     partyMore: (hidden: number) => string
     partyLess: string
     /** 完全に畳んだ状態から全員を開くボタン(相棒ホーム用) */
     partyReveal: (total: number) => string
+    /** パーティカードから /stars(10天体と12星座の説明)へ誘導するリンク */
+    partyLearn: string
     /** 「主人公の太陽星座は牡牛座」を色分け表示するためのパーツ。isAsc は上昇星座(名前に既に星座を含む)判定 */
     roleSign: (role: string, planet: string, sign: string, isAsc: boolean) => RoleSignParts
     domain: string
@@ -256,6 +262,10 @@ export interface UIStrings {
     allDone: string
     open: string
     close: string
+    /** 相棒ホームで地図を畳んでいるときに出す、宝箱一覧をひらくボタン */
+    expandMap: string
+    /** 開いた地図を畳むボタン */
+    collapseMap: string
     lockedHint: (n: number) => string
     soonNote: string
     generating: string
@@ -390,11 +400,15 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'この組み合わせで、全16キャラ',
       revealReading: '星を読んでいます…',
       revealIntro: 'あなたのほしキャラは',
+      guideTitle: 'この先の楽しみ方',
+      guideBody: (n) => `ほしキャラができました。このあと、あなたを作る${n}人のパーティ・今日の運勢と続きます。いちばんのおすすめは「ほしキャラ相談室」。あなたの星をもとに、恋愛も仕事もこの先の運勢も答えてくれます。`,
+      guideCta: '相談室で話しかける',
       partyTitle: (n) => `ほしキャラを構成する、${n}人のパーティ`,
       partySub: '生まれた瞬間の星たちが、あなたをかたちづくるキャラになりました。それぞれの担当と特徴です。',
       partyMore: (hidden) => `のこりの${hidden}キャラも見てみて！`,
       partyLess: '畳む',
       partyReveal: (total) => `${total}人のパーティを見る`,
+      partyLearn: '10天体と12星座って？',
       domain: '担当',
       roleSign: (role, planet, sign, isAsc) => ({ role, sep1: 'の', planetLabel: isAsc ? planet : `${planet}星座`, sep2: 'は', sign }),
       quirk: '特徴',
@@ -523,6 +537,8 @@ const UI: Record<Lang, UIStrings> = {
       allDone: 'すべての宝箱をひらきました。ここまで、よく続けましたね。',
       open: '見る',
       close: '閉じる',
+      expandMap: '宝箱の地図をひらく',
+      collapseMap: '地図を畳む',
       lockedHint: (n) => `あと ${n} でひらきます`,
       soonNote: 'この発見はいま準備中です。もうすこしで会えます。',
       generating: 'あなただけの発見を、いま読んでいます…',
@@ -663,11 +679,15 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'One of 16 characters',
       revealReading: 'Reading the stars…',
       revealIntro: 'Your Hoshi-Kyara is',
+      guideTitle: 'What comes next',
+      guideBody: (n) => `Your Hoshi-Kyara is ready. Below you'll find the party of ${n} that makes you who you are, plus today's reading. The best part is the Hoshi-Kyara consultation room — it answers anything about love, work or what lies ahead, based on your own stars.`,
+      guideCta: 'Talk in the consultation room',
       partyTitle: (n) => `Your Hoshi-Kyara’s party of ${n}`,
       partySub: 'The stars at the moment you were born became the characters that make you who you are—here’s what each one handles, and what it’s like.',
       partyMore: (hidden) => `See your other ${hidden} characters too!`,
       partyLess: 'Collapse',
       partyReveal: (total) => `See your party of ${total}`,
+      partyLearn: 'What are the 10 planets and 12 signs?',
       domain: 'Domain',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' in ', sign }),
       quirk: 'Trait',
@@ -796,6 +816,8 @@ const UI: Record<Lang, UIStrings> = {
       allDone: 'You’ve opened every chest. What a journey.',
       open: 'Open',
       close: 'Close',
+      expandMap: 'Open the treasure map',
+      collapseMap: 'Collapse the map',
       lockedHint: (n) => `${n} more to unlock`,
       soonNote: 'This discovery is still being prepared. Coming very soon.',
       generating: 'Reading a discovery just for you…',
@@ -936,11 +958,15 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'Uno de 16 personajes',
       revealReading: 'Leyendo las estrellas…',
       revealIntro: 'Tu Hoshi-Kyara es',
+      guideTitle: 'Lo que viene ahora',
+      guideBody: (n) => `Tu Hoshi-Kyara ya está aquí. Más abajo verás el grupo de ${n} que te compone y la lectura de hoy. Lo mejor es la sala de consulta: responde sobre amor, trabajo o lo que viene, a partir de tus propios astros.`,
+      guideCta: 'Hablar en la sala de consulta',
       partyTitle: (n) => `El grupo de ${n} tras tu Hoshi-Kyara`,
       partySub: 'Los astros del momento de tu nacimiento se volvieron los personajes que te componen: de qué se encarga cada uno y cómo es.',
       partyMore: (hidden) => `¡Mira también tus otros ${hidden} personajes!`,
       partyLess: 'Contraer',
       partyReveal: (total) => `Ver tu grupo de ${total}`,
+      partyLearn: '¿Qué son los 10 planetas y 12 signos?',
       domain: 'Área',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' en ', sign }),
       quirk: 'Rasgo',
@@ -1069,6 +1095,8 @@ const UI: Record<Lang, UIStrings> = {
       allDone: 'Has abierto todos los cofres. Qué viaje.',
       open: 'Ver',
       close: 'Cerrar',
+      expandMap: 'Abrir el mapa del tesoro',
+      collapseMap: 'Contraer el mapa',
       lockedHint: (n) => `${n} más para abrir`,
       soonNote: 'Este descubrimiento aún se está preparando. Llega muy pronto.',
       generating: 'Estoy leyendo un descubrimiento solo para ti…',
@@ -1209,11 +1237,15 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'L’un des 16 personnages',
       revealReading: 'Lecture des étoiles…',
       revealIntro: 'Ton Hoshi-Kyara est',
+      guideTitle: 'La suite',
+      guideBody: (n) => `Ton Hoshi-Kyara est né. Plus bas, tu trouveras l'équipe de ${n} qui te compose et la lecture du jour. Le meilleur, c'est le salon de consultation : il répond sur l'amour, le travail ou la suite, à partir de tes propres astres.`,
+      guideCta: 'Discuter au salon',
       partyTitle: (n) => `L’équipe de ${n} derrière ton Hoshi-Kyara`,
       partySub: 'Les astres de l’instant de ta naissance sont devenus les personnages qui te composent : ce dont chacun s’occupe et son caractère.',
       partyMore: (hidden) => `Découvre aussi tes ${hidden} autres personnages !`,
       partyLess: 'Réduire',
       partyReveal: (total) => `Voir ton équipe de ${total}`,
+      partyLearn: 'Les 10 planètes et 12 signes, c’est quoi ?',
       domain: 'Domaine',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' en ', sign }),
       quirk: 'Trait',
@@ -1342,6 +1374,8 @@ const UI: Record<Lang, UIStrings> = {
       allDone: 'Tu as ouvert tous les coffres. Quel parcours.',
       open: 'Voir',
       close: 'Fermer',
+      expandMap: 'Ouvrir la carte au trésor',
+      collapseMap: 'Réduire la carte',
       lockedHint: (n) => `encore ${n} pour ouvrir`,
       soonNote: 'Cette découverte est en préparation. Elle arrive très bientôt.',
       generating: 'Je lis une découverte rien que pour toi…',
@@ -1482,11 +1516,15 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'Uno dei 16 personaggi',
       revealReading: 'Sto leggendo le stelle…',
       revealIntro: 'Il tuo Hoshi-Kyara è',
+      guideTitle: 'Cosa viene dopo',
+      guideBody: (n) => `Il tuo Hoshi-Kyara è nato. Più sotto trovi il gruppo di ${n} che ti compone e la lettura di oggi. Il meglio è la sala consulti: risponde su amore, lavoro o ciò che verrà, partendo dai tuoi astri.`,
+      guideCta: 'Parla nella sala consulti',
       partyTitle: (n) => `Il gruppo di ${n} dietro il tuo Hoshi-Kyara`,
       partySub: 'Gli astri dell’istante della tua nascita sono diventati i personaggi che ti compongono: di cosa si occupa ognuno e com’è fatto.',
       partyMore: (hidden) => `Scopri anche gli altri tuoi ${hidden} personaggi!`,
       partyLess: 'Comprimi',
       partyReveal: (total) => `Vedi il tuo gruppo di ${total}`,
+      partyLearn: 'Cosa sono i 10 pianeti e i 12 segni?',
       domain: 'Ambito',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' in ', sign }),
       quirk: 'Tratto',
@@ -1615,6 +1653,8 @@ const UI: Record<Lang, UIStrings> = {
       allDone: 'Hai aperto tutti gli scrigni. Che viaggio.',
       open: 'Vedi',
       close: 'Chiudi',
+      expandMap: 'Apri la mappa del tesoro',
+      collapseMap: 'Comprimi la mappa',
       lockedHint: (n) => `ancora ${n} per aprire`,
       soonNote: 'Questa scoperta è in preparazione. Arriva prestissimo.',
       generating: 'Sto leggendo una scoperta solo per te…',
@@ -1755,11 +1795,15 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: 'Um dos 16 personagens',
       revealReading: 'Lendo as estrelas…',
       revealIntro: 'O seu Hoshi-Kyara é',
+      guideTitle: 'O que vem a seguir',
+      guideBody: (n) => `O seu Hoshi-Kyara nasceu. Abaixo você encontra o grupo de ${n} que compõe você e a leitura de hoje. O melhor é a sala de consulta: responde sobre amor, trabalho ou o que vem pela frente, a partir dos seus astros.`,
+      guideCta: 'Conversar na sala de consulta',
       partyTitle: (n) => `O grupo de ${n} por trás do seu Hoshi-Kyara`,
       partySub: 'Os astros do instante do seu nascimento viraram os personagens que compõem você: do que cada um cuida e como ele é.',
       partyMore: (hidden) => `Veja também os seus outros ${hidden} personagens!`,
       partyLess: 'Recolher',
       partyReveal: (total) => `Ver o seu grupo de ${total}`,
+      partyLearn: 'O que são os 10 planetas e 12 signos?',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' em ', sign }),
       domain: 'Área',
       quirk: 'Traço',
@@ -1888,6 +1932,8 @@ const UI: Record<Lang, UIStrings> = {
       allDone: 'Você abriu todos os baús. Que jornada.',
       open: 'Ver',
       close: 'Fechar',
+      expandMap: 'Abrir o mapa do tesouro',
+      collapseMap: 'Recolher o mapa',
       lockedHint: (n) => `mais ${n} para abrir`,
       soonNote: 'Esta descoberta ainda está sendo preparada. Chega muito em breve.',
       generating: 'Estou lendo uma descoberta só para você…',
@@ -2028,11 +2074,15 @@ const UI: Record<Lang, UIStrings> = {
       typeCount: '이 조합으로, 모두 16캐릭터',
       revealReading: '별을 읽고 있어요…',
       revealIntro: '당신의 호시캐릭터는',
+      guideTitle: '이다음 즐기는 법',
+      guideBody: (n) => `호시캐릭터가 완성됐어요. 아래에는 당신을 이루는 ${n}명의 파티와 오늘의 운세가 이어져요. 가장 추천하는 건 「호시캐릭터 상담실」. 당신의 별을 바탕으로 연애도 일도 앞으로의 운세도 답해 줘요.`,
+      guideCta: '상담실에서 말 걸기',
       partyTitle: (n) => `호시캐릭터를 이루는 ${n}명의 파티`,
       partySub: '태어난 순간의 별들이 당신을 이루는 캐릭터가 되었어요. 각자의 담당과 특징이에요.',
       partyMore: (hidden) => `나머지 ${hidden} 캐릭터도 봐 봐요!`,
       partyLess: '접기',
       partyReveal: (total) => `${total}명의 파티 보기`,
+      partyLearn: '10행성과 12별자리란?',
       domain: '담당',
       roleSign: (role, planet, sign, isAsc) => ({ role, sep1: '의 ', planetLabel: isAsc ? planet : `${planet} 별자리`, sep2: isAsc ? '은 ' : '는 ', sign }),
       quirk: '특징',
@@ -2161,6 +2211,8 @@ const UI: Record<Lang, UIStrings> = {
       allDone: '모든 보물상자를 열었어요. 여기까지 정말 잘 이어왔네요.',
       open: '보기',
       close: '닫기',
+      expandMap: '보물 지도 열기',
+      collapseMap: '지도 접기',
       lockedHint: (n) => `${n} 더 모으면 열림`,
       soonNote: '이 발견은 지금 준비 중이에요. 곧 만나요.',
       generating: '당신만을 위한 발견을 지금 읽고 있어요…',
