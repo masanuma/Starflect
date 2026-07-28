@@ -124,6 +124,7 @@ section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:
 .sunrole{font-size:13.5px;font-weight:800}
 .sundom{font-size:13px;color:var(--ink-sub)}
 .sunnote{font-size:12.5px;color:var(--ink-sub);line-height:1.8;margin-top:6px;border-top:1px dashed var(--line);padding-top:8px}
+.pairnote{font-size:13px;color:var(--ink-sub);line-height:1.9;text-align:left;margin-top:10px}
 .pgroup{margin-top:26px}
 .pgroup h3{font-family:'Zen Maru Gothic';font-size:17px;font-weight:800;margin-bottom:6px}
 .glead{font-size:13.5px;color:var(--ink-sub);line-height:1.9;text-align:left}
@@ -337,7 +338,7 @@ export function renderStarsPage(lang: Lang): string {
   const signNames = SIGN_NAMES[lang] ?? SIGN_NAMES.ja
   const signKw = SIGN_KEYWORDS[lang] ?? SIGN_KEYWORDS.ja
 
-  // 読み方の例: アプリのかけらぼし行と同じ組み立て(太陽 × しし座)を見せて、結果画面の読み方を教える
+  // 読み方の例: アプリの星の行と同じ組み立て(太陽 × しし座)を見せて、結果画面の読み方を教える
   const exIdx = 4 // しし座
   const ex = t.result.roleSign(role.sun, nm.sun, signNames[exIdx], false)
   const example =
@@ -359,19 +360,27 @@ export function renderStarsPage(lang: Lang): string {
     )
   }
 
-  // 太陽は誰もが知っている入口なので単独で先頭に置く
-  const sunColor = MASCOT_COLOR.sun
-  const sunBlock =
-    `<div class="suncard" style="background:${sunColor}14;border-color:${sunColor}55">` +
-    `<span class="sunav" style="background:${sunColor}2e">${planetMascot('sun', 84)}</span>` +
-    `<div class="sunbody"><b class="sunname">${esc(PLANET_SYMBOL.sun)} ${esc(nm.sun)}</b>` +
-    `<span class="sunrole" style="color:${sunColor}">${esc(role.sun)}</span>` +
-    `<span class="sundom">${esc(dom.sun)}</span>` +
-    `<span class="sunnote">${esc(P.sunNote)}</span></div></div>`
+  // 太陽と月はほしキャラの生成理由なので、同じ大きさの横並びカードで対に見せる
+  const bigCard = (k: PlanetKey, note?: string) => {
+    const c = MASCOT_COLOR[k]
+    return (
+      `<div class="suncard" style="background:${c}14;border-color:${c}55">` +
+      `<span class="sunav" style="background:${c}2e">${planetMascot(k, 84)}</span>` +
+      `<div class="sunbody"><b class="sunname">${esc(PLANET_SYMBOL[k])} ${esc(nm[k])}</b>` +
+      `<span class="sunrole" style="color:${c}">${esc(role[k])}</span>` +
+      `<span class="sundom">${esc(dom[k])}</span>` +
+      (note ? `<span class="sunnote">${esc(note)}</span>` : '') +
+      `</div></div>`
+    )
+  }
+  // 太陽は誰もが知っている入口なので先頭に置く
+  const sunBlock = bigCard('sun', P.sunNote)
+  // 太陽×月＝ほしキャラの生成理由。ここまでを先に見せると「よくある12星座占い」との違いが伝わる
+  const pairBlock = bigCard('moon') + `<p class="pairnote">${esc(t.result.partyPairNote)}</p>`
 
   // 自分 → 周り → 時代 とズームアウトする3グループ(公転の速さが分類の根拠)
   const GROUPS: { title: string; lead: string; keys: PlanetKey[]; note?: string }[] = [
-    { title: t.result.partyGroup1, lead: P.g1Lead, keys: ['moon', 'asc', 'mercury', 'venus', 'mars'], note: P.ascNote },
+    { title: t.result.partyGroup1, lead: P.g1Lead, keys: ['asc', 'mercury', 'venus', 'mars'], note: P.ascNote },
     { title: t.result.partyGroup2, lead: P.g2Lead, keys: ['jupiter', 'saturn'] },
     { title: t.result.partyGroup3, lead: P.g3Lead, keys: ['uranus', 'neptune', 'pluto'] },
   ]
@@ -420,6 +429,7 @@ export function renderStarsPage(lang: Lang): string {
   <h2>${esc(P.planetsTitle)}</h2>
   <p class="lead">${esc(P.planetsLead)}</p>
   ${sunBlock}
+  ${pairBlock}
   ${planetGroups}
 </section>
 

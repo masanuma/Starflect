@@ -34,7 +34,7 @@ export interface Starter {
   q: string
 }
 
-/** かけらぼし行の見出し「主人公 の 太陽星座 は 牡牛座」を色分け・強調するためのパーツ */
+/** 星の行の見出し「主人公 の 太陽星座 は 牡牛座」を色分け・強調するためのパーツ */
 export interface RoleSignParts {
   role: string
   sep1: string
@@ -130,7 +130,7 @@ export interface UIStrings {
     revealReading: string
     /** リビール演出でキャラ名の直前に出る一言 */
     revealIntro: string
-    /** 初回だけ出す「この画面の歩き方」案内。見出し・本文(かけらぼしの数)・相談室へ飛ぶボタン */
+    /** 初回だけ出す「この画面の歩き方」案内。見出し・本文(星の数)・相談室へ飛ぶボタン */
     guideTitle: string
     guideBody: (partyCount: number) => string
     guideCta: string
@@ -140,11 +140,15 @@ export interface UIStrings {
     partyLess: string
     /** 完全に畳んだ状態から全員を開くボタン(相棒ホーム用) */
     partyReveal: (total: number) => string
-    /** かけらぼしの分類(自分→周り→時代)。アプリと説明ページ /stars で共有する */
+    /** 星の分類(自分→周り→時代)。アプリと説明ページ /stars で共有する */
+    /** 太陽×月＝ほしキャラの生成理由。なじみのある太陽星座から入り、混乱を減らす */
+    partyPairNote: string
     partyGroup1: string
     partyGroup2: string
     partyGroup3: string
-    /** かけらぼしカードから /stars(10天体と12星座の説明)へ誘導するリンク */
+    /** グループ行に出す星の数(例: 5つの星) */
+    partyGroupCount: (n: number) => string
+    /** 星のカードから /stars(10天体と12星座の説明)へ誘導するリンク */
     partyLearn: string
     /** 「主人公の太陽星座は牡牛座」を色分け表示するためのパーツ。isAsc は上昇星座(名前に既に星座を含む)判定 */
     roleSign: (role: string, planet: string, sign: string, isAsc: boolean) => RoleSignParts
@@ -171,6 +175,9 @@ export interface UIStrings {
     breakdownSub: string
     todayTitle: (period: string) => string
     todaySub: (skyNote: string) => string
+    /** 先の期間は出さず、相棒に聞いてもらう(ソロの運勢カードと同じ方針) */
+    askAheadTitle: string
+    askAhead: { label: string; q: string }[]
     upsell: string
     retry: string
     home: string
@@ -249,6 +256,9 @@ export interface UIStrings {
     cautionLabel: string
     readsTitle: (name: string, period: string) => string
     readingHeading: string
+    /** 運勢は今日だけ出し、先の期間は相棒に聞いてもらう(毎日ひらく理由とAI利用を両取り) */
+    askAheadTitle: string
+    askAhead: { label: string; q: string }[]
     readsIntro: (name: string) => string
     readingVoice: string
     otherPerson: string
@@ -306,7 +316,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'ほしキャラ診断',
       tagline1: 'あなたはどの「ほしキャラ」?',
-      tagline2: '生まれた瞬間の星の配置でわかる、16キャラ×本格星占い。',
+      tagline2: '太陽星座だけじゃない。10天体で読む、あなただけの16キャラ占い。',
       greetNew: 'はじめまして、ほしキャラ診断です。',
       greetBack: 'おかえりなさい。',
       aboutLink: 'ほしキャラとは？',
@@ -353,6 +363,7 @@ const UI: Record<Lang, UIStrings> = {
         '「ほしキャラ」は、あなたが生まれた瞬間の星の配置から生まれる、あなただけのキャラクターです。',
         '雑誌の12星座占いが使う太陽星座(表の顔)に、月星座(心の中)を掛け合わせることで、「外から見たあなた」と「内側のあなた」の両方を映し出します。',
         '星座は4つのエレメント(火・地・風・水)に分けられます。太陽のエレメント4種 × 月のエレメント4種 = 全16種類。あなたはそのどれか1つです。',
+        '診断では、その裏で水星・金星・火星…と全10天体まで読んでいます。むずかしい話は表に出しません。ぜんぶ踏まえたうえで、あなたのほしキャラがふつうの言葉で話します。',
       ],
       howTitle: '16キャラの決まり方',
       outer: '表の顔',
@@ -405,16 +416,18 @@ const UI: Record<Lang, UIStrings> = {
       revealReading: '星を読んでいます…',
       revealIntro: 'あなたのほしキャラは',
       guideTitle: 'この先の楽しみ方',
-      guideBody: (n) => `ほしキャラができました。このあと、あなたをかたちづくる${n}のかけらぼし・今日の運勢と続きます。いちばんのおすすめは「ほしキャラ相談室」。あなたの星をもとに、恋愛も仕事もこの先の運勢も答えてくれます。`,
+      guideBody: (n) => `ほしキャラができました。このあと、あなたをかたちづくる${n}の星・今日の運勢と続きます。いちばんのおすすめは「ほしキャラ相談室」。あなたの星をもとに、恋愛も仕事もこの先の運勢も答えてくれます。`,
       guideCta: '相談室で話しかける',
-      partyTitle: (n) => `あなたをかたちづくる、${n}のかけらぼし`,
-      partySub: '生まれた瞬間の星たちが、あなたをかたちづくるかけらぼしになりました。それぞれの担当と特徴です。',
+      partyTitle: (n) => `あなたをかたちづくる、${n}の星`,
+      partySub: 'ほしキャラの精度のもとになっている、生まれた瞬間の星の配置です。気になる人だけ、のぞいてみてください。',
       partyMore: (hidden) => `のこりの${hidden}つも見てみて！`,
       partyLess: '畳む',
-      partyReveal: (total) => `${total}のかけらぼしを見る`,
-      partyGroup1: '毎日のあなた担当',
-      partyGroup2: '人づきあい担当',
-      partyGroup3: '時代まるごと担当',
+      partyReveal: (total) => `あなたの${total}の星をくわしく見る`,
+      partyPairNote: '雑誌やテレビでいう「あなたの星座」は、いちばん上の太陽のこと。この太陽（表の顔）と月（心）の組み合わせで、あなたのほしキャラが決まりました。',
+      partyGroup1: '自分のこと',
+      partyGroup2: '人とのこと',
+      partyGroup3: '時代のこと',
+      partyGroupCount: (n) => `${n}つの星`,
       partyLearn: '10天体と12星座って？',
       domain: '担当',
       roleSign: (role, planet, sign, isAsc) => ({ role, sep1: 'の', planetLabel: isAsc ? planet : `${planet}星座`, sep2: 'は', sign }),
@@ -439,17 +452,19 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: '太陽(表の顔)と月(心)、4つの組み合わせから',
       todayTitle: (period) => `${period}のふたり`,
       todaySub: (skyNote) => `${skyNote} — その星がふたりに吹かせる風は?`,
+      askAheadTitle: 'この先のふたりが気になったら、聞いてみて',
+      askAhead: [{ label: '明日は？', q: '明日のふたりはどんな感じ？' }, { label: '今週は？', q: '今週のふたりはどんな流れ？' }, { label: '来月は？', q: '来月のふたりはどんな時期になりそう？' }],
       upsell: '生まれた時刻が分かると月星座の精度が上がり、相性の判定もより正確になります(現在は正午で近似しています)。',
       retry: '条件を変えて占う',
       home: 'モード選択に戻る',
     },
     chat: {
       title: 'ほしキャラ相談室',
-      sub: 'あなたのほしキャラがなんでも相談にのります',
+      sub: 'あなたの星を全部知っている、あなただけの相談相手',
       historyCount: (n) => `これまでの相談 ${n}件`,
       hide: '非表示にする',
       show: '表示する',
-      intro: '気になることを聞いてみてください。恋愛・仕事・性格・これからの運勢——あなたの星の配置といまの星回りをもとにお答えします。',
+      intro: '生まれた瞬間の星ぜんぶと、いまの星の巡り。そのすべてを踏まえて、あなただけに答えます。恋愛・仕事・性格・これからのこと——なんでも聞いてみてください。',
       inputPlaceholder: 'メッセージを入力…',
       note: '送信するとあなたのほしキャラのデータがAIに送られます。',
       clear: '会話を消す',
@@ -526,7 +541,9 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: '追い風',
       cautionLabel: '注意',
       readsTitle: (name, period) => `${name}が読む、${period}`,
-      readingHeading: 'ほしキャラが読む、運勢',
+      readingHeading: 'ほしキャラが読む、今日の運勢',
+      askAheadTitle: 'この先が気になったら、聞いてみて',
+      askAhead: [{ label: '明日は？', q: '明日はどんな一日になりそう？' }, { label: '今週は？', q: '今週はどんな流れ？' }, { label: '来月は？', q: '来月はどんな時期になりそう？' }],
       readsIntro: (name) => `あなたのほしキャラ「${name}」です。今の星の巡りを読みました。`,
       readingVoice: '星の巡り、見ておいたよ。',
       otherPerson: '別の人を占う',
@@ -554,7 +571,7 @@ const UI: Record<Lang, UIStrings> = {
       tiers: {
         birth: { name: 'ほしキャラ誕生', teaser: '太陽と月から生まれた、あなたのほしキャラ。ここが物語の出発点。' },
         moonBack: { name: '月星座の裏側', teaser: '表の顔(太陽)とは別の、安心しているときの素のあなた。' },
-        partyDeep: { name: 'かけらぼしの深掘り', teaser: '10の星たちの、もう一歩踏み込んだ役割と読み。' },
+        partyDeep: { name: 'あなたの星、もっと深く', teaser: '10の星たちの、もう一歩踏み込んだ役割と読み。' },
         moodTrend: { name: '気分のクセ', teaser: '記録がたまると見えてくる、あなたが揺れやすい曜日と場面。' },
         hiddenSelf: { name: '隠れた自分レポート', teaser: '本来の星(出生図)と、実際の毎日とのギャップ。いちばんの発見。' },
         trueBuddy: { name: 'ほんとうの相棒', teaser: 'あなたのすべてを踏まえて話す、ほしキャラの最終形。' },
@@ -588,7 +605,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Which “Hoshi-Kyara” (star character) are you?',
-      tagline2: '16 characters × real astrology, from the sky at the moment you were born.',
+      tagline2: 'Not just your Sun sign. We read all 10 planets — so it actually fits you.',
       greetNew: 'Hi, welcome to Hoshi-Kyara.',
       greetBack: 'Welcome back.',
       aboutLink: 'What is Hoshi-Kyara?',
@@ -635,6 +652,7 @@ const UI: Record<Lang, UIStrings> = {
         '“Hoshi-Kyara” is your very own character, born from the arrangement of the stars at the moment you were born.',
         'On top of the Sun sign (your outer face) used by magazine horoscopes, we blend in the Moon sign (your inner heart) to reflect both “you as others see you” and “you on the inside.”',
         'The zodiac signs fall into four elements (Fire, Earth, Air, Water). Four Sun elements × four Moon elements = 16 characters in all. You are exactly one of them.',
+        'Behind the scenes we also read Mercury, Venus, Mars — all ten planets. None of that jargon reaches you. Your Hoshi-Kyara takes it all in and simply talks to you in everyday words.',
       ],
       howTitle: 'How the 16 are decided',
       outer: 'Outer face',
@@ -694,9 +712,11 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `See your other ${hidden} characters too!`,
       partyLess: 'Collapse',
       partyReveal: (total) => `See the ${total} stars that shape you`,
-      partyGroup1: 'In charge of everyday you',
-      partyGroup2: 'In charge of people',
-      partyGroup3: 'In charge of a whole era',
+      partyPairNote: 'When a horoscope says "your sign", it means the Sun at the top. Your Hoshi-Kyara comes from this Sun (your outer face) combined with the Moon (your heart).',
+      partyGroup1: 'About you',
+      partyGroup2: 'About others',
+      partyGroup3: 'About your era',
+      partyGroupCount: (n) => `${n} stars`,
       partyLearn: 'What are the 10 planets and 12 signs?',
       domain: 'Domain',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' in ', sign }),
@@ -721,17 +741,19 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: 'From four combinations of Sun (outer face) and Moon (heart)',
       todayTitle: (period) => `The two of you: ${period}`,
       todaySub: (skyNote) => `${skyNote} — what wind does that stir up for you two?`,
+      askAheadTitle: 'Curious about the two of you ahead? Just ask.',
+      askAhead: [{ label: 'Tomorrow?', q: 'What are the two of us like tomorrow?' }, { label: 'This week?', q: 'How is this week looking for the two of us?' }, { label: 'Next month?', q: 'What kind of month is next month for the two of us?' }],
       upsell: 'With birth times, the Moon signs get more accurate and the match becomes more precise (currently approximated at noon).',
       retry: 'Change details and retry',
       home: 'Back to modes',
     },
     chat: {
       title: 'Hoshi-Kyara Room',
-      sub: 'Your Hoshi-Kyara is here for any question.',
+      sub: 'Your Hoshi-Kyara knows every star you were born under. This room is yours alone.',
       historyCount: (n) => `${n} past ${n === 1 ? 'question' : 'questions'}`,
       hide: 'Hide',
       show: 'Show',
-      intro: 'Ask whatever’s on your mind. Love, work, personality, what’s ahead—answered from your birth chart and the current sky.',
+      intro: 'Every star you were born under, plus the sky as it is right now — all of it goes into an answer meant only for you. Love, work, personality, what lies ahead: ask anything.',
       inputPlaceholder: 'Type a message…',
       note: 'Sending shares your Hoshi-Kyara data with the AI.',
       clear: 'Clear chat',
@@ -808,7 +830,9 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: 'Tailwind',
       cautionLabel: 'Heads-up',
       readsTitle: (name, period) => `${period}, read by ${name}`,
-      readingHeading: 'Your Hoshi-Kyara reads the stars',
+      readingHeading: 'Your Hoshi-Kyara reads today’s stars',
+      askAheadTitle: 'Curious about what’s next? Just ask.',
+      askAhead: [{ label: 'Tomorrow?', q: 'What’s tomorrow going to be like?' }, { label: 'This week?', q: 'How is this week shaping up?' }, { label: 'Next month?', q: 'What kind of month is next month going to be?' }],
       readsIntro: (name) => `I’m your Hoshi-Kyara, “${name}.” I’ve read the current stars for you.`,
       readingVoice: 'I’ve looked over the stars for you.',
       otherPerson: 'Read someone else',
@@ -870,7 +894,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: '¿Qué “Hoshi-Kyara” (personaje estelar) eres?',
-      tagline2: '16 personajes × astrología real, según el cielo del momento en que naciste.',
+      tagline2: 'No solo tu signo solar. Leemos los 10 astros, para que de verdad encaje contigo.',
       greetNew: 'Hola, te damos la bienvenida a Hoshi-Kyara.',
       greetBack: 'Bienvenida de nuevo.',
       aboutLink: '¿Qué es Hoshi-Kyara?',
@@ -917,6 +941,7 @@ const UI: Record<Lang, UIStrings> = {
         '«Hoshi-Kyara» es tu propio personaje, nacido de la disposición de los astros en el momento en que naciste.',
         'Sobre el signo solar (tu cara externa) que usan los horóscopos de revista, sumamos el signo lunar (tu interior) para reflejar tanto «tú como te ven los demás» como «tú por dentro».',
         'Los signos se agrupan en cuatro elementos (Fuego, Tierra, Aire, Agua). Cuatro elementos solares × cuatro lunares = 16 personajes en total. Tú eres exactamente uno de ellos.',
+        'Por detrás leemos también Mercurio, Venus, Marte… los diez astros. Nada de esa jerga te llega: tu Hoshi-Kyara lo tiene todo en cuenta y te habla con palabras normales.',
       ],
       howTitle: 'Cómo se deciden los 16',
       outer: 'Cara externa',
@@ -976,9 +1001,11 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `¡Mira también tus otros ${hidden} personajes!`,
       partyLess: 'Contraer',
       partyReveal: (total) => `Ver los ${total} astros que te forman`,
-      partyGroup1: 'Encargados de tu día a día',
-      partyGroup2: 'Encargados del trato con los demás',
-      partyGroup3: 'Encargados de toda una época',
+      partyPairNote: 'Cuando un horóscopo dice "tu signo", se refiere al Sol de arriba. Tu Hoshi-Kyara nace de ese Sol (tu cara externa) unido a la Luna (tu corazón).',
+      partyGroup1: 'Sobre ti',
+      partyGroup2: 'Sobre los demás',
+      partyGroup3: 'Sobre tu época',
+      partyGroupCount: (n) => `${n} astros`,
       partyLearn: '¿Qué son los 10 planetas y 12 signos?',
       domain: 'Área',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' en ', sign }),
@@ -1003,17 +1030,19 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: 'A partir de cuatro combinaciones de Sol (cara externa) y Luna (corazón)',
       todayTitle: (period) => `Vosotros dos: ${period}`,
       todaySub: (skyNote) => `${skyNote} — ¿qué viento sopla eso para vosotros dos?`,
+      askAheadTitle: '¿Te intriga cómo seguirán? Pregúntame.',
+      askAhead: [{ label: '¿Mañana?', q: '¿Cómo estaremos mañana los dos?' }, { label: '¿Esta semana?', q: '¿Cómo se presenta esta semana para nosotros dos?' }, { label: '¿El mes que viene?', q: '¿Qué tal el mes que viene para nosotros dos?' }],
       upsell: 'Con las horas de nacimiento, los signos lunares ganan precisión y la afinidad se afina (ahora se aproxima al mediodía).',
       retry: 'Cambiar datos y repetir',
       home: 'Volver a los modos',
     },
     chat: {
       title: 'Sala Hoshi-Kyara',
-      sub: 'Tu Hoshi-Kyara responde lo que quieras.',
+      sub: 'Tu Hoshi-Kyara conoce todos tus astros. Esta sala es solo tuya.',
       historyCount: (n) => `${n} ${n === 1 ? 'consulta' : 'consultas'} anteriores`,
       hide: 'Ocultar',
       show: 'Mostrar',
-      intro: 'Pregunta lo que te inquiete. Amor, trabajo, personalidad, lo que viene: respondemos desde tu carta natal y el cielo actual.',
+      intro: 'Todos los astros bajo los que naciste, más el cielo de ahora mismo: todo eso entra en una respuesta pensada solo para ti. Amor, trabajo, personalidad, lo que viene: pregunta lo que quieras.',
       inputPlaceholder: 'Escribe un mensaje…',
       note: 'Al enviar, compartes los datos de tu Hoshi-Kyara con la IA.',
       clear: 'Borrar conversación',
@@ -1090,7 +1119,9 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: 'Viento a favor',
       cautionLabel: 'Atención',
       readsTitle: (name, period) => `${period}, leído por ${name}`,
-      readingHeading: 'Tu Hoshi-Kyara lee las estrellas',
+      readingHeading: 'Tu Hoshi-Kyara lee las estrellas de hoy',
+      askAheadTitle: '¿Te pica la curiosidad? Pregúntame.',
+      askAhead: [{ label: '¿Mañana?', q: '¿Cómo va a ser mañana?' }, { label: '¿Esta semana?', q: '¿Cómo se presenta esta semana?' }, { label: '¿El mes que viene?', q: '¿Qué tal va a ser el mes que viene?' }],
       readsIntro: (name) => `Soy tu Hoshi-Kyara, «${name}». He leído las estrellas de ahora para ti.`,
       readingVoice: 'Ya miré cómo van las estrellas por ti.',
       otherPerson: 'Consultar a otra persona',
@@ -1152,7 +1183,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Quel « Hoshi-Kyara » (personnage stellaire) es-tu ?',
-      tagline2: '16 personnages × vraie astrologie, d’après le ciel de l’instant de ta naissance.',
+      tagline2: 'Pas seulement ton signe solaire. On lit les 10 astres, pour que ça te corresponde vraiment.',
       greetNew: 'Bonjour, bienvenue sur Hoshi-Kyara.',
       greetBack: 'Bon retour.',
       aboutLink: 'C’est quoi Hoshi-Kyara ?',
@@ -1199,6 +1230,7 @@ const UI: Record<Lang, UIStrings> = {
         '« Hoshi-Kyara », c’est ton propre personnage, né de la position des astres au moment de ta naissance.',
         'Au signe solaire (ton visage extérieur) utilisé par les horoscopes de magazine, on ajoute le signe lunaire (ton cœur intérieur) pour refléter à la fois « toi vu·e par les autres » et « toi à l’intérieur ».',
         'Les signes se répartissent en quatre éléments (Feu, Terre, Air, Eau). Quatre éléments solaires × quatre éléments lunaires = 16 personnages en tout. Tu es exactement l’un d’eux.',
+        'En coulisses, on lit aussi Mercure, Vénus, Mars… les dix astres. Rien de ce jargon ne t’arrive : ton Hoshi-Kyara prend tout en compte et te parle avec des mots de tous les jours.',
       ],
       howTitle: 'Comment se décident les 16',
       outer: 'Visage extérieur',
@@ -1258,9 +1290,11 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `Découvre aussi tes ${hidden} autres personnages !`,
       partyLess: 'Réduire',
       partyReveal: (total) => `Voir les ${total} astres qui te façonnent`,
-      partyGroup1: 'En charge de ton quotidien',
-      partyGroup2: 'En charge des relations',
-      partyGroup3: 'En charge de toute une époque',
+      partyPairNote: 'Quand un horoscope parle de « ton signe », il s’agit du Soleil ci-dessus. Ton Hoshi-Kyara naît de ce Soleil (ton visage extérieur) associé à la Lune (ton cœur).',
+      partyGroup1: 'À propos de toi',
+      partyGroup2: 'À propos des autres',
+      partyGroup3: 'À propos de ton époque',
+      partyGroupCount: (n) => `${n} astres`,
       partyLearn: 'Les 10 planètes et 12 signes, c’est quoi ?',
       domain: 'Domaine',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' en ', sign }),
@@ -1285,17 +1319,19 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: 'À partir de quatre combinaisons de Soleil (visage extérieur) et Lune (cœur)',
       todayTitle: (period) => `Vous deux : ${period}`,
       todaySub: (skyNote) => `${skyNote} — quel vent cela souffle-t-il sur vous deux ?`,
+      askAheadTitle: 'Curieux de la suite pour vous deux ? Demande-moi.',
+      askAhead: [{ label: 'Demain ?', q: 'Comment ça se présente pour nous deux demain ?' }, { label: 'Cette semaine ?', q: 'Comment se présente cette semaine pour nous deux ?' }, { label: 'Le mois prochain ?', q: 'Ça donne quoi le mois prochain pour nous deux ?' }],
       upsell: 'Avec les heures de naissance, les signes lunaires gagnent en précision et l’affinité s’affine (actuellement approximée à midi).',
       retry: 'Changer les détails et recommencer',
       home: 'Retour aux modes',
     },
     chat: {
       title: 'Salon Hoshi-Kyara',
-      sub: 'Ton Hoshi-Kyara répond à tout.',
+      sub: 'Ton Hoshi-Kyara connaît tous tes astres. Ce salon n’est qu’à toi.',
       historyCount: (n) => `${n} ${n === 1 ? 'question' : 'questions'} déjà posée${n === 1 ? '' : 's'}`,
       hide: 'Masquer',
       show: 'Afficher',
-      intro: 'Demande ce qui te préoccupe. Amour, travail, personnalité, l’avenir — on répond à partir de ton thème natal et du ciel actuel.',
+      intro: 'Tous les astres sous lesquels tu es né, plus le ciel de cet instant : tout cela nourrit une réponse rien que pour toi. Amour, travail, personnalité, l’avenir — demande ce que tu veux.',
       inputPlaceholder: 'Écris un message…',
       note: 'En envoyant, tu partages les données de ton Hoshi-Kyara avec l’IA.',
       clear: 'Effacer la conversation',
@@ -1372,7 +1408,9 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: 'Vent porteur',
       cautionLabel: 'Vigilance',
       readsTitle: (name, period) => `${period}, lu par ${name}`,
-      readingHeading: 'Ton Hoshi-Kyara lit les étoiles',
+      readingHeading: 'Ton Hoshi-Kyara lit les étoiles du jour',
+      askAheadTitle: 'Curieux de la suite ? Demande-moi.',
+      askAhead: [{ label: 'Demain ?', q: 'Ça va donner quoi, demain ?' }, { label: 'Cette semaine ?', q: 'Comment se présente cette semaine ?' }, { label: 'Le mois prochain ?', q: 'Ça va ressembler à quoi, le mois prochain ?' }],
       readsIntro: (name) => `Je suis ton Hoshi-Kyara, « ${name} ». J’ai lu les étoiles du moment pour toi.`,
       readingVoice: 'J’ai jeté un œil aux étoiles pour toi.',
       otherPerson: 'Consulter une autre personne',
@@ -1434,7 +1472,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Quale « Hoshi-Kyara » (personaggio stellare) sei?',
-      tagline2: '16 personaggi × astrologia vera, dal cielo dell’istante in cui sei nato/a.',
+      tagline2: 'Non solo il segno solare. Leggiamo tutti e 10 gli astri, così ti somiglia davvero.',
       greetNew: 'Ciao, benvenuto/a su Hoshi-Kyara.',
       greetBack: 'Bentornato/a.',
       aboutLink: 'Cos’è Hoshi-Kyara?',
@@ -1481,6 +1519,7 @@ const UI: Record<Lang, UIStrings> = {
         '« Hoshi-Kyara » è il tuo personaggio, nato dalla disposizione degli astri nel momento della tua nascita.',
         'Al segno solare (il tuo volto esterno) usato dagli oroscopi delle riviste aggiungiamo il segno lunare (il tuo cuore interiore) per riflettere sia « te come ti vedono gli altri » sia « te dentro ».',
         'I segni si dividono in quattro elementi (Fuoco, Terra, Aria, Acqua). Quattro elementi solari × quattro lunari = 16 personaggi in tutto. Tu sei esattamente uno di loro.',
+        'Dietro le quinte leggiamo anche Mercurio, Venere, Marte… tutti e dieci gli astri. Niente di quel gergo arriva a te: il tuo Hoshi-Kyara tiene conto di tutto e ti parla con parole di ogni giorno.',
       ],
       howTitle: 'Come si decidono i 16',
       outer: 'Volto esterno',
@@ -1540,9 +1579,11 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `Scopri anche gli altri tuoi ${hidden} personaggi!`,
       partyLess: 'Comprimi',
       partyReveal: (total) => `Vedi i ${total} astri che ti formano`,
-      partyGroup1: 'Incaricati del tuo quotidiano',
-      partyGroup2: 'Incaricati dei rapporti',
-      partyGroup3: 'Incaricati di un’intera epoca',
+      partyPairNote: 'Quando un oroscopo dice "il tuo segno", intende il Sole qui sopra. Il tuo Hoshi-Kyara nasce da questo Sole (il volto esterno) unito alla Luna (il cuore).',
+      partyGroup1: 'Su di te',
+      partyGroup2: 'Sugli altri',
+      partyGroup3: 'Sulla tua epoca',
+      partyGroupCount: (n) => `${n} astri`,
       partyLearn: 'Cosa sono i 10 pianeti e i 12 segni?',
       domain: 'Ambito',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' in ', sign }),
@@ -1567,17 +1608,19 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: 'Da quattro combinazioni di Sole (volto esterno) e Luna (cuore)',
       todayTitle: (period) => `Voi due: ${period}`,
       todaySub: (skyNote) => `${skyNote} — che vento fa soffiare questo su di voi due?`,
+      askAheadTitle: 'Curioso/a di come andrà tra voi? Chiedimelo.',
+      askAhead: [{ label: 'Domani?', q: 'Come saremo noi due domani?' }, { label: 'Questa settimana?', q: 'Come si prospetta questa settimana per noi due?' }, { label: 'Il mese prossimo?', q: 'Che mese sarà il prossimo per noi due?' }],
       upsell: 'Con le ore di nascita i segni lunari guadagnano precisione e l’affinità si affina (ora approssimata a mezzogiorno).',
       retry: 'Cambia i dati e riprova',
       home: 'Torna ai modi',
     },
     chat: {
       title: 'Sala Hoshi-Kyara',
-      sub: 'Il tuo Hoshi-Kyara risponde a qualsiasi cosa.',
+      sub: 'Il tuo Hoshi-Kyara conosce tutti i tuoi astri. Questa sala è solo tua.',
       historyCount: (n) => `${n} ${n === 1 ? 'domanda' : 'domande'} finora`,
       hide: 'Nascondi',
       show: 'Mostra',
-      intro: 'Chiedi ciò che ti sta a cuore. Amore, lavoro, personalità, il futuro — rispondiamo dal tuo tema natale e dal cielo attuale.',
+      intro: 'Tutti gli astri sotto cui sei nato/a, più il cielo di adesso: tutto questo entra in una risposta pensata solo per te. Amore, lavoro, personalità, il futuro — chiedi quello che vuoi.',
       inputPlaceholder: 'Scrivi un messaggio…',
       note: 'Inviando, condividi i dati del tuo Hoshi-Kyara con l’IA.',
       clear: 'Cancella la conversazione',
@@ -1654,7 +1697,9 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: 'Vento a favore',
       cautionLabel: 'Attenzione',
       readsTitle: (name, period) => `${period}, letto da ${name}`,
-      readingHeading: 'Il tuo Hoshi-Kyara legge le stelle',
+      readingHeading: 'Il tuo Hoshi-Kyara legge le stelle di oggi',
+      askAheadTitle: 'Curioso/a di quel che viene? Chiedimelo.',
+      askAhead: [{ label: 'Domani?', q: 'Come sarà domani?' }, { label: 'Questa settimana?', q: 'Come si prospetta questa settimana?' }, { label: 'Il mese prossimo?', q: 'Che mese sarà il prossimo?' }],
       readsIntro: (name) => `Sono il tuo Hoshi-Kyara, «${name}». Ho letto le stelle di adesso per te.`,
       readingVoice: 'Ho dato un’occhiata alle stelle per te.',
       otherPerson: 'Consultare un’altra persona',
@@ -1716,7 +1761,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Qual « Hoshi-Kyara » (personagem estelar) é você?',
-      tagline2: '16 personagens × astrologia de verdade, a partir do céu no instante em que você nasceu.',
+      tagline2: 'Não é só o seu signo solar. Lemos os 10 astros, para combinar de verdade com você.',
       greetNew: 'Olá, boas-vindas ao Hoshi-Kyara.',
       greetBack: 'Bem-vindo/a de volta.',
       aboutLink: 'O que é Hoshi-Kyara?',
@@ -1763,6 +1808,7 @@ const UI: Record<Lang, UIStrings> = {
         '« Hoshi-Kyara » é o seu próprio personagem, nascido da disposição dos astros no momento em que você nasceu.',
         'Sobre o signo solar (o seu rosto externo) usado pelos horóscopos de revista, somamos o signo lunar (o seu coração interior) para refletir tanto « você como os outros veem » quanto « você por dentro ».',
         'Os signos se dividem em quatro elementos (Fogo, Terra, Ar, Água). Quatro elementos solares × quatro lunares = 16 personagens no total. Você é exatamente um deles.',
+        'Nos bastidores lemos também Mercúrio, Vênus, Marte… os dez astros. Nada desse jargão chega até você: o seu Hoshi-Kyara considera tudo e fala com palavras do dia a dia.',
       ],
       howTitle: 'Como os 16 são definidos',
       outer: 'Rosto externo',
@@ -1822,9 +1868,11 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `Veja também os seus outros ${hidden} personagens!`,
       partyLess: 'Recolher',
       partyReveal: (total) => `Ver os ${total} astros que formam você`,
-      partyGroup1: 'Encarregados do seu dia a dia',
-      partyGroup2: 'Encarregados do convívio',
-      partyGroup3: 'Encarregados de toda uma época',
+      partyPairNote: 'Quando um horóscopo fala do "seu signo", é o Sol aí em cima. O seu Hoshi-Kyara nasce desse Sol (a face externa) somado à Lua (o coração).',
+      partyGroup1: 'Sobre você',
+      partyGroup2: 'Sobre os outros',
+      partyGroup3: 'Sobre a sua época',
+      partyGroupCount: (n) => `${n} astros`,
       partyLearn: 'O que são os 10 planetas e 12 signos?',
       roleSign: (role, planet, sign) => ({ role, sep1: ' — ', planetLabel: planet, sep2: ' em ', sign }),
       domain: 'Área',
@@ -1849,17 +1897,19 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: 'A partir de quatro combinações de Sol (rosto externo) e Lua (coração)',
       todayTitle: (period) => `Vocês dois: ${period}`,
       todaySub: (skyNote) => `${skyNote} — que vento isso sopra para vocês dois?`,
+      askAheadTitle: 'Curioso sobre vocês dois daqui pra frente? Pergunte.',
+      askAhead: [{ label: 'Amanhã?', q: 'Como vamos estar nós dois amanhã?' }, { label: 'Esta semana?', q: 'Como está esta semana para nós dois?' }, { label: 'Mês que vem?', q: 'Que mês vai ser o próximo para nós dois?' }],
       upsell: 'Com as horas de nascimento, os signos lunares ficam mais precisos e a afinidade se afina (agora aproximada ao meio-dia).',
       retry: 'Mudar os dados e repetir',
       home: 'Voltar aos modos',
     },
     chat: {
       title: 'Sala Hoshi-Kyara',
-      sub: 'O seu Hoshi-Kyara responde a qualquer coisa.',
+      sub: 'O seu Hoshi-Kyara conhece todos os seus astros. Esta sala é só sua.',
       historyCount: (n) => `${n} ${n === 1 ? 'consulta' : 'consultas'} até agora`,
       hide: 'Ocultar',
       show: 'Mostrar',
-      intro: 'Pergunte o que quiser. Amor, trabalho, personalidade, o que vem aí — respondemos a partir do seu mapa natal e do céu atual.',
+      intro: 'Todos os astros sob os quais você nasceu, mais o céu de agora: tudo isso entra numa resposta feita só para você. Amor, trabalho, personalidade, o que vem aí — pergunte o que quiser.',
       inputPlaceholder: 'Escreva uma mensagem…',
       note: 'Ao enviar, você compartilha os dados do seu Hoshi-Kyara com a IA.',
       clear: 'Limpar conversa',
@@ -1936,7 +1986,9 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: 'Vento a favor',
       cautionLabel: 'Atenção',
       readsTitle: (name, period) => `${period}, lido por ${name}`,
-      readingHeading: 'Seu Hoshi-Kyara lê as estrelas',
+      readingHeading: 'Seu Hoshi-Kyara lê as estrelas de hoje',
+      askAheadTitle: 'Curioso sobre o que vem? É só perguntar.',
+      askAhead: [{ label: 'Amanhã?', q: 'Como vai ser o amanhã?' }, { label: 'Esta semana?', q: 'Como está esta semana?' }, { label: 'Mês que vem?', q: 'Que mês vai ser o próximo?' }],
       readsIntro: (name) => `Sou o seu Hoshi-Kyara, «${name}». Li as estrelas de agora para você.`,
       readingVoice: 'Já dei uma olhada nas estrelas para você.',
       otherPerson: 'Consultar outra pessoa',
@@ -1998,7 +2050,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: '당신은 어떤 「Hoshi-Kyara」(별 캐릭터)인가요?',
-      tagline2: '태어난 순간의 별자리로 보는, 16캐릭터 × 정통 별점.',
+      tagline2: '태양 별자리만이 아니에요. 10행성을 읽으니까, 당신에게 딱 맞아요.',
       greetNew: '처음 뵙겠습니다, 호시캐릭터 진단이에요.',
       greetBack: '어서 오세요.',
       aboutLink: 'Hoshi-Kyara란?',
@@ -2045,6 +2097,7 @@ const UI: Record<Lang, UIStrings> = {
         '「Hoshi-Kyara」는 당신이 태어난 순간의 별자리 배치에서 태어난, 당신만의 캐릭터예요.',
         '잡지 별자리 운세가 쓰는 태양 별자리(겉모습)에 달 별자리(속마음)를 더해, 「남이 보는 당신」과 「내면의 당신」을 함께 비춰요.',
         '별자리는 네 가지 원소(불·흙·바람·물)로 나뉘어요. 태양 원소 4종 × 달 원소 4종 = 모두 16종. 당신은 그중 딱 하나예요.',
+        '진단 뒤에서는 수성·금성·화성… 10행성까지 읽고 있어요. 어려운 이야기는 겉으로 내지 않아요. 그 모두를 바탕으로, 당신의 호시캐릭터가 평범한 말로 이야기해요.',
       ],
       howTitle: '16캐릭터가 정해지는 방식',
       outer: '겉모습',
@@ -2104,9 +2157,11 @@ const UI: Record<Lang, UIStrings> = {
       partyMore: (hidden) => `나머지 ${hidden} 캐릭터도 봐 봐요!`,
       partyLess: '접기',
       partyReveal: (total) => `당신을 이루는 ${total}개의 별 보기`,
-      partyGroup1: '매일의 당신 담당',
-      partyGroup2: '사람 사귀기 담당',
-      partyGroup3: '시대 전체 담당',
+      partyPairNote: '운세에서 말하는 "당신의 별자리"는 맨 위의 태양이에요. 이 태양(겉모습)과 달(마음)의 조합으로 당신의 호시캐릭터가 정해졌어요.',
+      partyGroup1: '나에 대한 것',
+      partyGroup2: '사람에 대한 것',
+      partyGroup3: '시대에 대한 것',
+      partyGroupCount: (n) => `별 ${n}개`,
       partyLearn: '10행성과 12별자리란?',
       domain: '담당',
       roleSign: (role, planet, sign, isAsc) => ({ role, sep1: '의 ', planetLabel: isAsc ? planet : `${planet} 별자리`, sep2: isAsc ? '은 ' : '는 ', sign }),
@@ -2131,17 +2186,19 @@ const UI: Record<Lang, UIStrings> = {
       breakdownSub: '태양(겉모습)과 달(마음), 네 가지 조합에서',
       todayTitle: (period) => `${period}의 두 사람`,
       todaySub: (skyNote) => `${skyNote} — 그 별이 두 사람에게 부는 바람은?`,
+      askAheadTitle: '앞으로의 두 사람이 궁금하면, 물어보세요',
+      askAhead: [{ label: '내일은?', q: '내일 두 사람은 어떤 느낌이야?' }, { label: '이번 주는?', q: '이번 주 두 사람은 어떤 흐름이야?' }, { label: '다음 달은?', q: '다음 달 두 사람은 어떤 시기가 될까?' }],
       upsell: '태어난 시각을 알면 달 별자리 정확도가 올라가 궁합 판정도 더 정확해져요(현재는 정오로 근사하고 있어요).',
       retry: '조건 바꿔 다시 점치기',
       home: '모드 선택으로',
     },
     chat: {
       title: 'Hoshi-Kyara 상담실',
-      sub: '당신의 호시캐릭터가 무엇이든 상담해 드려요.',
+      sub: '당신의 별을 전부 아는 호시캐릭터. 당신만의 상담실이에요.',
       historyCount: (n) => `지금까지 상담 ${n}건`,
       hide: '숨기기',
       show: '보기',
-      intro: '궁금한 걸 물어보세요. 연애·일·성격·앞으로의 운세——당신의 출생 차트와 지금의 별자리를 바탕으로 답해 드려요.',
+      intro: '태어난 순간의 별 전부와, 지금의 별의 흐름. 그 모두를 바탕으로 당신에게만 답해 드려요. 연애·일·성격·앞으로의 일——무엇이든 물어보세요.',
       inputPlaceholder: '메시지를 입력…',
       note: '보내면 당신의 Hoshi-Kyara 데이터가 AI로 전송돼요.',
       clear: '대화 지우기',
@@ -2218,7 +2275,9 @@ const UI: Record<Lang, UIStrings> = {
       tailwindLabel: '순풍',
       cautionLabel: '주의',
       readsTitle: (name, period) => `${name}의 ${period}`,
-      readingHeading: '당신의 호시캐릭터가 읽는 운세',
+      readingHeading: '당신의 호시캐릭터가 읽는 오늘의 운세',
+      askAheadTitle: '앞으로가 궁금하면, 물어보세요',
+      askAhead: [{ label: '내일은?', q: '내일은 어떤 하루가 될까?' }, { label: '이번 주는?', q: '이번 주는 어떤 흐름이야?' }, { label: '다음 달은?', q: '다음 달은 어떤 시기가 될까?' }],
       readsIntro: (name) => `당신의 호시캐릭터 「${name}」입니다. 지금의 별의 흐름을 읽어 봤어요.`,
       readingVoice: '별의 흐름, 미리 봐 뒀어.',
       otherPerson: '다른 사람 점치기',

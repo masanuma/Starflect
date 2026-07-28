@@ -16,7 +16,7 @@ interface Props {
 }
 
 /**
- * あなたをかたちづくる11のかけらぼし(10天体＋上昇星座)。結果画面と相棒ホームの両方で使う共有部品。
+ * あなたをかたちづくる星(10天体＋上昇星座)。結果画面と相棒ホームの両方で使う共有部品。
  * data.planets(太陽・月・上昇星座を先頭に全天体)を表示。
  * - 既定(結果画面): 先頭3件を表示し、残りを開閉。
  * - collapsedByDefault(相棒ホーム): 見出しだけで畳んでおき、タップで全員を開く。
@@ -26,22 +26,24 @@ export default function PartyCard({ data, collapsedByDefault = false }: Props) {
   const t = useUI()
 
   const partyPlanets = data.planets
+  // 中身は「見たい人だけ」。グループ見出し3行だけ出し、開いた行だけ星を見せる
+  const [openGroup, setOpenGroup] = useState<string | null>(null)
   const [showAllParty, setShowAllParty] = useState(false)
   const byKey = (k: PlanetKey) => partyPlanets.find((p) => p.key === k)
 
-  // 説明ページ /stars と同じ並び。太陽を先頭に置き、自分→周り→時代とズームアウトする
-  const sun = byKey('sun')
+  // 先頭は太陽と月。この2つの組み合わせがほしキャラの生成理由なので、
+  // なじみのある太陽星座から入りつつ「よくある12星座占い」との違いもここで伝わる。
+  // 残りは自分→周り→時代とズームアウトする3グループ(説明ページ /stars と同じ並び)
+  const pair = [byKey('sun'), byKey('moon')].filter((p) => p !== undefined)
   const GROUPS: { title: string; keys: PlanetKey[] }[] = [
-    { title: t.result.partyGroup1, keys: ['moon', 'asc', 'mercury', 'venus', 'mars'] },
+    { title: t.result.partyGroup1, keys: ['asc', 'mercury', 'venus', 'mars'] },
     { title: t.result.partyGroup2, keys: ['jupiter', 'saturn'] },
     { title: t.result.partyGroup3, keys: ['uranus', 'neptune', 'pluto'] },
   ]
   // 時刻不明だと上昇星座が無いので、実在する天体だけに絞る
   const groups = GROUPS.map((g) => ({ ...g, planets: g.keys.map(byKey).filter((p) => p !== undefined) }))
-  // 畳んでいる間は「毎日のあなた担当」まで。グループの途中で切らない
-  const openCount = collapsedByDefault && !showAllParty ? 0 : showAllParty ? groups.length : 1
-  const hiddenCount = groups.slice(openCount).reduce((n, g) => n + g.planets.length, 0)
-  const showSun = !(collapsedByDefault && !showAllParty)
+  // 相棒ホームでは丸ごと畳む。結果画面では常にペア(太陽・月)＋グループ見出しまで見せる
+  const showPair = !(collapsedByDefault && !showAllParty)
 
   const sunLon = partyPlanets.find((p) => p.key === 'sun')?.lon
   const moonLon = partyPlanets.find((p) => p.key === 'moon')?.lon
@@ -109,14 +111,26 @@ export default function PartyCard({ data, collapsedByDefault = false }: Props) {
           <p className="card-sub">{t.result.partySub}</p>
         </div>
       </div>
-      {showSun && sun && <ul className="party-list">{row(sun)}</ul>}
+      {showPair && (
+        <>
+          <ul className="party-list">{pair.map(row)}</ul>
+          <p className="party-pair-note">{t.result.partyPairNote}</p>
+        </>
+      )}
 
-      {groups.slice(0, openCount).map((g) => (
-        <div key={g.title} className="party-group">
-          <p className="party-group-title">{g.title}</p>
-          <ul className="party-list">{g.planets.map(row)}</ul>
-        </div>
-      ))}
+      {showPair &&
+        groups.map((g) => (
+          <div key={g.title} className="party-group">
+            <button
+              className={`party-group-head${openGroup === g.title ? ' open' : ''}`}
+              onClick={() => setOpenGroup((cur) => (cur === g.title ? null : g.title))}
+            >
+              <span className="party-group-title">{g.title}</span>
+              <span className="party-group-count">{t.result.partyGroupCount(g.planets.length)}</span>
+            </button>
+            {openGroup === g.title && <ul className="party-list">{g.planets.map(row)}</ul>}
+          </div>
+        ))}
       {collapsedByDefault ? (
         <button
           className={`party-toggle${showAllParty ? ' open' : ''}`}
@@ -124,16 +138,7 @@ export default function PartyCard({ data, collapsedByDefault = false }: Props) {
         >
           {showAllParty ? t.result.partyLess : t.result.partyReveal(partyPlanets.length)}
         </button>
-      ) : (
-        hiddenCount > 0 && (
-          <button
-            className={`party-toggle${showAllParty ? ' open' : ''}`}
-            onClick={() => setShowAllParty((v) => !v)}
-          >
-            {showAllParty ? t.result.partyLess : t.result.partyMore(hiddenCount)}
-          </button>
-        )
-      )}
+      ) : null}
 
       {/* 天体や星座の用語が急に出てくるので、説明ページ(静的・別ページ)へ逃がす */}
       <a className="party-learn" href={`${getLang() === 'ja' ? '' : `/${getLang()}`}/stars`}>

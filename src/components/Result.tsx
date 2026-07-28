@@ -55,6 +55,9 @@ export default function Result({ data, onHome, onPair }: Props) {
   const [played, setPlayed] = useState(false)
   // 「歩き方」案内から相談室へ運ぶ
   const chatRef = useRef<HTMLDivElement>(null)
+  // 運勢カードの「この先が気になったら」から相談室へ質問を投げる
+  const [autoAsk, setAutoAsk] = useState<{ q: string; n: number } | undefined>()
+  const ask = (q: string) => setAutoAsk((prev) => ({ q, n: (prev?.n ?? 0) + 1 }))
 
   useEffect(() => {
     track('diagnose_result', {
@@ -157,15 +160,15 @@ export default function Result({ data, onHome, onPair }: Props) {
         </section>
       )}
 
-      {/* 「自分は何者か」を見てから人に見せる流れにする(かけらぼし→シェア) */}
+      {/* 「自分は何者か」を見てから人に見せる流れにする(星の内訳→シェア) */}
       <PartyCard data={data} />
 
       {starType && <ShareButtons starTypeName={quoted(starType.type.name)} starSlug={starSlug} />}
 
-      <StarReading chart={data} />
+      <StarReading chart={data} onAsk={ask} />
 
       <div ref={chatRef}>
-        <AiChat context={chatContext} storageKey={chatStorageKey(data)} chart={data} />
+        <AiChat context={chatContext} storageKey={chatStorageKey(data)} chart={data} autoAsk={autoAsk} />
       </div>
 
       <Feedback page="result" starType={starSlug} chart={data} />

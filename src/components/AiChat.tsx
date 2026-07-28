@@ -34,6 +34,8 @@ interface Props {
   copy?: ChatCopy
   /** 1往復ごとに呼ばれる(ごほうび地図のシグナル更新など)。任意 */
   onExchange?: () => void
+  /** 外から質問を投げ込む(運勢カードの「この先を聞く」など)。値が変わるたびに送信する */
+  autoAsk?: { q: string; n: number }
 }
 
 function loadMessages(key: string): ChatMessage[] {
@@ -45,7 +47,7 @@ function loadMessages(key: string): ChatMessage[] {
   }
 }
 
-export default function AiChat({ context, storageKey, chart, stream, headerIcon, copy, onExchange }: Props) {
+export default function AiChat({ context, storageKey, chart, stream, headerIcon, copy, onExchange, autoAsk }: Props) {
   const { lang } = useLang()
   const t = useUI()
   // 相談相手は自分のほしキャラ。ヘッダーにそのマスコットを出す
@@ -65,6 +67,8 @@ export default function AiChat({ context, storageKey, chart, stream, headerIcon,
   const [error, setError] = useState('')
   const [showLog, setShowLog] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLElement>(null)
+  const askedRef = useRef(0)
 
   useEffect(() => {
     try {
@@ -137,8 +141,18 @@ export default function AiChat({ context, storageKey, chart, stream, headerIcon,
   const hasChat = messages.length > 0
   const questionCount = messages.filter((m) => m.role === 'user').length
 
+  // 運勢カードなど外から投げられた質問を、この相談室で受けて送る
+  useEffect(() => {
+    if (!autoAsk || autoAsk.n === askedRef.current) return
+    askedRef.current = autoAsk.n
+    cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    void send(autoAsk.q)
+    // send は毎レンダー作り直されるので依存に入れない
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoAsk])
+
   return (
-    <section className="planet-card chat-card">
+    <section className="planet-card chat-card" ref={cardRef}>
       <header className="card-head">
         {icon && (
           <div className="card-head-icon" aria-hidden="true">

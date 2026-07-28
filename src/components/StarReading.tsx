@@ -1,7 +1,6 @@
-import { useState } from 'react'
 import type { ChartData, PlanetKey } from '../lib/types'
-import type { Quality, FortuneTab } from '../lib/fortune'
-import { readFortune, periodLabel, FORTUNE_TABS, PERIOD_OF_TAB, fortuneTabDate } from '../lib/fortune'
+import type { Quality } from '../lib/fortune'
+import { readFortune } from '../lib/fortune'
 import { todayColor, todayColorName } from '../lib/companion'
 import { starTypeOf } from '../lib/startypes'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
@@ -30,23 +29,19 @@ function QualBadge({ quality }: { quality: Quality }) {
 }
 
 /**
- * ほしキャラが読む運勢(共有部品)。Result と Companion の両方で使う。
- * 見出し＋ほしキャラの自己紹介＋小さめマスコットで「相棒が読んでいる」体を統一。
- * 画面遷移なしで 今日/明日/今週/来週/今月/来月 を切り替える。中身は readFortune の実データ(AIなし)。
+ * ほしキャラが読む「今日」の運勢。
+ * 先の期間(明日/今週/来月…)は出さない。先まで見せると"明日また来る理由"も
+ * "相棒に聞く理由"も同時に消えてしまうため、この先は相談室へ渡す。
  */
-export default function StarReading({ chart }: { chart: ChartData }) {
+export default function StarReading({ chart, onAsk }: { chart: ChartData; onAsk?: (q: string) => void }) {
   const t = useUI()
-  const [tab, setTab] = useState<FortuneTab>('today')
-  const fortune = readFortune(chart.planets, PERIOD_OF_TAB[tab], fortuneTabDate(tab))
+  const fortune = readFortune(chart.planets, 'today')
 
   const lonOf = (key: PlanetKey) => chart.planets.find((p) => p.key === key)?.lon
   const sunLon = lonOf('sun')
   const moonLon = lonOf('moon')
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
   const name = starType?.type.name ?? ''
-
-  const tabLabel = (id: FortuneTab) =>
-    id === 'nextweek' ? t.companion.tabNextWeek : id === 'nextmonth' ? t.companion.tabNextMonth : periodLabel(PERIOD_OF_TAB[id])
 
   return (
     <section className="reading-card">
@@ -60,20 +55,6 @@ export default function StarReading({ chart }: { chart: ChartData }) {
           <p className="card-title">{t.companion.readingHeading}</p>
           <p className="card-sub">{t.companion.readsIntro(name)}</p>
         </div>
-      </div>
-
-      <div className="reading-tabs" role="tablist">
-        {FORTUNE_TABS.map((id) => (
-          <button
-            key={id}
-            role="tab"
-            aria-selected={id === tab}
-            className={`reading-tab ${id === tab ? 'active' : ''}`}
-            onClick={() => setTab(id)}
-          >
-            {tabLabel(id)}
-          </button>
-        ))}
       </div>
 
       <p className="reading-sky">{fortune.skyNote}</p>
@@ -99,14 +80,25 @@ export default function StarReading({ chart }: { chart: ChartData }) {
         ))}
       </ul>
 
-      {tab === 'today' && (
-        <div className="today-chips">
+      <div className="today-chips">
           <div className="today-chip">
             <span className="chip-label">{t.companion.colorLabel}</span>
             <span className="chip-colorname">
               <span className="chip-color" style={{ background: todayColor() }} aria-hidden="true" />
               {todayColorName()}
             </span>
+          </div>
+      </div>
+
+      {onAsk && (
+        <div className="ask-ahead">
+          <p className="ask-ahead-title">{t.companion.askAheadTitle}</p>
+          <div className="ask-ahead-chips">
+            {t.companion.askAhead.map((a) => (
+              <button key={a.label} className="ask-ahead-chip" onClick={() => onAsk(a.q)}>
+                {a.label}
+              </button>
+            ))}
           </div>
         </div>
       )}

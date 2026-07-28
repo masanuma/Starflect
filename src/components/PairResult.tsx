@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { PairData, PairPerson } from '../lib/compat'
 import { compatOf, pairTip, relLabel } from '../lib/compat'
-import type { FortuneTab } from '../lib/fortune'
-import { readFortune, periodLabel, FORTUNE_TABS, PERIOD_OF_TAB, fortuneTabDate } from '../lib/fortune'
+import { readFortune, periodLabel } from '../lib/fortune'
 import { starTypeOf } from '../lib/startypes'
 import type { PairChatContext } from '../lib/aiChat'
 import { streamAiPairChat } from '../lib/aiChat'
@@ -39,13 +38,14 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
   const typeB = personType(b)
   const compat = compatOf(a, b)
 
-  // 期間は結果画面でも切り替えられる(今日/明日/今週/来週/今月/来月)。すべてローカル計算=AIコストなし。
-  const [tab, setTab] = useState<FortuneTab>(data.period)
-  const fortuneA = readFortune(a.planets, PERIOD_OF_TAB[tab], fortuneTabDate(tab))
-  const fortuneB = readFortune(b.planets, PERIOD_OF_TAB[tab], fortuneTabDate(tab))
+  // 出すのは「今日のふたり」だけ。先まで見せると"また見る理由"も"相棒に聞く理由"も消えるので、
+  // この先は相談室へ渡す(ソロの運勢カードと同じ方針)
+  const fortuneA = readFortune(a.planets, 'today')
+  const fortuneB = readFortune(b.planets, 'today')
+  // 相談室へ質問を投げるための合図
+  const [autoAsk, setAutoAsk] = useState<{ q: string; n: number } | undefined>()
+  const ask = (q: string) => setAutoAsk((prev) => ({ q, n: (prev?.n ?? 0) + 1 }))
   const tip = pairTip(fortuneA.toneLevel, fortuneB.toneLevel, a.name, b.name)
-  const tabLabel = (id: FortuneTab) =>
-    id === 'nextweek' ? t.companion.tabNextWeek : id === 'nextmonth' ? t.companion.tabNextMonth : periodLabel(PERIOD_OF_TAB[id])
 
   const anyApprox = a.approxTime || b.approxTime
 
@@ -179,24 +179,10 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
             <SectionIcon name="today" />
           </div>
           <div>
-            <p className="planet-title">{t.pairResult.todayTitle(tabLabel(tab))}</p>
+            <p className="planet-title">{t.pairResult.todayTitle(periodLabel('today'))}</p>
             <p className="planet-sub">{t.pairResult.todaySub(fortuneA.skyNote)}</p>
           </div>
         </header>
-
-        <div className="reading-tabs" role="tablist">
-          {FORTUNE_TABS.map((id) => (
-            <button
-              key={id}
-              role="tab"
-              aria-selected={id === tab}
-              className={`reading-tab ${id === tab ? 'active' : ''}`}
-              onClick={() => setTab(id)}
-            >
-              {tabLabel(id)}
-            </button>
-          ))}
-        </div>
 
         <div className="pair-tones">
           <div className="pair-tone">
@@ -212,6 +198,17 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
         </div>
 
         <p className="pair-tip">{tip}</p>
+
+        <div className="ask-ahead">
+          <p className="ask-ahead-title">{t.pairResult.askAheadTitle}</p>
+          <div className="ask-ahead-chips">
+            {t.pairResult.askAhead.map((q) => (
+              <button key={q.label} className="ask-ahead-chip" onClick={() => ask(q.q)}>
+                {q.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </section>
 
       <AiChat
@@ -219,6 +216,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
         stream={(msgs, onDelta, l) => streamAiPairChat(pairChatContext, msgs, onDelta, l)}
         headerIcon={<SectionIcon name="pairReading" />}
         copy={t.pairChat}
+        autoAsk={autoAsk}
       />
 
       <Feedback page="pair" />

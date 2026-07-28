@@ -21,7 +21,7 @@ export interface ChatChartContext {
   placeLabel?: string
   starTypeName?: string
   starTypeCopy?: string
-  planets: { label: string; sign: string; deg: number; retro?: boolean }[]
+  planets: { label: string; role?: string; sign: string; deg: number; retro?: boolean }[]
   natalAspects?: string[]
   /** 今日〜来月＋この先数か月まで、期間ごとのトランジット見通し(全期間ぶん渡す) */
   periods: PeriodBrief[]
@@ -43,6 +43,8 @@ export function buildChatContext(chart: ChartData): ChatChartContext {
     starTypeCopy: starType?.type.copy,
     planets: chart.planets.map((p) => ({
       label: getPlanet(p.key).name,
+      // 役割名も渡す。AIは「やる気担当の火星が」のように役割名を主にして日常語で語る
+      role: getPlanet(p.key).role,
       sign: signName(signIndex(p.lon)),
       deg: degInSign(p.lon),
       retro: p.retro,

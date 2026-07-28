@@ -60,6 +60,10 @@ export default function Companion({ state, onHome, onPair }: Props) {
     setPhase('done')
   }
 
+  // 運勢カードの「この先が気になったら」から相談室へ質問を投げる(毎日の入口をAIに寄せる)
+  const [autoAsk, setAutoAsk] = useState<{ q: string; n: number } | undefined>()
+  const ask = (q: string) => setAutoAsk((prev) => ({ q, n: (prev?.n ?? 0) + 1 }))
+
   const reaction = mood === 'good' ? t.companion.reactGood : mood === 'bad' ? t.companion.reactBad : t.companion.reactMeh
 
   // 週末まとめ＋翌週フォーキャスト。土日に表示(ローカル開発時のみ ?weekend で強制確認できる)。
@@ -120,14 +124,15 @@ export default function Companion({ state, onHome, onPair }: Props) {
       <h2 className="companion-name">{starType ? quoted(starType.type.name) : ''}</h2>
 
       {/* 毎日ひらく理由＝今日の運勢。ここを一等地に置く。
-          地図やかけらぼしは「たまに見る」ものなので、相談室・振り返りより下へ送る */}
-      <StarReading chart={state.chart} />
+          地図や星の内訳は「たまに見る」ものなので、相談室・振り返りより下へ送る */}
+      <StarReading chart={state.chart} onAsk={ask} />
 
       <AiChat
         context={buildChatContext(state.chart)}
         storageKey={chatStorageKey(state.chart)}
         chart={state.chart}
         onExchange={refreshSignals}
+        autoAsk={autoAsk}
       />
 
       <section className="tap-card">

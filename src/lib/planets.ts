@@ -27,7 +27,7 @@ const PLANET_BASE: Record<PlanetKey, PlanetBase> = {
 }
 
 
-/** かけらぼしとしての役割(クラス名・言語別) */
+/** 星の役割(クラス名・言語別) */
 
 /** 担当領域(言語別) */
 
