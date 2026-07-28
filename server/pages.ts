@@ -117,6 +117,17 @@ section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:
 .pname{font-family:'Zen Maru Gothic';font-size:15px}
 .prole{font-size:12.5px;font-weight:700}
 .pdom{font-size:12px;color:var(--ink-sub);line-height:1.6}
+.suncard{display:flex;gap:14px;align-items:flex-start;border:1.5px solid;border-radius:20px;padding:16px;margin-top:14px}
+.sunav{flex:none;width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.sunbody{display:flex;flex-direction:column;gap:3px;text-align:left;min-width:0}
+.sunname{font-family:'Zen Maru Gothic';font-size:19px}
+.sunrole{font-size:13.5px;font-weight:800}
+.sundom{font-size:13px;color:var(--ink-sub)}
+.sunnote{font-size:12.5px;color:var(--ink-sub);line-height:1.8;margin-top:6px;border-top:1px dashed var(--line);padding-top:8px}
+.pgroup{margin-top:26px}
+.pgroup h3{font-family:'Zen Maru Gothic';font-size:17px;font-weight:800;margin-bottom:6px}
+.glead{font-size:13.5px;color:var(--ink-sub);line-height:1.9;text-align:left}
+.gnote{font-size:12px;color:var(--ink-sub);line-height:1.8;text-align:left;margin-top:10px}
 .egroup{border:1.5px solid;border-radius:18px;padding:14px 15px;margin-top:12px;background:var(--card)}
 .ehead{display:flex;align-items:center;gap:11px;margin-bottom:10px}
 .ehead b{font-family:'Zen Maru Gothic';font-size:15px;display:block}
@@ -335,8 +346,8 @@ export function renderStarsPage(lang: Lang): string {
     `<span class="ex-planet">${esc(ex.planetLabel)}</span>${esc(ex.sep2)}` +
     `<span class="ex-sign">${esc(SIGN_SYMBOLS[exIdx])} ${esc(ex.sign)}</span></p>`
 
-  // 11天体はマスコット付きのカードで(アプリで会うキャラと同じ顔にする)
-  const planets = PLANET_ORDER.map((k) => {
+  // 天体カード(アプリで会うキャラと同じ顔にする)
+  const pcard = (k: PlanetKey) => {
     const c = MASCOT_COLOR[k]
     return (
       `<div class="pcard" style="background:${c}12;border-color:${c}44">` +
@@ -346,7 +357,31 @@ export function renderStarsPage(lang: Lang): string {
       `<span class="pdom">${esc(dom[k])}</span>` +
       `</div>`
     )
-  }).join('')
+  }
+
+  // 太陽は誰もが知っている入口なので単独で先頭に置く
+  const sunColor = MASCOT_COLOR.sun
+  const sunBlock =
+    `<div class="suncard" style="background:${sunColor}14;border-color:${sunColor}55">` +
+    `<span class="sunav" style="background:${sunColor}2e">${planetMascot('sun', 84)}</span>` +
+    `<div class="sunbody"><b class="sunname">${esc(PLANET_SYMBOL.sun)} ${esc(nm.sun)}</b>` +
+    `<span class="sunrole" style="color:${sunColor}">${esc(role.sun)}</span>` +
+    `<span class="sundom">${esc(dom.sun)}</span>` +
+    `<span class="sunnote">${esc(P.sunNote)}</span></div></div>`
+
+  // 自分 → 周り → 時代 とズームアウトする3グループ(公転の速さが分類の根拠)
+  const GROUPS: { title: string; lead: string; keys: PlanetKey[]; note?: string }[] = [
+    { title: t.result.partyGroup1, lead: P.g1Lead, keys: ['moon', 'asc', 'mercury', 'venus', 'mars'], note: P.ascNote },
+    { title: t.result.partyGroup2, lead: P.g2Lead, keys: ['jupiter', 'saturn'] },
+    { title: t.result.partyGroup3, lead: P.g3Lead, keys: ['uranus', 'neptune', 'pluto'] },
+  ]
+  const planetGroups = GROUPS.map(
+    (g) =>
+      `<section class="pgroup"><h3>${esc(g.title)}</h3><p class="glead">${esc(g.lead)}</p>` +
+      `<div class="pgrid">${g.keys.map(pcard).join('')}</div>` +
+      (g.note ? `<p class="gnote">${esc(g.note)}</p>` : '') +
+      `</section>`,
+  ).join('')
 
   // 12星座はエレメントごとに3つずつまとめる(4×3の関係が一目で分かる)
   const groups = ELEMENT_ORDER.map((el) => {
@@ -384,7 +419,8 @@ export function renderStarsPage(lang: Lang): string {
 <section>
   <h2>${esc(P.planetsTitle)}</h2>
   <p class="lead">${esc(P.planetsLead)}</p>
-  <div class="pgrid">${planets}</div>
+  ${sunBlock}
+  ${planetGroups}
 </section>
 
 <section>

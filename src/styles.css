@@ -2321,6 +2321,22 @@ body {
   line-height: 1.6;
 }
 
+.party-group {
+  margin-top: 20px;
+}
+
+/* カード見出し(18px)の一段下、行の本文より上、という階層で見せる */
+.party-group-title {
+  font-family: var(--font-head);
+  font-size: 15.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--violet);
+  text-align: left;
+  margin: 0 0 10px;
+  padding-left: 2px;
+}
+
 .party-learn {
   display: block;
   text-align: center;

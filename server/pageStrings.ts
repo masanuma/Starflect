@@ -30,6 +30,12 @@ export interface PageStrings {
   howReadLead: string
   whoLabel: string
   howLabel: string
+  /** 天体の分類(太陽を先頭に、自分→周り→時代とズームアウトする) */
+  sunNote: string
+  ascNote: string
+  g1Lead: string
+  g2Lead: string
+  g3Lead: string
 }
 
 export const PAGE_STRINGS: Record<Lang, PageStrings> = {
@@ -56,6 +62,11 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     howReadLead: '天体が「誰が」を、星座が「どんなふうに」を表します。ふたつを合わせて、こんな一文になります。',
     whoLabel: '天体 ＝ 誰が',
     howLabel: '星座 ＝ どんなふうに',
+    sunNote: '雑誌やテレビの12星座占いでいう「あなたの星座」は、この太陽星座のことです。',
+    ascNote: '※上昇星座は天体ではなく、生まれた瞬間に東の地平線と重なっていた点です。約2時間で変わるので、生まれた時刻がわかると精度が上がります。',
+    g1Lead: '数日〜2か月ほどで次の星座へ移ります。動きが速いぶん人によって違い、あなたらしさがいちばん出るところです。',
+    g2Lead: '1年〜2年半かけて次の星座へ移ります。社会の中での役回りや、鍛えられる場所を表します。',
+    g3Lead: '7年〜30年かけてゆっくり移動します。だから同じ時代に生まれた人とは、ほぼ同じ。友だちと冥王星が同じなのは、このためです。',
   },
   en: {
     cta: 'Start your Hoshi-Kyara diagnosis!',
@@ -80,6 +91,11 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     howReadLead: 'The planet tells you "who", the sign tells you "in what way". Put the two together and you get a sentence like this.',
     whoLabel: 'Planet = who',
     howLabel: 'Sign = in what way',
+    sunNote: 'When a magazine or TV horoscope says "your sign", it means this Sun sign.',
+    ascNote: 'Note: the Rising sign is not a planet — it is the point where the eastern horizon met the zodiac at your birth. It changes about every two hours, so knowing your birth time makes it more accurate.',
+    g1Lead: 'These move to the next sign within days to a couple of months. Because they travel fast, they differ from person to person — this is where you are most yourself.',
+    g2Lead: 'These take one to two and a half years to change signs. They describe your role in society and where life trains you.',
+    g3Lead: 'These drift slowly, taking 7 to 30 years per sign. That is why people born around the same time share them — and why your friend often has the same Pluto as you.',
   },
   es: {
     cta: '¡Empieza tu diagnóstico Hoshi-Kyara!',
@@ -104,6 +120,11 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     howReadLead: 'El planeta dice "quién" y el signo dice "de qué manera". Al juntarlos, sale una frase así.',
     whoLabel: 'Planeta = quién',
     howLabel: 'Signo = de qué manera',
+    sunNote: 'Cuando un horóscopo de revista o televisión dice "tu signo", se refiere a este signo solar.',
+    ascNote: 'Nota: el Ascendente no es un planeta, sino el punto donde el horizonte este se cruzaba con el zodiaco al nacer. Cambia cada dos horas, así que saber tu hora de nacimiento lo hace más preciso.',
+    g1Lead: 'Cambian de signo en días o un par de meses. Al moverse rápido, varían de persona a persona: aquí es donde más se nota tu carácter.',
+    g2Lead: 'Tardan de uno a dos años y medio en cambiar de signo. Hablan de tu papel en la sociedad y de dónde la vida te pone a prueba.',
+    g3Lead: 'Avanzan muy despacio: de 7 a 30 años por signo. Por eso quienes nacieron en la misma época los comparten, y tu amigo suele tener el mismo Plutón que tú.',
   },
   fr: {
     cta: 'Commencer le diagnostic Hoshi-Kyara !',
@@ -128,6 +149,11 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     howReadLead: 'La planète dit « qui », le signe dit « de quelle manière ». Ensemble, cela donne une phrase comme celle-ci.',
     whoLabel: 'Planète = qui',
     howLabel: 'Signe = de quelle manière',
+    sunNote: 'Quand un horoscope de magazine ou de télévision parle de « ton signe », il s’agit de ce signe solaire.',
+    ascNote: 'À noter : l’Ascendant n’est pas une planète, mais le point où l’horizon est croisait le zodiaque à ta naissance. Il change environ toutes les deux heures : connaître ton heure de naissance le rend plus précis.',
+    g1Lead: 'Ils changent de signe en quelques jours à deux mois. Comme ils vont vite, ils diffèrent d’une personne à l’autre : c’est là que tu es le plus toi-même.',
+    g2Lead: 'Ils mettent un an à deux ans et demi à changer de signe. Ils décrivent ton rôle dans la société et là où la vie t’entraîne.',
+    g3Lead: 'Ils avancent lentement : de 7 à 30 ans par signe. Voilà pourquoi les personnes nées à la même époque les partagent, et pourquoi ton ami a souvent le même Pluton que toi.',
   },
   it: {
     cta: 'Inizia la tua diagnosi Hoshi-Kyara!',
@@ -152,6 +178,11 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     howReadLead: 'Il pianeta dice "chi", il segno dice "in che modo". Insieme formano una frase come questa.',
     whoLabel: 'Pianeta = chi',
     howLabel: 'Segno = in che modo',
+    sunNote: 'Quando un oroscopo di una rivista o della TV dice "il tuo segno", intende questo segno solare.',
+    ascNote: 'Nota: l’Ascendente non è un pianeta, ma il punto in cui l’orizzonte a est incrociava lo zodiaco alla tua nascita. Cambia ogni due ore circa, quindi conoscere l’ora di nascita lo rende più preciso.',
+    g1Lead: 'Cambiano segno nel giro di giorni o un paio di mesi. Muovendosi in fretta, variano da persona a persona: qui sei più te stesso/a.',
+    g2Lead: 'Impiegano da uno a due anni e mezzo per cambiare segno. Raccontano il tuo ruolo nella società e dove la vita ti allena.',
+    g3Lead: 'Si spostano lentamente: da 7 a 30 anni per segno. Per questo chi è nato nello stesso periodo li condivide, e il tuo amico spesso ha il tuo stesso Plutone.',
   },
   pt: {
     cta: 'Começar o diagnóstico Hoshi-Kyara!',
@@ -176,6 +207,11 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     howReadLead: 'O planeta diz "quem" e o signo diz "de que jeito". Juntando os dois, sai uma frase assim.',
     whoLabel: 'Planeta = quem',
     howLabel: 'Signo = de que jeito',
+    sunNote: 'Quando um horóscopo de revista ou TV fala do "seu signo", é deste signo solar que se trata.',
+    ascNote: 'Observação: o Ascendente não é um planeta, e sim o ponto onde o horizonte leste cruzava o zodíaco no seu nascimento. Ele muda a cada duas horas, então saber a hora do nascimento deixa tudo mais preciso.',
+    g1Lead: 'Mudam de signo em dias ou poucos meses. Como andam rápido, variam de pessoa para pessoa: é aqui que você é mais você.',
+    g2Lead: 'Levam de um a dois anos e meio para mudar de signo. Falam do seu papel na sociedade e de onde a vida treina você.',
+    g3Lead: 'Caminham devagar: de 7 a 30 anos por signo. Por isso quem nasceu na mesma época os compartilha, e o seu amigo costuma ter o mesmo Plutão que você.',
   },
   ko: {
     cta: '호시캐릭터 진단 시작하기!',
@@ -200,6 +236,11 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     howReadLead: '행성이 "누가"를, 별자리가 "어떤 식으로"를 나타내요. 둘을 합치면 이런 한 문장이 돼요.',
     whoLabel: '행성 = 누가',
     howLabel: '별자리 = 어떤 식으로',
+    sunNote: '잡지나 TV의 12별자리 운세에서 말하는 "당신의 별자리"가 바로 이 태양 별자리예요.',
+    ascNote: '※ 상승궁은 행성이 아니라, 태어난 순간 동쪽 지평선과 만나던 지점이에요. 약 2시간마다 바뀌기 때문에 태어난 시각을 알면 더 정확해져요.',
+    g1Lead: '며칠에서 두 달 정도면 다음 별자리로 옮겨 가요. 빠르게 움직이는 만큼 사람마다 달라서, 당신다움이 가장 잘 드러나는 곳이에요.',
+    g2Lead: '1년에서 2년 반에 걸쳐 별자리를 옮겨요. 사회 속에서의 역할과, 단련되는 자리를 나타내요.',
+    g3Lead: '7년에서 30년에 걸쳐 천천히 움직여요. 그래서 같은 시대에 태어난 사람과는 거의 같아요. 친구와 명왕성이 같은 건 이 때문이에요.',
   },
 }
 
