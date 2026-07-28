@@ -1,5 +1,6 @@
 import { signIndex } from './astro'
 import { signName, signKeywords, elementOf } from './signs'
+import { getPlanet } from './planets'
 import type { Element } from './signs'
 import { getLang } from './i18n'
 import type { Lang } from './i18n'
@@ -120,20 +121,28 @@ const ACCENT: Record<Lang, Record<Element, string>> = {
   ko: { 火: '결정적인 순간에서의 승부욕', 地: '현실적으로 마무리하는 힘', 風: '한 걸음 물러선 객관적인 시선', 水: '섬세한 공감력' },
 }
 
+/**
+ * 星座名を単独で出すと「なぜ急にこの星座?」となるため、役割名を主・星座名を従(カッコ)にする。
+ * 役割名はすぐ上の星の一覧と同じ語彙なので、読み手の学習コストがない。
+ */
 function buildIntro(lang: Lang, ascN: string, ascK: string, sunN: string, sunK: string, moonN: string, moonK: string): string {
+  const r = (key: 'asc' | 'sun' | 'moon', sign: string) => `${getPlanet(key).role}(${sign})`
+  const A = r('asc', ascN)
+  const S = r('sun', sunN)
+  const M = r('moon', moonN)
   if (lang === 'en')
-    return `The first thing people meet in you is ${ascN}'s "${ascK}". The core that shows as they get closer is ${sunN}'s "${sunK}". And deep inside, where you recharge, lives ${moonN}'s "${moonK}".`
+    return `The first thing people meet in you is ${A}'s "${ascK}". The core that shows as they get closer is ${S}'s "${sunK}". And deep inside, where you recharge, lives ${M}'s "${moonK}".`
   if (lang === 'es')
-    return `Lo primero que la gente percibe en ti es «${ascK}», de ${ascN}. El núcleo que se revela al conocerte es «${sunK}», de ${sunN}. Y en lo más hondo, donde recargas energía, vive «${moonK}», de ${moonN}.`
+    return `Lo primero que la gente percibe en ti es «${ascK}», de ${A}. El núcleo que se revela al conocerte es «${sunK}», de ${S}. Y en lo más hondo, donde recargas energía, vive «${moonK}», de ${M}.`
   if (lang === 'fr')
-    return `La première chose que les gens rencontrent en vous, c'est le « ${ascK} » de ${ascN}. Le noyau qui se révèle à mesure qu'on s'approche, c'est le « ${sunK} » de ${sunN}. Et tout au fond, là où vous rechargez votre énergie, vit le « ${moonK} » de ${moonN}.`
+    return `La première chose que les gens rencontrent en vous, c'est le « ${ascK} » de ${A}. Le noyau qui se révèle à mesure qu'on s'approche, c'est le « ${sunK} » de ${S}. Et tout au fond, là où vous rechargez votre énergie, vit le « ${moonK} » de ${M}.`
   if (lang === 'it')
-    return `La prima cosa che le persone incontrano in te è il «${ascK}» di ${ascN}. Il nucleo che si rivela man mano che ci si avvicina è il «${sunK}» di ${sunN}. E nel profondo, dove ricarichi le energie, vive il «${moonK}» di ${moonN}.`
+    return `La prima cosa che le persone incontrano in te è il «${ascK}» di ${A}. Il nucleo che si rivela man mano che ci si avvicina è il «${sunK}» di ${S}. E nel profondo, dove ricarichi le energie, vive il «${moonK}» di ${M}.`
   if (lang === 'pt')
-    return `A primeira coisa que as pessoas encontram em você é o «${ascK}» de ${ascN}. O núcleo que se revela à medida que se aproximam é o «${sunK}» de ${sunN}. E lá no fundo, onde você recarrega as energias, vive o «${moonK}» de ${moonN}.`
+    return `A primeira coisa que as pessoas encontram em você é o «${ascK}» de ${A}. O núcleo que se revela à medida que se aproximam é o «${sunK}» de ${S}. E lá no fundo, onde você recarrega as energias, vive o «${moonK}» de ${M}.`
   if (lang === 'ko')
-    return `사람들이 당신을 만나 처음 접하는 것은 ${ascN}의 「${ascK}」. 가까워질수록 드러나는 핵심은 ${sunN}의 「${sunK}」. 그리고 마음 깊은 곳에서 에너지를 충전하는 것은 ${moonN}의 「${moonK}」입니다.`
-  return `人があなたに出会ってまず触れるのは、${ascN}の「${ascK}」。付き合いが深まるほど見えてくる核は、${sunN}の「${sunK}」。そして心の奥でエネルギーを充電しているのは、${moonN}の「${moonK}」です。`
+    return `사람들이 당신을 만나 처음 접하는 것은 ${A}의 「${ascK}」. 가까워질수록 드러나는 핵심은 ${S}의 「${sunK}」. 그리고 마음 깊은 곳에서 에너지를 충전하는 것은 ${M}의 「${moonK}」입니다.`
+  return `人があなたに出会ってまず触れるのは、${A}の「${ascK}」。付き合いが深まるほど見えてくる核は、${S}の「${sunK}」。そして心の奥でエネルギーを充電しているのは、${M}の「${moonK}」です。`
 }
 
 export function synthesize(sunLon: number, moonLon: number, ascLon: number): Synthesis {
