@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'node:url'
-import { readFileSync } from 'node:fs'
+import { readFileSync, statSync } from 'node:fs'
 import path from 'node:path'
 import express from 'express'
 import { createAiHandlers, createFeedbackHandler } from './handlers'
@@ -18,19 +18,37 @@ const NONJA = CONTENT_LANGS.filter((l) => l !== 'ja')
 const isLang = (v: string): v is Lang => (CONTENT_LANGS as string[]).includes(v)
 
 // アプリ本体(SPA)。検索の入口は LP と /c なので noindex にして重複を避ける。
-let APP_HTML = ''
-try {
-  APP_HTML = readFileSync(path.join(distDir, 'index.html'), 'utf8')
-    .replace(
-      '<meta name="robots" content="index, follow, max-image-preview:large" />',
-      '<meta name="robots" content="noindex, follow" />',
-    )
-    .replace(
-      '<link rel="canonical" href="https://starflect.asanuma.works/" />',
-      '<link rel="canonical" href="https://starflect.asanuma.works/app" />',
-    )
-} catch {
-  /* 未ビルド時は空 */
+/**
+ * SPA本体のHTML。検索の重複を避けるため noindex ＋ canonical を /app に差し替える。
+ *
+ * 中身はキャッシュするが、dist/index.html の更新時刻が変わったら読み直す。
+ * 本番はビルド→起動が順次なので実質起動時の1回だけ。ローカルは「サーバーを起動したまま
+ * 再ビルド」ができてしまい、固定キャッシュだと消えたバンドルを指してアプリが起動しなくなる。
+ * (環境変数に依存しないので、どちらの環境でも正しく動く)
+ */
+const appHtmlPath = path.join(distDir, 'index.html')
+let appHtmlCache = ''
+let appHtmlMtime = -1
+
+function appHtml(): string {
+  try {
+    const mtime = statSync(appHtmlPath).mtimeMs
+    if (mtime !== appHtmlMtime) {
+      appHtmlCache = readFileSync(appHtmlPath, 'utf8')
+        .replace(
+          '<meta name="robots" content="index, follow, max-image-preview:large" />',
+          '<meta name="robots" content="noindex, follow" />',
+        )
+        .replace(
+          '<link rel="canonical" href="https://starflect.asanuma.works/" />',
+          '<link rel="canonical" href="https://starflect.asanuma.works/app" />',
+        )
+      appHtmlMtime = mtime
+    }
+    return appHtmlCache
+  } catch {
+    return '' /* 未ビルド時は空 */
+  }
 }
 
 // 静的ページはデータ固定なので起動時に一度だけ全言語ぶん生成してキャッシュする。
@@ -107,7 +125,8 @@ app.get('/c/:slug', (req, res) => {
 
 // アプリ本体(SPA)
 app.get(['/app', '/app/'], (_req, res) => {
-  if (APP_HTML) sendHtml(res, APP_HTML)
+  const html = appHtml()
+  if (html) sendHtml(res, html)
   else res.status(404).send('Not built')
 })
 

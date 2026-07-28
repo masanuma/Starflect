@@ -58,7 +58,9 @@
 ## ⚠️ 重要な技術的注意（同じ轍を踏まない）
 - **サーバー(server/)から astronomy-engine を import しない**。`signs.ts`/`fortune.ts`/`planets.ts`/`astro.ts` は astronomy-engine を名前付きimportしており、Railway の **Node 18** ではESM解決に失敗して**起動クラッシュ**する（"does not provide an export named 'Body'"）。天体計算はクライアント専用。
   - サーバーがキャラ名/エレメント等の言語別データを使うときは、astro非依存の `src/lib/starData.ts`（STAR_TYPES / ELEMENT_LABEL / ELEMENT_WORD_L）を参照する。`signs`/`startypes` を値importすると astro が芋づるで載るので注意。 — 事故と修正: `247ec68`（2026-07-23、本番ダウン→分離で復旧）
-- **ローカル検証**: Expressサーバーは起動時に `dist/index.html` をキャッシュする。再ビルドしたら**サーバー再起動が必要**（古いバンドル参照で /app が404→アプリ起動せず、になる）。本番はビルド→起動が順次なので問題なし。
+- **ローカル検証**: Expressサーバーは `dist/index.html` の更新時刻を見て自動で読み直す（`c1fe55a` 以降）。**サーバーを起動したまま再ビルドしてOK**。
+  - それ以外（`server/` や `src/lib` のソース変更、LP・`/stars` の文言）は**再起動が必要**（tsx はホットリロードしない／静的ページは起動時に生成）。
+  - Vite dev(5173) は Express 製の静的ページ（`/`・`/stars`・`/c/<slug>`）を配信しない。それらを見るときは `full` 構成（`npm start`）を使う。
 
 ---
 
