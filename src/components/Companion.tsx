@@ -191,13 +191,13 @@ export default function Companion({ state, onHome, onPair }: Props) {
           {tailwind && (
             <p className="forecast-line forecast-good">
               <span className="forecast-label">{t.companion.tailwindLabel}</span>
-              {tailwind.title}
+              {tailwind.plain}
             </p>
           )}
           {caution && (
             <p className="forecast-line forecast-hard">
               <span className="forecast-label">{t.companion.cautionLabel}</span>
-              {caution.title}
+              {caution.plain}
             </p>
           )}
         </section>

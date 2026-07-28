@@ -436,6 +436,40 @@ const ASPECT_NAME: Record<Lang, Record<number, string>> = {
   ko: { 0: '딱 겹쳐 있는 상태(0°)', 60: '부드러운 순풍(60°)', 90: '시험대에 오르는 각도(90°)', 120: '강한 순풍(120°)', 180: '서로 잡아당기는 힘(180°)' },
 }
 
+/**
+ * 表示用のアスペクト語。角度の数字は表に出さない(憲法: 10天体は"効かせる"もので"読ませる"ものではない)。
+ * AI に渡す title は従来どおり角度つきのまま＝精度は落とさない。
+ */
+const PLAIN_ASPECT: Record<Lang, Record<number, string>> = {
+  ja: { 0: 'まっすぐな重なり', 60: 'ゆるやかな追い風', 90: '試練の角度', 120: '大きな追い風', 180: '引っぱり合う力' },
+  en: { 0: 'a direct overlap', 60: 'a gentle tailwind', 90: 'a testing angle', 120: 'a strong tailwind', 180: 'a tug-of-war' },
+  es: { 0: 'una superposición directa', 60: 'un viento suave a favor', 90: 'un ángulo que pone a prueba', 120: 'un fuerte viento a favor', 180: 'un tira y afloja' },
+  fr: { 0: 'une superposition directe', 60: 'un vent léger favorable', 90: 'un angle qui met à l’épreuve', 120: 'un fort vent favorable', 180: 'un bras de fer' },
+  it: { 0: 'una sovrapposizione diretta', 60: 'un vento leggero a favore', 90: 'un angolo che mette alla prova', 120: 'un forte vento a favore', 180: 'un braccio di ferro' },
+  pt: { 0: 'uma sobreposição direta', 60: 'um vento leve a favor', 90: 'um ângulo que põe à prova', 120: 'um forte vento a favor', 180: 'um cabo de guerra' },
+  ko: { 0: '똑바로 겹치는 힘', 60: '부드러운 순풍', 90: '시험대에 오르는 각도', 120: '강한 순풍', 180: '서로 잡아당기는 힘' },
+}
+
+/** 「木星(発展)」→「発展」。表に出すのは日常語の役割だけ */
+const plainNatal = (label: string) => label.match(/[（(]([^（()]*)[)）]\s*$/)?.[1] ?? label
+
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+/**
+ * 表示用の一文。運行側の天体名は出さず「いまの巡り」とまとめ、出生側は役割名だけを出す。
+ * (AIの答え方と同じ言い換えルール)
+ */
+const PLAIN_TITLE: Record<Lang, (natal: string, aspect: string) => string> = {
+  ja: (n, a) => `あなたの${n}に、いまの巡りから${a}`,
+  en: (n, a) => `Your ${n}: ${a} from the current sky`,
+  es: (n, a) => `Tu ${n}: ${a} desde el cielo de ahora`,
+  // fr の votre は性別で変化しないので付けられる。it/pt の所有格は変化するので付けず、頭を大文字にする。
+  fr: (n, a) => `Votre ${n} : ${a} depuis le ciel actuel`,
+  it: (n, a) => `${cap(n)}: ${a} dal cielo di adesso`,
+  pt: (n, a) => `${cap(n)}: ${a} do céu de agora`,
+  ko: (n, a) => `당신의 ${n}에, 지금의 흐름에서 ${a}`,
+}
+
 const ITEM_TITLE: Record<Lang, (transit: string, natal: string, aspect: string) => string> = {
   ja: (t, n, a) => `運行中の${t} × あなたの${n} — ${a}`,
   en: (t, n, a) => `Transiting ${t} × your ${n} — ${a}`,
@@ -479,7 +513,10 @@ const EMPTY_ITEM: Record<Lang, { title: string; text: string }> = {
 
 export interface FortuneItem {
   symbol: string
+  /** AIに渡す技術的な表記(「運行中のA × あなたのB — ◯◯(120°)」)。精度のため従来どおり */
   title: string
+  /** 画面に出す日常語の表記。天体名も角度も出さない */
+  plain: string
   quality: Quality
   text: string
 }
@@ -611,13 +648,14 @@ export function readFortune(natal: PlanetPos[], period: PeriodKey, now = new Dat
     return {
       symbol: info.symbol,
       title: ITEM_TITLE[lang](info.name, NATAL_LABEL[lang][h.natalKey], ASPECT_NAME[lang][h.aspect.angle]),
+      plain: PLAIN_TITLE[lang](plainNatal(NATAL_LABEL[lang][h.natalKey]), PLAIN_ASPECT[lang][h.aspect.angle]),
       quality: h.aspect.quality,
       text: TRANSIT_TEXT[lang][h.transit][h.aspect.quality],
     }
   })
 
   if (items.length === 0) {
-    items.push({ symbol: '✦', title: EMPTY_ITEM[lang].title, quality: 'good', text: EMPTY_ITEM[lang].text })
+    items.push({ symbol: '✦', title: EMPTY_ITEM[lang].title, plain: EMPTY_ITEM[lang].title, quality: 'good', text: EMPTY_ITEM[lang].text })
   }
 
   const score = top.reduce(

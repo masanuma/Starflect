@@ -68,12 +68,8 @@ export default function StarReading({ chart, onAsk }: { chart: ChartData; onAsk?
           <li key={item.title} className={`fortune-item ${item.quality}`}>
             <div className="fortune-item-head">
               <QualBadge quality={item.quality} />
-              <p className="fortune-item-title">
-                <span className="fortune-symbol" aria-hidden="true">
-                  {item.symbol}
-                </span>
-                {item.title}
-              </p>
+              {/* 表に出すのは日常語だけ。天体名・角度は出さない(AIに渡す item.title は技術表記のまま) */}
+              <p className="fortune-item-title">{item.plain}</p>
             </div>
             <p className="fortune-item-text">{item.text}</p>
           </li>
