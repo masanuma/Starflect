@@ -12,6 +12,24 @@ import type { Lang } from '../src/lib/i18n'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const distDir = path.resolve(__dirname, '../dist')
+
+/**
+ * ローカル用に .env を読む。Vite は自前で .env を読むが、このサーバーは読まないため
+ * `npm start` だと AI が「APIキーが未設定」になっていた。
+ * すでに設定済みの環境変数は上書きしないので、本番(Railway の Variables)には影響しない。
+ * .env が無ければ何もしない。Node 18 でも動くよう依存を足さず自前で解析する。
+ */
+try {
+  for (const line of readFileSync(path.resolve(__dirname, '../.env'), 'utf8').split(/\r?\n/)) {
+    const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/)
+    if (!m || line.trimStart().startsWith('#')) continue
+    const key = m[1]
+    if (process.env[key] !== undefined) continue
+    process.env[key] = m[2].trim().replace(/^["']|["']$/g, '')
+  }
+} catch {
+  /* .env が無い(本番など)ときは何もしない */
+}
 const ORIGIN = 'https://starflect.asanuma.works'
 const SLUGS = Object.keys(CHAR_BY_SLUG)
 const NONJA = CONTENT_LANGS.filter((l) => l !== 'ja')
