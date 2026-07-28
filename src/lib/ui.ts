@@ -34,7 +34,7 @@ export interface Starter {
   q: string
 }
 
-/** パーティ行の見出し「主人公 の 太陽星座 は 牡牛座」を色分け・強調するためのパーツ */
+/** かけらぼし行の見出し「主人公 の 太陽星座 は 牡牛座」を色分け・強調するためのパーツ */
 export interface RoleSignParts {
   role: string
   sep1: string
@@ -130,7 +130,7 @@ export interface UIStrings {
     revealReading: string
     /** リビール演出でキャラ名の直前に出る一言 */
     revealIntro: string
-    /** 初回だけ出す「この画面の歩き方」案内。見出し・本文(パーティ人数)・相談室へ飛ぶボタン */
+    /** 初回だけ出す「この画面の歩き方」案内。見出し・本文(かけらぼしの数)・相談室へ飛ぶボタン */
     guideTitle: string
     guideBody: (partyCount: number) => string
     guideCta: string
@@ -144,7 +144,7 @@ export interface UIStrings {
     partyGroup1: string
     partyGroup2: string
     partyGroup3: string
-    /** パーティカードから /stars(10天体と12星座の説明)へ誘導するリンク */
+    /** かけらぼしカードから /stars(10天体と12星座の説明)へ誘導するリンク */
     partyLearn: string
     /** 「主人公の太陽星座は牡牛座」を色分け表示するためのパーツ。isAsc は上昇星座(名前に既に星座を含む)判定 */
     roleSign: (role: string, planet: string, sign: string, isAsc: boolean) => RoleSignParts
@@ -405,7 +405,7 @@ const UI: Record<Lang, UIStrings> = {
       revealReading: '星を読んでいます…',
       revealIntro: 'あなたのほしキャラは',
       guideTitle: 'この先の楽しみ方',
-      guideBody: (n) => `ほしキャラができました。このあと、あなたを作る${n}人のパーティ・今日の運勢と続きます。いちばんのおすすめは「ほしキャラ相談室」。あなたの星をもとに、恋愛も仕事もこの先の運勢も答えてくれます。`,
+      guideBody: (n) => `ほしキャラができました。このあと、あなたをかたちづくる${n}のかけらぼし・今日の運勢と続きます。いちばんのおすすめは「ほしキャラ相談室」。あなたの星をもとに、恋愛も仕事もこの先の運勢も答えてくれます。`,
       guideCta: '相談室で話しかける',
       partyTitle: (n) => `あなたをかたちづくる、${n}のかけらぼし`,
       partySub: '生まれた瞬間の星たちが、あなたをかたちづくるかけらぼしになりました。それぞれの担当と特徴です。',
@@ -554,7 +554,7 @@ const UI: Record<Lang, UIStrings> = {
       tiers: {
         birth: { name: 'ほしキャラ誕生', teaser: '太陽と月から生まれた、あなたのほしキャラ。ここが物語の出発点。' },
         moonBack: { name: '月星座の裏側', teaser: '表の顔(太陽)とは別の、安心しているときの素のあなた。' },
-        partyDeep: { name: 'パーティの深掘り', teaser: '10人の星たちの、もう一歩踏み込んだ役割と読み。' },
+        partyDeep: { name: 'かけらぼしの深掘り', teaser: '10の星たちの、もう一歩踏み込んだ役割と読み。' },
         moodTrend: { name: '気分のクセ', teaser: '記録がたまると見えてくる、あなたが揺れやすい曜日と場面。' },
         hiddenSelf: { name: '隠れた自分レポート', teaser: '本来の星(出生図)と、実際の毎日とのギャップ。いちばんの発見。' },
         trueBuddy: { name: 'ほんとうの相棒', teaser: 'あなたのすべてを踏まえて話す、ほしキャラの最終形。' },
@@ -687,7 +687,7 @@ const UI: Record<Lang, UIStrings> = {
       revealReading: 'Reading the stars…',
       revealIntro: 'Your Hoshi-Kyara is',
       guideTitle: 'What comes next',
-      guideBody: (n) => `Your Hoshi-Kyara is ready. Below you'll find the party of ${n} that makes you who you are, plus today's reading. The best part is the Hoshi-Kyara consultation room — it answers anything about love, work or what lies ahead, based on your own stars.`,
+      guideBody: (n) => `Your Hoshi-Kyara is ready. Below you'll find the ${n} stars that shape you, plus today's reading. The best part is the Hoshi-Kyara consultation room — it answers anything about love, work or what lies ahead, based on your own stars.`,
       guideCta: 'Talk in the consultation room',
       partyTitle: (n) => `The ${n} stars that shape you`,
       partySub: 'The stars at the moment you were born became the characters that make you who you are—here’s what each one handles, and what it’s like.',
@@ -836,7 +836,7 @@ const UI: Record<Lang, UIStrings> = {
       tiers: {
         birth: { name: 'Your Hoshi-Kyara is born', teaser: 'Born from your Sun and Moon — the starting point of your story.' },
         moonBack: { name: 'The other side of your Moon', teaser: 'The unguarded you when you feel safe, apart from your public face (the Sun).' },
-        partyDeep: { name: 'Your party, in depth', teaser: 'A closer read on the roles of all ten star characters.' },
+        partyDeep: { name: 'Your stars, in depth', teaser: 'A closer read on the roles of all ten star characters.' },
         moodTrend: { name: 'Your mood patterns', teaser: 'As records add up: the days and places where you tend to wobble.' },
         hiddenSelf: { name: 'Your hidden-self report', teaser: 'The gap between your birth chart and your real days. The big one.' },
         trueBuddy: { name: 'Your true companion', teaser: 'The final form of your Hoshi-Kyara, speaking with everything about you in mind.' },
@@ -969,7 +969,7 @@ const UI: Record<Lang, UIStrings> = {
       revealReading: 'Leyendo las estrellas…',
       revealIntro: 'Tu Hoshi-Kyara es',
       guideTitle: 'Lo que viene ahora',
-      guideBody: (n) => `Tu Hoshi-Kyara ya está aquí. Más abajo verás el grupo de ${n} que te compone y la lectura de hoy. Lo mejor es la sala de consulta: responde sobre amor, trabajo o lo que viene, a partir de tus propios astros.`,
+      guideBody: (n) => `Tu Hoshi-Kyara ya está aquí. Más abajo verás los ${n} astros que te forman y la lectura de hoy. Lo mejor es la sala de consulta: responde sobre amor, trabajo o lo que viene, a partir de tus propios astros.`,
       guideCta: 'Hablar en la sala de consulta',
       partyTitle: (n) => `Los ${n} astros que te forman`,
       partySub: 'Los astros del momento de tu nacimiento se volvieron los personajes que te componen: de qué se encarga cada uno y cómo es.',
@@ -1118,7 +1118,7 @@ const UI: Record<Lang, UIStrings> = {
       tiers: {
         birth: { name: 'Nace tu Hoshi-Kyara', teaser: 'Nacido de tu Sol y tu Luna: el punto de partida de tu historia.' },
         moonBack: { name: 'El otro lado de tu Luna', teaser: 'El tú sin guardia cuando te sientes a salvo, aparte de tu cara pública (el Sol).' },
-        partyDeep: { name: 'Tu grupo, a fondo', teaser: 'Una lectura más cercana del papel de los diez personajes estelares.' },
+        partyDeep: { name: 'Tus astros, a fondo', teaser: 'Una lectura más cercana del papel de los diez personajes estelares.' },
         moodTrend: { name: 'Tus patrones de ánimo', teaser: 'Cuando se acumulan los registros: los días y lugares donde sueles tambalear.' },
         hiddenSelf: { name: 'Informe de tu yo oculto', teaser: 'La brecha entre tu carta natal y tus días reales. El descubrimiento clave.' },
         trueBuddy: { name: 'Tu verdadero compañero', teaser: 'La forma final de tu Hoshi-Kyara: habla teniendo en cuenta todo sobre ti.' },
@@ -1251,7 +1251,7 @@ const UI: Record<Lang, UIStrings> = {
       revealReading: 'Lecture des étoiles…',
       revealIntro: 'Ton Hoshi-Kyara est',
       guideTitle: 'La suite',
-      guideBody: (n) => `Ton Hoshi-Kyara est né. Plus bas, tu trouveras l'équipe de ${n} qui te compose et la lecture du jour. Le meilleur, c'est le salon de consultation : il répond sur l'amour, le travail ou la suite, à partir de tes propres astres.`,
+      guideBody: (n) => `Ton Hoshi-Kyara est né. Plus bas, tu trouveras les ${n} astres qui te façonnent et la lecture du jour. Le meilleur, c'est le salon de consultation : il répond sur l'amour, le travail ou la suite, à partir de tes propres astres.`,
       guideCta: 'Discuter au salon',
       partyTitle: (n) => `Les ${n} astres qui te façonnent`,
       partySub: 'Les astres de l’instant de ta naissance sont devenus les personnages qui te composent : ce dont chacun s’occupe et son caractère.',
@@ -1400,7 +1400,7 @@ const UI: Record<Lang, UIStrings> = {
       tiers: {
         birth: { name: 'Ton Hoshi-Kyara naît', teaser: 'Né de ton Soleil et de ta Lune : le point de départ de ton histoire.' },
         moonBack: { name: 'L’autre face de ta Lune', teaser: 'Le toi sans défense quand tu te sens en sécurité, à part ton visage public (le Soleil).' },
-        partyDeep: { name: 'Ton équipe, en détail', teaser: 'Une lecture plus fine du rôle des dix personnages stellaires.' },
+        partyDeep: { name: 'Tes astres, en détail', teaser: 'Une lecture plus fine du rôle des dix personnages stellaires.' },
         moodTrend: { name: 'Tes habitudes d’humeur', teaser: 'À mesure que les notes s’accumulent : les jours et lieux où tu vacilles.' },
         hiddenSelf: { name: 'Le rapport sur ton toi caché', teaser: 'L’écart entre ton thème natal et tes journées réelles. La grande découverte.' },
         trueBuddy: { name: 'Ton vrai compagnon', teaser: 'La forme ultime de ton Hoshi-Kyara : il parle en tenant compte de tout sur toi.' },
@@ -1533,7 +1533,7 @@ const UI: Record<Lang, UIStrings> = {
       revealReading: 'Sto leggendo le stelle…',
       revealIntro: 'Il tuo Hoshi-Kyara è',
       guideTitle: 'Cosa viene dopo',
-      guideBody: (n) => `Il tuo Hoshi-Kyara è nato. Più sotto trovi il gruppo di ${n} che ti compone e la lettura di oggi. Il meglio è la sala consulti: risponde su amore, lavoro o ciò che verrà, partendo dai tuoi astri.`,
+      guideBody: (n) => `Il tuo Hoshi-Kyara è nato. Più sotto trovi i ${n} astri che ti formano e la lettura di oggi. Il meglio è la sala consulti: risponde su amore, lavoro o ciò che verrà, partendo dai tuoi astri.`,
       guideCta: 'Parla nella sala consulti',
       partyTitle: (n) => `I ${n} astri che ti formano`,
       partySub: 'Gli astri dell’istante della tua nascita sono diventati i personaggi che ti compongono: di cosa si occupa ognuno e com’è fatto.',
@@ -1682,7 +1682,7 @@ const UI: Record<Lang, UIStrings> = {
       tiers: {
         birth: { name: 'Nasce il tuo Hoshi-Kyara', teaser: 'Nato dal tuo Sole e dalla tua Luna: il punto di partenza della tua storia.' },
         moonBack: { name: 'L’altro lato della tua Luna', teaser: 'Il te senza difese quando ti senti al sicuro, oltre la tua faccia pubblica (il Sole).' },
-        partyDeep: { name: 'Il tuo gruppo, in profondità', teaser: 'Una lettura più ravvicinata del ruolo dei dieci personaggi stellari.' },
+        partyDeep: { name: 'I tuoi astri, in profondità', teaser: 'Una lettura più ravvicinata del ruolo dei dieci personaggi stellari.' },
         moodTrend: { name: 'Le tue tendenze d’umore', teaser: 'Man mano che i segni si accumulano: i giorni e i momenti in cui vacilli.' },
         hiddenSelf: { name: 'Il rapporto sul tuo io nascosto', teaser: 'Il divario tra il tuo tema natale e le tue giornate reali. La scoperta più grande.' },
         trueBuddy: { name: 'Il tuo vero compagno', teaser: 'La forma finale del tuo Hoshi-Kyara: parla tenendo conto di tutto su di te.' },
@@ -1815,7 +1815,7 @@ const UI: Record<Lang, UIStrings> = {
       revealReading: 'Lendo as estrelas…',
       revealIntro: 'O seu Hoshi-Kyara é',
       guideTitle: 'O que vem a seguir',
-      guideBody: (n) => `O seu Hoshi-Kyara nasceu. Abaixo você encontra o grupo de ${n} que compõe você e a leitura de hoje. O melhor é a sala de consulta: responde sobre amor, trabalho ou o que vem pela frente, a partir dos seus astros.`,
+      guideBody: (n) => `O seu Hoshi-Kyara nasceu. Abaixo você encontra os ${n} astros que formam você e a leitura de hoje. O melhor é a sala de consulta: responde sobre amor, trabalho ou o que vem pela frente, a partir dos seus astros.`,
       guideCta: 'Conversar na sala de consulta',
       partyTitle: (n) => `Os ${n} astros que formam você`,
       partySub: 'Os astros do instante do seu nascimento viraram os personagens que compõem você: do que cada um cuida e como ele é.',
@@ -1964,7 +1964,7 @@ const UI: Record<Lang, UIStrings> = {
       tiers: {
         birth: { name: 'Seu Hoshi-Kyara nasce', teaser: 'Nascido do seu Sol e da sua Lua: o ponto de partida da sua história.' },
         moonBack: { name: 'O outro lado da sua Lua', teaser: 'O você sem defesas quando se sente seguro, além da sua face pública (o Sol).' },
-        partyDeep: { name: 'Seu grupo, a fundo', teaser: 'Uma leitura mais próxima do papel dos dez personagens estelares.' },
+        partyDeep: { name: 'Seus astros, a fundo', teaser: 'Uma leitura mais próxima do papel dos dez personagens estelares.' },
         moodTrend: { name: 'Seus padrões de humor', teaser: 'Conforme os registros se acumulam: os dias e lugares em que você oscila.' },
         hiddenSelf: { name: 'Relatório do seu eu oculto', teaser: 'A lacuna entre seu mapa natal e seus dias reais. A grande descoberta.' },
         trueBuddy: { name: 'Seu verdadeiro companheiro', teaser: 'A forma final do seu Hoshi-Kyara: fala levando em conta tudo sobre você.' },
@@ -2097,7 +2097,7 @@ const UI: Record<Lang, UIStrings> = {
       revealReading: '별을 읽고 있어요…',
       revealIntro: '당신의 호시캐릭터는',
       guideTitle: '이다음 즐기는 법',
-      guideBody: (n) => `호시캐릭터가 완성됐어요. 아래에는 당신을 이루는 ${n}명의 파티와 오늘의 운세가 이어져요. 가장 추천하는 건 「호시캐릭터 상담실」. 당신의 별을 바탕으로 연애도 일도 앞으로의 운세도 답해 줘요.`,
+      guideBody: (n) => `호시캐릭터가 완성됐어요. 아래에는 당신을 이루는 ${n}개의 별과 오늘의 운세가 이어져요. 가장 추천하는 건 「호시캐릭터 상담실」. 당신의 별을 바탕으로 연애도 일도 앞으로의 운세도 답해 줘요.`,
       guideCta: '상담실에서 말 걸기',
       partyTitle: (n) => `당신을 이루는 ${n}개의 별`,
       partySub: '태어난 순간의 별들이 당신을 이루는 캐릭터가 되었어요. 각자의 담당과 특징이에요.',
@@ -2246,7 +2246,7 @@ const UI: Record<Lang, UIStrings> = {
       tiers: {
         birth: { name: '호시캐릭터 탄생', teaser: '태양과 달에서 태어난 당신의 호시캐릭터. 이야기의 출발점.' },
         moonBack: { name: '달 별자리의 이면', teaser: '겉으로 보이는 얼굴(태양)과는 다른, 안심할 때의 본래의 당신.' },
-        partyDeep: { name: '파티 깊이 보기', teaser: '열 별 캐릭터의 한 걸음 더 들어간 역할과 해석.' },
+        partyDeep: { name: '별들 깊이 보기', teaser: '열 별 캐릭터의 한 걸음 더 들어간 역할과 해석.' },
         moodTrend: { name: '기분의 버릇', teaser: '기록이 쌓이면 보이는, 당신이 흔들리기 쉬운 요일과 상황.' },
         hiddenSelf: { name: '숨은 나 리포트', teaser: '본래의 별(출생 차트)과 실제 하루의 간극. 가장 큰 발견.' },
         trueBuddy: { name: '진짜 단짝', teaser: '당신의 모든 것을 바탕으로 이야기하는 호시캐릭터의 최종형.' },

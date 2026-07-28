@@ -27,7 +27,7 @@ const PLANET_BASE: Record<PlanetKey, PlanetBase> = {
 }
 
 
-/** パーティでの役割(クラス名・言語別) */
+/** かけらぼしとしての役割(クラス名・言語別) */
 
 /** 担当領域(言語別) */
 

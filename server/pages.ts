@@ -337,7 +337,7 @@ export function renderStarsPage(lang: Lang): string {
   const signNames = SIGN_NAMES[lang] ?? SIGN_NAMES.ja
   const signKw = SIGN_KEYWORDS[lang] ?? SIGN_KEYWORDS.ja
 
-  // 読み方の例: アプリのパーティ行と同じ組み立て(太陽 × しし座)を見せて、結果画面の読み方を教える
+  // 読み方の例: アプリのかけらぼし行と同じ組み立て(太陽 × しし座)を見せて、結果画面の読み方を教える
   const exIdx = 4 // しし座
   const ex = t.result.roleSign(role.sun, nm.sun, signNames[exIdx], false)
   const example =

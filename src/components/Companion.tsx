@@ -120,7 +120,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
       <h2 className="companion-name">{starType ? quoted(starType.type.name) : ''}</h2>
 
       {/* 毎日ひらく理由＝今日の運勢。ここを一等地に置く。
-          地図やパーティは「たまに見る」ものなので、相談室・振り返りより下へ送る */}
+          地図やかけらぼしは「たまに見る」ものなので、相談室・振り返りより下へ送る */}
       <StarReading chart={state.chart} />
 
       <AiChat

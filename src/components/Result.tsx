@@ -157,7 +157,7 @@ export default function Result({ data, onHome, onPair }: Props) {
         </section>
       )}
 
-      {/* 「自分は何者か」を見てから人に見せる流れにする(パーティ→シェア) */}
+      {/* 「自分は何者か」を見てから人に見せる流れにする(かけらぼし→シェア) */}
       <PartyCard data={data} />
 
       {starType && <ShareButtons starTypeName={quoted(starType.type.name)} starSlug={starSlug} />}
