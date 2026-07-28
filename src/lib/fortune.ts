@@ -437,37 +437,102 @@ const ASPECT_NAME: Record<Lang, Record<number, string>> = {
 }
 
 /**
- * 表示用のアスペクト語。角度の数字は表に出さない(憲法: 10天体は"効かせる"もので"読ませる"ものではない)。
- * AI に渡す title は従来どおり角度つきのまま＝精度は落とさない。
+ * 表示用の役割名。NATAL_LABEL の括弧の中身をそのまま出すと「あなたの発展に」のように
+ * 日本語として意味の取れない見出しになるので、カードで読ませる用の言い方を別に持つ。
  */
-const PLAIN_ASPECT: Record<Lang, Record<number, string>> = {
-  ja: { 0: 'まっすぐな重なり', 60: 'ゆるやかな追い風', 90: '試練の角度', 120: '大きな追い風', 180: '引っぱり合う力' },
-  en: { 0: 'a direct overlap', 60: 'a gentle tailwind', 90: 'a testing angle', 120: 'a strong tailwind', 180: 'a tug-of-war' },
-  es: { 0: 'una superposición directa', 60: 'un viento suave a favor', 90: 'un ángulo que pone a prueba', 120: 'un fuerte viento a favor', 180: 'un tira y afloja' },
-  fr: { 0: 'une superposition directe', 60: 'un vent léger favorable', 90: 'un angle qui met à l’épreuve', 120: 'un fort vent favorable', 180: 'un bras de fer' },
-  it: { 0: 'una sovrapposizione diretta', 60: 'un vento leggero a favore', 90: 'un angolo che mette alla prova', 120: 'un forte vento a favore', 180: 'un braccio di ferro' },
-  pt: { 0: 'uma sobreposição direta', 60: 'um vento leve a favor', 90: 'um ângulo que põe à prova', 120: 'um forte vento a favor', 180: 'um cabo de guerra' },
-  ko: { 0: '똑바로 겹치는 힘', 60: '부드러운 순풍', 90: '시험대에 오르는 각도', 120: '강한 순풍', 180: '서로 잡아당기는 힘' },
+const PLAIN_ROLE: Record<Lang, Record<PlanetKey, string>> = {
+  ja: {
+    sun: 'あなたらしさ', moon: '気持ち', asc: '人からの見え方', mercury: '考えごと',
+    venus: '人づきあいと恋', mars: 'やる気', jupiter: 'チャンス', saturn: 'がんばりどころ',
+    uranus: '変化のきざし', neptune: '直感', pluto: '心の奥',
+  },
+  en: {
+    sun: 'who you are', moon: 'your feelings', asc: 'how you come across', mercury: 'your thinking',
+    venus: 'love and connection', mars: 'your drive', jupiter: 'your chances', saturn: 'the work you put in',
+    uranus: 'signs of change', neptune: 'your intuition', pluto: 'what is deep down',
+  },
+  es: {
+    sun: 'quién eres', moon: 'tus emociones', asc: 'cómo te ven', mercury: 'tus ideas',
+    venus: 'el amor y los vínculos', mars: 'tu impulso', jupiter: 'tus oportunidades', saturn: 'tu esfuerzo',
+    uranus: 'las señales de cambio', neptune: 'tu intuición', pluto: 'lo más hondo de ti',
+  },
+  fr: {
+    sun: 'qui vous êtes', moon: 'vos émotions', asc: 'votre image', mercury: 'vos idées',
+    venus: 'vos liens et l’amour', mars: 'votre élan', jupiter: 'vos occasions', saturn: 'vos efforts',
+    uranus: 'les signes de changement', neptune: 'votre intuition', pluto: 'ce qui est au plus profond',
+  },
+  it: {
+    sun: 'chi sei', moon: 'le tue emozioni', asc: 'come ti vedono', mercury: 'i tuoi pensieri',
+    venus: 'gli affetti e l’amore', mars: 'il tuo slancio', jupiter: 'le tue occasioni', saturn: 'il tuo impegno',
+    uranus: 'i segni di cambiamento', neptune: 'il tuo intuito', pluto: 'ciò che hai nel profondo',
+  },
+  pt: {
+    sun: 'quem você é', moon: 'suas emoções', asc: 'como te veem', mercury: 'suas ideias',
+    venus: 'os afetos e o amor', mars: 'sua garra', jupiter: 'suas oportunidades', saturn: 'seu esforço',
+    uranus: 'os sinais de mudança', neptune: 'sua intuição', pluto: 'o que há de mais fundo',
+  },
+  ko: {
+    sun: '당신다움', moon: '마음', asc: '남에게 비치는 모습', mercury: '생각',
+    venus: '사랑과 관계', mars: '의욕', jupiter: '기회', saturn: '노력할 부분',
+    uranus: '변화의 조짐', neptune: '직감', pluto: '마음 깊은 곳',
+  },
 }
 
-/** 「木星(発展)」→「発展」。表に出すのは日常語の役割だけ */
-const plainNatal = (label: string) => label.match(/[（(]([^（()]*)[)）]\s*$/)?.[1] ?? label
-
-const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
-
 /**
- * 表示用の一文。運行側の天体名は出さず「いまの巡り」とまとめ、出生側は役割名だけを出す。
- * (AIの答え方と同じ言い換えルール)
+ * 表示用の一行。運行側の天体名も角度の数字も出さず、「その役割がいまどうなっているか」だけを言う。
+ * 角度ごとに言い回しを持つのは、助詞や語順を自然にするため(テンプレートに当てはめると日本語が壊れる)。
+ * AI に渡す ITEM_TITLE は従来どおり技術表記のまま＝精度は落とさない。
  */
-const PLAIN_TITLE: Record<Lang, (natal: string, aspect: string) => string> = {
-  ja: (n, a) => `あなたの${n}に、いまの巡りから${a}`,
-  en: (n, a) => `Your ${n}: ${a} from the current sky`,
-  es: (n, a) => `Tu ${n}: ${a} desde el cielo de ahora`,
-  // fr の votre は性別で変化しないので付けられる。it/pt の所有格は変化するので付けず、頭を大文字にする。
-  fr: (n, a) => `Votre ${n} : ${a} depuis le ciel actuel`,
-  it: (n, a) => `${cap(n)}: ${a} dal cielo di adesso`,
-  pt: (n, a) => `${cap(n)}: ${a} do céu de agora`,
-  ko: (n, a) => `당신의 ${n}에, 지금의 흐름에서 ${a}`,
+const PLAIN_LINE: Record<Lang, Record<number, (role: string) => string>> = {
+  ja: {
+    0: (r) => `${r}にスポットライト`,
+    60: (r) => `${r}に、やわらかい追い風`,
+    90: (r) => `${r}に、小さな試練`,
+    120: (r) => `${r}に、大きな追い風`,
+    180: (r) => `${r}が、あちこちに引っぱられそう`,
+  },
+  en: {
+    0: (r) => `Spotlight on ${r}`,
+    60: (r) => `A gentle push for ${r}`,
+    90: (r) => `A small test for ${r}`,
+    120: (r) => `A strong tailwind for ${r}`,
+    180: (r) => `A pull in two directions for ${r}`,
+  },
+  es: {
+    0: (r) => `Primer plano para ${r}`,
+    60: (r) => `Un empujón suave para ${r}`,
+    90: (r) => `Un pequeño reto para ${r}`,
+    120: (r) => `Un fuerte empujón para ${r}`,
+    180: (r) => `Una tensión en dos direcciones para ${r}`,
+  },
+  fr: {
+    0: (r) => `Premier plan pour ${r}`,
+    60: (r) => `Un léger coup de pouce pour ${r}`,
+    90: (r) => `Un petit défi pour ${r}`,
+    120: (r) => `Un vent porteur pour ${r}`,
+    180: (r) => `Une tension dans deux sens pour ${r}`,
+  },
+  it: {
+    0: (r) => `Primo piano per ${r}`,
+    60: (r) => `Una leggera spinta per ${r}`,
+    90: (r) => `Una piccola sfida per ${r}`,
+    120: (r) => `Una forte spinta per ${r}`,
+    180: (r) => `Una tensione in due direzioni per ${r}`,
+  },
+  pt: {
+    0: (r) => `Primeiro plano para ${r}`,
+    60: (r) => `Um empurrãozinho para ${r}`,
+    90: (r) => `Um pequeno desafio para ${r}`,
+    120: (r) => `Um forte empurrão para ${r}`,
+    180: (r) => `Uma tensão em dois sentidos para ${r}`,
+  },
+  ko: {
+    0: (r) => `${r}에 스포트라이트`,
+    60: (r) => `${r}에 부드러운 순풍`,
+    90: (r) => `${r}에 작은 시험`,
+    120: (r) => `${r}에 강한 순풍`,
+    180: (r) => `${r}에 양쪽으로 당기는 힘`,
+  },
 }
 
 const ITEM_TITLE: Record<Lang, (transit: string, natal: string, aspect: string) => string> = {
@@ -648,7 +713,7 @@ export function readFortune(natal: PlanetPos[], period: PeriodKey, now = new Dat
     return {
       symbol: info.symbol,
       title: ITEM_TITLE[lang](info.name, NATAL_LABEL[lang][h.natalKey], ASPECT_NAME[lang][h.aspect.angle]),
-      plain: PLAIN_TITLE[lang](plainNatal(NATAL_LABEL[lang][h.natalKey]), PLAIN_ASPECT[lang][h.aspect.angle]),
+      plain: PLAIN_LINE[lang][h.aspect.angle](PLAIN_ROLE[lang][h.natalKey]),
       quality: h.aspect.quality,
       text: TRANSIT_TEXT[lang][h.transit][h.aspect.quality],
     }
