@@ -149,9 +149,28 @@ section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:
 `
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-const mascot = (sun: Element, moon: Element, size: number) =>
-  renderToStaticMarkup(createElement(HoshiKyaraMascot, { sunElement: sun, moonElement: moon, size }))
-const brand = (size: number) => renderToStaticMarkup(createElement(BrandMascot, { size }))
+/**
+ * マスコットは1体ずつ renderToStaticMarkup するため、React の useId() が毎回同じ値になる。
+ * 同じキャラを1ページに2回置いても衝突しないよう、ここで毎回ユニークな接頭辞に付け替える。
+ * (gen-ogp.tsx が複数体を1枚に載せるときと同じやり方)
+ */
+let mascotSeq = 0
+const mascot = (sun: Element, moon: Element, size: number) => {
+  const p = `hk${mascotSeq++}`
+  return renderToStaticMarkup(createElement(HoshiKyaraMascot, { sunElement: sun, moonElement: moon, size })).replace(
+    /(id="|url\(#)([A-Za-z0-9]+)/g,
+    (_m, head, id) => `${head}${p}${id}`,
+  )
+}
+// ブランドマスコットも1ページに複数置くので同じ理由で付け替える
+let brandSeq = 0
+const brand = (size: number) => {
+  const p = `br${brandSeq++}`
+  return renderToStaticMarkup(createElement(BrandMascot, { size })).replace(
+    /(id="|url\(#)([A-Za-z0-9]+)/g,
+    (_m, head, id) => `${head}${p}${id}`,
+  )
+}
 const planetMascot = (key: PlanetKey, size: number) =>
   renderToStaticMarkup(createElement(PlanetMascot, { planetKey: key, size }))
 const elMark = (el: Element) =>

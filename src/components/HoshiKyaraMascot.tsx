@@ -308,7 +308,10 @@ interface Props {
 
 /** ほしキャラのマスコット(SVG)。16キャラそれぞれ固有のポップイラスト(顔なし)＋固有の舞台。 */
 export default function HoshiKyaraMascot({ sunElement, moonElement, size = 72 }: Props) {
-  const uid = useId().replace(/:/g, '')
+  // グラデーションの id はキャラ名まで含める。サーバーはマスコットを1体ずつ
+  // renderToStaticMarkup するので useId() が毎回同じ値になり、これが無いと
+  // 同じページの全マスコットが先頭の1体のグラデーションを参照してしまう。
+  const uid = `${useId().replace(/:/g, '')}${MOTION[sunElement]}${MOTION[moonElement]}`
   const key = `${sunElement}${moonElement}` as Key
   const sun = STAGE[sunElement]
   const moon = STAGE[moonElement]
