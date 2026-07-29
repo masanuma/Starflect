@@ -43,9 +43,6 @@ const T: Record<Element, Record<Element, { name: string; copy: string }>> = {
   },
 }
 
-// 太陽エレメントのやわらかい下地色(マスコットの円背景)
-const TINT: Record<Element, string> = { 火: '#FFE1E9', 地: '#E9F1DA', 風: '#DEF0F8', 水: '#DDE7F8' }
-
 const font = readFileSync(new URL('./assets/ZenMaruGothic-Bold.ttf', import.meta.url))
 
 /** マスコットのSVG中身(<svg>を剥がした内側)を、id衝突しないようプレフィックス付きで返す */
@@ -104,7 +101,6 @@ function cardSvg(sun: Element, moon: Element): string {
     <text x="20" y="8" font-family="Zen Maru Gothic" font-size="30" font-weight="700" fill="#B26A98">ほしキャラ診断</text>
   </g>
 
-  <circle cx="600" cy="272" r="140" fill="${TINT[sun]}"/>
   ${placeMascot(sun, moon, 600, 272, 232, 'm')}
 
   <text x="600" y="470" text-anchor="middle" font-family="Zen Maru Gothic" font-size="${ns}" font-weight="700" fill="url(#name)">${info.name}</text>

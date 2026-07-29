@@ -1684,6 +1684,86 @@ body {
   margin: 0;
 }
 
+/* ---------- ほしキャラの舞台(マスコットの背景円と、キャラごとのゆらぎ) ---------- */
+/* SVGの<g>にCSS transformをかけるので、原点を自分のバウンディングボックスの中心にする */
+.hk-m {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* キャラごとに「光っているもの」が違う(火口・彗星の核・月・泉の照り返し…)。そこだけが明滅する */
+.hk-glow {
+  animation: hk-glow 3.4s ease-in-out infinite alternate;
+}
+
+@keyframes hk-glow {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.hk-m-fire {
+  animation: hk-fire 4.2s ease-in-out infinite alternate;
+}
+
+@keyframes hk-fire {
+  from {
+    transform: translateY(0.6px) scale(0.99);
+  }
+  to {
+    transform: translateY(-0.6px) scale(1.012);
+  }
+}
+
+.hk-m-earth {
+  animation: hk-earth 7s ease-in-out infinite alternate;
+}
+
+@keyframes hk-earth {
+  from {
+    transform: scale(0.996);
+  }
+  to {
+    transform: scale(1.008);
+  }
+}
+
+.hk-m-air {
+  animation: hk-air 5.4s ease-in-out infinite alternate;
+}
+
+@keyframes hk-air {
+  from {
+    transform: translateX(-0.9px) rotate(-1.2deg);
+  }
+  to {
+    transform: translateX(0.9px) rotate(1.2deg);
+  }
+}
+
+.hk-m-water {
+  animation: hk-water 6.2s ease-in-out infinite alternate;
+}
+
+@keyframes hk-water {
+  from {
+    transform: translateY(-0.8px);
+  }
+  to {
+    transform: translateY(0.8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hk-m,
+  .hk-glow {
+    animation: none;
+  }
+}
+
 /* ---------- ほしキャラカード(結果の入口) ---------- */
 .type-card {
   position: relative;

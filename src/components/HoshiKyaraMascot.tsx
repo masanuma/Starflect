@@ -32,7 +32,7 @@ function scene(key: Key, id: string): ReactNode {
           <path d="M37 34 C25 39 15 47 6 56 C20 50 32 44 42 37 Z" fill="#FF8FB4" opacity="0.9" />
           <path d="M39 31 C30 35 20 41 12 50 C24 45 35 40 43 34 Z" fill="#FFB25C" opacity="0.9" />
           <path d="M41 28 C34 31 26 36 20 43 C30 38 38 34 44 30 Z" fill="#FFD96B" opacity="0.95" />
-          <circle cx="44" cy="24" r="12" fill={`url(#${g('h')})`} stroke="#EE6E97" strokeWidth="1.5" />
+          <circle className="hk-glow" cx="44" cy="24" r="12" fill={`url(#${g('h')})`} stroke="#EE6E97" strokeWidth="1.5" />
           <ellipse cx="39" cy="19" rx="4.2" ry="3" fill="#ffffff" opacity="0.55" />
           {spark(58, 30, 4, '#FFD96B')}
           {spark(28, 14, 2.6, '#FF8FB4')}
@@ -54,7 +54,7 @@ function scene(key: Key, id: string): ReactNode {
             d="M32 8 C40 20 44 26 44 36 A12 12 0 0 1 20 36 C20 30 24 26 27 21 C29 29 32 29 33 28 C31 21 30 15 32 8 Z"
             fill={`url(#${g('f')})`}
           />
-          <path d="M32 24 C36 30 37 33 37 37 A5 5 0 0 1 27 37 C27 33 30 30 32 24 Z" fill="#FFE884" opacity="0.9" />
+          <path className="hk-glow" d="M32 24 C36 30 37 33 37 37 A5 5 0 0 1 27 37 C27 33 30 30 32 24 Z" fill="#FFE884" opacity="0.9" />
           {spark(48, 16, 3, '#FFCF4D')}
         </>
       )
@@ -73,7 +73,7 @@ function scene(key: Key, id: string): ReactNode {
             <circle cx="45" cy="41" r="1.8" fill="#F5A0C6" />
             <circle cx="19" cy="41" r="1.8" fill="#7FC8E8" />
           </g>
-          <circle cx="32" cy="26" r="3" fill="#FFF0B8" />
+          <circle className="hk-glow" cx="32" cy="26" r="3" fill="#FFF0B8" />
           <path d="M31 50 q1 -6 1 -14" stroke="#F5C24A" strokeWidth="1.6" fill="none" strokeLinecap="round" opacity="0.7" />
           {spark(52, 48, 2.4, '#FF8FB4')}
         </>
@@ -93,7 +93,7 @@ function scene(key: Key, id: string): ReactNode {
           />
           <path d="M22 38 q5 -5 10 0 t10 0 a10 10 0 0 1 -20 0 z" fill="#5FB3E8" />
           <path d="M22 39 q5 -4.5 10 0 t10 0" fill="none" stroke="#ffffff" strokeWidth="1.4" strokeLinecap="round" opacity="0.7" />
-          {spark(46, 14, 3, '#FFE29A')}
+          <g className="hk-glow">{spark(46, 14, 3, '#FFE29A')}</g>
         </>
       )
     case '地火': // 静かな火山
@@ -106,7 +106,7 @@ function scene(key: Key, id: string): ReactNode {
           <path d="M12 52 L26 20 h12 L52 52 Z" fill="#8A7F94" />
           <path d="M26 20 h12 L44 34 q-12 5 -24 0 Z" fill="#75697F" opacity="0.6" />
           <ellipse cx="32" cy="20" rx="7" ry="2.4" fill="#FF7A3C" />
-          <ellipse cx="32" cy="20" rx="3.4" ry="1.2" fill="#FFD34D" />
+          <ellipse className="hk-glow" cx="32" cy="20" rx="3.4" ry="1.2" fill="#FFD34D" />
           <path d="M26 24 q6 3 12 0" stroke="#FF8A4B" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.6" />
           {spark(50, 16, 2.6, '#FFCF4D')}
         </>
@@ -118,7 +118,7 @@ function scene(key: Key, id: string): ReactNode {
           <path d="M24 20 L31 32 q-7 3 -13 0 Z" fill="#ffffff" opacity="0.92" />
           <path d="M46 30 L50 36 q-5 2 -9 0 Z" fill="#ffffff" opacity="0.92" />
           <path d="M4 54 L24 20 L28 26 L14 54 Z" fill="#8FA3B6" opacity="0.5" />
-          {spark(50, 14, 3.4, '#FFD96B')}
+          <g className="hk-glow">{spark(50, 14, 3.4, '#FFD96B')}</g>
           {spark(14, 20, 2, '#BFD0E0')}
         </>
       )
@@ -135,14 +135,14 @@ function scene(key: Key, id: string): ReactNode {
             <path d="M50 24 q5 -1 8 2" />
           </g>
           <path d="M50 34 q3 3 0 6 q-3 -1 -2 -4" fill="#8FC46B" />
-          {spark(14, 16, 2.6, '#FFE29A')}
+          <g className="hk-glow">{spark(14, 16, 2.6, '#FFE29A')}</g>
         </>
       )
     case '地水': // 泉を隠す森
       return (
         <>
           <ellipse cx="32" cy="50" rx="15" ry="5" fill="#7FC0E8" />
-          <ellipse cx="32" cy="49" rx="9" ry="2.6" fill="#B8E2F5" opacity="0.8" />
+          <ellipse className="hk-glow" cx="32" cy="49" rx="9" ry="2.6" fill="#B8E2F5" opacity="0.8" />
           <path d="M20 44 L14 30 L26 30 Z" fill="#6FA84E" />
           <path d="M20 36 L15 24 L25 24 Z" fill="#8CC46B" />
           <rect x="18.5" y="42" width="3" height="6" fill="#8A5E38" />
@@ -161,7 +161,7 @@ function scene(key: Key, id: string): ReactNode {
             <path d="M10 34 h30 a5 5 0 1 1 -5 5" opacity="0.85" />
             <path d="M8 44 h18 a4 4 0 1 0 -4 -4" opacity="0.7" />
           </g>
-          <g>
+          <g className="hk-glow">
             <circle cx="46" cy="20" r="2.4" fill="#FF8A3C" />
             <circle cx="52" cy="34" r="2" fill="#FFB25C" />
             <circle cx="40" cy="46" r="1.8" fill="#FF7A5B" />
@@ -180,7 +180,7 @@ function scene(key: Key, id: string): ReactNode {
           <path d="M32 16 L37 32 L32 30 Z" fill="#E8574F" />
           <path d="M32 48 L27 32 L32 34 Z" fill="#5E6E86" />
           <circle cx="32" cy="32" r="2.4" fill="#3a2f57" />
-          {spark(53, 14, 2.6, '#FFD96B')}
+          <g className="hk-glow">{spark(53, 14, 2.6, '#FFD96B')}</g>
         </>
       )
     case '風風': // 自由な渡り鳥
@@ -196,14 +196,16 @@ function scene(key: Key, id: string): ReactNode {
           <path d="M32 30 q14 -12 26 -6 q-10 2 -12 8 q8 0 12 6 q-14 4 -26 -2 Z" fill={`url(#${g('w')})`} />
           <ellipse cx="32" cy="31" rx="5" ry="7" fill="#5E8FD8" />
           <circle cx="32" cy="25" r="3.4" fill="#6FA6E8" />
-          {spark(52, 46, 2.6, '#BFE6F2')}
-          {spark(14, 46, 2, '#BFE6F2')}
+          <g className="hk-glow">
+            {spark(52, 46, 2.6, '#BFE6F2')}
+            {spark(14, 46, 2, '#BFE6F2')}
+          </g>
         </>
       )
     case '風水': // 月夜のそよ風
       return (
         <>
-          <path d="M40 12 a16 16 0 1 0 6 24 a13 13 0 1 1 -6 -24 Z" fill="#F6E7A8" stroke="#E3CB6B" strokeWidth="1.2" />
+          <path className="hk-glow" d="M40 12 a16 16 0 1 0 6 24 a13 13 0 1 1 -6 -24 Z" fill="#F6E7A8" stroke="#E3CB6B" strokeWidth="1.2" />
           <g fill="none" stroke="#7FC8E0" strokeWidth="2.4" strokeLinecap="round" opacity="0.9">
             <path d="M8 44 h20 a4 4 0 1 0 -4 -4" />
             <path d="M12 52 h14 a3.4 3.4 0 1 1 -3 3" opacity="0.8" />
@@ -218,7 +220,7 @@ function scene(key: Key, id: string): ReactNode {
           <path d="M12 54 L26 24 h12 L52 54 Z" fill="#3C5A86" />
           <path d="M26 24 h12 L44 36 q-12 5 -24 0 Z" fill="#2E4870" opacity="0.7" />
           <ellipse cx="32" cy="24" rx="6.5" ry="2.2" fill="#FF7A3C" />
-          <ellipse cx="32" cy="24" rx="3" ry="1" fill="#FFD34D" />
+          <ellipse className="hk-glow" cx="32" cy="24" rx="3" ry="1" fill="#FFD34D" />
           <path d="M28 28 q4 4 8 0" stroke="#FF8A4B" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.6" />
           <g fill="#CDEBFA" opacity="0.9">
             <circle cx="46" cy="20" r="2.4" />
@@ -239,7 +241,7 @@ function scene(key: Key, id: string): ReactNode {
           <g stroke="#7FB6D8" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.85">
             <path d="M8 54 q4 -3 8 0 t8 0 t8 0 t8 0 t8 0" />
           </g>
-          {spark(52, 14, 2.6, '#CDEBFA')}
+          <g className="hk-glow">{spark(52, 14, 2.6, '#CDEBFA')}</g>
         </>
       )
     case '水風': // 風をうつす水面
@@ -254,7 +256,7 @@ function scene(key: Key, id: string): ReactNode {
             <path d="M12 20 h22 a4 4 0 1 0 -4 -4" />
             <path d="M16 28 h16 a3.4 3.4 0 1 1 -3 3" opacity="0.8" />
           </g>
-          {spark(50, 16, 2.6, '#CDEBFA')}
+          <g className="hk-glow">{spark(50, 16, 2.6, '#CDEBFA')}</g>
         </>
       )
     case '水水': // 深海の月
@@ -266,7 +268,7 @@ function scene(key: Key, id: string): ReactNode {
               <stop offset="100%" stopColor="#C9D6EA" />
             </radialGradient>
           </defs>
-          <circle cx="32" cy="30" r="17" fill={`url(#${g('m')})`} />
+          <circle className="hk-glow" cx="32" cy="30" r="17" fill={`url(#${g('m')})`} />
           <g fill="#B6C6DE" opacity="0.7">
             <circle cx="26" cy="24" r="3" />
             <circle cx="38" cy="34" r="2.4" />
@@ -283,19 +285,49 @@ function scene(key: Key, id: string): ReactNode {
   }
 }
 
+/**
+ * 舞台(背景の円)の色。**外側＝太陽（表の顔）／中心＝月（心の中）** で、
+ * アプリが説明している「太陽×月」の式をそのまま色にしている。
+ * 4×4＝16通りなので、キャラごとに自分の色を持つことになる。
+ */
+const STAGE: Record<Element, { core: string; light: string; deep: string }> = {
+  火: { core: '#FFF6E9', light: '#FFD5A8', deep: '#F0975C' },
+  地: { core: '#FBF7E6', light: '#EBD79E', deep: '#C2A75F' },
+  風: { core: '#EFFBFE', light: '#BFE6F2', deep: '#63BDD4' },
+  水: { core: '#F2F7FF', light: '#C4D6F4', deep: '#7398D8' },
+}
+
+/** ゆらぎ方も太陽のエレメントで変える(火は揺れる／地はほとんど動かない／風は流れる／水は漂う) */
+const MOTION: Record<Element, string> = { 火: 'fire', 地: 'earth', 風: 'air', 水: 'water' }
+
 interface Props {
   sunElement: Element
   moonElement: Element
   size?: number
 }
 
-/** ほしキャラのマスコット(SVG)。16キャラそれぞれ固有のポップイラスト(顔なし)。 */
+/** ほしキャラのマスコット(SVG)。16キャラそれぞれ固有のポップイラスト(顔なし)＋固有の舞台。 */
 export default function HoshiKyaraMascot({ sunElement, moonElement, size = 72 }: Props) {
   const uid = useId().replace(/:/g, '')
   const key = `${sunElement}${moonElement}` as Key
+  const sun = STAGE[sunElement]
+  const moon = STAGE[moonElement]
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" role="img" aria-hidden="true">
-      {scene(key, uid)}
+      <defs>
+        <radialGradient id={`${uid}stage`} cx="50%" cy="42%" r="66%">
+          <stop offset="0%" stopColor={sun.core} />
+          <stop offset="52%" stopColor={sun.light} />
+          <stop offset="100%" stopColor={sun.deep} />
+        </radialGradient>
+      </defs>
+      {/* 面＝太陽(表の顔)、輪郭＝月(心の中)。中心に月の色を置くと絵の下に隠れて見えないので輪郭に出す */}
+      <circle cx="32" cy="32" r="30.4" fill={`url(#${uid}stage)`} />
+      <circle cx="32" cy="32" r="30.4" fill="none" stroke={moon.deep} strokeWidth="2.4" />
+      {/* 絵は少し縮めて円の中に収める(山や水面など端まで描いているキャラが枠から出ないように) */}
+      <g transform="translate(32 32) scale(0.86) translate(-32 -32)">
+        <g className={`hk-m hk-m-${MOTION[sunElement]}`}>{scene(key, uid)}</g>
+      </g>
     </svg>
   )
 }

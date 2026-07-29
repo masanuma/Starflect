@@ -145,6 +145,7 @@ section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:
 .starslink{display:block;text-align:center;margin:8px 0 0;font-size:13.5px}
 .footer{text-align:center;color:var(--ink-sub);font-size:12px;padding:32px 0;border-top:1px solid var(--line);margin-top:40px;line-height:1.9}
 @media(max-width:400px){.tgrid{grid-template-columns:1fr}}
+.hk-m{transform-box:fill-box;transform-origin:center}.hk-glow{animation:hk-glow 3.4s ease-in-out infinite alternate}@keyframes hk-glow{from{opacity:.5}to{opacity:1}}.hk-m-fire{animation:hk-fire 4.2s ease-in-out infinite alternate}@keyframes hk-fire{from{transform:translateY(.6px) scale(.99)}to{transform:translateY(-.6px) scale(1.012)}}.hk-m-earth{animation:hk-earth 7s ease-in-out infinite alternate}@keyframes hk-earth{from{transform:scale(.996)}to{transform:scale(1.008)}}.hk-m-air{animation:hk-air 5.4s ease-in-out infinite alternate}@keyframes hk-air{from{transform:translateX(-.9px) rotate(-1.2deg)}to{transform:translateX(.9px) rotate(1.2deg)}}.hk-m-water{animation:hk-water 6.2s ease-in-out infinite alternate}@keyframes hk-water{from{transform:translateY(-.8px)}to{transform:translateY(.8px)}}@media(prefers-reduced-motion:reduce){.hk-m,.hk-glow{animation:none}}
 `
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
