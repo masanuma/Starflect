@@ -57,7 +57,7 @@ export default function StarReading({ chart, onAsk }: { chart: ChartData; onAsk?
         </div>
       </div>
 
-      <p className="reading-sky">{fortune.skyNote}</p>
+      <p className="reading-sky">{fortune.plainSky}</p>
       <p className="fortune-tone">
         <span className="tone-badge">{fortune.toneLabel}</span>
         {fortune.toneText}

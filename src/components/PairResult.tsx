@@ -180,7 +180,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
           </div>
           <div>
             <p className="planet-title">{t.pairResult.todayTitle(periodLabel('today'))}</p>
-            <p className="planet-sub">{t.pairResult.todaySub(fortuneA.skyNote)}</p>
+            <p className="planet-sub">{t.pairResult.todaySub(fortuneA.plainSky)}</p>
           </div>
         </header>
 

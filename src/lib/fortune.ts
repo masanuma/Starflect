@@ -1,6 +1,7 @@
 import { Body } from 'astronomy-engine'
 import { eclipticLongitude, signIndex } from './astro'
 import { signName } from './signs'
+import { SIGN_KEYWORDS } from './astroText'
 import { getPlanet } from './planets'
 import { getLang } from './i18n'
 import type { Lang } from './i18n'
@@ -592,6 +593,8 @@ export interface Fortune {
   /** 調子の数値(+2=絶好調 〜 -2=充電期間)。相性占いの組み合わせ判定に使う */
   toneLevel: number
   skyNote: string
+  /** 画面に出す空模様(星座名を出さない) */
+  plainSky: string
   items: FortuneItem[]
 }
 
@@ -666,6 +669,23 @@ const TONE_TEXT: Record<Lang, Record<number, { label: string; text: string }>> =
   },
 }
 
+/**
+ * 表示用の空模様。天体名も星座名も出さず、「今日はどんな空気か」だけを言う。
+ * 手がかりは運行中の月の星座(約2.5日で移る＝毎日の気分の色)で、そのキーワードを1語だけ借りる。
+ * AI に渡す skyNote は従来どおり技術表記のまま＝精度は落とさない。
+ */
+function plainSkyText(lang: Lang, moonSignIndex: number): string {
+  const kw = SIGN_KEYWORDS[lang][moonSignIndex][0]
+  const lower = kw.toLowerCase()
+  if (lang === 'en') return `A day with ${lower} in the air`
+  if (lang === 'es') return `Un día con ${lower} en el aire`
+  if (lang === 'fr') return `Une journée avec ${lower} dans l’air`
+  if (lang === 'it') return `Una giornata con ${lower} nell’aria`
+  if (lang === 'pt') return `Um dia com ${lower} no ar`
+  if (lang === 'ko') return `오늘은 ${kw}의 기운이 흐르는 날`
+  return `今日は、${kw}の空気が流れています`
+}
+
 function skyNoteText(lang: Lang, period: PeriodKey, sunSign: string, moonSign: string): string {
   const short = period === 'today' || period === 'tomorrow'
   if (lang === 'en') return short ? `Sun in ${sunSign}, Moon in ${moonSign}` : `Sun transiting through ${sunSign}`
@@ -730,11 +750,13 @@ export function readFortune(natal: PlanetPos[], period: PeriodKey, now = new Dat
   const tone = TONE_DEFS.find((t) => score >= t.min) ?? TONE_DEFS[2]
   const toneText = TONE_TEXT[lang][tone.level]
 
+  const moonSignIndex = signIndex(eclipticLongitude(Body.Moon, when))
   const sunSign = signName(signIndex(eclipticLongitude(Body.Sun, when)))
-  const moonSign = signName(signIndex(eclipticLongitude(Body.Moon, when)))
+  const moonSign = signName(moonSignIndex)
   const skyNote = skyNoteText(lang, period, sunSign, moonSign)
+  const plainSky = plainSkyText(lang, moonSignIndex)
 
-  return { toneLabel: toneText.label, toneText: toneText.text, toneLevel: tone.level, skyNote, items }
+  return { toneLabel: toneText.label, toneText: toneText.text, toneLevel: tone.level, skyNote, plainSky, items }
 }
 
 /** 期間ごとの見通しダイジェスト(チャットに全期間ぶん渡すための軽量サマリ) */

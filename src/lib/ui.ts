@@ -174,7 +174,7 @@ export interface UIStrings {
     breakdownTitle: string
     breakdownSub: string
     todayTitle: (period: string) => string
-    todaySub: (skyNote: string) => string
+    todaySub: (sky: string) => string
     /** 先の期間は出さず、相棒に聞いてもらう(ソロの運勢カードと同じ方針) */
     askAheadTitle: string
     askAhead: { label: string; q: string }[]
@@ -451,7 +451,7 @@ const UI: Record<Lang, UIStrings> = {
       breakdownTitle: '相性の内訳',
       breakdownSub: '太陽(表の顔)と月(心)、4つの組み合わせから',
       todayTitle: (period) => `${period}のふたり`,
-      todaySub: (skyNote) => `${skyNote} — その星がふたりに吹かせる風は?`,
+      todaySub: (sky) => `${sky}。ふたりには、どんな風が吹く?`,
       askAheadTitle: 'この先のふたりが気になったら、聞いてみて',
       askAhead: [{ label: '明日は？', q: '明日のふたりはどんな感じ？' }, { label: '今週は？', q: '今週のふたりはどんな流れ？' }, { label: '来月は？', q: '来月のふたりはどんな時期になりそう？' }],
       upsell: '生まれた時刻が分かると月星座の精度が上がり、相性の判定もより正確になります(現在は正午で近似しています)。',
@@ -740,7 +740,7 @@ const UI: Record<Lang, UIStrings> = {
       breakdownTitle: 'Compatibility breakdown',
       breakdownSub: 'From four combinations of Sun (outer face) and Moon (heart)',
       todayTitle: (period) => `The two of you: ${period}`,
-      todaySub: (skyNote) => `${skyNote} — what wind does that stir up for you two?`,
+      todaySub: (sky) => `${sky}. What wind does that stir up for you two?`,
       askAheadTitle: 'Curious about the two of you ahead? Just ask.',
       askAhead: [{ label: 'Tomorrow?', q: 'What are the two of us like tomorrow?' }, { label: 'This week?', q: 'How is this week looking for the two of us?' }, { label: 'Next month?', q: 'What kind of month is next month for the two of us?' }],
       upsell: 'With birth times, the Moon signs get more accurate and the match becomes more precise (currently approximated at noon).',
@@ -1029,7 +1029,7 @@ const UI: Record<Lang, UIStrings> = {
       breakdownTitle: 'Desglose de la afinidad',
       breakdownSub: 'A partir de cuatro combinaciones de Sol (cara externa) y Luna (corazón)',
       todayTitle: (period) => `Vosotros dos: ${period}`,
-      todaySub: (skyNote) => `${skyNote} — ¿qué viento sopla eso para vosotros dos?`,
+      todaySub: (sky) => `${sky}. ¿Qué viento sopla eso para vosotros dos?`,
       askAheadTitle: '¿Te intriga cómo seguirán? Pregúntame.',
       askAhead: [{ label: '¿Mañana?', q: '¿Cómo estaremos mañana los dos?' }, { label: '¿Esta semana?', q: '¿Cómo se presenta esta semana para nosotros dos?' }, { label: '¿El mes que viene?', q: '¿Qué tal el mes que viene para nosotros dos?' }],
       upsell: 'Con las horas de nacimiento, los signos lunares ganan precisión y la afinidad se afina (ahora se aproxima al mediodía).',
@@ -1318,7 +1318,7 @@ const UI: Record<Lang, UIStrings> = {
       breakdownTitle: 'Détail de l’affinité',
       breakdownSub: 'À partir de quatre combinaisons de Soleil (visage extérieur) et Lune (cœur)',
       todayTitle: (period) => `Vous deux : ${period}`,
-      todaySub: (skyNote) => `${skyNote} — quel vent cela souffle-t-il sur vous deux ?`,
+      todaySub: (sky) => `${sky}. Quel vent cela souffle-t-il sur vous deux ?`,
       askAheadTitle: 'Curieux de la suite pour vous deux ? Demande-moi.',
       askAhead: [{ label: 'Demain ?', q: 'Comment ça se présente pour nous deux demain ?' }, { label: 'Cette semaine ?', q: 'Comment se présente cette semaine pour nous deux ?' }, { label: 'Le mois prochain ?', q: 'Ça donne quoi le mois prochain pour nous deux ?' }],
       upsell: 'Avec les heures de naissance, les signes lunaires gagnent en précision et l’affinité s’affine (actuellement approximée à midi).',
@@ -1607,7 +1607,7 @@ const UI: Record<Lang, UIStrings> = {
       breakdownTitle: 'Dettaglio dell’affinità',
       breakdownSub: 'Da quattro combinazioni di Sole (volto esterno) e Luna (cuore)',
       todayTitle: (period) => `Voi due: ${period}`,
-      todaySub: (skyNote) => `${skyNote} — che vento fa soffiare questo su di voi due?`,
+      todaySub: (sky) => `${sky}. Che vento fa soffiare questo su di voi due?`,
       askAheadTitle: 'Curioso/a di come andrà tra voi? Chiedimelo.',
       askAhead: [{ label: 'Domani?', q: 'Come saremo noi due domani?' }, { label: 'Questa settimana?', q: 'Come si prospetta questa settimana per noi due?' }, { label: 'Il mese prossimo?', q: 'Che mese sarà il prossimo per noi due?' }],
       upsell: 'Con le ore di nascita i segni lunari guadagnano precisione e l’affinità si affina (ora approssimata a mezzogiorno).',
@@ -1896,7 +1896,7 @@ const UI: Record<Lang, UIStrings> = {
       breakdownTitle: 'Detalhe da afinidade',
       breakdownSub: 'A partir de quatro combinações de Sol (rosto externo) e Lua (coração)',
       todayTitle: (period) => `Vocês dois: ${period}`,
-      todaySub: (skyNote) => `${skyNote} — que vento isso sopra para vocês dois?`,
+      todaySub: (sky) => `${sky}. Que vento isso sopra para vocês dois?`,
       askAheadTitle: 'Curioso sobre vocês dois daqui pra frente? Pergunte.',
       askAhead: [{ label: 'Amanhã?', q: 'Como vamos estar nós dois amanhã?' }, { label: 'Esta semana?', q: 'Como está esta semana para nós dois?' }, { label: 'Mês que vem?', q: 'Que mês vai ser o próximo para nós dois?' }],
       upsell: 'Com as horas de nascimento, os signos lunares ficam mais precisos e a afinidade se afina (agora aproximada ao meio-dia).',
@@ -2185,7 +2185,7 @@ const UI: Record<Lang, UIStrings> = {
       breakdownTitle: '궁합 내역',
       breakdownSub: '태양(겉모습)과 달(마음), 네 가지 조합에서',
       todayTitle: (period) => `${period}의 두 사람`,
-      todaySub: (skyNote) => `${skyNote} — 그 별이 두 사람에게 부는 바람은?`,
+      todaySub: (sky) => `${sky}. 두 사람에게는 어떤 바람이 불까요?`,
       askAheadTitle: '앞으로의 두 사람이 궁금하면, 물어보세요',
       askAhead: [{ label: '내일은?', q: '내일 두 사람은 어떤 느낌이야?' }, { label: '이번 주는?', q: '이번 주 두 사람은 어떤 흐름이야?' }, { label: '다음 달은?', q: '다음 달 두 사람은 어떤 시기가 될까?' }],
       upsell: '태어난 시각을 알면 달 별자리 정확도가 올라가 궁합 판정도 더 정확해져요(현재는 정오로 근사하고 있어요).',
