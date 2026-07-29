@@ -83,10 +83,29 @@ for (const lang of CONTENT_LANGS) {
   }
 }
 
+/**
+ * サイトマップの lastmod。
+ *
+ * 静的ページはすべてコードから生成しているので「内容が変わる＝デプロイした」とみなせる。
+ * そこでビルド成果物(dist/index.html)の更新時刻＝デプロイ時刻を最終更新日として使う。
+ *
+ * 固定文字列(2026-07-23)にしていたときは、`/stars` を7言語ぶん足してもLPを全面書き換えても
+ * 日付が動かず、クローラーに「更新なし」と判断されて再クロールされなかった
+ * (Bing の検出URLが 119 のまま止まっていた)。
+ */
+function lastModified(): string {
+  try {
+    return new Date(statSync(appHtmlPath).mtimeMs).toISOString().slice(0, 10)
+  } catch {
+    return new Date().toISOString().slice(0, 10) /* 未ビルド時は当日 */
+  }
+}
+
 function sitemapXml(): string {
   const urls: string[] = []
+  const lastmod = lastModified()
   const push = (loc: string, prio: string) =>
-    urls.push(`  <url><loc>${loc}</loc><lastmod>2026-07-23</lastmod><priority>${prio}</priority></url>`)
+    urls.push(`  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod><priority>${prio}</priority></url>`)
   for (const lang of CONTENT_LANGS) {
     push(ORIGIN + (lang === 'ja' ? '/' : `/${lang}`), lang === 'ja' ? '1.0' : '0.9')
     push(ORIGIN + (lang === 'ja' ? '/stars' : `/${lang}/stars`), '0.6')
