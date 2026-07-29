@@ -5,6 +5,7 @@ import express from 'express'
 import { createAiHandlers, createFeedbackHandler } from './handlers'
 import { renderLP, renderCharPage, renderStarsPage, CONTENT_LANGS } from './pages'
 import { CHAR_BY_SLUG } from './characters'
+import * as stats from './stats'
 import type { Lang } from '../src/lib/i18n'
 
 // 本番サーバー: 静的な紹介LP( / , /<lang> ) とキャラ別ページ( /c/<slug> , /<lang>/c/<slug> )を7言語で配信し、
@@ -121,6 +122,28 @@ const app = express()
 const handlers = createAiHandlers(process.env.ANTHROPIC_API_KEY)
 const feedback = createFeedbackHandler(process.env.FEEDBACK_SHEET_URL)
 
+/**
+ * 着地の集計。GA4 は /app の中でしか動かず、シェアの着地先も検索の入口も無計測だったため、
+ * ここでページ表示だけを数える（Cookieなし・同意不要・個人情報なし。詳細は stats.ts）。
+ * 静的アセットとAPIは対象外。ページのGETだけを見る。
+ */
+const STATS_KEY = process.env.STATS_KEY
+app.use((req, _res, next) => {
+  if (req.method !== 'GET') return next()
+  const p = req.path
+  if (p.startsWith('/api/') || p.startsWith('/assets/') || p.startsWith('/ogp/') || p.includes('.')) return next()
+  if (stats.isBot(req.get('user-agent'))) return next()
+  const utm = typeof req.query.utm_source === 'string' ? req.query.utm_source : undefined
+  stats.record(stats.normalizePath(p), stats.normalizeSource(req.get('referer'), utm, req.hostname))
+  next()
+})
+
+// 集計の閲覧。鍵(STATS_KEY)を設定していないときは存在しない扱いにする
+app.get('/api/stats', (req, res) => {
+  if (!STATS_KEY || req.query.key !== STATS_KEY) return res.status(404).send('Not found')
+  return res.json(stats.snapshot())
+})
+
 app.post('/api/ai-pair-chat', handlers.pairChat)
 app.post('/api/ai-chat', handlers.chat)
 app.post('/api/ai-report', handlers.report)
@@ -199,6 +222,15 @@ app.use((req, res) => {
   if (req.method === 'GET') res.redirect(302, '/')
   else res.status(404).send('Not found')
 })
+
+// メモリ上の集計はデプロイで消えるので、定期的にログへ吐いて履歴を残す
+setInterval(() => stats.flushToLog(), 30 * 60 * 1000).unref()
+for (const sig of ['SIGTERM', 'SIGINT'] as const) {
+  process.on(sig, () => {
+    stats.flushToLog()
+    process.exit(0)
+  })
+}
 
 const port = Number(process.env.PORT) || 3000
 app.listen(port, () => {

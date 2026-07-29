@@ -20,14 +20,25 @@ export default function ShareButtons({ starTypeName, starSlug }: Props) {
   const [copied, setCopied] = useState(false)
 
   // 共有の着地先はキャラ別ページ(読み物→診断CTA)。slug 不明時はトップLP
-  const url = starSlug ? `${location.origin}/c/${encodeURIComponent(starSlug)}` : `${location.origin}/`
-  const parts: ShareParts = { text: t.share.text(starTypeName), url, hashtags: t.share.hashtags }
+  const base = starSlug ? `${location.origin}/c/${encodeURIComponent(starSlug)}` : `${location.origin}/`
+  /**
+   * 共有先ごとに utm_source を付ける。着地先は静的ページでGA4が動かないため、
+   * サーバー側の集計(server/stats.ts)がこの値を見て「どこから来たか」を数える。
+   * これが無いと、シェア経由の訪問と検索・直打ちが区別できない。
+   */
+  const shareUrl = (via: string) => `${base}?utm_source=${via}`
+  const partsFor = (via: string): ShareParts => ({
+    text: t.share.text(starTypeName),
+    url: shareUrl(via),
+    hashtags: t.share.hashtags,
+  })
+  const parts = partsFor('x') /* リンクのhrefは描画時に決まるのでX用を既定にする */
 
   async function onNative() {
-    if (await nativeShare(parts)) track('share', { target: 'native', star_type: starSlug })
+    if (await nativeShare(partsFor('native'))) track('share', { target: 'native', star_type: starSlug })
   }
   async function onCopy() {
-    if (await copyLink(url)) {
+    if (await copyLink(shareUrl('copy'))) {
       setCopied(true)
       track('share', { target: 'copy', star_type: starSlug })
       window.setTimeout(() => setCopied(false), 1800)
@@ -54,7 +65,7 @@ export default function ShareButtons({ starTypeName, starSlug }: Props) {
         </a>
         <a
           className="share-btn share-line"
-          href={lineShareUrl(parts)}
+          href={lineShareUrl(partsFor('line'))}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => track('share', { target: 'line', star_type: starSlug })}
