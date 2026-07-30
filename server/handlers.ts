@@ -122,6 +122,63 @@ function honorificName(name: string, lang: Lang): string {
   return lang === 'ja' ? `${name}さん` : name
 }
 
+/* ---------- 安全（危機的な相談への対応） ---------- */
+
+/**
+ * 危機的な相談に出す窓口。**AIに番号を思い出させてはいけない**のでここに持つ。
+ *
+ * 実測（2026-07-30）：現行プロンプトでも AI は占いをやめて安全を優先し、窓口まで案内した。
+ * ただし**番号は生成されていた**。韓国語では**2024年1月に109へ統合された旧番号 1393 を出した**。
+ * 番号は変わるし覚え違いも起きるので、出典を確認した文字列だけを渡し、それ以外は作らせない。
+ *
+ * 日本語と韓国語は単一の国＝番号が確定できるので実番号を持つ。
+ * 英・西・仏・伊・葡は**話者の国が特定できない**（アプリは国を知らない）ため、
+ * 国を選んで地域の窓口を引ける findahelpline.com（ThroughLine／175か国以上・各団体が自ら情報を検証）に寄せる。
+ * ※各国の番号を抱えると保守できない。1本のディレクトリなら維持できる。
+ */
+const CRISIS_HELP: Record<Lang, string> = {
+  ja:
+    'いのちの電話 ナビダイヤル 0570-783-556（10:00〜22:00・年中無休）／ フリーダイヤル 0120-783-556（毎日16:00〜21:00）。' +
+    '子どもの虐待に関することなら 児童相談所虐待対応ダイヤル 189。いますぐ命に危険があるときは 119（救急）・110（警察）。' +
+    'ネットで相談したいときは https://netsoudan.inochinodenwa.org/ 。',
+  ko:
+    '자살예방 상담전화 109（24시간。2024년 1월부터 1393 등이 109로 통합되었다）。' +
+    '청소년이라면 청소년전화 1388。지금 생명이 위험하다면 119。',
+  en:
+    'Find A Helpline — https://findahelpline.com — pick your country for free, verified crisis lines (phone/chat/text). ' +
+    'If there is immediate danger, tell them to call their local emergency number.',
+  es:
+    'Find A Helpline — https://findahelpline.com — elige tu país para ver líneas de crisis gratuitas y verificadas. ' +
+    'Si hay peligro inmediato, dile que llame al número de emergencias de su país.',
+  fr:
+    'Find A Helpline — https://findahelpline.com — choisis ton pays pour trouver des lignes d’écoute gratuites et vérifiées. ' +
+    'En cas de danger immédiat, dis-lui d’appeler le numéro d’urgence de son pays.',
+  it:
+    'Find A Helpline — https://findahelpline.com — scegli il tuo paese per linee di ascolto gratuite e verificate. ' +
+    'In caso di pericolo immediato, dille di chiamare il numero di emergenza del suo paese.',
+  pt:
+    'Find A Helpline — https://findahelpline.com — escolha o seu país para linhas de apoio gratuitas e verificadas. ' +
+    'Em caso de perigo imediato, diga-lhe para ligar para o número de emergência do seu país.',
+}
+
+/**
+ * 危機的な相談への対応ルール。**占いより安全を優先**させる。
+ * 相談室と相性相談の両方に必ず入れる（片方だけ守られている状態を作らない）。
+ */
+function safetyRules(lang: Lang): string[] {
+  return [
+    '',
+    '【最優先・安全に関する例外】上の答え方のルールより、こちらが優先です。',
+    '- 相手が「死にたい」「消えたい」「自分を傷つけたい」、虐待・暴力を受けている、誰かを傷つけたい、事故や事件に巻き込まれている——など安全にかかわる内容を書いたときは、占いを続けない。星の話・運勢・「結論→星→行動」の型はいったん全部やめる',
+    '- まず相手の言葉を受け止め、心配していることを短く率直に伝える。責めない・軽く扱わない・原因を星のせいにしない',
+    '- そのうえで、下の「相談できる窓口」をそのまま案内する。身近な信頼できる人に今すぐ伝えるようにも促す',
+    '- 【厳守】電話番号やURLを自分で思い出して書かない。下に書かれた文字列だけを使う。書かれていない番号・団体名・URLは絶対に出さない（番号は変わるため、記憶で書くと間違った先に誘導してしまう）',
+    `- 相談できる窓口: ${CRISIS_HELP[lang] ?? CRISIS_HELP.en}`,
+    '- あなたは医師・カウンセラー・警察ではないので、診断や約束はしない。「必ず良くなる」など根拠のない断定もしない',
+    '- 相手が落ち着いて、自分から占いの話に戻りたいと言うまでは占いに戻らない',
+  ]
+}
+
 function buildChatSystem(c: ChatChartContext, lang: Lang): string {
   // 名前があれば敬称つき(日本語=「◯◯さん」)、無ければ「あなた」(「あなたさん」を避ける)
   const who = c.name ? honorificName(c.name, lang) : 'あなた'
@@ -178,6 +235,7 @@ function buildChatSystem(c: ChatChartContext, lang: Lang): string {
     '- 1回の返答は2〜4文程度で簡潔に。相棒との自然な会話のテンポを保つ',
     `- あなたは「${me}」本人。占い師としてではなく、${who}のほしキャラとして一人称「わたし」で話す(「占い師として」「AIとして」などの言い方はしない)`,
     '- 呼びかけは二人称で。名前(◯◯さん)が分かるときだけ、時々やさしく名前で呼んでよい。名前が無いときは「あなた」と呼び、「この方」など第三者的な言い方は絶対にしない',
+    ...safetyRules(lang),
   )
   return lines.join('\n')
 }
@@ -208,7 +266,7 @@ export interface PairChatRequest {
   lang?: Lang
 }
 
-function buildPairChatSystem(c: PairChatContext): string {
+function buildPairChatSystem(c: PairChatContext, lang: Lang): string {
   // nameA/nameB は表示名(日本語は敬称「さん」込み)。ここでは足さない(二重敬称回避)。
   const lines = [
     `あなたは、${c.nameA} と ${c.nameB} の相性をよく知る、あたたかくて聡明な西洋占星術師です。ふたりの相談に、会話形式で丁寧に答えます。`,
@@ -238,6 +296,7 @@ function buildPairChatSystem(c: PairChatContext): string {
     '- 恋愛にも友情・仕事の関係にも読めるように、決めつけず前向きに',
     '- 1回の返答は2〜4文程度で簡潔に。会話のテンポを保つ',
     '- ふたりを名前で呼ぶときは上の表記をそのまま使う(敬称の付け外しをしない)',
+    ...safetyRules(lang),
   ]
   return lines.join('\n')
 }
@@ -379,7 +438,7 @@ const createPairChatHandler = (apiKey: string | undefined): RawHandler =>
   createStreamingChatHandler<PairChatRequest>(
     apiKey,
     'pair-chat',
-    (p) => buildPairChatSystem(p.context) + LANG_DIRECTIVE[langOf(p)],
+    (p) => buildPairChatSystem(p.context, langOf(p)) + LANG_DIRECTIVE[langOf(p)],
   )
 
 /** ごほうび地図の発見レポート(非ストリーミング。初回だけ生成しクライアントがキャッシュする) */
