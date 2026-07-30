@@ -202,7 +202,6 @@ export interface UIStrings {
     intro: string
     starters: Starter[]
   }
-  footer: string
   /** LP下部の「このアプリについて」への導線。注記はそこへ集約している */
   aboutLink: string
   consent: {
@@ -492,7 +491,6 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 この先', q: 'この先のふたりの関係はどうなりそう？' },
       ],
     },
-    footer: '星の計算はあなたの端末の中で行われます。',
     aboutLink: 'このアプリについて',
     consent: {
       message: '匿名の利用状況を計測してもよいですか？(個人情報・生年月日は送信しません)',
@@ -784,7 +782,6 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 Ahead', q: 'Where is our relationship headed?' },
       ],
     },
-    footer: 'The astrology math runs on your own device.',
     aboutLink: 'About this app',
     consent: {
       message: 'May we measure anonymous usage? (No personal data or birth dates are sent.)',
@@ -1075,7 +1072,6 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 El futuro', q: '¿Hacia dónde va nuestra relación?' },
       ],
     },
-    footer: 'Los cálculos astrales ocurren en tu dispositivo.',
     aboutLink: 'Sobre esta app',
     consent: {
       message: '¿Podemos medir el uso de forma anónima? (No se envían datos personales ni fechas de nacimiento.)',
@@ -1366,7 +1362,6 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 L’avenir', q: 'Où va notre relation ?' },
       ],
     },
-    footer: 'Les calculs astraux se font sur ton appareil.',
     aboutLink: 'À propos de cette application',
     consent: {
       message: 'Pouvons-nous mesurer l’usage de façon anonyme ? (Aucune donnée personnelle ni date de naissance n’est envoyée.)',
@@ -1657,7 +1652,6 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 Il futuro', q: 'Dove sta andando la nostra relazione?' },
       ],
     },
-    footer: 'I calcoli astrali avvengono sul tuo dispositivo.',
     aboutLink: 'Su questa app',
     consent: {
       message: 'Possiamo misurare l’uso in forma anonima? (Non vengono inviati dati personali né date di nascita.)',
@@ -1948,7 +1942,6 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 O futuro', q: 'Para onde vai a nossa relação?' },
       ],
     },
-    footer: 'Os cálculos astrais acontecem no seu aparelho.',
     aboutLink: 'Sobre este app',
     consent: {
       message: 'Podemos medir o uso de forma anônima? (Nenhum dado pessoal ou data de nascimento é enviado.)',
@@ -2239,7 +2232,6 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 앞으로', q: '앞으로 두 사람 관계는 어떻게 될까요?' },
       ],
     },
-    footer: '별 계산은 사용 중인 기기 안에서 이루어져요.',
     aboutLink: '이 앱에 대해',
     consent: {
       message: '익명 사용 현황을 측정해도 될까요? (개인정보·생년월일은 전송하지 않아요.)',

@@ -118,7 +118,6 @@ export default function App() {
       */}
       <footer className="footer">
         <span className="footer-star">✦</span>
-        {t.footer}
         {/* ?stay=1 が無いと、相棒がいる人はLPから /app へ即リダイレクトされて戻ってきてしまう */}
         <a className="consent-link" href={`${lpPath()}?stay=1#about-app`}>
           {t.aboutLink}
