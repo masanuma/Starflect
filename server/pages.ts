@@ -148,7 +148,7 @@ section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:
 .starslink{display:block;text-align:center;margin:8px 0 0;font-size:13.5px}
 .footer{text-align:center;color:var(--ink-sub);font-size:12px;padding:32px 0;border-top:1px solid var(--line);margin-top:40px;line-height:1.9}
 @media(max-width:400px){.tgrid{grid-template-columns:1fr}}
-.combos{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}.combos li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 11px;font-size:13px;text-align:center}@media(max-width:380px){.combos{grid-template-columns:1fr}}.cscope{text-align:center;font-size:12.5px;color:var(--ink-sub);margin:8px 0 0;font-weight:700;line-height:1.9}
+.cscope{text-align:center;font-size:12.5px;color:var(--ink-sub);margin:8px 0 0;font-weight:700;line-height:1.9}
 .pairhero{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 6px}
 .pairhero .pax{font-size:26px;color:var(--ink-sub);font-weight:700}
 .plist{list-style:none;padding:0;margin:0;display:grid;gap:10px}
@@ -320,38 +320,24 @@ export function renderCharPage(lang: Lang, slug: string): string | null {
   const qname = quoted(r.type.name)
 
   /**
-   * このキャラに当てはまる星座の一覧。
+   * このキャラに当てはまる星座。キャラはエレメントで決まるので
+   * **1キャラ＝太陽3星座 × 月3星座**をカバーする（1組だけを名乗ると残り8組の人には嘘になる）。
    *
-   * キャラはエレメントで決まるので **1キャラ＝太陽3星座 × 月3星座＝9通り**をカバーする。
-   * 従来このページには星座名が1つも無く、実際に検索される語（「太陽おうし座 月しし座」など）と
-   * 接点がゼロだった。9通りを明記することで、造語の名前を保ったまま検索意図に当たる。
+   * 従来このページには星座名が1つも無く、実際に検索される語との接点がゼロだった。
+   * ただし**9通りを並べて見せるのは表に出す量を増やしすぎ**（憲法：説明を足す前に表の量を減らす）。
+   * 読者に見せるのはヒーロー直下の1行だけにして、検索用の文字列は description に持たせる。
    */
   const signNames = SIGN_NAMES[lang] ?? SIGN_NAMES.ja
   const signsOf = (el: Element) => SIGN_ELEMENTS.map((e, i) => (e === el ? i : -1)).filter((i) => i >= 0)
   const sunSigns = signsOf(r.sunElement)
   const moonSigns = signsOf(r.moonElement)
-  const comboChips = sunSigns
-    .flatMap((si) => moonSigns.map((mi) => P.comboItem(signNames[si], signNames[mi])))
-    .map((x) => `<li>${esc(x)}</li>`)
-    .join('')
-  /**
-   * ヒーロー直下の一行。**このページが誰のためのページか**を星座名で示す。
-   * 検索語（星座名）がページ上部に来るので、`combos` セクションと合わせて検索意図に当たる。
-   * ※エレメント名（地・火）だけだと「太陽地 × 月火」のような意味の取れない表記になる。
-   */
   const nm = PLANET_NAME[lang] ?? PLANET_NAME.ja
   const listOf = (idx: number[]) => idx.map((i) => signNames[i]).join(' · ')
+  // ヒーロー直下の一行＝「このページは自分のページか」が分かる。星座名なのでそのまま検索語にもなる
   const scopeLine =
     `${PLANET_SYMBOL.sun} ${esc(nm.sun)}: ${esc(listOf(sunSigns))}` +
     ` &nbsp;/&nbsp; ${PLANET_SYMBOL.moon} ${esc(nm.moon)}: ${esc(listOf(moonSigns))}`
 
-  const combos = `
-<section>
-  <h2>${esc(P.combosTitle)}</h2>
-  <p class="lead">${esc(P.combosLead(r.type.name, elementLabel(r.sunElement), elementLabel(r.moonElement)))}</p>
-  <ul class="combos">${comboChips}</ul>
-</section>
-`
   const body = `
 <div class="chero">
   <div class="av" style="background:#f3eefb">${mascot(r.sunElement, r.moonElement, 118)}</div>
@@ -366,8 +352,6 @@ export function renderCharPage(lang: Lang, slug: string): string | null {
   <div class="fbox"><div class="lb">☉ ${esc(t.about.outer)}</div><div class="el">${elMark(r.sunElement)} ${esc(elementPhrase(r.sunElement))}</div></div>
   <div class="fbox"><div class="lb">☽ ${esc(t.about.inner)}</div><div class="el">${elMark(r.moonElement)} ${esc(elementPhrase(r.moonElement))}</div></div>
 </div>
-
-${combos}
 
 <div class="cta-block">
   <a class="cta" href="/app?lang=${lang}">${esc(P.cta)}</a>
@@ -387,7 +371,8 @@ ${combos}
     lang,
     // <title> は検索語を前に、造語は後ろに(ブランド価値は残す)。og:title はSNS用なのでキャラ名のまま
     title: `${P.charTitleSeo(r.type.name)}｜${t.home.appTitle}`,
-    description: `${qname}: ${r.type.copy} ${P.combosLead(r.type.name, elementLabel(r.sunElement), elementLabel(r.moonElement))}`,
+    // 星座名は description に持たせる。読者に見せる量は増やさず、検索語との接点は作る
+    description: `${qname}: ${r.type.copy} ${P.comboItem(listOf(sunSigns), listOf(moonSigns))}`,
     ogTitle: `${qname}｜${t.home.appTitle}`,
     ogImage: `${ORIGIN}/ogp/${slug}.png`,
     body,

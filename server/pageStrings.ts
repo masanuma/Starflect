@@ -21,11 +21,8 @@ export interface PageStrings {
    * 実際に検索されるのは「太陽星座 月星座 組み合わせ」「性格」などなので、そちらを前に出す。
    */
   charTitleSeo: (name: string) => string
-  /** 「この組み合わせに当てはまる星座」セクション。1キャラ＝太陽3星座×月3星座の9通りをカバーする */
-  combosTitle: string
-  combosLead: (name: string, sunWord: string, moonWord: string) => string
-  /** 例: 「太陽おうし座 × 月しし座」 */
-  comboItem: (sunSign: string, moonSign: string) => string
+  /** 検索用に星座名を含める1文（description で使う。表には出さない）。例: 「太陽おうし座・おとめ座・やぎ座 × 月…」 */
+  comboItem: (sunSigns: string, moonSigns: string) => string
   otherTitle: string
   backToTop: string
   /** 10天体と12星座の説明ページ(/stars) */
@@ -66,8 +63,6 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     ],
     charTitle: (n) => `「${n}」ってどんな人？`,
     charTitleSeo: (n) => `太陽星座と月星座の組み合わせ「${n}」の性格`,
-    combosTitle: 'この組み合わせに当てはまる星座',
-    combosLead: (n, sw, mw) => `「${n}」になるのは、太陽星座が${sw}のグループ・月星座が${mw}のグループの人です。次の9通りが当てはまります。`,
     comboItem: (ss, ms) => `太陽${ss} × 月${ms}`,
     otherTitle: 'ほかのほしキャラ',
     backToTop: '← ほしキャラ診断トップへ',
@@ -108,8 +103,6 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     ],
     charTitle: (n) => `What is “${n}” like?`,
     charTitleSeo: (n) => `Sun sign × Moon sign: the “${n}” personality`,
-    combosTitle: 'Which signs this combination covers',
-    combosLead: (n, sw, mw) => `You are a “${n}” if your Sun sign is in the ${sw} group and your Moon sign is in the ${mw} group. These nine pairings apply.`,
     comboItem: (ss, ms) => `Sun in ${ss} × Moon in ${ms}`,
     otherTitle: 'Other Hoshi-Kyara',
     backToTop: '← Back to Hoshi-Kyara home',
@@ -150,8 +143,6 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     ],
     charTitle: (n) => `¿Cómo es «${n}»?`,
     charTitleSeo: (n) => `Signo solar × signo lunar: la personalidad de «${n}»`,
-    combosTitle: 'Qué signos abarca esta combinación',
-    combosLead: (n, sw, mw) => `Eres «${n}» si tu signo solar está en el grupo de ${sw} y tu signo lunar en el de ${mw}. Estas nueve parejas encajan.`,
     comboItem: (ss, ms) => `Sol en ${ss} × Luna en ${ms}`,
     otherTitle: 'Otros Hoshi-Kyara',
     backToTop: '← Volver al inicio de Hoshi-Kyara',
@@ -192,8 +183,6 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     ],
     charTitle: (n) => `Qui est « ${n} » ?`,
     charTitleSeo: (n) => `Signe solaire × signe lunaire : la personnalité « ${n} »`,
-    combosTitle: 'Quels signes cette combinaison couvre',
-    combosLead: (n, sw, mw) => `Tu es « ${n} » si ton signe solaire est du groupe ${sw} et ton signe lunaire du groupe ${mw}. Ces neuf paires correspondent.`,
     comboItem: (ss, ms) => `Soleil en ${ss} × Lune en ${ms}`,
     otherTitle: 'Autres Hoshi-Kyara',
     backToTop: '← Retour à l’accueil Hoshi-Kyara',
@@ -234,8 +223,6 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     ],
     charTitle: (n) => `Com’è «${n}»?`,
     charTitleSeo: (n) => `Segno solare × segno lunare: la personalità di «${n}»`,
-    combosTitle: 'Quali segni copre questa combinazione',
-    combosLead: (n, sw, mw) => `Sei «${n}» se il tuo segno solare è del gruppo ${sw} e quello lunare del gruppo ${mw}. Queste nove coppie corrispondono.`,
     comboItem: (ss, ms) => `Sole in ${ss} × Luna in ${ms}`,
     otherTitle: 'Altri Hoshi-Kyara',
     backToTop: '← Torna alla home di Hoshi-Kyara',
@@ -276,8 +263,6 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     ],
     charTitle: (n) => `Como é «${n}»?`,
     charTitleSeo: (n) => `Signo solar × signo lunar: a personalidade de «${n}»`,
-    combosTitle: 'Quais signos esta combinação abrange',
-    combosLead: (n, sw, mw) => `Você é «${n}» se o seu signo solar for do grupo ${sw} e o lunar do grupo ${mw}. Estes nove pares se aplicam.`,
     comboItem: (ss, ms) => `Sol em ${ss} × Lua em ${ms}`,
     otherTitle: 'Outros Hoshi-Kyara',
     backToTop: '← Voltar ao início de Hoshi-Kyara',
@@ -318,8 +303,6 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     ],
     charTitle: (n) => `「${n}」은 어떤 사람?`,
     charTitleSeo: (n) => `태양 별자리 × 달 별자리 ‘${n}’의 성격`,
-    combosTitle: '이 조합에 해당하는 별자리',
-    combosLead: (n, sw, mw) => `‘${n}’은 태양 별자리가 ${sw} 그룹, 달 별자리가 ${mw} 그룹인 사람이에요. 다음 9가지가 해당됩니다.`,
     comboItem: (ss, ms) => `태양 ${ss} × 달 ${ms}`,
     otherTitle: '다른 호시캐릭터',
     backToTop: '← 호시캐릭터 진단 홈으로',

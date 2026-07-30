@@ -33,7 +33,6 @@ try {
 }
 const ORIGIN = 'https://starflect.asanuma.works'
 const SLUGS = Object.keys(CHAR_BY_SLUG)
-const NONJA = CONTENT_LANGS.filter((l) => l !== 'ja')
 const isLang = (v: string): v is Lang => (CONTENT_LANGS as string[]).includes(v)
 
 // アプリ本体(SPA)。検索の入口は LP と /c なので noindex にして重複を避ける。
@@ -216,7 +215,7 @@ app.get('/pair', (req, res) => sendHtml(res, pairHtml('ja', req.query)))
 app.get('/:lang', (req, res, next) => {
   const l = req.params.lang
   if (l === 'ja') return res.redirect(301, '/')
-  if (isLang(l) && NONJA.includes(l)) return sendHtml(res, LP_HTML[l])
+  if (isLang(l)) return sendHtml(res, LP_HTML[l]) /* ja は上で早期return済み */
   return next()
 })
 
