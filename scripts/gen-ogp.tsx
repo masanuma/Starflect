@@ -132,6 +132,42 @@ function defaultSvg(): string {
 </svg>`
 }
 
+/**
+ * 相性シェアの着地先(/pair)のカード。
+ * 「ふたり」であることが一目で分かる必要があるので、対照的な2キャラを × で並べる。
+ * 相性%はキャラの組み合わせで決まる(256通り)が、組み合わせごとの画像は作らない
+ * ＝1枚で「ふたりの相性が占える」だけ伝える。
+ */
+function pairSvg(): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF9EC4"/>
+      <stop offset="100%" stop-color="#9B7BEA"/>
+    </linearGradient>
+    <linearGradient id="name" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E85B96"/>
+      <stop offset="100%" stop-color="#7A4FD0"/>
+    </linearGradient>
+  </defs>
+  <rect width="${W}" height="${H}" fill="url(#bg)"/>
+  <rect x="40" y="40" width="${W - 80}" height="${H - 80}" rx="44" fill="#FFFFFF"/>
+
+  <g transform="translate(490 118)">
+    ${sparkPath(0, 0, 11, '#E8A93A')}
+    <text x="20" y="8" font-family="Zen Maru Gothic" font-size="30" font-weight="700" fill="#B26A98">ほしキャラ診断</text>
+  </g>
+
+  ${placeMascot('火', '火', 452, 288, 196, 'pa')}
+  <text x="600" y="306" text-anchor="middle" font-family="Zen Maru Gothic" font-size="54" font-weight="700" fill="#C39AD8">×</text>
+  ${placeMascot('水', '水', 748, 288, 196, 'pb')}
+
+  <text x="600" y="470" text-anchor="middle" font-family="Zen Maru Gothic" font-size="60" font-weight="700" fill="url(#name)">ふたりの相性</text>
+  <text x="600" y="518" text-anchor="middle" font-family="Zen Maru Gothic" font-size="27" font-weight="700" fill="#6B5B95">相手の生年月日だけ。組み合わせは16×16通り</text>
+  <text x="600" y="562" text-anchor="middle" font-family="Zen Maru Gothic" font-size="22" font-weight="700" fill="#AC9AC8">starflect.asanuma.works</text>
+</svg>`
+}
+
 function rasterize(svg: string, out: string) {
   const r = new Resvg(svg, {
     font: { fontBuffers: [font], defaultFontFamily: 'Zen Maru Gothic', loadSystemFonts: false },
@@ -152,4 +188,5 @@ for (const sun of ORDER) {
   }
 }
 rasterize(defaultSvg(), new URL('../public/ogp/default.png', import.meta.url))
-console.log(`done: ${count} character cards + default.png`)
+rasterize(pairSvg(), new URL('../public/ogp/pair.png', import.meta.url))
+console.log(`done: ${count} character cards + default.png + pair.png`)

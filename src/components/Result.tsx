@@ -163,7 +163,14 @@ export default function Result({ data, onHome, onPair }: Props) {
       {/* 「自分は何者か」を見てから人に見せる流れにする(星の内訳→シェア) */}
       <PartyCard data={data} />
 
-      {starType && <ShareButtons starTypeName={quoted(starType.type.name)} starSlug={starSlug} />}
+      {starType && (
+        <ShareButtons
+          heading={t.share.heading}
+          text={t.share.text(quoted(starType.type.name))}
+          path={starSlug ? `/c/${encodeURIComponent(starSlug)}` : '/'}
+          label={starSlug}
+        />
+      )}
 
       <StarReading chart={data} onAsk={ask} />
 

@@ -43,6 +43,7 @@ export function normalizePath(pathname: string): string {
   if (s.length === 0) return '/' /* /en など言語トップ */
   if (s[0] === 'c') return '/c/*'
   if (s[0] === 'stars') return '/stars'
+  if (s[0] === 'pair') return '/pair'
   if (s[0] === 'app') return '/app'
   return '/other'
 }

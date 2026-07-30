@@ -22,6 +22,12 @@ export interface PageStrings {
   starsLink: string
   starsTitle: string
   starsLead: string
+  /** 相性の紹介ページ(/pair)＝相性シェアの着地先 */
+  pairTitle: string
+  pairLead: string
+  pairPoints: [string, string, string]
+  pairCta: string
+  pairNote: string
   planetsTitle: string
   planetsLead: string
   signsTitle: string
@@ -54,6 +60,15 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: '10天体と12星座のこと',
     starsTitle: '10天体と12星座のこと',
     starsLead: '診断結果に出てくる「太陽星座」「月星座」、そしてあなたをかたちづくる10の星。それぞれが何を担当しているのかをまとめました。',
+    pairTitle: 'ふたりの相性を占う',
+    pairLead: '相手の生年月日だけで、ふたりの相性がわかります。太陽星座と月星座を掛け合わせた「ほしキャラ」同士の相性なので、雑誌の12星座占いより細かく出ます。',
+    pairPoints: [
+      '相手の生年月日を入れるだけ。名前はニックネームでもOKです。',
+      '相性の%と、ふたりの呼び名（例：名コンビ）が出ます。組み合わせは16×16通り。',
+      '「今日のふたり」と、ふたり専門の相談室つき。恋愛でも仕事でも聞けます。',
+    ],
+    pairCta: 'ふたりの相性を占う',
+    pairNote: '登録不要・ふたりの生年月日だけ・1分',
     planetsTitle: 'あなたをかたちづくる星たち',
     planetsLead: '生まれた瞬間、それぞれの星がどの星座にいたか。星が「誰が」を、星座が「どんなふうに」を表します。上昇星座を入れて全11キャラです。',
     signsTitle: '12星座と4つのエレメント',
@@ -83,6 +98,15 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'About the 10 planets and 12 signs',
     starsTitle: 'About the 10 planets and 12 signs',
     starsLead: 'Your Sun sign, your Moon sign, and the ten stars that shape you — here is what each one is in charge of.',
+    pairTitle: 'See how you two match',
+    pairLead: 'Just their birth date is enough. Because it matches Hoshi-Kyara — Sun sign blended with Moon sign — it goes finer than a magazine horoscope.',
+    pairPoints: [
+      'Just enter their birth date. A nickname works fine for the name.',
+      'You get a match percentage and a name for the pair (like “great duo”). 16 × 16 combinations.',
+      'Comes with “the two of you today” and a chat room just for your pair — love or work, ask anything.',
+    ],
+    pairCta: 'See how you two match',
+    pairNote: 'No signup · Just two birth dates · 1 minute',
     planetsTitle: 'The stars that shape you',
     planetsLead: 'Where each star stood the moment you were born. The planet says "who", the sign says "in what way". With the Rising sign, that makes eleven characters.',
     signsTitle: 'The 12 signs and 4 elements',
@@ -112,6 +136,15 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'Sobre los 10 planetas y 12 signos',
     starsTitle: 'Sobre los 10 planetas y 12 signos',
     starsLead: 'Tu signo solar, tu signo lunar y los diez astros que te forman: esto es de lo que se encarga cada uno.',
+    pairTitle: 'Ved vuestra compatibilidad',
+    pairLead: 'Basta con su fecha de nacimiento. Al comparar Hoshi-Kyara —el signo solar combinado con el lunar— sale más fino que un horóscopo de revista.',
+    pairPoints: [
+      'Solo introduce su fecha de nacimiento. Un apodo sirve como nombre.',
+      'Obtenéis un porcentaje y un nombre para la pareja (por ejemplo, «gran dúo»). 16 × 16 combinaciones.',
+      'Incluye «vosotros dos hoy» y un consultorio solo para vosotros: amor o trabajo, lo que queráis.',
+    ],
+    pairCta: 'Ved vuestra compatibilidad',
+    pairNote: 'Sin registro · Solo dos fechas de nacimiento · 1 minuto',
     planetsTitle: 'Los astros que te forman',
     planetsLead: 'Dónde estaba cada astro en el momento de tu nacimiento. El planeta dice "quién" y el signo dice "de qué manera". Con el Ascendente son once personajes.',
     signsTitle: 'Los 12 signos y los 4 elementos',
@@ -141,6 +174,15 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'À propos des 10 planètes et 12 signes',
     starsTitle: 'À propos des 10 planètes et 12 signes',
     starsLead: 'Ton signe solaire, ton signe lunaire et les dix astres qui te façonnent : voici ce dont chacun s’occupe.',
+    pairTitle: 'Voyez votre compatibilité',
+    pairLead: 'Sa date de naissance suffit. Comme on compare les Hoshi-Kyara — signe solaire croisé avec signe lunaire — c’est plus fin qu’un horoscope de magazine.',
+    pairPoints: [
+      'Entre simplement sa date de naissance. Un surnom suffit comme nom.',
+      'Vous obtenez un pourcentage et un nom pour le duo (par exemple « super duo »). 16 × 16 combinaisons.',
+      'Avec « vous deux aujourd’hui » et un salon réservé à votre duo : amour ou travail, demandez ce que vous voulez.',
+    ],
+    pairCta: 'Voir votre compatibilité',
+    pairNote: 'Sans inscription · Deux dates de naissance · 1 minute',
     planetsTitle: 'Les astres qui te façonnent',
     planetsLead: 'Où se trouvait chaque astre à l’instant de ta naissance. La planète dit « qui », le signe dit « de quelle manière ». Avec l’Ascendant, cela fait onze personnages.',
     signsTitle: 'Les 12 signes et les 4 éléments',
@@ -170,6 +212,15 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'I 10 pianeti e i 12 segni',
     starsTitle: 'I 10 pianeti e i 12 segni',
     starsLead: 'Il tuo segno solare, il tuo segno lunare e i dieci astri che ti formano: ecco di cosa si occupa ognuno.',
+    pairTitle: 'Scoprite la vostra affinità',
+    pairLead: 'Basta la sua data di nascita. Confrontando gli Hoshi-Kyara — segno solare incrociato con quello lunare — è più preciso di un oroscopo da rivista.',
+    pairPoints: [
+      'Inserisci solo la sua data di nascita. Come nome va bene anche un soprannome.',
+      'Ottenete una percentuale e un nome per la coppia (per esempio «gran duo»). 16 × 16 combinazioni.',
+      'Con «voi due oggi» e uno spazio di consulenza solo per voi: amore o lavoro, chiedete quello che volete.',
+    ],
+    pairCta: 'Scoprite la vostra affinità',
+    pairNote: 'Senza registrazione · Due date di nascita · 1 minuto',
     planetsTitle: 'Gli astri che ti formano',
     planetsLead: 'Dove si trovava ogni astro nell’istante della tua nascita. Il pianeta dice "chi", il segno dice "in che modo". Con l’Ascendente sono undici personaggi.',
     signsTitle: 'I 12 segni e i 4 elementi',
@@ -199,6 +250,15 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'Sobre os 10 planetas e 12 signos',
     starsTitle: 'Sobre os 10 planetas e 12 signos',
     starsLead: 'O seu signo solar, o seu signo lunar e os dez astros que formam você: veja do que cada um cuida.',
+    pairTitle: 'Vejam a combinação de vocês',
+    pairLead: 'Basta a data de nascimento dela. Como comparamos os Hoshi-Kyara — signo solar cruzado com o lunar — sai mais fino que um horóscopo de revista.',
+    pairPoints: [
+      'Basta inserir a data de nascimento. Um apelido serve como nome.',
+      'Vocês recebem uma porcentagem e um nome para a dupla (por exemplo, «grande dupla»). 16 × 16 combinações.',
+      'Vem com «vocês dois hoje» e um espaço de consulta só para vocês: amor ou trabalho, pergunte o que quiser.',
+    ],
+    pairCta: 'Ver a combinação de vocês',
+    pairNote: 'Sem cadastro · Só duas datas de nascimento · 1 minuto',
     planetsTitle: 'Os astros que formam você',
     planetsLead: 'Onde cada astro estava no instante do seu nascimento. O planeta diz "quem" e o signo diz "de que jeito". Com o Ascendente, são onze personagens.',
     signsTitle: 'Os 12 signos e os 4 elementos',
@@ -228,6 +288,15 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: '10행성과 12별자리 이야기',
     starsTitle: '10행성과 12별자리 이야기',
     starsLead: '진단 결과에 나오는 태양 별자리와 달 별자리, 그리고 당신을 이루는 10개의 별. 각자 무엇을 담당하는지 정리했어요.',
+    pairTitle: '두 사람의 궁합 보기',
+    pairLead: '상대의 생년월일만 있으면 됩니다. 태양 별자리와 달 별자리를 곱한 ‘호시캐릭터’끼리의 궁합이라, 잡지 별자리 운세보다 세밀하게 나와요.',
+    pairPoints: [
+      '상대의 생년월일만 넣으면 됩니다. 이름은 닉네임도 괜찮아요.',
+      '궁합 %와 두 사람의 별칭(예: 명콤비)이 나와요. 조합은 16 × 16가지.',
+      '‘오늘의 두 사람’과 두 사람 전용 상담실까지. 연애도 일도 물어볼 수 있어요.',
+    ],
+    pairCta: '두 사람의 궁합 보기',
+    pairNote: '가입 불필요 · 두 사람의 생년월일만 · 1분',
     planetsTitle: '당신을 이루는 별들',
     planetsLead: '태어난 순간 각 별이 어느 별자리에 있었는지. 행성이 "누가"를, 별자리가 "어떤 식으로"를 나타내요. 상승궁까지 더해 모두 11캐릭터예요.',
     signsTitle: '12별자리와 4원소',

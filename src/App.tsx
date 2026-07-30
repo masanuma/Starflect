@@ -28,6 +28,11 @@ type Screen =
 export default function App() {
   // 2回目以降(相棒がいる)は相棒ホームを起点にする
   const [screen, setScreen] = useState<Screen>(() => {
+    // 相性ページ(/pair)のCTAから来た人は相性フォームを直接ひらく。
+    // 相性を見たくて来ているので、相棒がいても相棒ホームには寄せない。
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('mode') === 'pair') {
+      return { page: 'pairForm' }
+    }
     const saved = hasCompanion() ? loadCompanion() : null
     return saved ? { page: 'companion', state: saved } : { page: 'home' }
   })

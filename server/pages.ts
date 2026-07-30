@@ -33,6 +33,8 @@ const lpUrl = (l: Lang) => ORIGIN + (l === 'ja' ? '/' : `/${l}`)
 const charUrl = (l: Lang, slug: string) => ORIGIN + (l === 'ja' ? `/c/${slug}` : `/${l}/c/${slug}`)
 const starsHref = (l: Lang) => (l === 'ja' ? '/stars' : `/${l}/stars`)
 const starsUrl = (l: Lang) => ORIGIN + starsHref(l)
+const pairHref = (l: Lang) => (l === 'ja' ? '/pair' : `/${l}/pair`)
+const pairUrl = (l: Lang) => ORIGIN + pairHref(l)
 
 // signs/startypes と同じ挙動を純データで再実装(getLang() 参照。setLang(lang) 後に呼ぶ)
 const elementLabel = (el: Element): string => (ELEMENT_LABEL[getLang()] ?? ELEMENT_LABEL.ja)[el]
@@ -145,6 +147,10 @@ section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:
 .starslink{display:block;text-align:center;margin:8px 0 0;font-size:13.5px}
 .footer{text-align:center;color:var(--ink-sub);font-size:12px;padding:32px 0;border-top:1px solid var(--line);margin-top:40px;line-height:1.9}
 @media(max-width:400px){.tgrid{grid-template-columns:1fr}}
+.pairhero{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 6px}
+.pairhero .pax{font-size:26px;color:var(--ink-sub);font-weight:700}
+.plist{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.plist li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:14.5px;line-height:1.85}
 .hk-m{transform-box:fill-box;transform-origin:center}.hk-glow{animation:hk-glow 3.4s ease-in-out infinite alternate}@keyframes hk-glow{from{opacity:.5}to{opacity:1}}.hk-m-fire{animation:hk-fire 4.2s ease-in-out infinite alternate}@keyframes hk-fire{from{transform:translateY(.6px) scale(.99)}to{transform:translateY(-.6px) scale(1.012)}}.hk-m-earth{animation:hk-earth 7s ease-in-out infinite alternate}@keyframes hk-earth{from{transform:scale(.996)}to{transform:scale(1.008)}}.hk-m-air{animation:hk-air 5.4s ease-in-out infinite alternate}@keyframes hk-air{from{transform:translateX(-.9px) rotate(-1.2deg)}to{transform:translateX(.9px) rotate(1.2deg)}}.hk-m-water{animation:hk-water 6.2s ease-in-out infinite alternate}@keyframes hk-water{from{transform:translateY(-.8px)}to{transform:translateY(.8px)}}@media(prefers-reduced-motion:reduce){.hk-m,.hk-glow{animation:none}}
 `
 
@@ -183,14 +189,16 @@ interface LayoutOpts {
   ogTitle: string
   ogImage: string
   body: string
-  kind: 'lp' | 'char' | 'stars'
+  kind: 'lp' | 'char' | 'stars' | 'pair'
   slug?: string
   redirectIfCompanion?: boolean
 }
 
 function layout(o: LayoutOpts): string {
-  const urlOf = (l: Lang) => (o.kind === 'lp' ? lpUrl(l) : o.kind === 'stars' ? starsUrl(l) : charUrl(l, o.slug!))
-  const hrefOf = (l: Lang) => (o.kind === 'lp' ? lpHref(l) : o.kind === 'stars' ? starsHref(l) : charHref(l, o.slug!))
+  const urlOf = (l: Lang) =>
+    o.kind === 'lp' ? lpUrl(l) : o.kind === 'stars' ? starsUrl(l) : o.kind === 'pair' ? pairUrl(l) : charUrl(l, o.slug!)
+  const hrefOf = (l: Lang) =>
+    o.kind === 'lp' ? lpHref(l) : o.kind === 'stars' ? starsHref(l) : o.kind === 'pair' ? pairHref(l) : charHref(l, o.slug!)
   const canonical = urlOf(o.lang)
   const alt = urlOf
   const href = hrefOf
@@ -348,6 +356,58 @@ export function renderCharPage(lang: Lang, slug: string): string | null {
 }
 
 /** 10天体と12星座の説明ページ(/stars)。アプリで突然出てくる用語の受け皿 */
+/**
+ * 相性の紹介ページ(/pair)。**相性シェアの着地先**。
+ *
+ * 相性結果を受け取った人がまず知りたいのは「自分もやってみたい」の一点なので、
+ * 説明は3つに絞り、すぐCTAに落とす。CTAは `?mode=pair` を付けて相性フォームを直接ひらく
+ * (トップに落とすと、相性を見たくて来た人がひとり用の診断に迷い込む)。
+ */
+export function renderPairPage(lang: Lang): string {
+  setLang(lang)
+  const t = ui()
+  const P = PAGE_STRINGS[lang]
+
+  // 相性は「太陽×月のエレメント」で決まるので、見本として対照的な2キャラを並べる
+  const sample =
+    `<div class="pairhero">` +
+    `<span class="pav">${mascot('火', '火', 88)}</span>` +
+    `<span class="pax" aria-hidden="true">×</span>` +
+    `<span class="pav">${mascot('水', '水', 88)}</span>` +
+    `</div>`
+
+  const points = P.pairPoints.map((x) => `<li>${esc(x)}</li>`).join('')
+
+  const body = `
+<section class="chero">
+  <h1>${esc(P.pairTitle)}</h1>
+  ${sample}
+  <p class="lead">${esc(P.pairLead)}</p>
+</section>
+
+<section>
+  <ul class="plist">${points}</ul>
+</section>
+
+<div class="cta-block">
+  <a class="cta" href="/app?lang=${lang}&amp;mode=pair">${esc(P.pairCta)}</a>
+  <p class="note">${esc(P.pairNote)}</p>
+</div>
+
+<a class="starslink" href="${starsHref(lang)}">${esc(P.starsLink)} →</a>
+<a class="back" href="${lpHref(lang)}">${esc(P.backToTop)}</a>
+`
+  return layout({
+    lang,
+    title: `${P.pairTitle}｜${t.home.appTitle}`,
+    description: P.pairLead,
+    ogTitle: `${P.pairTitle}｜${t.home.appTitle}`,
+    ogImage: `${ORIGIN}/ogp/pair.png`,
+    body,
+    kind: 'pair',
+  })
+}
+
 export function renderStarsPage(lang: Lang): string {
   setLang(lang)
   const t = ui()

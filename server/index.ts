@@ -3,7 +3,7 @@ import { readFileSync, statSync } from 'node:fs'
 import path from 'node:path'
 import express from 'express'
 import { createAiHandlers, createFeedbackHandler } from './handlers'
-import { renderLP, renderCharPage, renderStarsPage, CONTENT_LANGS } from './pages'
+import { renderLP, renderCharPage, renderStarsPage, renderPairPage, CONTENT_LANGS } from './pages'
 import { CHAR_BY_SLUG } from './characters'
 import * as stats from './stats'
 import type { Lang } from '../src/lib/i18n'
@@ -73,10 +73,12 @@ function appHtml(): string {
 // 静的ページはデータ固定なので起動時に一度だけ全言語ぶん生成してキャッシュする。
 const LP_HTML: Record<string, string> = {}
 const STARS_HTML: Record<string, string> = {}
+const PAIR_HTML: Record<string, string> = {}
 const CHAR_HTML: Record<string, Record<string, string>> = {}
 for (const lang of CONTENT_LANGS) {
   LP_HTML[lang] = renderLP(lang)
   STARS_HTML[lang] = renderStarsPage(lang)
+  PAIR_HTML[lang] = renderPairPage(lang)
   CHAR_HTML[lang] = {}
   for (const slug of SLUGS) {
     const h = renderCharPage(lang, slug)
@@ -110,6 +112,7 @@ function sitemapXml(): string {
   for (const lang of CONTENT_LANGS) {
     push(ORIGIN + (lang === 'ja' ? '/' : `/${lang}`), lang === 'ja' ? '1.0' : '0.9')
     push(ORIGIN + (lang === 'ja' ? '/stars' : `/${lang}/stars`), '0.6')
+    push(ORIGIN + (lang === 'ja' ? '/pair' : `/${lang}/pair`), '0.7')
     for (const slug of SLUGS) {
       push(ORIGIN + (lang === 'ja' ? `/c/${slug}` : `/${lang}/c/${slug}`), '0.7')
     }
@@ -193,6 +196,9 @@ app.get(['/app', '/app/'], (_req, res) => {
 // 10天体と12星座の説明ページ(ja)
 app.get('/stars', (_req, res) => sendHtml(res, STARS_HTML.ja))
 
+// 相性の紹介ページ(ja)＝相性シェアの着地先
+app.get('/pair', (_req, res) => sendHtml(res, PAIR_HTML.ja))
+
 // 他言語の紹介LP( /<lang> )
 app.get('/:lang', (req, res, next) => {
   const l = req.params.lang
@@ -206,6 +212,14 @@ app.get('/:lang/stars', (req, res) => {
   const l = req.params.lang
   if (l === 'ja') return res.redirect(301, '/stars')
   if (isLang(l) && STARS_HTML[l]) return sendHtml(res, STARS_HTML[l])
+  return res.redirect(302, '/')
+})
+
+// 他言語の相性紹介ページ( /<lang>/pair )
+app.get('/:lang/pair', (req, res) => {
+  const l = req.params.lang
+  if (l === 'ja') return res.redirect(301, '/pair')
+  if (isLang(l) && PAIR_HTML[l]) return sendHtml(res, PAIR_HTML[l])
   return res.redirect(302, '/')
 })
 

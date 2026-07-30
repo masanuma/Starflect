@@ -12,6 +12,7 @@ import { useUI } from '../lib/ui'
 import AiChat from './AiChat'
 import PairReveal from './PairReveal'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
+import ShareButtons from './ShareButtons'
 import SectionIcon from './SectionIcon'
 import Feedback from './Feedback'
 import { track } from '../lib/analytics'
@@ -217,6 +218,17 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
         headerIcon={<SectionIcon name="pairReading" />}
         copy={t.pairChat}
         autoAsk={autoAsk}
+      />
+
+      {/*
+        相性は構造的に相手を巻き込む(相手の生年月日を聞く＝会話が発生し、結果は「ふたりの話題」)。
+        共有本文には個人名を入れない(公開SNSに他人の名前を出さないため)。キャラ名と%だけで語る。
+      */}
+      <ShareButtons
+        heading={t.share.pairHeading}
+        text={t.share.pairText(typeA.type.name, typeB.type.name, compat.percent, compat.nickname)}
+        path="/pair"
+        label="pair"
       />
 
       <Feedback page="pair" />

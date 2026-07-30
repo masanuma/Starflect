@@ -296,6 +296,9 @@ export interface UIStrings {
     native: string
     copy: string
     copied: string
+    /** 相性結果の共有。個人名は入れない(公開SNSに他人の名前を出さないため)。キャラ名同士で語る */
+    pairHeading: string
+    pairText: (a: string, b: string, percent: number, nickname: string) => string
   }
 }
 
@@ -587,6 +590,9 @@ const UI: Record<Lang, UIStrings> = {
       native: 'シェアする',
       copy: 'リンクをコピー',
       copied: 'コピーしました ✓',
+      pairHeading: 'この相性を相手にも見せる',
+      pairText: (a, b, percent, nickname) =>
+        `「${a}」×「${b}」の相性は${percent}%、${nickname}でした✨ あなたたちの相性も占えます`,
     },
   },
   en: {
@@ -876,6 +882,8 @@ const UI: Record<Lang, UIStrings> = {
       native: 'Share',
       copy: 'Copy link',
       copied: 'Copied ✓',
+      pairHeading: 'Show this match to them',
+      pairText: (a, b, percent, nickname) => `${a} × ${b} scored ${percent}% — ${nickname}✨ Check your own match too`,
     },
   },
   es: {
@@ -1165,6 +1173,8 @@ const UI: Record<Lang, UIStrings> = {
       native: 'Compartir',
       copy: 'Copiar enlace',
       copied: 'Copiado ✓',
+      pairHeading: 'Muéstrale esta compatibilidad',
+      pairText: (a, b, percent, nickname) => `${a} × ${b}: ${percent}% de compatibilidad, ${nickname}✨ Descubre también la vuestra`,
     },
   },
   fr: {
@@ -1454,6 +1464,8 @@ const UI: Record<Lang, UIStrings> = {
       native: 'Partager',
       copy: 'Copier le lien',
       copied: 'Copié ✓',
+      pairHeading: 'Montre-lui cette compatibilité',
+      pairText: (a, b, percent, nickname) => `${a} × ${b} : ${percent}% de compatibilité, ${nickname}✨ Découvrez la vôtre aussi`,
     },
   },
   it: {
@@ -1743,6 +1755,8 @@ const UI: Record<Lang, UIStrings> = {
       native: 'Condividi',
       copy: 'Copia link',
       copied: 'Copiato ✓',
+      pairHeading: 'Mostragli questa affinità',
+      pairText: (a, b, percent, nickname) => `${a} × ${b}: ${percent}% di affinità, ${nickname}✨ Scoprite anche la vostra`,
     },
   },
   pt: {
@@ -2032,6 +2046,8 @@ const UI: Record<Lang, UIStrings> = {
       native: 'Compartilhar',
       copy: 'Copiar link',
       copied: 'Copiado ✓',
+      pairHeading: 'Mostre esta combinação',
+      pairText: (a, b, percent, nickname) => `${a} × ${b}: ${percent}% de combinação, ${nickname}✨ Descubram a de vocês também`,
     },
   },
   ko: {
@@ -2321,6 +2337,8 @@ const UI: Record<Lang, UIStrings> = {
       native: '공유하기',
       copy: '링크 복사',
       copied: '복사됨 ✓',
+      pairHeading: '이 궁합을 상대에게 보여주기',
+      pairText: (a, b, percent, nickname) => `${a} × ${b} 궁합은 ${percent}%, ${nickname}였어요✨ 두 사람의 궁합도 볼 수 있어요`,
     },
   },
 }
