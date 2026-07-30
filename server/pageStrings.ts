@@ -16,6 +16,16 @@ export interface PageStrings {
   howTo: string
   steps: [Step, Step, Step]
   charTitle: (name: string) => string
+  /**
+   * キャラ別ページの<title>。従来は「『静かな火山』ってどんな人？」＝**自社造語のみで検索需要ゼロ**だった。
+   * 実際に検索されるのは「太陽星座 月星座 組み合わせ」「性格」などなので、そちらを前に出す。
+   */
+  charTitleSeo: (name: string) => string
+  /** 「この組み合わせに当てはまる星座」セクション。1キャラ＝太陽3星座×月3星座の9通りをカバーする */
+  combosTitle: string
+  combosLead: (name: string, sunWord: string, moonWord: string) => string
+  /** 例: 「太陽おうし座 × 月しし座」 */
+  comboItem: (sunSign: string, moonSign: string) => string
   otherTitle: string
   backToTop: string
   /** 10天体と12星座の説明ページ(/stars) */
@@ -55,6 +65,10 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: 'ほしキャラに相談', d: '今日の運勢と、あなたの星を全部知ったほしキャラとのチャット。この先のことも、聞けば答えてくれます。' },
     ],
     charTitle: (n) => `「${n}」ってどんな人？`,
+    charTitleSeo: (n) => `太陽星座と月星座の組み合わせ「${n}」の性格`,
+    combosTitle: 'この組み合わせに当てはまる星座',
+    combosLead: (n, sw, mw) => `「${n}」になるのは、太陽星座が${sw}のグループ・月星座が${mw}のグループの人です。次の9通りが当てはまります。`,
+    comboItem: (ss, ms) => `太陽${ss} × 月${ms}`,
     otherTitle: 'ほかのほしキャラ',
     backToTop: '← ほしキャラ診断トップへ',
     starsLink: '10天体と12星座のこと',
@@ -93,6 +107,10 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: 'Ask your Hoshi-Kyara', d: 'Today’s reading, plus a chat with the Hoshi-Kyara that knows every one of your stars. Ask about what’s ahead and it will tell you.' },
     ],
     charTitle: (n) => `What is “${n}” like?`,
+    charTitleSeo: (n) => `Sun sign × Moon sign: the “${n}” personality`,
+    combosTitle: 'Which signs this combination covers',
+    combosLead: (n, sw, mw) => `You are a “${n}” if your Sun sign is in the ${sw} group and your Moon sign is in the ${mw} group. These nine pairings apply.`,
+    comboItem: (ss, ms) => `Sun in ${ss} × Moon in ${ms}`,
     otherTitle: 'Other Hoshi-Kyara',
     backToTop: '← Back to Hoshi-Kyara home',
     starsLink: 'About the 10 planets and 12 signs',
@@ -131,6 +149,10 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: 'Consulta a tu Hoshi-Kyara', d: 'La lectura de hoy y un chat con el Hoshi-Kyara que conoce todos tus astros. Pregúntale por lo que viene y te lo dirá.' },
     ],
     charTitle: (n) => `¿Cómo es «${n}»?`,
+    charTitleSeo: (n) => `Signo solar × signo lunar: la personalidad de «${n}»`,
+    combosTitle: 'Qué signos abarca esta combinación',
+    combosLead: (n, sw, mw) => `Eres «${n}» si tu signo solar está en el grupo de ${sw} y tu signo lunar en el de ${mw}. Estas nueve parejas encajan.`,
+    comboItem: (ss, ms) => `Sol en ${ss} × Luna en ${ms}`,
     otherTitle: 'Otros Hoshi-Kyara',
     backToTop: '← Volver al inicio de Hoshi-Kyara',
     starsLink: 'Sobre los 10 planetas y 12 signos',
@@ -169,6 +191,10 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: 'Demande à ton Hoshi-Kyara', d: 'La lecture du jour, et un échange avec le Hoshi-Kyara qui connaît tous tes astres. Demande-lui la suite, il te répondra.' },
     ],
     charTitle: (n) => `Qui est « ${n} » ?`,
+    charTitleSeo: (n) => `Signe solaire × signe lunaire : la personnalité « ${n} »`,
+    combosTitle: 'Quels signes cette combinaison couvre',
+    combosLead: (n, sw, mw) => `Tu es « ${n} » si ton signe solaire est du groupe ${sw} et ton signe lunaire du groupe ${mw}. Ces neuf paires correspondent.`,
+    comboItem: (ss, ms) => `Soleil en ${ss} × Lune en ${ms}`,
     otherTitle: 'Autres Hoshi-Kyara',
     backToTop: '← Retour à l’accueil Hoshi-Kyara',
     starsLink: 'À propos des 10 planètes et 12 signes',
@@ -207,6 +233,10 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: 'Chiedi al tuo Hoshi-Kyara', d: 'La lettura di oggi e una chat con l’Hoshi-Kyara che conosce tutti i tuoi astri. Chiedi cosa verrà e te lo dirà.' },
     ],
     charTitle: (n) => `Com’è «${n}»?`,
+    charTitleSeo: (n) => `Segno solare × segno lunare: la personalità di «${n}»`,
+    combosTitle: 'Quali segni copre questa combinazione',
+    combosLead: (n, sw, mw) => `Sei «${n}» se il tuo segno solare è del gruppo ${sw} e quello lunare del gruppo ${mw}. Queste nove coppie corrispondono.`,
+    comboItem: (ss, ms) => `Sole in ${ss} × Luna in ${ms}`,
     otherTitle: 'Altri Hoshi-Kyara',
     backToTop: '← Torna alla home di Hoshi-Kyara',
     starsLink: 'I 10 pianeti e i 12 segni',
@@ -245,6 +275,10 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: 'Pergunte ao seu Hoshi-Kyara', d: 'A leitura de hoje e uma conversa com o Hoshi-Kyara que conhece todos os seus astros. Pergunte o que vem aí e ele responde.' },
     ],
     charTitle: (n) => `Como é «${n}»?`,
+    charTitleSeo: (n) => `Signo solar × signo lunar: a personalidade de «${n}»`,
+    combosTitle: 'Quais signos esta combinação abrange',
+    combosLead: (n, sw, mw) => `Você é «${n}» se o seu signo solar for do grupo ${sw} e o lunar do grupo ${mw}. Estes nove pares se aplicam.`,
+    comboItem: (ss, ms) => `Sol em ${ss} × Lua em ${ms}`,
     otherTitle: 'Outros Hoshi-Kyara',
     backToTop: '← Voltar ao início de Hoshi-Kyara',
     starsLink: 'Sobre os 10 planetas e 12 signos',
@@ -283,6 +317,10 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: '호시캐릭터에게 상담', d: '오늘의 운세와, 당신의 별을 전부 아는 호시캐릭터와의 채팅. 앞으로의 일도 물어보면 답해 줘요.' },
     ],
     charTitle: (n) => `「${n}」은 어떤 사람?`,
+    charTitleSeo: (n) => `태양 별자리 × 달 별자리 ‘${n}’의 성격`,
+    combosTitle: '이 조합에 해당하는 별자리',
+    combosLead: (n, sw, mw) => `‘${n}’은 태양 별자리가 ${sw} 그룹, 달 별자리가 ${mw} 그룹인 사람이에요. 다음 9가지가 해당됩니다.`,
+    comboItem: (ss, ms) => `태양 ${ss} × 달 ${ms}`,
     otherTitle: '다른 호시캐릭터',
     backToTop: '← 호시캐릭터 진단 홈으로',
     starsLink: '10행성과 12별자리 이야기',
