@@ -156,6 +156,19 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
         </p>
       </section>
 
+      {/*
+        %が出た直後＝いちばんシェアしたくなる瞬間なので、内訳より前に置く。
+        相性は構造的に相手を巻き込む(相手の生年月日を聞く＝会話が発生し、結果は「ふたりの話題」)。
+        共有本文には個人名を入れない(公開SNSに他人の名前を出さないため)。キャラ名と%だけで語る。
+      */}
+      <ShareButtons
+        heading={t.share.pairHeading}
+        text={t.share.pairText(typeA.type.name, typeB.type.name, compat.percent, compat.nickname)}
+        path="/pair"
+        label="pair"
+        params={{ a: slugOf(typeA), b: slugOf(typeB) }}
+      />
+
       <section className="planet-card">
         <header className="planet-head">
           <div className="planet-symbol" aria-hidden="true">
@@ -223,18 +236,6 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
         headerIcon={<SectionIcon name="pairReading" />}
         copy={t.pairChat}
         autoAsk={autoAsk}
-      />
-
-      {/*
-        相性は構造的に相手を巻き込む(相手の生年月日を聞く＝会話が発生し、結果は「ふたりの話題」)。
-        共有本文には個人名を入れない(公開SNSに他人の名前を出さないため)。キャラ名と%だけで語る。
-      */}
-      <ShareButtons
-        heading={t.share.pairHeading}
-        text={t.share.pairText(typeA.type.name, typeB.type.name, compat.percent, compat.nickname)}
-        path="/pair"
-        label="pair"
-        params={{ a: slugOf(typeA), b: slugOf(typeB) }}
       />
 
       <Feedback page="pair" />
