@@ -23,6 +23,11 @@ interface Props {
   onHome: () => void
 }
 
+/** キャラのスラッグ(= /ogp/<slug>.png・サーバーが相性を再計算するための鍵) */
+const ELEMENT_SLUG: Record<string, string> = { 火: 'fire', 地: 'earth', 風: 'air', 水: 'water' }
+const slugOf = (s: { sunElement: string; moonElement: string }) =>
+  `${ELEMENT_SLUG[s.sunElement]}_${ELEMENT_SLUG[s.moonElement]}`
+
 function personType(p: PairPerson) {
   const sun = p.planets.find((pp) => pp.key === 'sun')!
   const moon = p.planets.find((pp) => pp.key === 'moon')!
@@ -229,6 +234,7 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
         text={t.share.pairText(typeA.type.name, typeB.type.name, compat.percent, compat.nickname)}
         path="/pair"
         label="pair"
+        params={{ a: slugOf(typeA), b: slugOf(typeB) }}
       />
 
       <Feedback page="pair" />

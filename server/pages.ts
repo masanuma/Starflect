@@ -18,6 +18,7 @@ import type { StarType, Element } from '../src/lib/starData'
 import type { PlanetKey } from '../src/lib/types'
 import { PAGE_STRINGS, ELEMENT_ICON, ELEMENT_COLOR } from './pageStrings'
 import { SLUG, ELEMENT_ORDER } from './characters'
+import { pairSummary } from '../src/lib/compatCore'
 import {
   PLANET_ORDER, PLANET_SYMBOL, PLANET_NAME, PLANET_ROLE, PLANET_DOMAIN,
   SIGN_NAMES, SIGN_SYMBOLS, SIGN_KEYWORDS, SIGN_ELEMENTS,
@@ -150,6 +151,7 @@ section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:
 .pairhero{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 6px}
 .pairhero .pax{font-size:26px;color:var(--ink-sub);font-weight:700}
 .plist{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.pairres{margin:6px 0 10px;text-align:center}.pairres-names{font-family:'Zen Maru Gothic';font-size:15px;font-weight:700;margin:0 0 2px}.pairres-pct{font-family:'Zen Maru Gothic';font-size:52px;font-weight:900;line-height:1.1;margin:0;background:linear-gradient(90deg,#E85B96,#7A4FD0);-webkit-background-clip:text;background-clip:text;color:transparent}.pairres-unit{font-size:24px}.pairres-nick{font-family:'Zen Maru Gothic';font-size:17px;font-weight:700;color:var(--violet);margin:2px 0 0}
 .plist li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:14.5px;line-height:1.85}
 .hk-m{transform-box:fill-box;transform-origin:center}.hk-glow{animation:hk-glow 3.4s ease-in-out infinite alternate}@keyframes hk-glow{from{opacity:.5}to{opacity:1}}.hk-m-fire{animation:hk-fire 4.2s ease-in-out infinite alternate}@keyframes hk-fire{from{transform:translateY(.6px) scale(.99)}to{transform:translateY(-.6px) scale(1.012)}}.hk-m-earth{animation:hk-earth 7s ease-in-out infinite alternate}@keyframes hk-earth{from{transform:scale(.996)}to{transform:scale(1.008)}}.hk-m-air{animation:hk-air 5.4s ease-in-out infinite alternate}@keyframes hk-air{from{transform:translateX(-.9px) rotate(-1.2deg)}to{transform:translateX(.9px) rotate(1.2deg)}}.hk-m-water{animation:hk-water 6.2s ease-in-out infinite alternate}@keyframes hk-water{from{transform:translateY(-.8px)}to{transform:translateY(.8px)}}@media(prefers-reduced-motion:reduce){.hk-m,.hk-glow{animation:none}}
 `
@@ -363,18 +365,61 @@ export function renderCharPage(lang: Lang, slug: string): string | null {
  * 説明は3つに絞り、すぐCTAに落とす。CTAは `?mode=pair` を付けて相性フォームを直接ひらく
  * (トップに落とすと、相性を見たくて来た人がひとり用の診断に迷い込む)。
  */
-export function renderPairPage(lang: Lang): string {
+/** スラッグから太陽・月のエレメントを引く。不正なら null */
+export function elementsOfSlug(slug: string): { sun: Element; moon: Element } | null {
+  const [a, b] = slug.split('_')
+  const rev = Object.fromEntries(ELEMENT_ORDER.map((e) => [SLUG[e], e])) as Record<string, Element>
+  if (!rev[a] || !rev[b]) return null
+  return { sun: rev[a], moon: rev[b] }
+}
+
+/**
+ * 相性の紹介ページ(/pair)。**相性シェアの着地先**。
+ *
+ * 相性結果を受け取った人がまず知りたいのは「自分もやってみたい」の一点なので、
+ * 説明は3つに絞り、すぐCTAに落とす。CTAは `?mode=pair` を付けて相性フォームを直接ひらく
+ * (トップに落とすと、相性を見たくて来た人がひとり用の診断に迷い込む)。
+ *
+ * `pair` を渡すと「そのふたりの結果」を見出しとOGPに出す。**LINEは本文を送れずURLだけ**なので、
+ * カードに%と呼び名が出ないと「72%だった」という肝心の中身が相手に伝わらない。
+ * 相性は太陽・月のエレメントだけで決まるため、スラッグ2つから正しい値を再計算できる。
+ */
+export function renderPairPage(lang: Lang, pair?: { a: string; b: string }): string {
   setLang(lang)
   const t = ui()
   const P = PAGE_STRINGS[lang]
 
-  // 相性は「太陽×月のエレメント」で決まるので、見本として対照的な2キャラを並べる
+  const ea = pair ? elementsOfSlug(pair.a) : null
+  const eb = pair ? elementsOfSlug(pair.b) : null
+  const types = STAR_TYPES[lang] ?? STAR_TYPES.ja
+  const result =
+    ea && eb
+      ? {
+          ...pairSummary(lang, ea.sun, ea.moon, eb.sun, eb.moon),
+          nameA: types[ea.sun][ea.moon].name,
+          nameB: types[eb.sun][eb.moon].name,
+          ea,
+          eb,
+        }
+      : null
+
+  // 結果つきなら本人たちのキャラを、無ければ見本として対照的な2キャラを並べる
+  const left = result ? result.ea : { sun: '火' as Element, moon: '火' as Element }
+  const right = result ? result.eb : { sun: '水' as Element, moon: '水' as Element }
   const sample =
     `<div class="pairhero">` +
-    `<span class="pav">${mascot('火', '火', 88)}</span>` +
+    `<span class="pav">${mascot(left.sun, left.moon, 88)}</span>` +
     `<span class="pax" aria-hidden="true">×</span>` +
-    `<span class="pav">${mascot('水', '水', 88)}</span>` +
+    `<span class="pav">${mascot(right.sun, right.moon, 88)}</span>` +
     `</div>`
+
+  const resultBlock = result
+    ? `<div class="pairres">` +
+      `<p class="pairres-names">${esc(quoted(result.nameA))} × ${esc(quoted(result.nameB))}</p>` +
+      `<p class="pairres-pct">${result.percent}<span class="pairres-unit">%</span></p>` +
+      `<p class="pairres-nick">${result.emoji} ${esc(result.nickname)}</p>` +
+      `</div>`
+    : ''
 
   const points = P.pairPoints.map((x) => `<li>${esc(x)}</li>`).join('')
 
@@ -382,6 +427,7 @@ export function renderPairPage(lang: Lang): string {
 <section class="chero">
   <h1>${esc(P.pairTitle)}</h1>
   ${sample}
+  ${resultBlock}
   <p class="lead">${esc(P.pairLead)}</p>
 </section>
 
@@ -397,11 +443,16 @@ export function renderPairPage(lang: Lang): string {
 <a class="starslink" href="${starsHref(lang)}">${esc(P.starsLink)} →</a>
 <a class="back" href="${lpHref(lang)}">${esc(P.backToTop)}</a>
 `
+  // 結果つきのときは、カードの見出しを「そのふたりの結果」にする(LINEはこれしか伝わらない)
+  const ogTitle = result
+    ? `${quoted(result.nameA)} × ${quoted(result.nameB)} = ${result.percent}% ${result.nickname}`
+    : `${P.pairTitle}｜${t.home.appTitle}`
+
   return layout({
     lang,
     title: `${P.pairTitle}｜${t.home.appTitle}`,
     description: P.pairLead,
-    ogTitle: `${P.pairTitle}｜${t.home.appTitle}`,
+    ogTitle,
     ogImage: `${ORIGIN}/ogp/pair.png`,
     body,
     kind: 'pair',

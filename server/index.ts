@@ -3,7 +3,7 @@ import { readFileSync, statSync } from 'node:fs'
 import path from 'node:path'
 import express from 'express'
 import { createAiHandlers, createFeedbackHandler } from './handlers'
-import { renderLP, renderCharPage, renderStarsPage, renderPairPage, CONTENT_LANGS } from './pages'
+import { renderLP, renderCharPage, renderStarsPage, renderPairPage, elementsOfSlug, CONTENT_LANGS } from './pages'
 import { CHAR_BY_SLUG } from './characters'
 import * as stats from './stats'
 import type { Lang } from '../src/lib/i18n'
@@ -196,8 +196,21 @@ app.get(['/app', '/app/'], (_req, res) => {
 // 10天体と12星座の説明ページ(ja)
 app.get('/stars', (_req, res) => sendHtml(res, STARS_HTML.ja))
 
-// 相性の紹介ページ(ja)＝相性シェアの着地先
-app.get('/pair', (_req, res) => sendHtml(res, PAIR_HTML.ja))
+/**
+ * 相性の紹介ページ＝相性シェアの着地先。
+ * `?a=<slug>&b=<slug>` が付いていれば「そのふたりの結果」を出す。
+ * LINEは本文を送れずURLだけなので、カードに%が出ないと肝心の中身が相手に伝わらない。
+ * 不正なスラッグは無視して通常のページを返す(壊れたリンクでも着地はさせる)。
+ */
+const pairHtml = (lang: Lang, q: express.Request['query']): string => {
+  const a = typeof q.a === 'string' ? q.a : ''
+  const b = typeof q.b === 'string' ? q.b : ''
+  if (a && b && elementsOfSlug(a) && elementsOfSlug(b)) return renderPairPage(lang, { a, b })
+  return PAIR_HTML[lang]
+}
+
+// 相性の紹介ページ(ja)
+app.get('/pair', (req, res) => sendHtml(res, pairHtml('ja', req.query)))
 
 // 他言語の紹介LP( /<lang> )
 app.get('/:lang', (req, res, next) => {
@@ -219,7 +232,7 @@ app.get('/:lang/stars', (req, res) => {
 app.get('/:lang/pair', (req, res) => {
   const l = req.params.lang
   if (l === 'ja') return res.redirect(301, '/pair')
-  if (isLang(l) && PAIR_HTML[l]) return sendHtml(res, PAIR_HTML[l])
+  if (isLang(l) && PAIR_HTML[l]) return sendHtml(res, pairHtml(l, req.query))
   return res.redirect(302, '/')
 })
 

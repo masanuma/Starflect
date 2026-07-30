@@ -2,6 +2,12 @@ import { elementOf, elementLabel } from './signs'
 import type { Element } from './signs'
 import { getLang } from './i18n'
 import type { Lang } from './i18n'
+// 計算部分は astro 非依存の compatCore.ts に集約（サーバーから使うため）。ここでは再利用するだけ
+import { relOf, pairSummary } from './compatCore'
+import type { ElementRel } from './compatCore'
+
+export { relOf } from './compatCore'
+export type { ElementRel } from './compatCore'
 import type { PlanetPos, PeriodKey } from './types'
 
 /** ひとり分の相性用チャート */
@@ -20,15 +26,6 @@ export interface PairData {
 }
 
 /** エレメント同士の関係: 共鳴(同じ) / 好相性(火×風・地×水) / 化学反応(その他) */
-export type ElementRel = 'same' | 'friend' | 'spark'
-
-export function relOf(x: Element, y: Element): ElementRel {
-  if (x === y) return 'same'
-  const pair = [x, y].sort().join('')
-  if (pair === '火風' || pair === '地水') return 'friend'
-  return 'spark'
-}
-
 const REL_LABEL_L: Record<Lang, Record<ElementRel, string>> = {
   ja: { same: '共鳴', friend: '好相性', spark: '化学反応' },
   en: { same: 'Resonance', friend: 'Good Match', spark: 'Chemistry' },
@@ -41,8 +38,6 @@ const REL_LABEL_L: Record<Lang, Record<ElementRel, string>> = {
 
 /** 関係ラベル(現在言語) */
 export const relLabel = (rel: ElementRel): string => (REL_LABEL_L[getLang()] ?? REL_LABEL_L.ja)[rel]
-
-const REL_SCORE: Record<ElementRel, number> = { same: 2.0, friend: 1.8, spark: 1.0 }
 
 /** 表の顔どうし(太陽×太陽)の文 */
 const SUN_TEXT: Record<Lang, Record<ElementRel, string>> = {
@@ -166,49 +161,6 @@ function crossText(lang: Lang, r1: ElementRel, r2: ElementRel): string {
 }
 
 /** タイプ相性のニックネーム(太陽の関係 × 月の関係)。emoji は言語非依存 */
-const NICK_EMOJI: Record<ElementRel, Record<ElementRel, string>> = {
-  same: { same: '👯', friend: '🤝', spark: '🎭' },
-  friend: { same: '💞', friend: '🌈', spark: '🎢' },
-  spark: { same: '🧲', friend: '☕', spark: '⚡' },
-}
-
-const NICK_NAME: Record<Lang, Record<ElementRel, Record<ElementRel, string>>> = {
-  ja: {
-    same: { same: 'まるで双子タイプ', friend: 'あうんの呼吸タイプ', spark: '似た者同士、心は別世界タイプ' },
-    friend: { same: '深いところで通じ合うタイプ', friend: 'ベストパートナータイプ', spark: '楽しいけど時々嵐タイプ' },
-    spark: { same: '見た目は正反対、心は同じタイプ', friend: '慣れるほど心地いいタイプ', spark: '化学反応MAXタイプ' },
-  },
-  en: {
-    same: { same: 'Practically Twins', friend: 'In Perfect Sync', spark: 'Alike Outside, Worlds Apart Inside' },
-    friend: { same: 'Connected Deep Down', friend: 'Best Partners', spark: 'Fun with Occasional Storms' },
-    spark: { same: 'Opposite Looks, Same Heart', friend: 'Better the More You Get Used to It', spark: 'Maximum Chemistry' },
-  },
-  es: {
-    same: { same: 'Casi gemelos', friend: 'En perfecta sintonía', spark: 'Iguales fuera, mundos aparte dentro' },
-    friend: { same: 'Conectados en lo profundo', friend: 'Mejores compañeros', spark: 'Divertidos con tormentas ocasionales' },
-    spark: { same: 'Opuestos por fuera, iguales de corazón', friend: 'Mejor cuanto más os acostumbráis', spark: 'Química al máximo' },
-  },
-  fr: {
-    same: { same: 'Presque jumeaux', friend: 'En parfaite harmonie', spark: 'Pareils dehors, mondes à part dedans' },
-    friend: { same: 'Reliés au plus profond', friend: 'Les partenaires idéaux', spark: 'Fun avec quelques orages' },
-    spark: { same: 'Opposés dehors, un seul cœur', friend: 'De mieux en mieux avec le temps', spark: 'Alchimie à fond' },
-  },
-  it: {
-    same: { same: 'Quasi gemelli', friend: 'In perfetta sintonia', spark: 'Uguali fuori, mondi a parte dentro' },
-    friend: { same: 'Uniti nel profondo', friend: 'Partner perfetti', spark: 'Divertenti con qualche tempesta' },
-    spark: { same: 'Opposti fuori, stesso cuore', friend: 'Meglio più ci si abitua', spark: 'Chimica al massimo' },
-  },
-  pt: {
-    same: { same: 'Quase gêmeos', friend: 'Em perfeita sintonia', spark: 'Iguais por fora, mundos à parte por dentro' },
-    friend: { same: 'Ligados lá no fundo', friend: 'Os melhores parceiros', spark: 'Divertidos com tempestades ocasionais' },
-    spark: { same: 'Opostos por fora, mesmo coração', friend: 'Melhor quanto mais se acostumam', spark: 'Química no máximo' },
-  },
-  ko: {
-    same: { same: '쌍둥이 같은 타입', friend: '척하면 척 타입', spark: '겉은 닮은꼴, 속은 딴 세상 타입' },
-    friend: { same: '깊은 곳에서 통하는 타입', friend: '최고의 파트너 타입', spark: '즐겁지만 가끔 폭풍 타입' },
-    spark: { same: '겉은 정반대, 속은 똑같은 타입', friend: '익숙해질수록 편안한 타입', spark: '케미 MAX 타입' },
-  },
-}
 
 const DETAIL_TITLE: Record<Lang, (aSun: string, bSun: string, aMoon: string, bMoon: string) => [string, string, string]> = {
   ja: (aSun, bSun, aMoon, bMoon) => [
@@ -281,12 +233,8 @@ export function compatOf(a: PairPerson, b: PairPerson): Compat {
   const cross1 = relOf(aSun, bMoon)
   const cross2 = relOf(aMoon, bSun)
 
-  // 心(月)の関係を最重視、次いで表の顔、クロスは補助
-  const score =
-    REL_SCORE[sunRel] * 1.0 + REL_SCORE[moonRel] * 1.4 + REL_SCORE[cross1] * 0.6 + REL_SCORE[cross2] * 0.6
-  const max = 2.0 * 3.6
-  const min = 1.0 * 3.6
-  const percent = Math.round(55 + ((score - min) / (max - min)) * 43)
+  // %・絵文字・呼び名は compatCore に一本化(サーバーの /pair と必ず同じ値になるように)
+  const summary = pairSummary(lang, aSun, aMoon, bSun, bMoon)
 
   const RANK: Record<ElementRel, number> = { spark: 0, friend: 1, same: 2 }
   const crossRel = RANK[cross1] <= RANK[cross2] ? cross1 : cross2
@@ -296,9 +244,9 @@ export function compatOf(a: PairPerson, b: PairPerson): Compat {
   )
 
   return {
-    percent,
-    emoji: NICK_EMOJI[sunRel][moonRel],
-    nickname: NICK_NAME[lang][sunRel][moonRel],
+    percent: summary.percent,
+    emoji: summary.emoji,
+    nickname: summary.nickname,
     details: [
       { title: titles[0], rel: sunRel, text: SUN_TEXT[lang][sunRel] },
       { title: titles[1], rel: moonRel, text: MOON_TEXT[lang][moonRel] },

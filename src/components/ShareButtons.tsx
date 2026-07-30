@@ -13,6 +13,8 @@ interface Props {
   path: string
   /** 解析用のラベル(診断結果=キャラのスラッグ、相性=`pair`) */
   label?: string
+  /** 着地先に足すクエリ(相性なら ふたりのスラッグ。カードに結果を出すために使う) */
+  params?: Record<string, string>
   /** GA4 のイベント名を分けたいとき(既定は share) */
   event?: string
 }
@@ -21,7 +23,7 @@ interface Props {
  * 結果のSNSシェア(拡大の起爆剤)。ネイティブ共有 / X / LINE / リンクコピー。
  * 診断結果と相性結果の両方で使う。違いは「見出し・本文・着地先」の3つだけなので props で受ける。
  */
-export default function ShareButtons({ heading, text, path, label, event = 'share' }: Props) {
+export default function ShareButtons({ heading, text, path, label, params, event = 'share' }: Props) {
   const t = useUI()
   const [copied, setCopied] = useState(false)
 
@@ -30,7 +32,10 @@ export default function ShareButtons({ heading, text, path, label, event = 'shar
    * サーバー側の集計(server/stats.ts)がこの値を見て「どこから来たか」を数える。
    * これが無いと、シェア経由の訪問と検索・直打ちが区別できない。
    */
-  const shareUrl = (via: string) => `${location.origin}${path}?utm_source=${via}`
+  const shareUrl = (via: string) => {
+    const q = new URLSearchParams({ utm_source: via, ...params })
+    return `${location.origin}${path}?${q.toString()}`
+  }
   const partsFor = (via: string): ShareParts => ({ text, url: shareUrl(via), hashtags: t.share.hashtags })
 
   async function onNative() {
