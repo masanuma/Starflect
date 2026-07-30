@@ -147,7 +147,7 @@ section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:
 @media(max-width:380px){.schips{grid-template-columns:1fr 1fr}}
 .starslink{display:block;text-align:center;margin:8px 0 0;font-size:13.5px}
 .footer{text-align:center;color:var(--ink-sub);font-size:12px;padding:32px 0;border-top:1px solid var(--line);margin-top:40px;line-height:1.9}
-@media(max-width:400px){.tgrid{grid-template-columns:1fr}}
+@media(max-width:400px){.tgrid{gap:9px}.tcard{padding:12px 8px}.tav{width:56px;height:56px}.tname{font-size:13.5px}.tcopy{font-size:11px}.tcombo{font-size:10.5px}}@media(max-width:330px){.tgrid{grid-template-columns:1fr}}
 .cscope{text-align:center;font-size:12.5px;color:var(--ink-sub);margin:8px 0 0;font-weight:700;line-height:1.9}
 .pairhero{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 6px}
 .pairhero .pax{font-size:26px;color:var(--ink-sub);font-weight:700}
