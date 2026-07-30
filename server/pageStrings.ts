@@ -29,6 +29,13 @@ export interface PageStrings {
   starsLink: string
   starsTitle: string
   starsLead: string
+  /**
+   * LP下部の「このアプリについて」。
+   * データの扱い・AI相談の位置づけ・占いの位置づけを**1か所に集約**する。
+   * 画面のあちこちに注記を散らすと世界観が壊れるので、アプリ側からはここへ寄せる。
+   */
+  aboutAppTitle: string
+  aboutAppItems: [{ t: string; d: string }, { t: string; d: string }, { t: string; d: string }]
   /** 相性の紹介ページ(/pair)＝相性シェアの着地先 */
   pairTitle: string
   pairLead: string
@@ -69,6 +76,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: '10天体と12星座のこと',
     starsTitle: '10天体と12星座のこと',
     starsLead: '診断結果に出てくる「太陽星座」「月星座」、そしてあなたをかたちづくる10の星。それぞれが何を担当しているのかをまとめました。',
+    aboutAppTitle: 'このアプリについて',
+    aboutAppItems: [
+      { t: '星の計算はあなたの端末の中で', d: '生年月日と時刻から星の位置を計算する処理は、すべてお使いの端末内で行われます。入力した生年月日そのものを送信することはありません。' },
+      { t: '相談室でAIに送られるもの', d: 'ほしキャラに相談したときだけ、計算結果(星の配置と、あなたが書いたメッセージ)がAIに送られます。名前は入力した場合のみ含まれます。' },
+      { t: '占いとして楽しんでください', d: 'この診断と相談室は娯楽としてお楽しみいただくものです。医療・カウンセリング・法律・投資などの専門的な助言ではありません。心や体の不調、安全にかかわることは、専門の窓口や医療機関にご相談ください。' },
+    ],
     pairTitle: 'ふたりの相性を占う',
     pairLead: '相手の生年月日だけで、ふたりの相性がわかります。太陽星座と月星座を掛け合わせた「ほしキャラ」同士の相性なので、雑誌の12星座占いより細かく出ます。',
     pairPoints: [
@@ -109,6 +122,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'About the 10 planets and 12 signs',
     starsTitle: 'About the 10 planets and 12 signs',
     starsLead: 'Your Sun sign, your Moon sign, and the ten stars that shape you — here is what each one is in charge of.',
+    aboutAppTitle: 'About this app',
+    aboutAppItems: [
+      { t: 'The astrology math runs on your device', d: 'Working out where the planets were from your birth date and time happens entirely in your browser. Your birth date itself is never sent to us.' },
+      { t: 'What reaches the AI in the chat room', d: 'Only when you talk to your Hoshi-Kyara: the calculated chart and the message you wrote are sent to the AI. Your name is included only if you entered one.' },
+      { t: 'Please enjoy it as entertainment', d: 'This reading and the chat room are for entertainment. They are not medical, counselling, legal or financial advice. For your health, your mental wellbeing or anything involving your safety, please contact a professional service.' },
+    ],
     pairTitle: 'See how you two match',
     pairLead: 'Just their birth date is enough. Because it matches Hoshi-Kyara — Sun sign blended with Moon sign — it goes finer than a magazine horoscope.',
     pairPoints: [
@@ -149,6 +168,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'Sobre los 10 planetas y 12 signos',
     starsTitle: 'Sobre los 10 planetas y 12 signos',
     starsLead: 'Tu signo solar, tu signo lunar y los diez astros que te forman: esto es de lo que se encarga cada uno.',
+    aboutAppTitle: 'Sobre esta app',
+    aboutAppItems: [
+      { t: 'Los cálculos se hacen en tu dispositivo', d: 'Calcular la posición de los astros a partir de tu fecha y hora de nacimiento ocurre por completo en tu navegador. Tu fecha de nacimiento nunca se envía.' },
+      { t: 'Qué llega a la IA en el consultorio', d: 'Solo cuando hablas con tu Hoshi-Kyara: se envían a la IA la carta calculada y el mensaje que escribiste. Tu nombre se incluye solo si lo introdujiste.' },
+      { t: 'Disfrútalo como entretenimiento', d: 'Esta lectura y el consultorio son entretenimiento. No son consejo médico, psicológico, legal ni financiero. Para tu salud, tu bienestar emocional o cualquier cosa que afecte a tu seguridad, acude a un servicio profesional.' },
+    ],
     pairTitle: 'Ved vuestra compatibilidad',
     pairLead: 'Basta con su fecha de nacimiento. Al comparar Hoshi-Kyara —el signo solar combinado con el lunar— sale más fino que un horóscopo de revista.',
     pairPoints: [
@@ -189,6 +214,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'À propos des 10 planètes et 12 signes',
     starsTitle: 'À propos des 10 planètes et 12 signes',
     starsLead: 'Ton signe solaire, ton signe lunaire et les dix astres qui te façonnent : voici ce dont chacun s’occupe.',
+    aboutAppTitle: 'À propos de cette application',
+    aboutAppItems: [
+      { t: 'Les calculs se font sur ton appareil', d: 'Le calcul de la position des astres à partir de ta date et de ton heure de naissance se fait entièrement dans ton navigateur. Ta date de naissance n’est jamais envoyée.' },
+      { t: 'Ce qui parvient à l’IA dans le salon', d: 'Uniquement quand tu parles à ton Hoshi-Kyara : le thème calculé et le message que tu as écrit sont envoyés à l’IA. Ton prénom n’est inclus que si tu l’as saisi.' },
+      { t: 'À prendre comme un divertissement', d: 'Cette lecture et le salon sont un divertissement. Ce ne sont pas des conseils médicaux, psychologiques, juridiques ou financiers. Pour ta santé, ton moral ou tout ce qui touche à ta sécurité, adresse-toi à un service professionnel.' },
+    ],
     pairTitle: 'Voyez votre compatibilité',
     pairLead: 'Sa date de naissance suffit. Comme on compare les Hoshi-Kyara — signe solaire croisé avec signe lunaire — c’est plus fin qu’un horoscope de magazine.',
     pairPoints: [
@@ -229,6 +260,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'I 10 pianeti e i 12 segni',
     starsTitle: 'I 10 pianeti e i 12 segni',
     starsLead: 'Il tuo segno solare, il tuo segno lunare e i dieci astri che ti formano: ecco di cosa si occupa ognuno.',
+    aboutAppTitle: 'Su questa app',
+    aboutAppItems: [
+      { t: 'I calcoli avvengono sul tuo dispositivo', d: 'Il calcolo della posizione degli astri dalla tua data e ora di nascita avviene interamente nel tuo browser. La tua data di nascita non viene mai inviata.' },
+      { t: 'Cosa arriva all’IA nello spazio di consulenza', d: 'Solo quando parli con il tuo Hoshi-Kyara: il tema calcolato e il messaggio che hai scritto vengono inviati all’IA. Il tuo nome è incluso solo se lo hai inserito.' },
+      { t: 'Prendilo come un intrattenimento', d: 'Questa lettura e lo spazio di consulenza sono un intrattenimento. Non sono consigli medici, psicologici, legali o finanziari. Per la tua salute, il tuo benessere o qualsiasi cosa riguardi la tua sicurezza, rivolgiti a un servizio professionale.' },
+    ],
     pairTitle: 'Scoprite la vostra affinità',
     pairLead: 'Basta la sua data di nascita. Confrontando gli Hoshi-Kyara — segno solare incrociato con quello lunare — è più preciso di un oroscopo da rivista.',
     pairPoints: [
@@ -269,6 +306,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'Sobre os 10 planetas e 12 signos',
     starsTitle: 'Sobre os 10 planetas e 12 signos',
     starsLead: 'O seu signo solar, o seu signo lunar e os dez astros que formam você: veja do que cada um cuida.',
+    aboutAppTitle: 'Sobre este app',
+    aboutAppItems: [
+      { t: 'Os cálculos acontecem no seu aparelho', d: 'Calcular a posição dos astros a partir da sua data e hora de nascimento acontece inteiramente no seu navegador. A sua data de nascimento nunca é enviada.' },
+      { t: 'O que chega à IA no espaço de consulta', d: 'Só quando você fala com o seu Hoshi-Kyara: o mapa calculado e a mensagem que você escreveu são enviados à IA. O seu nome só é incluído se você o tiver informado.' },
+      { t: 'Aproveite como entretenimento', d: 'Esta leitura e o espaço de consulta são entretenimento. Não são orientação médica, psicológica, jurídica ou financeira. Para a sua saúde, o seu bem-estar ou qualquer coisa que envolva a sua segurança, procure um serviço profissional.' },
+    ],
     pairTitle: 'Vejam a combinação de vocês',
     pairLead: 'Basta a data de nascimento dela. Como comparamos os Hoshi-Kyara — signo solar cruzado com o lunar — sai mais fino que um horóscopo de revista.',
     pairPoints: [
@@ -309,6 +352,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: '10행성과 12별자리 이야기',
     starsTitle: '10행성과 12별자리 이야기',
     starsLead: '진단 결과에 나오는 태양 별자리와 달 별자리, 그리고 당신을 이루는 10개의 별. 각자 무엇을 담당하는지 정리했어요.',
+    aboutAppTitle: '이 앱에 대해',
+    aboutAppItems: [
+      { t: '별 계산은 당신의 기기 안에서', d: '생년월일과 시각으로 별의 위치를 계산하는 처리는 모두 사용 중인 기기 안에서 이루어집니다. 입력한 생년월일 자체를 전송하지는 않습니다.' },
+      { t: '상담실에서 AI에게 전달되는 것', d: '호시캐릭터에게 상담할 때만, 계산 결과(별의 배치와 당신이 쓴 메시지)가 AI에게 전달됩니다. 이름은 입력한 경우에만 포함됩니다.' },
+      { t: '점으로 즐겨 주세요', d: '이 진단과 상담실은 오락으로 즐기시는 것입니다. 의료·상담·법률·투자 등의 전문적인 조언이 아닙니다. 마음이나 몸의 이상, 안전에 관한 일은 전문 창구나 의료기관에 상담해 주세요.' },
+    ],
     pairTitle: '두 사람의 궁합 보기',
     pairLead: '상대의 생년월일만 있으면 됩니다. 태양 별자리와 달 별자리를 곱한 ‘호시캐릭터’끼리의 궁합이라, 잡지 별자리 운세보다 세밀하게 나와요.',
     pairPoints: [

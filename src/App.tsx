@@ -25,6 +25,9 @@ type Screen =
   | { page: 'pairResult'; data: PairData }
   | { page: 'companion'; state: CompanionState }
 
+/** LP のパス。日本語は `/`、他言語は `/<lang>`（静的ページ側の lpHref と同じ規則） */
+const lpPath = () => (getLang() === 'ja' ? '/' : `/${getLang()}`)
+
 export default function App() {
   // 2回目以降(相棒がいる)は相棒ホームを起点にする
   const [screen, setScreen] = useState<Screen>(() => {
@@ -108,9 +111,18 @@ export default function App() {
           />
         )}
       </main>
+      {/*
+        注記はここに寄せる。データの扱い・AI相談の位置づけ・占いの位置づけの詳細は
+        LP下部の「このアプリについて」(#about-app)に集約し、ここからは1本のリンクで飛ばす。
+        画面のあちこちに但し書きを置くと世界観が壊れるため。
+      */}
       <footer className="footer">
         <span className="footer-star">✦</span>
         {t.footer}
+        {/* ?stay=1 が無いと、相棒がいる人はLPから /app へ即リダイレクトされて戻ってきてしまう */}
+        <a className="consent-link" href={`${lpPath()}?stay=1#about-app`}>
+          {t.aboutLink}
+        </a>
         <button className="consent-link" onClick={() => setConsentState(null)}>
           {t.consent.settings}
         </button>

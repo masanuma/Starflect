@@ -226,7 +226,11 @@ export default function AiChat({ context, storageKey, chart, stream, headerIcon,
       </div>
 
       <div className="chat-foot-row">
-        <p className="ai-note chat-note">{t.chat.note}</p>
+        {/*
+          入力欄の下の注記は世界観を壊すのでやめた。
+          「書いた内容がAIに届く」ことは相談室の説明文(t.chat.intro)に織り込んであり、
+          詳細はLP下部の「このアプリについて」(#about-app)に集約している。
+        */}
         {hasChat && (
           <button className="chat-clear" onClick={clearChat}>
             {t.chat.clear}

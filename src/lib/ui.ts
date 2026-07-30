@@ -190,7 +190,6 @@ export interface UIStrings {
     show: string
     intro: string
     inputPlaceholder: string
-    note: string
     clear: string
     delAria: string
     sendAria: string
@@ -204,6 +203,8 @@ export interface UIStrings {
     starters: Starter[]
   }
   footer: string
+  /** LP下部の「このアプリについて」への導線。注記はそこへ集約している */
+  aboutLink: string
   consent: {
     message: string
     allow: string
@@ -391,7 +392,7 @@ const UI: Record<Lang, UIStrings> = {
       country: '生まれた国',
       countryHint: 'お使いの端末から自動で選んでいます。上昇星座の計算に使います(時刻が未入力のときは使いません)',
       prefecture: '生まれた都道府県',
-      prefectureHint: '上昇星座の精度が少し上がります(時刻が未入力のときは使いません)',
+      prefectureHint: '上昇星座の精度が少し上がります',
       periodHint: '占った時点の星の運行から、その期間の運勢を読みます',
       submit: '星を読む',
       errNoDate: '生年月日を入力してください',
@@ -467,9 +468,8 @@ const UI: Record<Lang, UIStrings> = {
       historyCount: (n) => `これまでの相談 ${n}件`,
       hide: '非表示にする',
       show: '表示する',
-      intro: '生まれた瞬間の星ぜんぶと、いまの星の巡り。そのすべてを踏まえて、あなただけに答えます。恋愛・仕事・性格・これからのこと——なんでも聞いてみてください。',
+      intro: '生まれた瞬間の星ぜんぶと、いまの星の巡り。そのすべてを踏まえて、あなただけに答えます。恋愛・仕事・性格・これからのこと——なんでも聞いてみてください。話した内容は、星の配置といっしょにAIへ届きます。',
       inputPlaceholder: 'メッセージを入力…',
-      note: '送信するとあなたのほしキャラのデータがAIに送られます。',
       clear: '会話を消す',
       delAria: 'この質問と回答を削除',
       sendAria: '送信',
@@ -492,7 +492,8 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 この先', q: 'この先のふたりの関係はどうなりそう？' },
       ],
     },
-    footer: '星の計算はすべてお使いの端末内で行われます。相談室でほしキャラに相談したときだけ、計算結果が送信されます。',
+    footer: '星の計算はあなたの端末の中で行われます。',
+    aboutLink: 'このアプリについて',
     consent: {
       message: '匿名の利用状況を計測してもよいですか？(個人情報・生年月日は送信しません)',
       allow: '許可する',
@@ -683,7 +684,7 @@ const UI: Record<Lang, UIStrings> = {
       country: 'Country of birth',
       countryHint: 'Auto-selected from your device. Used to compute your Rising sign (ignored if no time is entered).',
       prefecture: 'Prefecture of birth',
-      prefectureHint: 'Slightly improves Rising-sign accuracy (ignored if no time is entered).',
+      prefectureHint: 'Slightly improves Rising-sign accuracy.',
       periodHint: 'We read this period’s fortune from the transits at the time of reading.',
       submit: 'Read the stars',
       errNoDate: 'Please enter a date of birth',
@@ -759,9 +760,8 @@ const UI: Record<Lang, UIStrings> = {
       historyCount: (n) => `${n} past ${n === 1 ? 'question' : 'questions'}`,
       hide: 'Hide',
       show: 'Show',
-      intro: 'Every star you were born under, plus the sky as it is right now — all of it goes into an answer meant only for you. Love, work, personality, what lies ahead: ask anything.',
+      intro: 'Every star you were born under, plus the sky as it is right now — all of it goes into an answer meant only for you. Love, work, personality, what lies ahead: ask anything. What you write is sent to the AI along with your chart.',
       inputPlaceholder: 'Type a message…',
-      note: 'Sending shares your Hoshi-Kyara data with the AI.',
       clear: 'Clear chat',
       delAria: 'Delete this question and answer',
       sendAria: 'Send',
@@ -784,7 +784,8 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 Ahead', q: 'Where is our relationship headed?' },
       ],
     },
-    footer: 'All star calculations happen on your own device. Results are sent only when you talk to your Hoshi-Kyara in the chat room.',
+    footer: 'The astrology math runs on your own device.',
+    aboutLink: 'About this app',
     consent: {
       message: 'May we measure anonymous usage? (No personal data or birth dates are sent.)',
       allow: 'Allow',
@@ -974,7 +975,7 @@ const UI: Record<Lang, UIStrings> = {
       country: 'País de nacimiento',
       countryHint: 'Elegido automáticamente desde tu dispositivo. Se usa para calcular tu Ascendente (se ignora si no indicas la hora).',
       prefecture: 'Prefectura de nacimiento',
-      prefectureHint: 'Mejora ligeramente la precisión del Ascendente (se ignora si no indicas la hora).',
+      prefectureHint: 'Mejora ligeramente la precisión del Ascendente.',
       periodHint: 'Leemos la fortuna de este periodo a partir de los tránsitos en el momento de la lectura.',
       submit: 'Leer las estrellas',
       errNoDate: 'Introduce una fecha de nacimiento',
@@ -1050,9 +1051,8 @@ const UI: Record<Lang, UIStrings> = {
       historyCount: (n) => `${n} ${n === 1 ? 'consulta' : 'consultas'} anteriores`,
       hide: 'Ocultar',
       show: 'Mostrar',
-      intro: 'Todos los astros bajo los que naciste, más el cielo de ahora mismo: todo eso entra en una respuesta pensada solo para ti. Amor, trabajo, personalidad, lo que viene: pregunta lo que quieras.',
+      intro: 'Todos los astros bajo los que naciste, más el cielo de ahora mismo: todo eso entra en una respuesta pensada solo para ti. Amor, trabajo, personalidad, lo que viene: pregunta lo que quieras. Lo que escribes se envía a la IA junto con tu carta.',
       inputPlaceholder: 'Escribe un mensaje…',
-      note: 'Al enviar, compartes los datos de tu Hoshi-Kyara con la IA.',
       clear: 'Borrar conversación',
       delAria: 'Eliminar esta pregunta y su respuesta',
       sendAria: 'Enviar',
@@ -1075,7 +1075,8 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 El futuro', q: '¿Hacia dónde va nuestra relación?' },
       ],
     },
-    footer: 'Todos los cálculos astrales ocurren en tu propio dispositivo. Los resultados solo se envían cuando hablas con tu Hoshi-Kyara en la sala de consulta.',
+    footer: 'Los cálculos astrales ocurren en tu dispositivo.',
+    aboutLink: 'Sobre esta app',
     consent: {
       message: '¿Podemos medir el uso de forma anónima? (No se envían datos personales ni fechas de nacimiento.)',
       allow: 'Permitir',
@@ -1265,7 +1266,7 @@ const UI: Record<Lang, UIStrings> = {
       country: 'Pays de naissance',
       countryHint: 'Sélectionné automatiquement depuis ton appareil. Sert à calculer ton Ascendant (ignoré si aucune heure n’est saisie).',
       prefecture: 'Département de naissance',
-      prefectureHint: 'Améliore légèrement la précision de l’Ascendant (ignoré si aucune heure n’est saisie).',
+      prefectureHint: 'Améliore légèrement la précision de l’Ascendant.',
       periodHint: 'On lit la fortune de cette période à partir des transits au moment de la lecture.',
       submit: 'Lire les étoiles',
       errNoDate: 'Saisis une date de naissance',
@@ -1341,9 +1342,8 @@ const UI: Record<Lang, UIStrings> = {
       historyCount: (n) => `${n} ${n === 1 ? 'question' : 'questions'} déjà posée${n === 1 ? '' : 's'}`,
       hide: 'Masquer',
       show: 'Afficher',
-      intro: 'Tous les astres sous lesquels tu es né, plus le ciel de cet instant : tout cela nourrit une réponse rien que pour toi. Amour, travail, personnalité, l’avenir — demande ce que tu veux.',
+      intro: 'Tous les astres sous lesquels tu es né, plus le ciel de cet instant : tout cela nourrit une réponse rien que pour toi. Amour, travail, personnalité, l’avenir — demande ce que tu veux. Ce que tu écris est envoyé à l’IA avec ton thème.',
       inputPlaceholder: 'Écris un message…',
-      note: 'En envoyant, tu partages les données de ton Hoshi-Kyara avec l’IA.',
       clear: 'Effacer la conversation',
       delAria: 'Supprimer cette question et sa réponse',
       sendAria: 'Envoyer',
@@ -1366,7 +1366,8 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 L’avenir', q: 'Où va notre relation ?' },
       ],
     },
-    footer: 'Tous les calculs astraux se font sur ton propre appareil. Les résultats ne sont envoyés que lorsque tu parles à ton Hoshi-Kyara dans le salon.',
+    footer: 'Les calculs astraux se font sur ton appareil.',
+    aboutLink: 'À propos de cette application',
     consent: {
       message: 'Pouvons-nous mesurer l’usage de façon anonyme ? (Aucune donnée personnelle ni date de naissance n’est envoyée.)',
       allow: 'Autoriser',
@@ -1556,7 +1557,7 @@ const UI: Record<Lang, UIStrings> = {
       country: 'Paese di nascita',
       countryHint: 'Selezionato automaticamente dal tuo dispositivo. Serve a calcolare l’Ascendente (ignorato se non indichi l’ora).',
       prefecture: 'Provincia di nascita',
-      prefectureHint: 'Migliora leggermente la precisione dell’Ascendente (ignorato se non indichi l’ora).',
+      prefectureHint: 'Migliora leggermente la precisione dell’Ascendente.',
       periodHint: 'Leggiamo la fortuna di questo periodo dai transiti al momento della lettura.',
       submit: 'Leggere le stelle',
       errNoDate: 'Inserisci una data di nascita',
@@ -1632,9 +1633,8 @@ const UI: Record<Lang, UIStrings> = {
       historyCount: (n) => `${n} ${n === 1 ? 'domanda' : 'domande'} finora`,
       hide: 'Nascondi',
       show: 'Mostra',
-      intro: 'Tutti gli astri sotto cui sei nato/a, più il cielo di adesso: tutto questo entra in una risposta pensata solo per te. Amore, lavoro, personalità, il futuro — chiedi quello che vuoi.',
+      intro: 'Tutti gli astri sotto cui sei nato/a, più il cielo di adesso: tutto questo entra in una risposta pensata solo per te. Amore, lavoro, personalità, il futuro — chiedi quello che vuoi. Quello che scrivi viene inviato all’IA insieme al tuo tema.',
       inputPlaceholder: 'Scrivi un messaggio…',
-      note: 'Inviando, condividi i dati del tuo Hoshi-Kyara con l’IA.',
       clear: 'Cancella la conversazione',
       delAria: 'Elimina questa domanda e la risposta',
       sendAria: 'Invia',
@@ -1657,7 +1657,8 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 Il futuro', q: 'Dove sta andando la nostra relazione?' },
       ],
     },
-    footer: 'Tutti i calcoli astrali avvengono sul tuo dispositivo. I risultati vengono inviati solo quando parli con il tuo Hoshi-Kyara nella sala consulti.',
+    footer: 'I calcoli astrali avvengono sul tuo dispositivo.',
+    aboutLink: 'Su questa app',
     consent: {
       message: 'Possiamo misurare l’uso in forma anonima? (Non vengono inviati dati personali né date di nascita.)',
       allow: 'Consenti',
@@ -1847,7 +1848,7 @@ const UI: Record<Lang, UIStrings> = {
       country: 'País de nascimento',
       countryHint: 'Selecionado automaticamente pelo seu dispositivo. Usado para calcular o Ascendente (ignorado se a hora não for informada).',
       prefecture: 'Estado de nascimento',
-      prefectureHint: 'Melhora um pouco a precisão do Ascendente (ignorado se a hora não for informada).',
+      prefectureHint: 'Melhora um pouco a precisão do Ascendente.',
       periodHint: 'Lemos a fortuna deste período a partir dos trânsitos no momento da leitura.',
       submit: 'Ler as estrelas',
       errNoDate: 'Informe uma data de nascimento',
@@ -1923,9 +1924,8 @@ const UI: Record<Lang, UIStrings> = {
       historyCount: (n) => `${n} ${n === 1 ? 'consulta' : 'consultas'} até agora`,
       hide: 'Ocultar',
       show: 'Mostrar',
-      intro: 'Todos os astros sob os quais você nasceu, mais o céu de agora: tudo isso entra numa resposta feita só para você. Amor, trabalho, personalidade, o que vem aí — pergunte o que quiser.',
+      intro: 'Todos os astros sob os quais você nasceu, mais o céu de agora: tudo isso entra numa resposta feita só para você. Amor, trabalho, personalidade, o que vem aí — pergunte o que quiser. O que você escreve é enviado à IA junto com o seu mapa.',
       inputPlaceholder: 'Escreva uma mensagem…',
-      note: 'Ao enviar, você compartilha os dados do seu Hoshi-Kyara com a IA.',
       clear: 'Limpar conversa',
       delAria: 'Excluir esta pergunta e resposta',
       sendAria: 'Enviar',
@@ -1948,7 +1948,8 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 O futuro', q: 'Para onde vai a nossa relação?' },
       ],
     },
-    footer: 'Todos os cálculos astrais acontecem no seu próprio dispositivo. Os resultados só são enviados quando você conversa com o seu Hoshi-Kyara na sala de consulta.',
+    footer: 'Os cálculos astrais acontecem no seu aparelho.',
+    aboutLink: 'Sobre este app',
     consent: {
       message: 'Podemos medir o uso de forma anônima? (Nenhum dado pessoal ou data de nascimento é enviado.)',
       allow: 'Permitir',
@@ -2138,7 +2139,7 @@ const UI: Record<Lang, UIStrings> = {
       country: '태어난 나라',
       countryHint: '기기에서 자동으로 선택했어요. 상승 별자리 계산에 써요(시각을 입력하지 않으면 사용하지 않아요).',
       prefecture: '태어난 지역',
-      prefectureHint: '상승 별자리 정확도가 살짝 올라가요(시각을 입력하지 않으면 사용하지 않아요).',
+      prefectureHint: '상승 별자리 정확도가 살짝 올라가요.',
       periodHint: '점치는 시점의 별의 운행으로 그 기간의 운세를 읽어요.',
       submit: '별 읽기',
       errNoDate: '생년월일을 입력해 주세요',
@@ -2214,9 +2215,8 @@ const UI: Record<Lang, UIStrings> = {
       historyCount: (n) => `지금까지 상담 ${n}건`,
       hide: '숨기기',
       show: '보기',
-      intro: '태어난 순간의 별 전부와, 지금의 별의 흐름. 그 모두를 바탕으로 당신에게만 답해 드려요. 연애·일·성격·앞으로의 일——무엇이든 물어보세요.',
+      intro: '태어난 순간의 별 전부와, 지금의 별의 흐름. 그 모두를 바탕으로 당신에게만 답해 드려요. 연애·일·성격·앞으로의 일——무엇이든 물어보세요. 쓰신 내용은 별자리 배치와 함께 AI에게 전달돼요.',
       inputPlaceholder: '메시지를 입력…',
-      note: '보내면 당신의 Hoshi-Kyara 데이터가 AI로 전송돼요.',
       clear: '대화 지우기',
       delAria: '이 질문과 답변 삭제',
       sendAria: '보내기',
@@ -2239,7 +2239,8 @@ const UI: Record<Lang, UIStrings> = {
         { label: '🔮 앞으로', q: '앞으로 두 사람 관계는 어떻게 될까요?' },
       ],
     },
-    footer: '별 계산은 모두 사용 중인 기기 안에서 이루어져요. 상담실에서 호시캐릭터에게 상담할 때만 계산 결과가 전송돼요.',
+    footer: '별 계산은 사용 중인 기기 안에서 이루어져요.',
+    aboutLink: '이 앱에 대해',
     consent: {
       message: '익명 사용 현황을 측정해도 될까요? (개인정보·생년월일은 전송하지 않아요.)',
       allow: '허용',

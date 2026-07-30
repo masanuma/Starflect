@@ -149,6 +149,7 @@ section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:
 .footer{text-align:center;color:var(--ink-sub);font-size:12px;padding:32px 0;border-top:1px solid var(--line);margin-top:40px;line-height:1.9}
 @media(max-width:400px){.tgrid{gap:9px}.tcard{padding:12px 8px}.tav{width:56px;height:56px}.tname{font-size:13.5px}.tcopy{font-size:11px}.tcombo{font-size:10.5px}}@media(max-width:330px){.tgrid{grid-template-columns:1fr}}
 .cscope{text-align:center;font-size:12.5px;color:var(--ink-sub);margin:8px 0 0;font-weight:700;line-height:1.9}
+.aboutapp .abox{display:grid;gap:10px}.aboutapp .abrow{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}.aboutapp .abrow b{display:block;font-family:'Zen Maru Gothic';font-size:14.5px;margin-bottom:4px}.aboutapp .abrow p{font-size:13px;color:var(--ink-sub);line-height:1.9}
 .pairhero{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 6px}
 .pairhero .pax{font-size:26px;color:var(--ink-sub);font-weight:700}
 .plist{list-style:none;padding:0;margin:0;display:grid;gap:10px}
@@ -253,6 +254,7 @@ export function renderLP(lang: Lang): string {
   const steps = P.steps
     .map((s, i) => `<div class="step"><span class="n">${i + 1}</span><span><b>${esc(s.t)}</b><br/>${esc(s.d)}</span></div>`)
     .join('')
+  const aboutApp = aboutAppSection(lang)
   const faq = t.faq.items
     .map((q) => `<details><summary>${esc(q.q)}</summary><p>${esc(q.a)}</p></details>`)
     .join('')
@@ -295,6 +297,8 @@ export function renderLP(lang: Lang): string {
   <h2>${esc(t.faq.title)}</h2>
   ${faq}
 </section>
+
+${aboutApp}
 `
   return layout({
     lang,
@@ -306,6 +310,23 @@ export function renderLP(lang: Lang): string {
     kind: 'lp',
     redirectIfCompanion: true,
   })
+}
+
+/**
+ * 「このアプリについて」＝データの扱い・AI相談の位置づけ・占いの位置づけの集約先。
+ *
+ * 画面のあちこちに注記を散らすと世界観が壊れるので、アプリ側の注記はここへ寄せて
+ * `#about-app` で直接リンクできるようにしている（アプリのフッターから飛ぶ）。
+ */
+function aboutAppSection(lang: Lang): string {
+  const P = PAGE_STRINGS[lang]
+  const items = P.aboutAppItems
+    .map((x) => `<div class="abrow"><b>${esc(x.t)}</b><p>${esc(x.d)}</p></div>`)
+    .join('')
+  return `<section class="aboutapp" id="about-app">
+  <h2>${esc(P.aboutAppTitle)}</h2>
+  <div class="abox">${items}</div>
+</section>`
 }
 
 /** キャラ別ページ。無効な slug は null */
