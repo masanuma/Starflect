@@ -11,11 +11,33 @@ import type { Lang } from './i18n'
 export type Mood = 'good' | 'meh' | 'bad'
 export type Domain = 'work' | 'love' | 'people' | 'other'
 
+/**
+ * その日の運勢（AIが書いたもの）。
+ *
+ * **1日1本・引き直し不可**。一度書いたものを保存して、同じ日に何度開いても同じものを見せる。
+ * （毎回違うことを言うと「適当だ」と思われる。深掘りしたい人は相談室へ流す）
+ * 言語ごとに別で持つ＝日本語で書いたものと英語で書いたものは別物として扱う。
+ */
+export interface SavedFortune {
+  /** 本文 */
+  text: string
+  /** 書いた時刻(ISO) */
+  writtenAt: string
+  /**
+   * 根拠に使った星の並び（技術表記のまま）。
+   * 「なぜならば」を見たい人への提示と、答え合わせのときの手がかりに使う。
+   */
+  basis: string[]
+}
+
 export interface DailyEntry {
-  mood: Mood
+  /** その日の気分。運勢だけ保存して気分は未記録の日があるので任意 */
+  mood?: Mood
   domain?: Domain
   /** その日の「今日の星」カードを見たか */
   forecastSeen?: boolean
+  /** その日の運勢（言語ごとに1本） */
+  fortune?: Partial<Record<Lang, SavedFortune>>
 }
 
 export interface CompanionState {
@@ -61,7 +83,13 @@ export function saveCompanion(state: CompanionState): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
   } catch {
-    /* 保存できない環境(プライベートモード等)では無視 */
+    // 容量オーバーの可能性があるので、いちばん重い「保存した運勢」を7日ぶんまで削って一度だけ再試行する。
+    // 気分・領域の記録は軽いうえ「いまの空気」の材料なので消さない。
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(pruneFortunes(state, new Date(), 7)))
+    } catch {
+      /* それでも保存できない環境(プライベートモード等)では無視 */
+    }
   }
 }
 
@@ -279,6 +307,90 @@ export function mapProgress(signals: number): MapProgress {
 }
 
 /** その日の気分タップを記録。その日はじめて気分を残したときだけ +1 シグナル(連打では増えない) */
+/* ---------- その日の運勢の保存（1日1本・引き直し不可） ---------- */
+
+/** 保存した運勢を残す日数。これより古いものは本文だけ捨てる（気分の記録は残す） */
+const FORTUNE_KEEP_DAYS = 30
+
+/**
+ * 古い運勢の本文だけを捨てる（純粋関数）。
+ *
+ * 気分・領域・訪問の記録は**捨てない**。軽いうえに「いまの空気」の材料になるため。
+ * 捨てるのは本文（1本200字前後）だけで、30日ぶんでも数KBに収まる。
+ */
+export function pruneFortunes(state: CompanionState, now: Date = new Date(), keepDays = FORTUNE_KEEP_DAYS): CompanionState {
+  const limit = todayKey(new Date(now.getTime() - keepDays * 86_400_000))
+  const daily: Record<string, DailyEntry> = {}
+  for (const [key, entry] of Object.entries(state.daily)) {
+    if (key >= limit || !entry.fortune) {
+      daily[key] = entry
+      continue
+    }
+    const { fortune: _drop, ...rest } = entry
+    // 本文しか無かった日は、まるごと捨てて構わない
+    if (rest.mood === undefined && rest.domain === undefined && rest.forecastSeen === undefined) continue
+    daily[key] = rest
+  }
+  return { ...state, daily }
+}
+
+/** その日ぶんの運勢を保存する。すでにある場合は**上書きしない**（引き直し不可） */
+export function saveFortune(
+  state: CompanionState,
+  text: string,
+  basis: string[],
+  lang: Lang = getLang(),
+  now: Date = new Date(),
+): CompanionState {
+  const key = todayKey(now)
+  const entry = state.daily[key] ?? {}
+  if (entry.fortune?.[lang]) return state /* すでに今日の分がある＝引き直させない */
+  const next: CompanionState = {
+    ...state,
+    daily: {
+      ...state.daily,
+      [key]: {
+        ...entry,
+        fortune: { ...entry.fortune, [lang]: { text, writtenAt: now.toISOString(), basis } },
+      },
+    },
+  }
+  const pruned = pruneFortunes(next, now)
+  saveCompanion(pruned)
+  return pruned
+}
+
+/** その日ぶんの運勢（未生成なら undefined） */
+export function todaysFortune(
+  state: CompanionState,
+  lang: Lang = getLang(),
+  now: Date = new Date(),
+): SavedFortune | undefined {
+  return state.daily[todayKey(now)]?.fortune?.[lang]
+}
+
+/**
+ * 直近の「過去の」運勢＝答え合わせで振り返る対象。
+ *
+ * 「昨日」に限定しない。間が空く人がいるので、**直近の1本**を日付つきで返す。
+ * 何日前まで聞くかは呼び出し側で決める（古すぎる話を振ると気持ち悪いため）。
+ */
+export function latestPastFortune(
+  state: CompanionState,
+  lang: Lang = getLang(),
+  now: Date = new Date(),
+): { dateKey: string; daysAgo: number; fortune: SavedFortune } | undefined {
+  const today = todayKey(now)
+  const past = Object.entries(state.daily)
+    .filter(([key, e]) => key < today && e.fortune?.[lang])
+    .sort((a, b) => (a[0] < b[0] ? 1 : -1))
+  const hit = past[0]
+  if (!hit) return undefined
+  const [dateKey, entry] = hit
+  const diff = Math.round((new Date(today).getTime() - new Date(dateKey).getTime()) / 86_400_000)
+  return { dateKey, daysAgo: diff, fortune: entry.fortune![lang]! }
+}
+
 export function recordMood(
   state: CompanionState,
   mood: Mood,
