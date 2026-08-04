@@ -1684,6 +1684,45 @@ body {
   margin: 0;
 }
 
+/* ---------- 予期しない例外の受け皿(ErrorBoundary) ---------- */
+/* ここが無いと例外時に画面が真っ白になる。壊れた状態でも読めるよう単純に保つ */
+.crash {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.crash-card {
+  background: var(--card);
+  border: 1.5px solid #f4c3d7;
+  border-radius: 24px;
+  padding: 32px 24px;
+  text-align: center;
+  max-width: 420px;
+}
+
+.crash-star {
+  font-size: 28px;
+  color: var(--pink-strong);
+  margin-bottom: 10px;
+}
+
+.crash-title {
+  font-family: var(--font-head);
+  font-size: 19px;
+  font-weight: 800;
+  margin: 0 0 10px;
+}
+
+.crash-body {
+  font-size: 14px;
+  color: var(--ink-sub);
+  line-height: 1.9;
+  margin: 0 0 20px;
+}
+
 /* ---------- ほしキャラの舞台(マスコットの背景円と、キャラごとのゆらぎ) ---------- */
 /* SVGの<g>にCSS transformをかけるので、原点を自分のバウンディングボックスの中心にする */
 .hk-m {
