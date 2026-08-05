@@ -118,3 +118,21 @@ export async function streamAiPairChat(
 ): Promise<void> {
   await postStream('/api/ai-pair-chat', { context, messages, lang }, onDelta)
 }
+
+/**
+ * 今日の運勢(ほしキャラが書く)をストリーミングで受け取る。
+ *
+ * ストリーミングにするのは、待ち時間を「読み込み中」ではなく
+ * 「いま書いている」として見せたいから。1文目が早く出るほど体感が軽くなる。
+ */
+export async function streamAiFortune(
+  context: ChatChartContext,
+  onDelta: (text: string) => void,
+  lang?: Lang,
+): Promise<void> {
+  await postStream(
+    '/api/ai-fortune',
+    { context, messages: [{ role: 'user', content: '今日のわたしの運勢を教えて' }], lang },
+    onDelta,
+  )
+}
