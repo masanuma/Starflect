@@ -97,13 +97,34 @@ export function hasCompanion(): boolean {
   return loadCompanion() !== null
 }
 
-/** 相棒を迎え入れる(初回のみ)。既にいれば chart だけ更新して保持 */
+/** 出生データが同じ人かどうか(生年月日＋時刻＋場所で見る) */
+const sameChart = (a: ChartData, b: ChartData) => a.dateLabel === b.dateLabel && a.placeLabel === b.placeLabel
+
+/**
+ * 相棒を迎え入れる(初回のみ)。既にいれば chart だけ更新して保持。
+ *
+ * ⚠️ **出生データが変わったら、保存済みの運勢は捨てる**。
+ * 運勢はその出生図に対して書かれたものなので、別の生年月日で占い直したときに
+ * 残っていると**前の人の運勢がそのまま表示される**（引き直し不可の判定に引っかかって再生成もされない）。
+ * 気分・領域の記録は本人の行動なので残す。
+ */
 export function createCompanion(chart: ChartData, starType: string, now: Date = new Date()): CompanionState {
   const existing = loadCompanion()
   const iso = now.toISOString()
-  const state: CompanionState = existing
-    ? { ...existing, chart, starType }
-    : { chart, starType, createdAt: iso, lastVisitAt: iso, daily: {} }
+  let state: CompanionState
+  if (!existing) {
+    state = { chart, starType, createdAt: iso, lastVisitAt: iso, daily: {} }
+  } else if (sameChart(existing.chart, chart)) {
+    state = { ...existing, chart, starType }
+  } else {
+    const daily: Record<string, DailyEntry> = {}
+    for (const [key, entry] of Object.entries(existing.daily)) {
+      const { fortune: _drop, ...rest } = entry
+      if (rest.mood === undefined && rest.domain === undefined && rest.forecastSeen === undefined) continue
+      daily[key] = rest
+    }
+    state = { ...existing, chart, starType, daily }
+  }
   saveCompanion(state)
   return state
 }
