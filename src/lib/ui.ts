@@ -260,6 +260,12 @@ export interface UIStrings {
     askAheadTitle: string
     askAhead: { label: string; q: string }[]
     readsIntro: (name: string) => string
+    /** 毎日の運勢をAIが書いているあいだの表示。待ち時間は「パーソナライズしている証拠」として見せる */
+    fortuneWaiting: string
+    fortuneError: string
+    fortuneRetry: string
+    /** 天体の根拠を畳んでおく見出し(憲法: 10天体は「なぜならば」＝見たい人だけ) */
+    fortuneWhy: string
     readingVoice: string
     otherPerson: string
     toMenu: string
@@ -547,6 +553,10 @@ const UI: Record<Lang, UIStrings> = {
       askAheadTitle: 'この先が気になったら、聞いてみて',
       askAhead: [{ label: '明日は？', q: '明日はどんな一日になりそう？' }, { label: '今週は？', q: '今週はどんな流れ？' }, { label: '来月は？', q: '来月はどんな時期になりそう？' }],
       readsIntro: (name) => `あなたのほしキャラ「${name}」です。今の星の巡りを読みました。`,
+      fortuneWaiting: 'いま、あなたの星を読んでいます',
+      fortuneError: 'AIにつながりませんでした',
+      fortuneRetry: 'もう一度読む',
+      fortuneWhy: 'なぜこう出たの？',
       readingVoice: '星の巡り、見ておいたよ。',
       otherPerson: '別の人を占う',
       toMenu: 'メインメニューへ',
@@ -838,6 +848,10 @@ const UI: Record<Lang, UIStrings> = {
       askAheadTitle: 'Curious about what’s next? Just ask.',
       askAhead: [{ label: 'Tomorrow?', q: 'What’s tomorrow going to be like?' }, { label: 'This week?', q: 'How is this week shaping up?' }, { label: 'Next month?', q: 'What kind of month is next month going to be?' }],
       readsIntro: (name) => `I’m your Hoshi-Kyara, “${name}.” I’ve read the current stars for you.`,
+      fortuneWaiting: 'Reading your stars right now',
+      fortuneError: 'Couldn’t reach the AI',
+      fortuneRetry: 'Read again',
+      fortuneWhy: 'Why did it come out this way?',
       readingVoice: 'I’ve looked over the stars for you.',
       otherPerson: 'Read someone else',
       toMenu: 'Main menu',
@@ -1128,6 +1142,10 @@ const UI: Record<Lang, UIStrings> = {
       askAheadTitle: '¿Te pica la curiosidad? Pregúntame.',
       askAhead: [{ label: '¿Mañana?', q: '¿Cómo va a ser mañana?' }, { label: '¿Esta semana?', q: '¿Cómo se presenta esta semana?' }, { label: '¿El mes que viene?', q: '¿Qué tal va a ser el mes que viene?' }],
       readsIntro: (name) => `Soy tu Hoshi-Kyara, «${name}». He leído las estrellas de ahora para ti.`,
+      fortuneWaiting: 'Estoy leyendo tus astros ahora mismo',
+      fortuneError: 'No se pudo conectar con la IA',
+      fortuneRetry: 'Leer otra vez',
+      fortuneWhy: '¿Por qué ha salido así?',
       readingVoice: 'Ya miré cómo van las estrellas por ti.',
       otherPerson: 'Consultar a otra persona',
       toMenu: 'Menú principal',
@@ -1418,6 +1436,10 @@ const UI: Record<Lang, UIStrings> = {
       askAheadTitle: 'Curieux de la suite ? Demande-moi.',
       askAhead: [{ label: 'Demain ?', q: 'Ça va donner quoi, demain ?' }, { label: 'Cette semaine ?', q: 'Comment se présente cette semaine ?' }, { label: 'Le mois prochain ?', q: 'Ça va ressembler à quoi, le mois prochain ?' }],
       readsIntro: (name) => `Je suis ton Hoshi-Kyara, « ${name} ». J’ai lu les étoiles du moment pour toi.`,
+      fortuneWaiting: 'Je lis tes astres en ce moment',
+      fortuneError: 'Impossible de joindre l’IA',
+      fortuneRetry: 'Relire',
+      fortuneWhy: 'Pourquoi ce résultat ?',
       readingVoice: 'J’ai jeté un œil aux étoiles pour toi.',
       otherPerson: 'Consulter une autre personne',
       toMenu: 'Menu principal',
@@ -1708,6 +1730,10 @@ const UI: Record<Lang, UIStrings> = {
       askAheadTitle: 'Curioso/a di quel che viene? Chiedimelo.',
       askAhead: [{ label: 'Domani?', q: 'Come sarà domani?' }, { label: 'Questa settimana?', q: 'Come si prospetta questa settimana?' }, { label: 'Il mese prossimo?', q: 'Che mese sarà il prossimo?' }],
       readsIntro: (name) => `Sono il tuo Hoshi-Kyara, «${name}». Ho letto le stelle di adesso per te.`,
+      fortuneWaiting: 'Sto leggendo i tuoi astri in questo momento',
+      fortuneError: 'Impossibile raggiungere l’IA',
+      fortuneRetry: 'Rileggi',
+      fortuneWhy: 'Perché è uscito così?',
       readingVoice: 'Ho dato un’occhiata alle stelle per te.',
       otherPerson: 'Consultare un’altra persona',
       toMenu: 'Menu principale',
@@ -1998,6 +2024,10 @@ const UI: Record<Lang, UIStrings> = {
       askAheadTitle: 'Curioso sobre o que vem? É só perguntar.',
       askAhead: [{ label: 'Amanhã?', q: 'Como vai ser o amanhã?' }, { label: 'Esta semana?', q: 'Como está esta semana?' }, { label: 'Mês que vem?', q: 'Que mês vai ser o próximo?' }],
       readsIntro: (name) => `Sou o seu Hoshi-Kyara, «${name}». Li as estrelas de agora para você.`,
+      fortuneWaiting: 'Estou lendo os seus astros agora',
+      fortuneError: 'Não foi possível conectar à IA',
+      fortuneRetry: 'Ler de novo',
+      fortuneWhy: 'Por que saiu assim?',
       readingVoice: 'Já dei uma olhada nas estrelas para você.',
       otherPerson: 'Consultar outra pessoa',
       toMenu: 'Menu principal',
@@ -2288,6 +2318,10 @@ const UI: Record<Lang, UIStrings> = {
       askAheadTitle: '앞으로가 궁금하면, 물어보세요',
       askAhead: [{ label: '내일은?', q: '내일은 어떤 하루가 될까?' }, { label: '이번 주는?', q: '이번 주는 어떤 흐름이야?' }, { label: '다음 달은?', q: '다음 달은 어떤 시기가 될까?' }],
       readsIntro: (name) => `당신의 호시캐릭터 「${name}」입니다. 지금의 별의 흐름을 읽어 봤어요.`,
+      fortuneWaiting: '지금 당신의 별을 읽고 있어요',
+      fortuneError: 'AI에 연결하지 못했어요',
+      fortuneRetry: '다시 읽기',
+      fortuneWhy: '왜 이렇게 나왔나요?',
       readingVoice: '별의 흐름, 미리 봐 뒀어.',
       otherPerson: '다른 사람 점치기',
       toMenu: '메인 메뉴로',

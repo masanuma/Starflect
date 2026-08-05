@@ -1723,6 +1723,157 @@ body {
   margin: 0 0 20px;
 }
 
+/* ---------- 今日の運勢(AIが書く) ---------- */
+/* 本文が主役。天体の根拠は畳んで、見たい人だけが開く(憲法) */
+.fortune-body {
+  font-size: 15px;
+  line-height: 2.05;
+  margin: 4px 0 0;
+  white-space: pre-wrap;
+}
+
+/* 待ち時間は「読み込み中」ではなく「いま読んでいる」として見せる。
+   一般の占いが一瞬なのは在庫から引くから。数秒かかるのは、その人のために今書いているから */
+.fortune-waiting {
+  text-align: center;
+  padding: 18px 0 6px;
+}
+
+.fortune-waiting-star {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+  animation: fortune-float 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes fortune-float {
+  from {
+    transform: translateY(2px);
+  }
+  to {
+    transform: translateY(-3px);
+  }
+}
+
+.fortune-waiting-msg {
+  font-family: var(--font-pop);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--pink-strong);
+  margin: 0;
+}
+
+.fortune-dots {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.fortune-dots i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: fortune-dot 1.2s ease-in-out infinite;
+}
+
+.fortune-dots i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.fortune-dots i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fortune-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+.fortune-waiting-hint {
+  font-size: 12.5px;
+  color: var(--ink-sub);
+  margin: 8px 0 0;
+}
+
+/* 障害は素直に伝える。固定文でごまかすと「その人のために書いている」が嘘になる */
+.fortune-error {
+  text-align: center;
+  padding: 14px 0 4px;
+}
+
+.fortune-error p {
+  font-size: 13.5px;
+  color: var(--ink-sub);
+  margin: 0 0 12px;
+}
+
+.fortune-why {
+  margin-top: 14px;
+  border-top: 1px dashed var(--line);
+  padding-top: 12px;
+}
+
+.fortune-why summary {
+  font-size: 12.5px;
+  color: var(--ink-sub);
+  cursor: pointer;
+  list-style: none;
+}
+
+.fortune-why summary::-webkit-details-marker {
+  display: none;
+}
+
+.fortune-why summary::after {
+  content: ' ▾';
+}
+
+.fortune-why[open] summary::after {
+  content: ' ▴';
+}
+
+.fortune-why-sky {
+  font-size: 13px;
+  color: var(--pink-strong);
+  font-weight: 700;
+  margin: 10px 0 6px;
+}
+
+.fortune-why-tone {
+  font-size: 13px;
+  color: var(--ink-sub);
+  margin: 0 0 10px;
+  line-height: 1.9;
+}
+
+.fortune-why-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.fortune-why-list li {
+  font-size: 12.5px;
+  padding: 8px 11px;
+  border-radius: 10px;
+  background: var(--bg-soft, #faf7fe);
+  border: 1px solid var(--line);
+}
+
+.fortune-why-list li.hard {
+  background: #fdf2f6;
+}
+
 /* ---------- ほしキャラの舞台(マスコットの背景円と、キャラごとのゆらぎ) ---------- */
 /* SVGの<g>にCSS transformをかけるので、原点を自分のバウンディングボックスの中心にする */
 .hk-m {
