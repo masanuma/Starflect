@@ -120,6 +120,22 @@ export async function streamAiPairChat(
 }
 
 /**
+ * ふたりの相性の読み(相性と「今日のふたり」をひとつづきで)をストリーミングで受け取る。
+ * ソロと違い**保存しない**＝占い直せる。言い回しは変わるが本筋はぶれない。
+ */
+export async function streamAiPairFortune(
+  context: PairChatContext,
+  onDelta: (text: string) => void,
+  lang?: Lang,
+): Promise<void> {
+  await postStream(
+    '/api/ai-pair-fortune',
+    { context, messages: [{ role: 'user', content: 'ふたりの相性を教えて' }], lang },
+    onDelta,
+  )
+}
+
+/**
  * 今日の運勢(ほしキャラが書く)をストリーミングで受け取る。
  *
  * ストリーミングにするのは、待ち時間を「読み込み中」ではなく

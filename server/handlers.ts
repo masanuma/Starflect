@@ -571,18 +571,96 @@ const createFortuneHandler = (apiKey: string | undefined): RawHandler =>
     (p) => buildFortuneSystem(p.context, langOf(p)) + LANG_DIRECTIVE[langOf(p)],
   )
 
+/* ---------- ふたりの相性の読み(AIが書く) ---------- */
+
+export interface PairFortuneRequest {
+  context: PairChatContext
+  messages: ChatMessage[]
+  lang?: Lang
+}
+
+/**
+ * 相性結果の本文をAIに書かせるプロンプト。
+ *
+ * **なぜ作ったか**：相性結果は全部が固定文だった。内訳は太陽3本・月3本・クロス9通り、
+ * 「今日のふたり」に至ってはソロで捨てたはずの**21本の在庫**をそのまま使っていた。
+ * 2人ぶんの出生図＝いちばん個別化できる場所なのに、9通りの定型文で返していた。
+ *
+ * ソロの運勢と同じ形にする：**文章1本が主役、天体の根拠は畳む**。
+ * 「ふたりの相性」と「今日のふたり」を分けず、1本にまとめて書かせる。
+ */
+function buildPairFortuneSystem(c: PairChatContext, lang: Lang): string {
+  const lines = [
+    `あなたは、${c.nameA} と ${c.nameB} の相性をよく知る、あたたかくて聡明な西洋占星術師です。`,
+    `いまから、ふたりの相性と「今日のふたり」を、ひとつづきの文章で書きます。口調は丁寧だけれど親しみやすく(です・ます調)。`,
+    '',
+    `【${c.nameA}(ほしキャラ: ${c.typeA})の出生の星座】`,
+    ...c.natalA.map((n) => `- ${n.label}: ${n.sign}`),
+    '',
+    `【${c.nameB}(ほしキャラ: ${c.typeB})の出生の星座】`,
+    ...c.natalB.map((n) => `- ${n.label}: ${n.sign}`),
+    '',
+    `【ふたりのほしキャラ相性】${c.percent}%「${c.nickname}」`,
+    ...c.details.map((d) => `- ${d}`),
+    '',
+    `【いまのふたりの空模様】${c.skyNote}`,
+    `- ${c.nameA}の基調: ${c.toneA}`,
+    ...c.aspectsA.map((a) => `  - ${a}`),
+    `- ${c.nameB}の基調: ${c.toneB}`,
+    ...c.aspectsB.map((a) => `  - ${a}`),
+    '',
+    '書き方:',
+    '- 全体で4〜6文。前置き・見出し・箇条書き・まとめは書かない。本文だけを書く',
+    '- 【最重要】どの2人にも当てはまることを書いたら失敗です。上のふたりの配置からだけ言えることを書く。「お互いを思いやって」「歩み寄りが大切」のような、どの組み合わせにも置ける文は書かない',
+    `- 【ふたりとも使う】${c.nameA} と ${c.nameB} の**両方**の出生の配置に触れる。片方だけの説明にしない。「こういう人と、こういう人だから、こう噛み合う」という形にする`,
+    '- 【前半と後半】前半で「ふたりの組み合わせがどういうものか」、後半で「そのふたりにとって今日はどんな日か」を書く。見出しで分けず、地の文でつなぐ',
+    '- 【日常語で】星の用語を並べない。1回の文章に出してよい星の名前は　最大1つだけ　。2つ以上並べたら失敗。角度(◯◯°)や専門用語(トライン・スクエア等)は書かない',
+    // ソロの運勢で分かったこと：今日の配置を複数渡すと全部に触れようとして星の名前が増える。
+    // 個数を締めるより「軸を1つ選ばせる」ほうが確実に守られる。
+    '- 【軸は1つだけ】今日の配置が複数書かれていても、いちばん効いているものを1つだけ選んで書く。全部に触れようとしない',
+    '- 【言い換え方】今日の配置は「運行中のA × あなたのB」の形で渡しているが、A と B を並べて書かない。運行側は「いまの巡り」とまとめ、出生側は役割名だけ出す',
+    '- データに書いてある角度の呼び名(「試練の角度」など)をそのまま持ち込まない。「角度」という語は使わず、自分の言葉で書く',
+    '- どちらか一方を悪者にしない。違いは「組み合わせの面白さ」として前向きに伝える',
+    '- 断定的な予言(「必ず〜になる」)や、別れ・重大な決断を促す言い方はしない',
+    '- 恋愛にも友情・仕事の関係にも読めるように、決めつけない',
+    '- ふたりを名前で呼ぶときは上の表記をそのまま使う(敬称の付け外しをしない)',
+    '- 星座名は上の表記をそのまま使い、生年月日から推測し直さない。上に書かれていない配置を勝手に作り出さない',
+    '- 【最後の1文】今日ふたりでできる具体的なことをひとつだけ添えて終わる。抽象的な心がけではなく、その日に実行できることにする',
+    '',
+    // ルールを積むより良い例を1つ見せるほうが効く（星名の個数・締め方が一度に伝わる）
+    '書き上がりの例(別のふたりの例。内容は真似せず、形だけ参考にすること):',
+    '「一方は思いついたら先に体が動く人、もう一方はまず全体を見てから動きたい人で、' +
+      'このふたりは"速さ"のものさしがはじめから違います。だからこそ、片方が走り出したあとを' +
+      'もう片方がきれいに整える、という形になりやすい組み合わせです。今日はいまの巡りが、' +
+      '整えるほうの気持ちにやわらかい追い風を送っていて、普段より提案を受け止めやすい日。' +
+      '今日は、前から話に出ていたけれど決めきれていないことを、ひとつだけ決めてしまってください。」',
+    '↑この例では、星の名前を1つも出さず、ふたりの違いを具体的に書いています。最後は今日できることで閉じています。',
+    ...safetyRules(lang),
+  ]
+  return lines.join('\n')
+}
+
+const createPairFortuneHandler = (apiKey: string | undefined): RawHandler =>
+  createStreamingChatHandler<PairFortuneRequest>(
+    apiKey,
+    'pair-fortune',
+    (p) => buildPairFortuneSystem(p.context, langOf(p)) + LANG_DIRECTIVE[langOf(p)],
+  )
+
 /** 相性鑑定・相談チャット・発見レポートのAPIハンドラを生成する(相棒との会話がAIの窓口を担う) */
 export function createAiHandlers(apiKey: string | undefined): {
   pairChat: RawHandler
   chat: RawHandler
   report: RawHandler
   fortune: RawHandler
+  pairFortune: RawHandler
 } {
   return {
     pairChat: createPairChatHandler(apiKey),
     chat: createChatHandler(apiKey),
     report: createReportHandler(apiKey),
     fortune: createFortuneHandler(apiKey),
+    pairFortune: createPairFortuneHandler(apiKey),
   }
 }
 

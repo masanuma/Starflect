@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { PairData, PairPerson } from '../lib/compat'
 import { compatOf, pairTip, relLabel } from '../lib/compat'
-import { readFortune, periodLabel } from '../lib/fortune'
+import { readFortune } from '../lib/fortune'
 import { starTypeOf } from '../lib/startypes'
 import type { PairChatContext } from '../lib/aiChat'
-import { streamAiPairChat } from '../lib/aiChat'
+import { streamAiPairChat, streamAiPairFortune } from '../lib/aiChat'
 import { getPlanet } from '../lib/planets'
 import { signName } from '../lib/signs'
 import { signIndex } from '../lib/astro'
@@ -33,6 +33,8 @@ function personType(p: PairPerson) {
   const moon = p.planets.find((pp) => pp.key === 'moon')!
   return starTypeOf(sun.lon, moon.lon)
 }
+
+type ReadingState = { kind: 'reading' } | { kind: 'done'; text: string } | { kind: 'error' }
 
 /** 直前にリビール演出を見せた組み合わせ(同じふたりでの占い直しでは再生しない) */
 const PAIR_REVEALED_KEY = 'starflect-pair-revealed'
@@ -99,6 +101,33 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
     aspectsA: fortuneA.items.map((i) => i.title),
     aspectsB: fortuneB.items.map((i) => i.title),
   }
+
+  const [reading, setReading] = useState<ReadingState>({ kind: 'reading' })
+  // 二重生成を防ぐ(StrictMode の二回マウントや再レンダーでの再実行)
+  const startedRef = useRef(false)
+
+  async function generateReading() {
+    setReading({ kind: 'reading' })
+    let acc = ''
+    try {
+      await streamAiPairFortune(pairChatContext, (delta) => {
+        // 届いた分から順に出す＝「読み込み中」ではなく「いま書いている」に見せる
+        acc += delta
+        setReading({ kind: 'done', text: acc })
+      })
+    } catch {
+      // 障害は素直に伝える。固定文でごまかすと「そのふたりのために書いている」が嘘になる
+      setReading({ kind: 'error' })
+    }
+  }
+
+  useEffect(() => {
+    if (startedRef.current) return
+    startedRef.current = true
+    void generateReading()
+    // マウント時に1回だけ
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
@@ -169,54 +198,80 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
         params={{ a: slugOf(typeA), b: slugOf(typeB) }}
       />
 
-      <section className="planet-card">
+      {/*
+        相性の読みは AI が書いた文章1本を主役にする（ソロの運勢と同じ形）。
+        以前は内訳が固定文3本＋クロス9通り、「今日のふたり」に至ってはソロで捨てた
+        21本の在庫をそのまま使っており、2人ぶんの出生図というもっとも個別化できる
+        材料を9通りの定型文で返していた。
+        天体の根拠（内訳・ふたりの調子・ヒント）は「なぜこう出たの？」に畳む。
+        ソロと違い保存しない＝占い直せる（言い回しは変わるが本筋はぶれない）。
+      */}
+      <section className="planet-card pair-reading">
         <header className="planet-head">
           <div className="planet-symbol" aria-hidden="true">
             <SectionIcon name="breakdown" />
           </div>
           <div>
             <p className="planet-title">{t.pairResult.breakdownTitle}</p>
-            <p className="planet-sub">{t.pairResult.breakdownSub}</p>
-          </div>
-        </header>
-        <ul className="fortune-list">
-          {compat.details.map((d) => (
-            <li key={d.title} className={`fortune-item ${d.rel === 'spark' ? 'hard' : 'good'}`}>
-              <p className="fortune-item-title">
-                {d.title}
-                <span className={`rel-badge rel-${d.rel}`}>{relLabel(d.rel)}</span>
-              </p>
-              <p className="fortune-item-text">{d.text}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="planet-card pair-today">
-        <header className="planet-head">
-          <div className="planet-symbol" aria-hidden="true">
-            <SectionIcon name="today" />
-          </div>
-          <div>
-            <p className="planet-title">{t.pairResult.todayTitle(periodLabel('today'))}</p>
             <p className="planet-sub">{t.pairResult.todaySub(fortuneA.plainSky)}</p>
           </div>
         </header>
 
-        <div className="pair-tones">
-          <div className="pair-tone">
-            <p className="pair-tone-name">{a.name}</p>
-            <span className="tone-badge">{fortuneA.toneLabel}</span>
-            <p className="pair-tone-text">{fortuneA.items[0]?.text}</p>
+        {reading.kind === 'reading' && (
+          <div className="fortune-waiting">
+            <div className="fortune-waiting-star" aria-hidden="true">
+              <HoshiKyaraMascot sunElement={typeA.sunElement} moonElement={typeA.moonElement} size={56} />
+              <span className="fortune-waiting-x">×</span>
+              <HoshiKyaraMascot sunElement={typeB.sunElement} moonElement={typeB.moonElement} size={56} />
+            </div>
+            <p className="fortune-waiting-msg">
+              {t.pairResult.fortuneWaiting}
+              <span className="fortune-dots" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </span>
+            </p>
+            <p className="fortune-waiting-hint">{fortuneA.plainSky}</p>
           </div>
-          <div className="pair-tone">
-            <p className="pair-tone-name">{b.name}</p>
-            <span className="tone-badge">{fortuneB.toneLabel}</span>
-            <p className="pair-tone-text">{fortuneB.items[0]?.text}</p>
-          </div>
-        </div>
+        )}
 
-        <p className="pair-tip">{tip}</p>
+        {reading.kind === 'done' && <p className="fortune-body">{reading.text}</p>}
+
+        {reading.kind === 'error' && (
+          <div className="fortune-error">
+            <p>{t.companion.fortuneError}</p>
+            <button className="ghost" onClick={() => void generateReading()}>
+              {t.companion.fortuneRetry}
+            </button>
+          </div>
+        )}
+
+        <details className="fortune-why">
+          <summary>{t.companion.fortuneWhy}</summary>
+          <ul className="fortune-list">
+            {compat.details.map((d) => (
+              <li key={d.title} className={`fortune-item ${d.rel === 'spark' ? 'hard' : 'good'}`}>
+                <p className="fortune-item-title">
+                  {d.title}
+                  <span className={`rel-badge rel-${d.rel}`}>{relLabel(d.rel)}</span>
+                </p>
+                <p className="fortune-item-text">{d.text}</p>
+              </li>
+            ))}
+          </ul>
+          <div className="pair-tones">
+            <div className="pair-tone">
+              <p className="pair-tone-name">{a.name}</p>
+              <span className="tone-badge">{fortuneA.toneLabel}</span>
+            </div>
+            <div className="pair-tone">
+              <p className="pair-tone-name">{b.name}</p>
+              <span className="tone-badge">{fortuneB.toneLabel}</span>
+            </div>
+          </div>
+          <p className="pair-tip">{tip}</p>
+        </details>
 
         <div className="ask-ahead">
           <p className="ask-ahead-title">{t.pairResult.askAheadTitle}</p>

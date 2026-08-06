@@ -1874,6 +1874,32 @@ body {
   background: #fdf2f6;
 }
 
+/* 相性の待ち演出はふたりのキャラを × で並べる */
+.pair-reading .fortune-waiting-star {
+  align-items: center;
+  gap: 8px;
+}
+
+.fortune-waiting-x {
+  font-size: 20px;
+  color: var(--ink-sub);
+  font-weight: 700;
+}
+
+/* 畳んだ中の内訳は余白を詰める(主役はAIの文章なので) */
+.pair-reading .fortune-why .fortune-list {
+  margin-top: 10px;
+}
+
+.pair-reading .fortune-why .pair-tones {
+  margin-top: 10px;
+}
+
+.pair-reading .fortune-why .pair-tip {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
 /* ---------- ほしキャラの舞台(マスコットの背景円と、キャラごとのゆらぎ) ---------- */
 /* SVGの<g>にCSS transformをかけるので、原点を自分のバウンディングボックスの中心にする */
 .hk-m {
