@@ -125,7 +125,8 @@ export default function Companion({ state, onHome, onPair }: Props) {
 
       {/* 毎日ひらく理由＝今日の運勢。ここを一等地に置く。
           地図や星の内訳は「たまに見る」ものなので、相談室・振り返りより下へ送る */}
-      <StarReading chart={state.chart} onAsk={ask} />
+      {/* daysSince は touchVisit より前にcaptureした値。渡さないと「ひさしぶり」が永久に出ない */}
+      <StarReading chart={state.chart} onAsk={ask} daysSince={daysSince} />
 
       <AiChat
         context={buildChatContext(state.chart)}

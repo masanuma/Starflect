@@ -268,6 +268,18 @@ export interface UIStrings {
     fortuneRetry: string
     /** 天体の根拠を畳んでおく見出し(憲法: 10天体は「なぜならば」＝見たい人だけ) */
     fortuneWhy: string
+    /**
+     * 答え合わせ。前に書いた運勢がどうだったかを、ほしキャラが後日1回だけ聞く。
+     * 集めた手応えは書き方の調整にだけ使い、**的中率などの数字は表に出さない**
+     * (嘘くさいうえ、外れが続くと自滅する)
+     */
+    hitAsk: (daysAgo: number) => string
+    hitYes: string
+    hitSoso: string
+    hitNo: string
+    hitDunno: string
+    hitSkip: string
+    hitThanks: string
     readingVoice: string
     otherPerson: string
     toMenu: string
@@ -560,6 +572,13 @@ const UI: Record<Lang, UIStrings> = {
       fortuneError: 'AIにつながりませんでした',
       fortuneRetry: 'もう一度読む',
       fortuneWhy: 'なぜこう出たの？',
+      hitAsk: (d) => (d === 1 ? '昨日はこんなふうにお伝えしましたが、どうでしたか？' : 'このあいだはこんなふうにお伝えしましたが、どうでしたか？'),
+      hitYes: 'あってた',
+      hitSoso: 'ぼちぼち',
+      hitNo: 'あってなかった',
+      hitDunno: 'わかんない',
+      hitSkip: '答えない',
+      hitThanks: '教えてくれてありがとうございます。次に生かしますね。',
       readingVoice: '星の巡り、見ておいたよ。',
       otherPerson: '別の人を占う',
       toMenu: 'メインメニューへ',
@@ -856,6 +875,13 @@ const UI: Record<Lang, UIStrings> = {
       fortuneError: 'Couldn’t reach the AI',
       fortuneRetry: 'Read again',
       fortuneWhy: 'Why did it come out this way?',
+      hitAsk: (d) => (d === 1 ? 'This is what I told you yesterday. How did it go?' : 'This is what I told you the other day. How did it go?'),
+      hitYes: 'Spot on',
+      hitSoso: 'Sort of',
+      hitNo: 'Not really',
+      hitDunno: 'Not sure',
+      hitSkip: 'Skip',
+      hitThanks: 'Thank you for telling me. I’ll keep it in mind.',
       readingVoice: 'I’ve looked over the stars for you.',
       otherPerson: 'Read someone else',
       toMenu: 'Main menu',
@@ -1151,6 +1177,13 @@ const UI: Record<Lang, UIStrings> = {
       fortuneError: 'No se pudo conectar con la IA',
       fortuneRetry: 'Leer otra vez',
       fortuneWhy: '¿Por qué ha salido así?',
+      hitAsk: (d) => (d === 1 ? 'Esto es lo que te dije ayer. ¿Qué tal fue?' : 'Esto es lo que te dije el otro día. ¿Qué tal fue?'),
+      hitYes: 'Acertado',
+      hitSoso: 'Más o menos',
+      hitNo: 'No mucho',
+      hitDunno: 'No sabría decir',
+      hitSkip: 'Ahora no',
+      hitThanks: 'Gracias por contármelo. Lo tendré en cuenta.',
       readingVoice: 'Ya miré cómo van las estrellas por ti.',
       otherPerson: 'Consultar a otra persona',
       toMenu: 'Menú principal',
@@ -1446,6 +1479,13 @@ const UI: Record<Lang, UIStrings> = {
       fortuneError: 'Impossible de joindre l’IA',
       fortuneRetry: 'Relire',
       fortuneWhy: 'Pourquoi ce résultat ?',
+      hitAsk: (d) => (d === 1 ? 'Voici ce que je t’avais dit hier. Ça s’est passé comment ?' : 'Voici ce que je t’avais dit l’autre jour. Ça s’est passé comment ?'),
+      hitYes: 'Juste',
+      hitSoso: 'À peu près',
+      hitNo: 'Pas vraiment',
+      hitDunno: 'Je ne sais pas',
+      hitSkip: 'Passer',
+      hitThanks: 'Merci de me le dire. J’en tiendrai compte.',
       readingVoice: 'J’ai jeté un œil aux étoiles pour toi.',
       otherPerson: 'Consulter une autre personne',
       toMenu: 'Menu principal',
@@ -1741,6 +1781,13 @@ const UI: Record<Lang, UIStrings> = {
       fortuneError: 'Impossibile raggiungere l’IA',
       fortuneRetry: 'Rileggi',
       fortuneWhy: 'Perché è uscito così?',
+      hitAsk: (d) => (d === 1 ? 'Ieri ti avevo detto così. Com’è andata?' : 'L’altro giorno ti avevo detto così. Com’è andata?'),
+      hitYes: 'Ci hai preso',
+      hitSoso: 'Più o meno',
+      hitNo: 'Non proprio',
+      hitDunno: 'Non saprei',
+      hitSkip: 'Salta',
+      hitThanks: 'Grazie per avermelo detto. Ne terrò conto.',
       readingVoice: 'Ho dato un’occhiata alle stelle per te.',
       otherPerson: 'Consultare un’altra persona',
       toMenu: 'Menu principale',
@@ -2036,6 +2083,13 @@ const UI: Record<Lang, UIStrings> = {
       fortuneError: 'Não foi possível conectar à IA',
       fortuneRetry: 'Ler de novo',
       fortuneWhy: 'Por que saiu assim?',
+      hitAsk: (d) => (d === 1 ? 'Foi isto que te disse ontem. Como foi?' : 'Foi isto que te disse no outro dia. Como foi?'),
+      hitYes: 'Acertou',
+      hitSoso: 'Mais ou menos',
+      hitNo: 'Nem tanto',
+      hitDunno: 'Não sei dizer',
+      hitSkip: 'Agora não',
+      hitThanks: 'Obrigada por contar. Vou levar isso em conta.',
       readingVoice: 'Já dei uma olhada nas estrelas para você.',
       otherPerson: 'Consultar outra pessoa',
       toMenu: 'Menu principal',
@@ -2331,6 +2385,13 @@ const UI: Record<Lang, UIStrings> = {
       fortuneError: 'AI에 연결하지 못했어요',
       fortuneRetry: '다시 읽기',
       fortuneWhy: '왜 이렇게 나왔나요?',
+      hitAsk: (d) => (d === 1 ? '어제는 이렇게 전해 드렸는데, 어떠셨어요?' : '지난번에는 이렇게 전해 드렸는데, 어떠셨어요?'),
+      hitYes: '맞았어요',
+      hitSoso: '그럭저럭',
+      hitNo: '안 맞았어요',
+      hitDunno: '잘 모르겠어요',
+      hitSkip: '나중에',
+      hitThanks: '알려 주셔서 고마워요. 다음에 참고할게요.',
       readingVoice: '별의 흐름, 미리 봐 뒀어.',
       otherPerson: '다른 사람 점치기',
       toMenu: '메인 메뉴로',

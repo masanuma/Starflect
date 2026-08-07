@@ -1,7 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ChartData, PlanetKey } from '../lib/types'
 import { readFortune } from '../lib/fortune'
-import { todayColor, todayColorName, loadCompanion, saveFortune, todaysFortune } from '../lib/companion'
+import {
+  todayColor,
+  todayColorName,
+  loadCompanion,
+  saveFortune,
+  todaysFortune,
+  currentAir,
+  pendingHitAsk,
+  recordHit,
+} from '../lib/companion'
+import type { Hit } from '../lib/companion'
+import { track } from '../lib/analytics'
 import { starTypeOf } from '../lib/startypes'
 import { getPlanet } from '../lib/planets'
 import { signName } from '../lib/signs'
@@ -9,6 +20,9 @@ import { signIndex } from '../lib/astro'
 import { streamAiFortune } from '../lib/aiChat'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import { useUI } from '../lib/ui'
+
+/** 答え合わせで振り返る運勢の抜粋。全文を貼ると今日の運勢より長くなって主役が入れ替わる */
+const excerpt = (text: string, max = 56) => (text.length <= max ? text : `${text.slice(0, max)}…`)
 
 type State =
   | { kind: 'reading' }
@@ -28,7 +42,19 @@ type State =
  * 先の期間(明日/今週/来月…)は出さない。先まで見せると"明日また来る理由"も
  * "相棒に聞く理由"も同時に消えてしまうため。
  */
-export default function StarReading({ chart, onAsk }: { chart: ChartData; onAsk?: (q: string) => void }) {
+export default function StarReading({
+  chart,
+  onAsk,
+  daysSince,
+}: {
+  chart: ChartData
+  onAsk?: (q: string) => void
+  /**
+   * 前回訪問からの経過日数。**訪問を記録する前に**captureした値を親から受け取る。
+   * ここで自前に測ると、親の `touchVisit` と競合して常に0になり「ひさしぶり」が出ない。
+   */
+  daysSince?: number
+}) {
   const t = useUI()
   const fortune = readFortune(chart.planets, 'today')
 
@@ -46,9 +72,31 @@ export default function StarReading({ chart, onAsk }: { chart: ChartData; onAsk?
   // 二重生成を防ぐ(StrictMode の二回マウントや、再レンダーでの再実行)
   const startedRef = useRef(false)
 
+  // 答え合わせ。前に書いた運勢について、後日1回だけ聞く(毎日は聞かない・スキップ可)。
+  // マウント時に一度だけ決める＝答えた直後に次の質問が湧いて出ないように。
+  const [ask, setAsk] = useState(() => {
+    const saved = loadCompanion()
+    return saved ? pendingHitAsk(saved) : undefined
+  })
+  const [thanked, setThanked] = useState(false)
+  function answerHit(hit: Hit) {
+    if (!ask) return
+    const saved = loadCompanion()
+    if (saved) recordHit(saved, ask.dateKey, hit)
+    track('fortune_hit', { hit, days_ago: ask.daysAgo })
+    setAsk(undefined)
+    // スキップは「答えなかった」なので、お礼を言われるほうが気持ち悪い
+    setThanked(hit !== 'skip')
+  }
+
   async function generate() {
     setState({ kind: 'reading' })
     let acc = ''
+    // 記憶(層2)。渡すものが何も無ければ undefined＝プロンプトにブロックごと出さない。
+    // 生の回数・日数はここを通らない＝AIが数え上げることが構造的にできない
+    const saved0 = loadCompanion()
+    const air = saved0 ? currentAir(saved0, new Date(), daysSince) : undefined
+    const hasAir = air && Object.keys(air).length > 0
     try {
       await streamAiFortune(
         {
@@ -78,6 +126,8 @@ export default function StarReading({ chart, onAsk }: { chart: ChartData; onAsk?
           acc += delta
           setState({ kind: 'done', text: acc })
         },
+        undefined,
+        hasAir ? air : undefined,
       )
       const saved = loadCompanion()
       // 相棒がまだ作られていない瞬間(初回診断の直後)は保存を諦める。翌日また書けばよい
@@ -131,6 +181,27 @@ export default function StarReading({ chart, onAsk }: { chart: ChartData; onAsk?
       )}
 
       {state.kind === 'done' && <p className="fortune-body">{state.text}</p>}
+
+      {/*
+        答え合わせ。読み終えたあとが自然な間なので、本文の下に置く。
+        集めた手応えは次からの書き方(断定を弱める/踏み込む)にだけ使い、的中率などの数字は出さない。
+      */}
+      {state.kind === 'done' && ask && (
+        <div className="hit-ask">
+          <p className="hit-ask-q">{t.companion.hitAsk(ask.daysAgo)}</p>
+          <p className="hit-ask-quote">{excerpt(ask.fortune.text)}</p>
+          <div className="hit-ask-btns">
+            <button onClick={() => answerHit('hit')}>{t.companion.hitYes}</button>
+            <button onClick={() => answerHit('soso')}>{t.companion.hitSoso}</button>
+            <button onClick={() => answerHit('miss')}>{t.companion.hitNo}</button>
+            <button onClick={() => answerHit('dunno')}>{t.companion.hitDunno}</button>
+          </div>
+          <button className="hit-ask-skip" onClick={() => answerHit('skip')}>
+            {t.companion.hitSkip}
+          </button>
+        </div>
+      )}
+      {thanked && <p className="hit-thanks">{t.companion.hitThanks}</p>}
 
       {state.kind === 'error' && (
         <div className="fortune-error">

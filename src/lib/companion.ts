@@ -30,6 +30,12 @@ export interface SavedFortune {
   basis: string[]
 }
 
+/**
+ * 運勢の答え合わせ。**その運勢が書かれた日**の記録として持つ（聞いた日ではない）。
+ * `skip` は「聞いたけど答えなかった」＝二度は聞かないための記録で、手応えの集計からは外す。
+ */
+export type Hit = 'hit' | 'soso' | 'miss' | 'dunno' | 'skip'
+
 export interface DailyEntry {
   /** その日の気分。運勢だけ保存して気分は未記録の日があるので任意 */
   mood?: Mood
@@ -38,6 +44,8 @@ export interface DailyEntry {
   forecastSeen?: boolean
   /** その日の運勢（言語ごとに1本） */
   fortune?: Partial<Record<Lang, SavedFortune>>
+  /** その日の運勢の答え合わせ（後日1回だけ聞く） */
+  hit?: Hit
 }
 
 export interface CompanionState {
@@ -51,6 +59,8 @@ export interface CompanionState {
   lastVisitAt: string
   /** 日付キー 'YYYY-MM-DD' → その日の記録 */
   daily: Record<string, DailyEntry>
+  /** 最後に答え合わせを「聞いた」日(ISO)。毎日は聞かないためのクールダウンに使う */
+  lastHitAskAt?: string
   /**
    * 累計シグナル(=「ごほうび地図」の通貨)。使うほど貯まる一方で、減らない・罰しない。
    * 連打で薄く稼げないよう、気分は「その日はじめて残したとき」だけ+1・会話は1往復+1・運勢閲覧は1日+1で数える。
@@ -100,6 +110,17 @@ export function hasCompanion(): boolean {
 /** 出生データが同じ人かどうか(生年月日＋時刻＋場所で見る) */
 const sameChart = (a: ChartData, b: ChartData) => a.dateLabel === b.dateLabel && a.placeLabel === b.placeLabel
 
+/** 運勢とその答え合わせを落とす。答え合わせは運勢に対する評価なので、運勢を捨てるなら道連れにする */
+function stripFortune(entry: DailyEntry): DailyEntry {
+  const { fortune: _f, hit: _h, ...rest } = entry
+  return rest
+}
+
+/** 気分・領域・訪問の記録が何も無い＝残す意味が無い日か */
+function isEmptyEntry(e: DailyEntry): boolean {
+  return e.mood === undefined && e.domain === undefined && e.forecastSeen === undefined
+}
+
 /**
  * 相棒を迎え入れる(初回のみ)。既にいれば chart だけ更新して保持。
  *
@@ -119,8 +140,8 @@ export function createCompanion(chart: ChartData, starType: string, now: Date = 
   } else {
     const daily: Record<string, DailyEntry> = {}
     for (const [key, entry] of Object.entries(existing.daily)) {
-      const { fortune: _drop, ...rest } = entry
-      if (rest.mood === undefined && rest.domain === undefined && rest.forecastSeen === undefined) continue
+      const rest = stripFortune(entry)
+      if (isEmptyEntry(rest)) continue
       daily[key] = rest
     }
     state = { ...existing, chart, starType, daily }
@@ -347,9 +368,9 @@ export function pruneFortunes(state: CompanionState, now: Date = new Date(), kee
       daily[key] = entry
       continue
     }
-    const { fortune: _drop, ...rest } = entry
+    const rest = stripFortune(entry)
     // 本文しか無かった日は、まるごと捨てて構わない
-    if (rest.mood === undefined && rest.domain === undefined && rest.forecastSeen === undefined) continue
+    if (isEmptyEntry(rest)) continue
     daily[key] = rest
   }
   return { ...state, daily }
@@ -410,6 +431,185 @@ export function latestPastFortune(
   const [dateKey, entry] = hit
   const diff = Math.round((new Date(today).getTime() - new Date(dateKey).getTime()) / 86_400_000)
   return { dateKey, daysAgo: diff, fortune: entry.fortune![lang]! }
+}
+
+/* ---------- 層2「いまの空気」＝AIに渡す記憶 ---------- */
+
+/**
+ * 記憶の3層。
+ * ```
+ * 層1  生の記録        端末に貯める。AIには絶対に渡さない
+ * 層2  「いまの空気」   直近だけを見て、言葉に変える  ← ここ
+ * 層3  AIが喋る        層2を素材に、自然に混ぜる。触れないことも選べる
+ * ```
+ * **数を渡すからAIが数えて言ってしまう。渡すものを言葉にすれば数えようがない。**
+ * だからこの型のフィールドはすべて「言葉」で、数値は1つも持たない。
+ *
+ * さらに**言わないことも設計のうち**：変化が無いとき・偏りが無いときは
+ * その項目ごと `undefined` にして渡さない。「いつもどおりですね」と毎日言われるのは、
+ * 見てくれている証ではなく監視されている感覚になる。
+ */
+export interface AirBrief {
+  /** 気分の流れ。「いつもどおり」のときは渡さない */
+  mood?: string
+  /** 気になっていること。偏りが無ければ渡さない */
+  focus?: string
+  /** ひさしぶり感。3日以上空いたときだけ */
+  gap?: string
+  /** 占いの手応え（答え合わせの蓄積から） */
+  hit?: string
+}
+
+/** 「いまの空気」を見る窓。日数ではなく**回数**で切る（週1の人の記憶が消えないように） */
+const AIR_WINDOW = 5
+/** これより古い記録はノイズなので見ない */
+const AIR_MAX_DAYS = 30
+/** 気分がこの数に満たなければ、流れとは呼べないので何も渡さない */
+const AIR_MIN_MOODS = 3
+/**
+ * 手応えは気分より集まりにくい（答え合わせは毎日は聞かない）ので、しきい値を1つ下げる。
+ * 3件を待つと、実質いつまでも渡らない。
+ */
+const AIR_MIN_HITS = 2
+
+const MOOD_SCORE: Record<Mood, number> = { good: 1, meh: 0, bad: -1 }
+const HIT_SCORE: Partial<Record<Hit, number>> = { hit: 1, soso: 0, miss: -1 }
+
+/** 直近の記録を新しい順に。30日より古いものは捨てる */
+function recentEntries(state: CompanionState, now: Date): Array<[string, DailyEntry]> {
+  const today = todayKey(now)
+  const oldest = todayKey(new Date(now.getTime() - AIR_MAX_DAYS * 86_400_000))
+  return Object.entries(state.daily)
+    .filter(([key]) => key >= oldest && key <= today)
+    .sort((a, b) => (a[0] < b[0] ? 1 : -1))
+}
+
+const avg = (xs: number[]) => xs.reduce((s, x) => s + x, 0) / xs.length
+
+/**
+ * 気分の流れを言葉にする。
+ * 直近の半分と、その前とを比べて「動いたか」を見る。動いていなければ水準で見る。
+ * どちらでもなければ `undefined`＝いつもどおり＝黙る。
+ */
+function moodTrend(moods: Mood[]): string | undefined {
+  if (moods.length < AIR_MIN_MOODS) return undefined
+  const s = moods.map((m) => MOOD_SCORE[m])
+  const half = Math.ceil(s.length / 2)
+  const delta = avg(s.slice(0, half)) - avg(s.slice(half))
+  if (delta >= 0.5) return '上向き'
+  if (delta <= -0.5) return '下向き'
+  const level = avg(s)
+  if (level <= -0.4) return 'しんどめが続く'
+  if (level >= 0.6) return 'いい感じが続く'
+  return undefined
+}
+
+/**
+ * 現在の「いまの空気」。渡すものが何も無ければ空オブジェクトを返す。
+ * 呼び出し側は空なら記憶ブロックごと送らない。
+ */
+export function currentAir(
+  state: CompanionState,
+  now: Date = new Date(),
+  /**
+   * 前回訪問からの経過日数。画面側で**訪問を記録する前に**captureした値を渡すこと。
+   * 既定値のまま呼ぶと `touchVisit` 済みの状態を見て常に0になり、「ひさしぶり」が永久に出ない。
+   */
+  daysSince: number = daysSinceLastVisit(state, now),
+): AirBrief {
+  const recent = recentEntries(state, now)
+
+  const moods = recent
+    .map(([, e]) => e.mood)
+    .filter((m): m is Mood => !!m)
+    .slice(0, AIR_WINDOW)
+  const mood = moodTrend(moods)
+
+  // 気になっていること：同じ窓のなかで、はっきり偏っているときだけ。'その他'は偏りとみなさない
+  const domains = recent
+    .filter(([, e]) => e.mood)
+    .slice(0, AIR_WINDOW)
+    .map(([, e]) => e.domain)
+    .filter((d): d is Domain => !!d && d !== 'other')
+  const tally: Partial<Record<Domain, number>> = {}
+  for (const d of domains) tally[d] = (tally[d] ?? 0) + 1
+  const top = Object.entries(tally).sort((a, b) => (b[1] ?? 0) - (a[1] ?? 0))[0]
+  const focus =
+    top && (top[1] ?? 0) >= 3 && (top[1] ?? 0) > domains.length / 2
+      ? `${DOMAIN_JA[top[0] as Domain]}のことが多い`
+      : undefined
+
+  // ひさしぶり感：1日空いた程度では触れない(毎日来いという圧をかけない)
+  const gap = daysSince >= 3 ? 'ひさしぶり' : undefined
+
+  const hits = recent
+    .map(([, e]) => e.hit)
+    .filter((h): h is Hit => !!h && h in HIT_SCORE)
+    .slice(0, AIR_WINDOW)
+  let hit: string | undefined
+  if (hits.length >= AIR_MIN_HITS) {
+    const level = avg(hits.map((h) => HIT_SCORE[h] ?? 0))
+    hit = level >= 0.5 ? '当たっている感じ' : level <= -0.5 ? 'ぴんと来ていないみたい' : 'まちまち'
+  }
+
+  const air: AirBrief = {}
+  if (mood) air.mood = mood
+  if (focus) air.focus = focus
+  if (gap) air.gap = gap
+  if (hit) air.hit = hit
+  return air
+}
+
+/* ---------- 答え合わせ ---------- */
+
+/** 答え合わせを聞いてよい期間。これより前の運勢を振り返られても覚えていない */
+const HIT_ASK_MAX_DAYS = 3
+/** 前に聞いてからこの日数は聞かない（毎日は聞かない） */
+const HIT_ASK_COOLDOWN_DAYS = 3
+
+/**
+ * いま答え合わせを聞くべき運勢（無ければ undefined）。
+ *
+ * - 直近の**過去の**運勢が対象。今日ぶんは聞かない（まだ1日が終わっていない）
+ * - 3日より前の運勢は振り返らない
+ * - すでに答えた／スキップした運勢は二度と聞かない
+ * - 前に聞いてから3日は聞かない
+ */
+export function pendingHitAsk(
+  state: CompanionState,
+  lang: Lang = getLang(),
+  now: Date = new Date(),
+): { dateKey: string; daysAgo: number; fortune: SavedFortune } | undefined {
+  const past = latestPastFortune(state, lang, now)
+  if (!past || past.daysAgo > HIT_ASK_MAX_DAYS) return undefined
+  if (state.daily[past.dateKey]?.hit) return undefined
+  if (state.lastHitAskAt) {
+    const asked = new Date(state.lastHitAskAt)
+    if (!isNaN(asked.getTime())) {
+      const days = Math.round((now.getTime() - asked.getTime()) / 86_400_000)
+      if (days < HIT_ASK_COOLDOWN_DAYS) return undefined
+    }
+  }
+  return past
+}
+
+/** 答え合わせを記録する。スキップも `'skip'` として残す＝同じ日を二度は聞かない */
+export function recordHit(
+  state: CompanionState,
+  dateKey: string,
+  hit: Hit,
+  now: Date = new Date(),
+): CompanionState {
+  const base = loadCompanion() ?? state
+  const prev = base.daily[dateKey]
+  if (!prev) return base
+  const next: CompanionState = {
+    ...base,
+    lastHitAskAt: now.toISOString(),
+    daily: { ...base.daily, [dateKey]: { ...prev, hit } },
+  }
+  saveCompanion(next)
+  return next
 }
 
 export function recordMood(

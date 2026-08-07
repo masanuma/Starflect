@@ -13,6 +13,7 @@
   --violet: #8a63dd;
   --violet-strong: #6a45c4;
   --violet-soft: rgba(138, 99, 221, 0.4);
+  --violet-faint: rgba(138, 99, 221, 0.07);
   --cyan: #2fa2b0;
   --card: #ffffff;
   --card-border: #e5daf4;
@@ -1813,6 +1814,74 @@ body {
   font-size: 13.5px;
   color: var(--ink-sub);
   margin: 0 0 12px;
+}
+
+/* 答え合わせ。ほしキャラが聞いてくる形にするので、運勢本文とは地を変えて「会話」に見せる。
+   集めた手応えは次からの書き方の調整にだけ使い、的中率などの数字は絶対に表に出さない */
+.hit-ask {
+  margin-top: 16px;
+  background: var(--violet-faint);
+  border-radius: 14px;
+  padding: 14px 14px 10px;
+}
+
+.hit-ask-q {
+  font-family: var(--font-pop);
+  font-size: 13.5px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.7;
+}
+
+.hit-ask-quote {
+  font-size: 12.5px;
+  color: var(--ink-sub);
+  line-height: 1.8;
+  margin: 6px 0 10px;
+  padding-left: 10px;
+  border-left: 2px solid var(--line);
+}
+
+.hit-ask-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hit-ask-btns button {
+  flex: 1 1 auto;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: inherit;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.hit-ask-btns button:hover {
+  border-color: var(--violet);
+  color: var(--violet);
+}
+
+/* スキップは同じ大きさで並べない。答えないことを選びやすくしつつ、選択肢と対等には見せない */
+.hit-ask-skip {
+  display: block;
+  margin: 8px auto 0;
+  border: none;
+  background: none;
+  color: var(--ink-sub);
+  font-size: 11.5px;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.hit-thanks {
+  font-size: 12.5px;
+  color: var(--ink-sub);
+  margin: 12px 0 0;
 }
 
 .fortune-why {

@@ -9,6 +9,7 @@ import { findNatalAspects } from './natalAspects'
 import { forecastSet } from './fortune'
 import type { PeriodBrief } from './fortune'
 import { starTypeOf } from './startypes'
+import type { AirBrief } from './companion'
 
 export interface ChatMessage {
   role: 'user' | 'assistant'
@@ -145,10 +146,12 @@ export async function streamAiFortune(
   context: ChatChartContext,
   onDelta: (text: string) => void,
   lang?: Lang,
+  /** 端末に貯めた記録を言葉に変えたもの(記憶の層2)。生の回数・日数は含まない */
+  air?: AirBrief,
 ): Promise<void> {
   await postStream(
     '/api/ai-fortune',
-    { context, messages: [{ role: 'user', content: '今日のわたしの運勢を教えて' }], lang },
+    { context, messages: [{ role: 'user', content: '今日のわたしの運勢を教えて' }], lang, air },
     onDelta,
   )
 }

@@ -488,11 +488,28 @@ function createReportHandler(apiKey: string | undefined): RawHandler {
 
 /* ---------- 毎日の運勢(AIが書く) ---------- */
 
+/**
+ * 端末に貯めた記録を「言葉」に変えたもの（記憶の層2）。
+ *
+ * **数は絶対に渡さない**。回数や日数を渡すとAIがそれを数え上げて
+ * 「3日連続でしんどいと答えていますね」のように言ってしまい、監視されている感覚になる。
+ * 言葉しか渡さなければ、数えようがない。
+ * 生成は `src/lib/companion.ts` の `currentAir()`。項目ごと省略される（＝触れない）ことがある。
+ */
+export interface AirBrief {
+  mood?: string
+  focus?: string
+  gap?: string
+  hit?: string
+}
+
 /** 毎日の運勢の生成リクエスト。相談室と同じ土台データを使う */
 export interface FortuneRequest {
   context: ChatChartContext
   messages: ChatMessage[]
   lang?: Lang
+  /** 最近の様子。渡すものが無ければ省略される */
+  air?: AirBrief
 }
 
 /**
@@ -506,7 +523,7 @@ export interface FortuneRequest {
  * 21本の固定文よりつまらなくなる。だから「一般論を書いたら失敗」を明示し、
  * 出生図の要素を必ず1つ引き合いに出させ、最後に今日できる具体的な行動で閉じさせる。
  */
-function buildFortuneSystem(c: ChatChartContext, lang: Lang): string {
+function buildFortuneSystem(c: ChatChartContext, lang: Lang, air?: AirBrief): string {
   const who = c.name ? honorificName(c.name, lang) : 'あなた'
   const me = c.starTypeName ?? 'ほしキャラ'
   const lines = [
@@ -532,6 +549,41 @@ function buildFortuneSystem(c: ChatChartContext, lang: Lang): string {
       ...today.items.map((t) => `- ${t}`),
     )
   }
+  // 記憶（層3＝喋る側）。渡すものが1つも無ければブロックごと出さない。
+  // 「知っている」を見せる場所だが、**知っていることを毎回言うのは監視**。触れない自由も同時に与える。
+  const airLines = [
+    air?.gap && `- しばらく会っていない感じ: ${air.gap}`,
+    air?.mood && `- 最近の気分の流れ: ${air.mood}`,
+    air?.focus && `- 気にしていること: ${air.focus}`,
+    air?.hit && `- これまでの運勢の手応え: ${air.hit}`,
+  ].filter((x): x is string => !!x)
+  if (airLines.length) {
+    lines.push(
+      '',
+      `【${who}の最近の様子】(${who}が自分で残した記録から。数ではなく感じとして持っています)`,
+      ...airLines,
+      '',
+      'この「最近の様子」の扱い:',
+      // 数を渡していないので数えられないはずだが、それらしい数を捏造する事故を潰しておく
+      '- 【数えない】「◯回」「◯日連続」「◯日ぶり」のような数え方は絶対にしない。回数も日数も渡していません',
+      '- 【毎回は触れない】自然に混ざるときだけ使う。触れずに今日の星の話だけで書き切ってよい。むしろ、そのほうが良い日が多い',
+      '- 【責めない】しばらく会っていなくても、来なかったことには触れない。会えてうれしい、という気配だけでよい',
+      '- 【言い当てない】「最近しんどそうですね」と本人の状態を断定しない。今日の星の話に、そっと重ねる形にする',
+    )
+    // 答え合わせの蓄積は「触れる材料」ではなく**書き方の調整**に使う（憲法: 的中率は表に出さない）。
+    // 何も言わないと「最近の運勢がしっくりこなかったのも」のように、手応えそのものを話題にしてしまう。
+    // 占いが当たったかどうかを占いの中で語り出すと、自己言及的で急に興ざめになる。
+    if (air?.hit) {
+      lines.push(
+        '- 【手応えには触れない】占いが当たっていたか外れていたかの話そのものは、一言も書かない。「しっくりこなかったですよね」のような振り返りは禁止。手応えは書き方を変えるためだけに渡しています',
+      )
+    }
+    if (air?.hit === 'ぴんと来ていないみたい') {
+      lines.push('- 今日は断定を弱め、決めつけずに書く。かわりに問いかけを1つだけ混ぜてよい')
+    } else if (air?.hit === '当たっている感じ') {
+      lines.push('- 今日はいつもより一歩だけ踏み込んで書いてよい')
+    }
+  }
   lines.push(
     '',
     '書き方:',
@@ -543,6 +595,10 @@ function buildFortuneSystem(c: ChatChartContext, lang: Lang): string {
     '- 【軸は1つだけ】今日の運行が複数書かれていても、いちばん効いているものを1つだけ選んで軸にする。全部に触れようとしない。触れなかった配置があっても構わない',
     '- データに書いてある角度の呼び名(「試練の角度」など)をそのまま持ち込まない。「角度」という語は使わず、自分の言葉で今日の空気として書く',
     '- 【日常語で】星の用語を並べない。1回の運勢に出してよい星の名前は　最大1つだけ　。2つ以上並べたら失敗。角度(◯◯°)や専門用語は書かない',
+    // 「星の名前」だけを禁じても、星座名(しし座)と用語(上昇)が抜けて
+    // 「見た目担当のしし座が上昇にある」のような文が出た。相性側で先に踏んだのと同じ罠。
+    '- 【星座名は出さない】「おひつじ座」〜「うお座」の星座名は書かない。出生の配置は星座ではなく性格の言葉に言い換える(例:「見た目(アセンダント): しし座」→「人前ではぱっと目を引くたち」)',
+    '- 【用語も出さない】「上昇」「アセンダント」「ハウス」「逆行」など、占星術を知らないと分からない語は使わない。データの見出しに書いてある役割名(見た目・やる気・広げ役 など)だけを日常語として使う',
     // ここが肝。相談室で同じ罠を踏んだ：ルールを強めるだけでは星が3個→2個で止まった。
     // 運行データが「運行中のA × あなたのB」の形で渡るので、そのまま2つ並べてしまう。
     // 具体的な言い換え方を示して初めて守られるようになった。
@@ -568,7 +624,7 @@ const createFortuneHandler = (apiKey: string | undefined): RawHandler =>
   createStreamingChatHandler<FortuneRequest>(
     apiKey,
     'fortune',
-    (p) => buildFortuneSystem(p.context, langOf(p)) + LANG_DIRECTIVE[langOf(p)],
+    (p) => buildFortuneSystem(p.context, langOf(p), p.air) + LANG_DIRECTIVE[langOf(p)],
   )
 
 /* ---------- ふたりの相性の読み(AIが書く) ---------- */
