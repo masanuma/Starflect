@@ -97,6 +97,8 @@ export default function StarReading({
     const saved0 = loadCompanion()
     const air = saved0 ? currentAir(saved0, new Date(), daysSince) : undefined
     const hasAir = air && Object.keys(air).length > 0
+    // 人となり（全期間）。会話がまだ少ない人には無い。生成は相棒ホーム側で裏で走らせる
+    const persona = saved0?.persona?.lines
     try {
       await streamAiFortune(
         {
@@ -128,6 +130,7 @@ export default function StarReading({
         },
         undefined,
         hasAir ? air : undefined,
+        persona?.length ? persona : undefined,
       )
       const saved = loadCompanion()
       // 相棒がまだ作られていない瞬間(初回診断の直後)は保存を諦める。翌日また書けばよい

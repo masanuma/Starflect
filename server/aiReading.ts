@@ -14,6 +14,9 @@ export function aiReadingPlugin(apiKey: string | undefined, feedbackUrl?: string
       server.middlewares.use('/api/ai-pair-chat', handlers.pairChat)
       server.middlewares.use('/api/ai-chat', handlers.chat)
       server.middlewares.use('/api/ai-report', handlers.report)
+      server.middlewares.use('/api/ai-fortune', handlers.fortune)
+      server.middlewares.use('/api/ai-pair-fortune', handlers.pairFortune)
+      server.middlewares.use('/api/ai-persona', handlers.persona)
       server.middlewares.use('/api/feedback', feedback)
     },
   }

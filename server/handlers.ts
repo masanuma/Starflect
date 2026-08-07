@@ -510,6 +510,11 @@ export interface FortuneRequest {
   lang?: Lang
   /** 最近の様子。渡すものが無ければ省略される */
   air?: AirBrief
+  /**
+   * 全期間を圧縮した「人となり」（層2の第2の窓）。
+   * 生の会話ログはここには含まれない — 圧縮済みの短い文だけが届く。
+   */
+  persona?: string[]
 }
 
 /**
@@ -523,7 +528,7 @@ export interface FortuneRequest {
  * 21本の固定文よりつまらなくなる。だから「一般論を書いたら失敗」を明示し、
  * 出生図の要素を必ず1つ引き合いに出させ、最後に今日できる具体的な行動で閉じさせる。
  */
-function buildFortuneSystem(c: ChatChartContext, lang: Lang, air?: AirBrief): string {
+function buildFortuneSystem(c: ChatChartContext, lang: Lang, air?: AirBrief, persona?: string[]): string {
   const who = c.name ? honorificName(c.name, lang) : 'あなた'
   const me = c.starTypeName ?? 'ほしキャラ'
   const lines = [
@@ -547,6 +552,21 @@ function buildFortuneSystem(c: ChatChartContext, lang: Lang, air?: AirBrief): st
       `【今日の星の運行】${today.sky}(全体の基調: ${today.tone})`,
       '※これが今日この人に効いている配置のすべて。ここに無い星や角度を持ち出さないこと。',
       ...today.items.map((t) => `- ${t}`),
+    )
+  }
+  // 人となり（全期間）。「最近の様子」が“今どうか”なのに対し、こちらは“どういう人か”。
+  // 生の会話は届いていないので、ここに書いていないことは知りようがない＝持ち出しようがない。
+  if (persona?.length) {
+    lines.push(
+      '',
+      `【${who}のふだんの様子】(これまでの記録から見えていること)`,
+      ...persona.map((l) => `- ${l}`),
+      '',
+      'この「ふだんの様子」の扱い:',
+      '- 出生図と同じ「もともとこういう人」の材料として使ってよい。今日の運行と重なるところがあれば、そこを軸にする',
+      '- 【言い当てない】「〜な人ですよね」と本人に言い返さない。分かっている前提で、そっと書く',
+      '- 【毎回は触れない】今日の話に自然に混ざるときだけ使う',
+      '- ここに書かれていない具体的な出来事や予定を、知っているかのように書かない',
     )
   }
   // 記憶（層3＝喋る側）。渡すものが1つも無ければブロックごと出さない。
@@ -624,7 +644,7 @@ const createFortuneHandler = (apiKey: string | undefined): RawHandler =>
   createStreamingChatHandler<FortuneRequest>(
     apiKey,
     'fortune',
-    (p) => buildFortuneSystem(p.context, langOf(p), p.air) + LANG_DIRECTIVE[langOf(p)],
+    (p) => buildFortuneSystem(p.context, langOf(p), p.air, p.persona) + LANG_DIRECTIVE[langOf(p)],
   )
 
 /* ---------- ふたりの相性の読み(AIが書く) ---------- */
@@ -715,6 +735,76 @@ const createPairFortuneHandler = (apiKey: string | undefined): RawHandler =>
     (p) => buildPairFortuneSystem(p.context, langOf(p)) + LANG_DIRECTIVE[langOf(p)],
   )
 
+/* ---------- 人となり(記憶の圧縮) ---------- */
+
+/**
+ * 「人となり」を作るリクエスト。
+ *
+ * **ここだけが層1（生の記録）を見てよい。** このハンドラの入力には会話ログが含まれるが、
+ * 出力（圧縮後の言葉）だけが運勢AI・相談AIに渡る。
+ */
+export interface PersonaRequest {
+  context: {
+    /** その人自身の発言だけ。ほしキャラ側の発言は材料にしない */
+    says: string[]
+    /** 行動記録の実測（全期間）。数を見てよいのは圧縮AIだけ */
+    behavior?: BehaviorBrief
+  }
+  messages: ChatMessage[]
+  lang?: Lang
+}
+
+/**
+ * 会話ログと行動記録を「人となり」に圧縮させるプロンプト。
+ *
+ * **なぜ作ったか**：層2は「いまの空気」＝直近5回しか見ておらず、それ以外は捨てていた。
+ * いちばん濃い材料である会話ログは、相談室の中だけで使われて毎日の面には流れていなかった。
+ *
+ * **いちばんの敵は「監視されている感じ」**。固有名詞・出来事・日付・数が1つでも混ざると、
+ * 翌日の運勢で持ち出されたときに気持ち悪くなる。だから**圧縮の時点で落とす**。
+ * ルールで運勢AIに我慢させるのではなく、そもそも渡らない形にするのが構造的な解。
+ */
+function buildPersonaSystem(c: PersonaRequest['context']): string {
+  const lines = [
+    'あなたは、ある人の記録を読んで「その人らしさ」を短い言葉にまとめる担当です。',
+    'まとめた言葉は、その人の占いを書くときの参考にだけ使われます。本人には見せません。',
+    '',
+    '【その人がこれまで話したこと】(本人の発言のみ)',
+    ...c.says.map((s) => `- ${s}`),
+  ]
+  if (c.behavior) {
+    const b = c.behavior
+    lines.push(
+      '',
+      `【その人がつけた記録】記録した日数 ${b.days}日 / いい ${b.good}・ふつう ${b.meh}・しんどい ${b.bad}` +
+        `${b.topDomains.length ? ` / よく選ぶ領域: ${b.topDomains.join('・')}` : ''} / はじめてから ${b.sinceDays}日`,
+    )
+  }
+  lines.push(
+    '',
+    '書き方:',
+    '- 3〜4個の短い文を、1行に1つずつ書く。箇条書きの記号・見出し・前置き・まとめは書かない',
+    // 長いと運勢のプロンプトを圧迫し、運勢がこの文章に引きずられて「今日の星の話」でなくなる
+    '- 1つの文は25字程度まで。長くしない',
+    // ここが最重要。渡らなければ、運勢AIは持ち出しようがない
+    '- 【固有名詞と出来事は絶対に書かない】会社名・人名・地名・作品名、および「面接」「引っ越し」「試験」のような具体的な出来事は1つも書かない。いつの話かも書かない',
+    '- 【数を書かない】「◯回」「◯日」のような数え方はしない',
+    '- 【性格診断をしない】星座や生まれつきの性格の話は書かない。この人が実際にどう過ごしてきたかから見えることだけを書く',
+    '- 【悪く書かない】短所として書かない。同じことでも前向きな言い方にする(例:「優柔不断」ではなく「決める前に人の意見を聞きたいほう」)',
+    '- 断定しない。「〜のよう」「〜ほう」「〜が多い」くらいの強さにする',
+    '- 材料から言えないことは書かない。話に出ていないことを想像で足さない',
+    '',
+    '出力の例(内容は真似せず、形と強さだけ参考にすること):',
+    '仕事のことをよく話すほう',
+    '決める前に人の意見を聞きたいタイプ',
+    '調子の波はあるが、後半で持ち直すことが多い',
+  )
+  return lines.join('\n')
+}
+
+const createPersonaHandler = (apiKey: string | undefined): RawHandler =>
+  createStreamingChatHandler<PersonaRequest>(apiKey, 'persona', (p) => buildPersonaSystem(p.context))
+
 /** 相性鑑定・相談チャット・発見レポートのAPIハンドラを生成する(相棒との会話がAIの窓口を担う) */
 export function createAiHandlers(apiKey: string | undefined): {
   pairChat: RawHandler
@@ -722,6 +812,7 @@ export function createAiHandlers(apiKey: string | undefined): {
   report: RawHandler
   fortune: RawHandler
   pairFortune: RawHandler
+  persona: RawHandler
 } {
   return {
     pairChat: createPairChatHandler(apiKey),
@@ -729,6 +820,7 @@ export function createAiHandlers(apiKey: string | undefined): {
     report: createReportHandler(apiKey),
     fortune: createFortuneHandler(apiKey),
     pairFortune: createPairFortuneHandler(apiKey),
+    persona: createPersonaHandler(apiKey),
   }
 }
 

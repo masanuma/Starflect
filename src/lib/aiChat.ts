@@ -9,7 +9,7 @@ import { findNatalAspects } from './natalAspects'
 import { forecastSet } from './fortune'
 import type { PeriodBrief } from './fortune'
 import { starTypeOf } from './startypes'
-import type { AirBrief } from './companion'
+import type { AirBrief, BehaviorBrief } from './companion'
 
 export interface ChatMessage {
   role: 'user' | 'assistant'
@@ -148,10 +148,64 @@ export async function streamAiFortune(
   lang?: Lang,
   /** 端末に貯めた記録を言葉に変えたもの(記憶の層2)。生の回数・日数は含まない */
   air?: AirBrief,
+  /** 全期間を圧縮した「人となり」。圧縮済みの短い文だけ(生の会話は含まない) */
+  persona?: string[],
 ): Promise<void> {
   await postStream(
     '/api/ai-fortune',
-    { context, messages: [{ role: 'user', content: '今日のわたしの運勢を教えて' }], lang, air },
+    { context, messages: [{ role: 'user', content: '今日のわたしの運勢を教えて' }], lang, air, persona },
     onDelta,
   )
+}
+
+/* ---------- 人となり(記憶の圧縮) ---------- */
+
+/** 圧縮に渡す発言の数。古いものより最近のほうが「いまのその人」に近い */
+const PERSONA_MAX_SAYS = 40
+/** 1発言の長さの上限。長文をそのまま送るとトークンを食う */
+const PERSONA_MAX_LEN = 120
+
+/**
+ * 保存済みの会話から、その人自身の発言だけを取り出す。
+ *
+ * ほしキャラ側の発言は入れない — それはAIが書いた言葉であって、その人の材料ではない。
+ * ここで取り出した生ログを見てよいのは**圧縮AIだけ**（`/api/ai-persona`）。
+ * 運勢AIに届くのは圧縮後の短い文だけ。
+ */
+export function userSays(chart: ChartData): string[] {
+  let raw: string | null = null
+  try {
+    raw = localStorage.getItem(chatStorageKey(chart))
+  } catch {
+    return []
+  }
+  if (!raw) return []
+  try {
+    const messages = JSON.parse(raw) as ChatMessage[]
+    return messages
+      .filter((m) => m.role === 'user' && m.content.trim())
+      .map((m) => m.content.trim().slice(0, PERSONA_MAX_LEN))
+      .slice(-PERSONA_MAX_SAYS)
+  } catch {
+    return []
+  }
+}
+
+/**
+ * 会話と行動記録から「人となり」を作らせる。
+ * 画面には出さないので、届いた分をためて改行で割るだけ。
+ */
+export async function fetchPersona(says: string[], behavior?: BehaviorBrief): Promise<string[]> {
+  let acc = ''
+  await postStream(
+    '/api/ai-persona',
+    { context: { says, behavior }, messages: [{ role: 'user', content: 'この人の人となりをまとめて' }] },
+    (delta) => {
+      acc += delta
+    },
+  )
+  return acc
+    .split('\n')
+    .map((l) => l.replace(/^[-・*\s]+/, '').trim())
+    .filter(Boolean)
 }

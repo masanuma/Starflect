@@ -151,6 +151,7 @@ app.post('/api/ai-chat', handlers.chat)
 app.post('/api/ai-report', handlers.report)
 app.post('/api/ai-fortune', handlers.fortune)
 app.post('/api/ai-pair-fortune', handlers.pairFortune)
+app.post('/api/ai-persona', handlers.persona)
 app.post('/api/feedback', feedback)
 
 // sitemap(全言語ぶんを動的生成)は静的配信より前に置く

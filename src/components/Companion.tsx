@@ -9,6 +9,9 @@ import {
   weekAggregate,
   currentSignals,
   loadCompanion,
+  behaviorBrief,
+  personaNeedsUpdate,
+  savePersona,
 } from '../lib/companion'
 import { starTypeOf } from '../lib/startypes'
 import { readFortune } from '../lib/fortune'
@@ -18,7 +21,7 @@ import StarReading from './StarReading'
 import PartyCard from './PartyCard'
 import RewardMap from './RewardMap'
 import AiChat from './AiChat'
-import { buildChatContext, chatStorageKey } from '../lib/aiChat'
+import { buildChatContext, chatStorageKey, userSays, fetchPersona } from '../lib/aiChat'
 import { useUI, quoted } from '../lib/ui'
 import { track } from '../lib/analytics'
 
@@ -60,6 +63,25 @@ export default function Companion({ state, onHome, onPair }: Props) {
     setPhase('done')
   }
 
+  /**
+   * 「人となり」を裏で作り直す（記憶の圧縮）。
+   *
+   * 運勢の生成をブロックしない＝**その日の運勢は前回の人となりを使う**。翌日から新しくなる。
+   * ここで待たせてまで最新にする価値は無いし、待ち時間はパーソナライズの証拠として
+   * 運勢の生成に使いたい。失敗しても握りつぶす（人となりが無いだけで、運勢は書ける）。
+   */
+  async function refreshPersona() {
+    try {
+      const base = loadCompanion() ?? state
+      const says = userSays(base.chart)
+      if (!personaNeedsUpdate(base, says.length)) return
+      const lines = await fetchPersona(says, behaviorBrief(base))
+      savePersona(base, lines, says.length)
+    } catch {
+      /* 作れなくても困らない */
+    }
+  }
+
   // 運勢カードの「この先が気になったら」から相談室へ質問を投げる(毎日の入口をAIに寄せる)
   const [autoAsk, setAutoAsk] = useState<{ q: string; n: number } | undefined>()
   const ask = (q: string) => setAutoAsk((prev) => ({ q, n: (prev?.n ?? 0) + 1 }))
@@ -96,6 +118,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
     refreshSignals()
     track('companion_open', { days_since: daysSince, star_type: state.starType })
     if (isWeekend) track('weekend_view', { star_type: state.starType })
+    void refreshPersona()
     // マウント時に1回だけ
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

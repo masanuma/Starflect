@@ -36,6 +36,23 @@ export interface SavedFortune {
  */
 export type Hit = 'hit' | 'soso' | 'miss' | 'dunno' | 'skip'
 
+/**
+ * 全期間の記録を圧縮した「人となり」＝記憶の層2の第2の窓。
+ *
+ * 「いまの空気」が**直近5回の変化**を見るのに対し、こちらは**全期間の傾向**を見る。
+ * 材料は会話ログと行動記録（＝層1）だが、**層1を見てよいのは圧縮AIだけ**で、
+ * 運勢を書くAIにはこの `lines`（圧縮後の言葉）しか渡らない。
+ *
+ * 固有名詞・出来事・日付・数は含めない。含めた瞬間に「知ってくれてる」が「監視されてる」に変わる。
+ */
+export interface Persona {
+  /** 3〜4個の短い文。日本語1本で持つ（プロンプトが日本語なので全言語で使える） */
+  lines: string[]
+  writtenAt: string
+  /** 要約に使った会話の往復数。次に作り直すかの判定に使う */
+  basedOn: number
+}
+
 export interface DailyEntry {
   /** その日の気分。運勢だけ保存して気分は未記録の日があるので任意 */
   mood?: Mood
@@ -61,6 +78,8 @@ export interface CompanionState {
   daily: Record<string, DailyEntry>
   /** 最後に答え合わせを「聞いた」日(ISO)。毎日は聞かないためのクールダウンに使う */
   lastHitAskAt?: string
+  /** 全期間の記録を圧縮した「人となり」(層2の第2の窓) */
+  persona?: Persona
   /**
    * 累計シグナル(=「ごほうび地図」の通貨)。使うほど貯まる一方で、減らない・罰しない。
    * 連打で薄く稼げないよう、気分は「その日はじめて残したとき」だけ+1・会話は1往復+1・運勢閲覧は1日+1で数える。
@@ -144,7 +163,10 @@ export function createCompanion(chart: ChartData, starType: string, now: Date = 
       if (isEmptyEntry(rest)) continue
       daily[key] = rest
     }
-    state = { ...existing, chart, starType, daily }
+    // 「人となり」も前の人のもの。会話ログは生年月日＋名前でキーが分かれるので自動で切り替わるが、
+    // これは相棒の状態に乗っているので明示的に捨てる
+    const { persona: _drop, ...keep } = existing
+    state = { ...keep, chart, starType, daily }
   }
   saveCompanion(state)
   return state
@@ -558,6 +580,42 @@ export function currentAir(
   if (gap) air.gap = gap
   if (hit) air.hit = hit
   return air
+}
+
+/* ---------- 人となり（記憶の圧縮） ---------- */
+
+/** これだけ会話が積み上がったら、はじめて「人となり」を作る */
+const PERSONA_MIN_TURNS = 3
+/** 前回の要約からこれだけ会話が増えたら作り直す。毎日変わるものは「人となり」ではない */
+const PERSONA_REFRESH_TURNS = 5
+
+/**
+ * いま「人となり」を作り直すべきか。
+ * `turns` は会話の往復数（＝ユーザーの発言数）。
+ */
+export function personaNeedsUpdate(state: CompanionState, turns: number): boolean {
+  if (turns < PERSONA_MIN_TURNS) return false
+  const p = state.persona
+  if (!p) return true
+  return turns >= p.basedOn + PERSONA_REFRESH_TURNS
+}
+
+/** 「人となり」を保存する。空の要約は保存しない（前回のものを残したほうがまし） */
+export function savePersona(
+  state: CompanionState,
+  lines: string[],
+  basedOn: number,
+  now: Date = new Date(),
+): CompanionState {
+  const clean = lines.map((l) => l.trim()).filter(Boolean)
+  if (!clean.length) return state
+  const base = loadCompanion() ?? state
+  const next: CompanionState = {
+    ...base,
+    persona: { lines: clean, writtenAt: now.toISOString(), basedOn },
+  }
+  saveCompanion(next)
+  return next
 }
 
 /* ---------- 答え合わせ ---------- */
