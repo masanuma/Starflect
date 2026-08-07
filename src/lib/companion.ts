@@ -12,6 +12,16 @@ export type Mood = 'good' | 'meh' | 'bad'
 export type Domain = 'work' | 'love' | 'people' | 'other'
 
 /**
+ * 1日1問の遊びの二択。**質問感なくプロファイルを溜める**ための問い。
+ *
+ * 6問はそれぞれ「その人の傾き」を1本ずつ見ている
+ * （ひとり↔誰かと／直感↔熟考／計画↔柔軟／変化↔安定／気持ち↔解決／いま↔これから）。
+ * 出生図が言う性質と、実際に選ぶものとのギャップは `隠れた自分レポート` の材料にもなる。
+ */
+export type PickId = 'alone' | 'decide' | 'holiday' | 'newplace' | 'advice' | 'matter'
+export const PICK_IDS: PickId[] = ['alone', 'decide', 'holiday', 'newplace', 'advice', 'matter']
+
+/**
  * その日の運勢（AIが書いたもの）。
  *
  * **1日1本・引き直し不可**。一度書いたものを保存して、同じ日に何度開いても同じものを見せる。
@@ -63,6 +73,8 @@ export interface DailyEntry {
   fortune?: Partial<Record<Lang, SavedFortune>>
   /** その日の運勢の答え合わせ（後日1回だけ聞く） */
   hit?: Hit
+  /** その日の二択の答え。`a` は 0=左 / 1=右 */
+  pick?: { id: PickId; a: 0 | 1 }
 }
 
 export interface CompanionState {
@@ -242,10 +254,14 @@ const COLOR_NAMES: Record<Lang, string[]> = {
   pt: ['rosa', 'lavanda', 'dourado', 'turquesa', 'magenta', 'violeta', 'esmeralda', 'laranja'],
   ko: ['로즈핑크', '라벤더', '골드', '터콰이즈', '마젠타', '바이올렛', '에메랄드', '오렌지'],
 }
-function colorIndex(key: string): number {
+/** 日付キーから決定論的な数を作る。同じ日は何度開いても同じものが出る */
+function hashKey(key: string): number {
   let h = 0
   for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0
-  return h % DAY_COLORS.length
+  return h
+}
+function colorIndex(key: string): number {
+  return hashKey(key) % DAY_COLORS.length
 }
 export function todayColor(key: string = todayKey()): string {
   return DAY_COLORS[colorIndex(key)]
@@ -312,7 +328,9 @@ export const MILESTONES: Milestone[] = [
   { at: 10, key: 'partyDeep', content: 'ai' },
   { at: 25, key: 'moodTrend', content: 'ai' },
   { at: 50, key: 'hiddenSelf', content: 'ai' },
-  { at: 100, key: 'trueBuddy', content: 'soon' },
+  // 中身がAIで書けるようになったので 'soon'(予告) から 'ai'(生成) へ。
+  // 材料は出生図×人となり×いまの空気。人となりが無い人にも「これから見えてくること」として書ける
+  { at: 100, key: 'trueBuddy', content: 'ai' },
 ]
 
 /** 発見レポート(気分のクセ・隠れた自分)に渡す、行動ログの実測サマリ */
@@ -580,6 +598,67 @@ export function currentAir(
   if (gap) air.gap = gap
   if (hit) air.hit = hit
   return air
+}
+
+/* ---------- 1日1問（遊びの二択） ---------- */
+
+/**
+ * 今日の二択（無い日は undefined）。
+ *
+ * **毎日は出さない。** 2問目の枠は「領域」と取り合いなので、毎日二択にすると
+ * `いまの空気` の材料である領域の記録が消える。3日に1日だけ二択にして、残りは従来どおり領域を聞く。
+ * 気分（1問目）は毎日聞く＝層2の主材料なので減らせない。
+ */
+export function todaysPickId(key: string = todayKey()): PickId | undefined {
+  const h = hashKey(key)
+  if (h % 3 !== 0) return undefined
+  return PICK_IDS[Math.floor(h / 3) % PICK_IDS.length]
+}
+
+/**
+ * 圧縮AIに渡す用の日本語ラベル（表示用テキストは `ui.ts` が7言語で持つ）。
+ * 「人となり」は日本語1本で作るので、選んだ内容もここで日本語に寄せる。
+ */
+const PICK_JA: Record<PickId, [string, string]> = {
+  alone: ['ひとりで過ごすほうを選ぶ', '誰かと過ごすほうを選ぶ'],
+  decide: ['ぴんときたほうで決める', '調べてから決める'],
+  holiday: ['休みは予定を決めておくほう', '休みは気分で動くほう'],
+  newplace: ['新しいほうを選ぶ', 'いつものほうを選ぶ'],
+  advice: ['相談されたらまず気持ちを聞く', '相談されたらまず解決策を考える'],
+  matter: ['いま手にあるものを大事にする', 'これから起きることを大事にする'],
+}
+
+/** その日の二択を記録。その日はじめてなら +1 シグナル */
+export function recordPick(
+  state: CompanionState,
+  id: PickId,
+  a: 0 | 1,
+  now: Date = new Date(),
+): CompanionState {
+  const base = loadCompanion() ?? state
+  const key = todayKey(now)
+  const prev = base.daily[key]
+  const first = !prev?.pick
+  const next: CompanionState = {
+    ...base,
+    signals: currentSignals(base) + (first ? 1 : 0),
+    daily: { ...base.daily, [key]: { ...prev, pick: { id, a } } as DailyEntry },
+  }
+  saveCompanion(next)
+  return next
+}
+
+/**
+ * これまでの二択を「人となり」の材料にする。
+ * 同じ問いに何度か答えていたら**最新を採用**（人は変わるので、古い答えを引きずらない）。
+ */
+export function personaPicks(state: CompanionState): string[] {
+  const latest = new Map<PickId, 0 | 1>()
+  for (const key of Object.keys(state.daily).sort()) {
+    const p = state.daily[key].pick
+    if (p) latest.set(p.id, p.a)
+  }
+  return [...latest].map(([id, a]) => PICK_JA[id]?.[a]).filter(Boolean)
 }
 
 /* ---------- 人となり（記憶の圧縮） ---------- */

@@ -2,9 +2,9 @@
 
 import type { Lang } from './i18n'
 import type { ChatChartContext } from './aiChat'
-import type { BehaviorBrief } from './companion'
+import type { AirBrief, BehaviorBrief } from './companion'
 
-export type ReportTopic = 'moonBack' | 'partyDeep' | 'moodTrend' | 'hiddenSelf'
+export type ReportTopic = 'moonBack' | 'partyDeep' | 'moodTrend' | 'hiddenSelf' | 'trueBuddy'
 
 /** 生成済みレポートを保存する localStorage キー(人×トピックごと) */
 const reportKey = (context: ChatChartContext, topic: ReportTopic) =>
@@ -28,6 +28,8 @@ export async function fetchAiReport(
   topic: ReportTopic,
   behavior?: BehaviorBrief,
   lang?: Lang,
+  /** `trueBuddy` 用の記憶。圧縮済みの言葉だけで、生の会話は含まない */
+  memory?: { persona?: string[]; air?: AirBrief },
 ): Promise<string> {
   const cached = loadReport(context, topic)
   if (cached) return cached
@@ -35,7 +37,7 @@ export async function fetchAiReport(
   const res = await fetch('/api/ai-report', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ context, topic, behavior, lang }),
+    body: JSON.stringify({ context, topic, behavior, lang, ...memory }),
   })
   if (!res.ok) {
     const data = (await res.json().catch(() => null)) as { error?: string } | null

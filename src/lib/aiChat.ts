@@ -195,11 +195,16 @@ export function userSays(chart: ChartData): string[] {
  * 会話と行動記録から「人となり」を作らせる。
  * 画面には出さないので、届いた分をためて改行で割るだけ。
  */
-export async function fetchPersona(says: string[], behavior?: BehaviorBrief): Promise<string[]> {
+export async function fetchPersona(
+  says: string[],
+  behavior?: BehaviorBrief,
+  /** 1日1問の二択で選んだもの（日本語ラベル） */
+  picks?: string[],
+): Promise<string[]> {
   let acc = ''
   await postStream(
     '/api/ai-persona',
-    { context: { says, behavior }, messages: [{ role: 'user', content: 'この人の人となりをまとめて' }] },
+    { context: { says, behavior, picks }, messages: [{ role: 'user', content: 'この人の人となりをまとめて' }] },
     (delta) => {
       acc += delta
     },

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { ChartData } from '../lib/types'
-import { mapProgress, loadCompanion, behaviorBrief } from '../lib/companion'
+import { mapProgress, loadCompanion, behaviorBrief, currentAir } from '../lib/companion'
 import { buildChatContext } from '../lib/aiChat'
 import { fetchAiReport, loadReport } from '../lib/aiReport'
 import type { ReportTopic } from '../lib/aiReport'
@@ -55,7 +55,12 @@ export default function RewardMap({ signals, chart, starName, collapsible = fals
     try {
       const state = loadCompanion()
       const behavior = state ? behaviorBrief(state) : undefined
-      const text = await fetchAiReport(context, topic, behavior, lang)
+      // 「ほんとうの相棒」だけは記憶（人となり・いまの空気）も踏まえて書く＝最終形の中身
+      const memory =
+        topic === 'trueBuddy' && state
+          ? { persona: state.persona?.lines, air: currentAir(state) }
+          : undefined
+      const text = await fetchAiReport(context, topic, behavior, lang, memory)
       setReports((r) => ({ ...r, [topic]: { text } }))
     } catch {
       setReports((r) => ({ ...r, [topic]: { error: true } }))

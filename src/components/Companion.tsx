@@ -12,6 +12,10 @@ import {
   behaviorBrief,
   personaNeedsUpdate,
   savePersona,
+  todaysPickId,
+  recordPick,
+  personaPicks,
+  PICK_IDS,
 } from '../lib/companion'
 import { starTypeOf } from '../lib/startypes'
 import { readFortune } from '../lib/fortune'
@@ -31,7 +35,7 @@ interface Props {
   onPair: () => void
 }
 
-type TapPhase = 'mood' | 'domain' | 'done'
+type TapPhase = 'mood' | 'domain' | 'pick' | 'done'
 
 /**
  * 星の相棒ホーム(MVP v0.1)。2回目以降の起点。
@@ -50,16 +54,31 @@ export default function Companion({ state, onHome, onPair }: Props) {
   const [phase, setPhase] = useState<TapPhase>(todayEntry?.mood ? 'done' : 'mood')
   const [mood, setMood] = useState<Mood | undefined>(todayEntry?.mood)
 
+  // 2問目は「領域」と「遊びの二択」の取り合い。日付から決まるので、同じ日は何度開いても同じ問い。
+  // 二択は3日に1日しか出ないので、ローカル開発時だけ ?pick=<id> で強制表示できるようにしておく
+  const forcedPick = new URLSearchParams(location.search).get('pick')
+  const pickId =
+    forcedPick && /^(localhost|127\.)/.test(location.hostname)
+      ? (PICK_IDS.find((id) => id === forcedPick) ?? todaysPickId())
+      : todaysPickId()
+
   function pickMood(m: Mood) {
     setMood(m)
     recordMood(state, m)
     refreshSignals()
     track('tap_mood', { mood: m, star_type: state.starType })
-    setPhase('domain')
+    setPhase(pickId ? 'pick' : 'domain')
   }
   function pickDomain(d?: Domain) {
     if (mood) recordMood(state, mood, d)
     if (d) track('tap_domain', { domain: d, mood })
+    setPhase('done')
+  }
+  function answerPick(a: 0 | 1) {
+    if (!pickId) return
+    recordPick(state, pickId, a)
+    refreshSignals()
+    track('tap_pick', { pick: pickId, answer: a })
     setPhase('done')
   }
 
@@ -75,7 +94,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
       const base = loadCompanion() ?? state
       const says = userSays(base.chart)
       if (!personaNeedsUpdate(base, says.length)) return
-      const lines = await fetchPersona(says, behaviorBrief(base))
+      const lines = await fetchPersona(says, behaviorBrief(base), personaPicks(base))
       savePersona(base, lines, says.length)
     } catch {
       /* 作れなくても困らない */
@@ -194,6 +213,24 @@ export default function Companion({ state, onHome, onPair }: Props) {
                 {t.companion.domOther}
               </button>
               <button className="tap-chip tap-skip" onClick={() => pickDomain(undefined)}>
+                {t.companion.tapSkip}
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* 遊びの二択。領域と同じ枠なので、聞かれる回数は増えない */}
+        {phase === 'pick' && pickId && (
+          <>
+            <p className="tap-question">{t.companion.picks[pickId].q}</p>
+            <div className="tap-domains">
+              <button className="tap-chip" onClick={() => answerPick(0)}>
+                {t.companion.picks[pickId].a[0]}
+              </button>
+              <button className="tap-chip" onClick={() => answerPick(1)}>
+                {t.companion.picks[pickId].a[1]}
+              </button>
+              <button className="tap-chip tap-skip" onClick={() => setPhase('done')}>
                 {t.companion.tapSkip}
               </button>
             </div>

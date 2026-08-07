@@ -8,6 +8,7 @@ import PairResult from './components/PairResult'
 import Companion from './components/Companion'
 import LangSwitcher from './components/LangSwitcher'
 import ConsentBanner from './components/ConsentBanner'
+import BackupPanel from './components/BackupPanel'
 import type { ChartData } from './lib/types'
 import type { PairData } from './lib/compat'
 import { useUI } from './lib/ui'
@@ -125,6 +126,8 @@ export default function App() {
         <button className="consent-link" onClick={() => setConsentState(null)}>
           {t.consent.settings}
         </button>
+        {/* 引き継ぎは畳んでおく。毎日使うものではないし、表に出す量は増やさない(憲法) */}
+        <BackupPanel />
       </footer>
       {consent === null && <ConsentBanner onChoose={chooseConsent} />}
     </div>

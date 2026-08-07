@@ -1,6 +1,7 @@
 import { useLang, getLang } from './i18n'
 import type { Lang } from './i18n'
 import type { Element } from './signs'
+import type { PickId } from './companion'
 
 /** 生年月日ラベルを言語別に整形 */
 const MONTHS: Record<Lang, string[]> = {
@@ -206,6 +207,19 @@ export interface UIStrings {
   }
   /** LP下部の「このアプリについて」への導線。注記はそこへ集約している */
   aboutLink: string
+  /**
+   * 引き継ぎ（機種変え対策）。クラウドではなくファイル＝
+   * 「入力した生年月日そのものを送信することはありません」という公開済みの約束を守るため。
+   */
+  backup: {
+    title: string
+    note: string
+    save: string
+    load: string
+    confirm: string
+    done: string
+    fail: string
+  }
   consent: {
     message: string
     allow: string
@@ -280,6 +294,11 @@ export interface UIStrings {
     hitDunno: string
     hitSkip: string
     hitThanks: string
+    /**
+     * 1日1問の遊びの二択。気分タップの2問目として、領域の代わりに数日に1度だけ出す。
+     * `PickId` で型付けしているので、どれか1問でも訳が抜けると型チェックで落ちる。
+     */
+    picks: Record<PickId, { q: string; a: [string, string] }>
     readingVoice: string
     otherPerson: string
     toMenu: string
@@ -519,6 +538,15 @@ const UI: Record<Lang, UIStrings> = {
       deny: 'しない',
       settings: '計測設定',
     },
+    backup: {
+      title: 'データの引き継ぎ',
+      note: '機種変更や、ブラウザのデータを消す前に。ファイルは端末に保存されます（サーバーには送られません）。',
+      save: 'ファイルに保存',
+      load: 'ファイルから復元',
+      confirm: 'いまの記録を、選んだファイルの内容に置きかえます。よろしいですか？',
+      done: '復元しました。',
+      fail: 'このファイルは読み込めませんでした。',
+    },
     feedback: {
       title: 'この診断はどうでしたか？',
       sub: '感想や「ここ変」など、ひとことあると嬉しいです',
@@ -579,6 +607,14 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'わかんない',
       hitSkip: '答えない',
       hitThanks: '教えてくれてありがとうございます。次に生かしますね。',
+      picks: {
+        alone: { q: 'もし今日、1時間だけ自由になったら？', a: ['ひとりで過ごす', '誰かと過ごす'] },
+        decide: { q: '何かを決めるとき、どっち？', a: ['ぴんときたほう', '調べてから'] },
+        holiday: { q: 'お休みの日は？', a: ['予定を決めておく', '気分で動く'] },
+        newplace: { q: 'お店を選ぶなら？', a: ['はじめてのお店', 'いつものお店'] },
+        advice: { q: '相談されたら、まずどっち？', a: ['気持ちを聞く', '解決策を考える'] },
+        matter: { q: 'いま大事にしたいのは？', a: ['手にあるもの', 'これから起きること'] },
+      },
       readingVoice: '星の巡り、見ておいたよ。',
       otherPerson: '別の人を占う',
       toMenu: 'メインメニューへ',
@@ -822,6 +858,15 @@ const UI: Record<Lang, UIStrings> = {
       deny: 'No thanks',
       settings: 'Analytics settings',
     },
+    backup: {
+      title: 'Move your data',
+      note: 'For a new phone, or before clearing your browser data. The file is saved on your device — nothing is sent to a server.',
+      save: 'Save to a file',
+      load: 'Restore from a file',
+      confirm: 'This will replace your current records with the contents of the file you choose. Continue?',
+      done: 'Restored.',
+      fail: 'That file couldn’t be read.',
+    },
     feedback: {
       title: 'How was your reading?',
       sub: 'A quick word — what you liked or what felt off — means a lot.',
@@ -882,6 +927,14 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'Not sure',
       hitSkip: 'Skip',
       hitThanks: 'Thank you for telling me. I’ll keep it in mind.',
+      picks: {
+        alone: { q: 'If you had one free hour today?', a: ['Spend it alone', 'Spend it with someone'] },
+        decide: { q: 'When you decide something, which is it?', a: ['Go with my gut', 'Look into it first'] },
+        holiday: { q: 'On a day off?', a: ['Plan it out', 'Go with the flow'] },
+        newplace: { q: 'Picking a place to eat?', a: ['Somewhere new', 'The usual spot'] },
+        advice: { q: 'When someone asks for advice, first you…', a: ['Ask how they feel', 'Look for a fix'] },
+        matter: { q: 'What matters most right now?', a: ['What I already have', 'What’s coming next'] },
+      },
       readingVoice: 'I’ve looked over the stars for you.',
       otherPerson: 'Read someone else',
       toMenu: 'Main menu',
@@ -1124,6 +1177,15 @@ const UI: Record<Lang, UIStrings> = {
       deny: 'No, gracias',
       settings: 'Ajustes de medición',
     },
+    backup: {
+      title: 'Llevarte tus datos',
+      note: 'Para un móvil nuevo, o antes de borrar los datos del navegador. El archivo se guarda en tu dispositivo: no se envía a ningún servidor.',
+      save: 'Guardar en un archivo',
+      load: 'Restaurar desde un archivo',
+      confirm: 'Esto reemplazará tus registros actuales por el contenido del archivo elegido. ¿Continuar?',
+      done: 'Restaurado.',
+      fail: 'No se ha podido leer ese archivo.',
+    },
     feedback: {
       title: '¿Qué te pareció?',
       sub: 'Un comentario —lo que te gustó o lo que chirría— nos ayuda mucho.',
@@ -1184,6 +1246,14 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'No sabría decir',
       hitSkip: 'Ahora no',
       hitThanks: 'Gracias por contármelo. Lo tendré en cuenta.',
+      picks: {
+        alone: { q: 'Si hoy tuvieras una hora libre…', a: ['Pasarla a solas', 'Pasarla con alguien'] },
+        decide: { q: 'Cuando decides algo, ¿qué haces?', a: ['Seguir la intuición', 'Informarme antes'] },
+        holiday: { q: 'En un día libre…', a: ['Planearlo', 'Dejarme llevar'] },
+        newplace: { q: 'Al elegir un sitio…', a: ['Uno nuevo', 'El de siempre'] },
+        advice: { q: 'Si te piden consejo, primero…', a: ['Pregunto cómo se siente', 'Busco una solución'] },
+        matter: { q: '¿Qué importa más ahora?', a: ['Lo que ya tengo', 'Lo que está por venir'] },
+      },
       readingVoice: 'Ya miré cómo van las estrellas por ti.',
       otherPerson: 'Consultar a otra persona',
       toMenu: 'Menú principal',
@@ -1426,6 +1496,15 @@ const UI: Record<Lang, UIStrings> = {
       deny: 'Non merci',
       settings: 'Paramètres de mesure',
     },
+    backup: {
+      title: 'Emporter tes données',
+      note: 'Pour un nouveau téléphone, ou avant d’effacer les données du navigateur. Le fichier reste sur ton appareil : rien n’est envoyé à un serveur.',
+      save: 'Enregistrer dans un fichier',
+      load: 'Restaurer depuis un fichier',
+      confirm: 'Cela remplacera tes données actuelles par le contenu du fichier choisi. Continuer ?',
+      done: 'Restauré.',
+      fail: 'Ce fichier n’a pas pu être lu.',
+    },
     feedback: {
       title: 'Alors, ce résultat ?',
       sub: 'Un petit mot — ce qui t’a plu ou ce qui cloche — nous aide beaucoup.',
@@ -1486,6 +1565,14 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'Je ne sais pas',
       hitSkip: 'Passer',
       hitThanks: 'Merci de me le dire. J’en tiendrai compte.',
+      picks: {
+        alone: { q: 'Si tu avais une heure libre aujourd’hui ?', a: ['La passer seul·e', 'La passer avec quelqu’un'] },
+        decide: { q: 'Pour décider, tu fais comment ?', a: ['Au feeling', 'Après avoir cherché'] },
+        holiday: { q: 'Un jour de congé ?', a: ['Je prévois', 'Je vois sur le moment'] },
+        newplace: { q: 'Pour choisir un endroit ?', a: ['Un nouveau', 'Le même que d’habitude'] },
+        advice: { q: 'Si on te demande conseil, d’abord…', a: ['J’écoute le ressenti', 'Je cherche une solution'] },
+        matter: { q: 'Ce qui compte le plus en ce moment ?', a: ['Ce que j’ai déjà', 'Ce qui vient'] },
+      },
       readingVoice: 'J’ai jeté un œil aux étoiles pour toi.',
       otherPerson: 'Consulter une autre personne',
       toMenu: 'Menu principal',
@@ -1728,6 +1815,15 @@ const UI: Record<Lang, UIStrings> = {
       deny: 'No, grazie',
       settings: 'Impostazioni di misurazione',
     },
+    backup: {
+      title: 'Porta con te i tuoi dati',
+      note: 'Per un telefono nuovo, o prima di cancellare i dati del browser. Il file resta sul tuo dispositivo: non viene inviato a nessun server.',
+      save: 'Salva su file',
+      load: 'Ripristina da file',
+      confirm: 'Questo sostituirà i dati attuali con il contenuto del file scelto. Vuoi continuare?',
+      done: 'Ripristinato.',
+      fail: 'Non è stato possibile leggere questo file.',
+    },
     feedback: {
       title: 'Com’è andata?',
       sub: 'Due parole — cosa ti è piaciuto o cosa stona — ci aiutano molto.',
@@ -1788,6 +1884,14 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'Non saprei',
       hitSkip: 'Salta',
       hitThanks: 'Grazie per avermelo detto. Ne terrò conto.',
+      picks: {
+        alone: { q: 'Se oggi avessi un’ora libera?', a: ['La passo da solo/a', 'La passo con qualcuno'] },
+        decide: { q: 'Quando decidi, come fai?', a: ['Vado d’istinto', 'Prima mi informo'] },
+        holiday: { q: 'In un giorno libero?', a: ['Programmo', 'Vado a sensazione'] },
+        newplace: { q: 'Per scegliere un posto?', a: ['Uno nuovo', 'Quello di sempre'] },
+        advice: { q: 'Se ti chiedono consiglio, prima…', a: ['Ascolto come si sente', 'Cerco una soluzione'] },
+        matter: { q: 'Cosa conta di più adesso?', a: ['Quello che ho già', 'Quello che verrà'] },
+      },
       readingVoice: 'Ho dato un’occhiata alle stelle per te.',
       otherPerson: 'Consultare un’altra persona',
       toMenu: 'Menu principale',
@@ -2030,6 +2134,15 @@ const UI: Record<Lang, UIStrings> = {
       deny: 'Não, obrigado',
       settings: 'Configurações de medição',
     },
+    backup: {
+      title: 'Leve seus dados',
+      note: 'Para um celular novo, ou antes de limpar os dados do navegador. O arquivo fica no seu aparelho — nada é enviado para um servidor.',
+      save: 'Salvar em um arquivo',
+      load: 'Restaurar de um arquivo',
+      confirm: 'Isto vai substituir seus registros atuais pelo conteúdo do arquivo escolhido. Continuar?',
+      done: 'Restaurado.',
+      fail: 'Não foi possível ler esse arquivo.',
+    },
     feedback: {
       title: 'O que achou?',
       sub: 'Um comentário — o que gostou ou o que estranhou — ajuda muito.',
@@ -2090,6 +2203,14 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'Não sei dizer',
       hitSkip: 'Agora não',
       hitThanks: 'Obrigada por contar. Vou levar isso em conta.',
+      picks: {
+        alone: { q: 'Se hoje tivesse uma hora livre?', a: ['Ficar sozinho/a', 'Ficar com alguém'] },
+        decide: { q: 'Na hora de decidir, como é?', a: ['Vou na intuição', 'Pesquiso antes'] },
+        holiday: { q: 'Num dia de folga?', a: ['Planejo', 'Vou no clima'] },
+        newplace: { q: 'Para escolher um lugar?', a: ['Um novo', 'O de sempre'] },
+        advice: { q: 'Se te pedem conselho, primeiro…', a: ['Escuto o sentimento', 'Busco uma solução'] },
+        matter: { q: 'O que mais importa agora?', a: ['O que já tenho', 'O que está por vir'] },
+      },
       readingVoice: 'Já dei uma olhada nas estrelas para você.',
       otherPerson: 'Consultar outra pessoa',
       toMenu: 'Menu principal',
@@ -2332,6 +2453,15 @@ const UI: Record<Lang, UIStrings> = {
       deny: '아니요',
       settings: '측정 설정',
     },
+    backup: {
+      title: '데이터 옮기기',
+      note: '기기를 바꾸거나 브라우저 데이터를 지우기 전에. 파일은 기기에 저장되며 서버로 보내지 않습니다.',
+      save: '파일로 저장',
+      load: '파일에서 복원',
+      confirm: '지금의 기록을 선택한 파일의 내용으로 바꿉니다. 계속할까요?',
+      done: '복원했어요.',
+      fail: '이 파일은 읽을 수 없었어요.',
+    },
     feedback: {
       title: '진단은 어땠나요?',
       sub: '감상이나 "여기 이상해요" 같은 한마디를 남겨 주시면 큰 힘이 돼요.',
@@ -2392,6 +2522,14 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: '잘 모르겠어요',
       hitSkip: '나중에',
       hitThanks: '알려 주셔서 고마워요. 다음에 참고할게요.',
+      picks: {
+        alone: { q: '오늘 한 시간이 생긴다면?', a: ['혼자 보내기', '누군가와 보내기'] },
+        decide: { q: '뭔가 정할 때는 어느 쪽?', a: ['느낌이 오는 쪽', '알아보고 나서'] },
+        holiday: { q: '쉬는 날에는?', a: ['미리 정해 두기', '그때 기분대로'] },
+        newplace: { q: '가게를 고른다면?', a: ['처음 가는 곳', '늘 가던 곳'] },
+        advice: { q: '고민 상담을 받으면 먼저?', a: ['마음을 물어보기', '해결책을 찾기'] },
+        matter: { q: '지금 더 소중한 건?', a: ['지금 가진 것', '앞으로 올 것'] },
+      },
       readingVoice: '별의 흐름, 미리 봐 뒀어.',
       otherPerson: '다른 사람 점치기',
       toMenu: '메인 메뉴로',

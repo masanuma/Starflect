@@ -81,7 +81,7 @@ export interface ChatRequest {
 }
 
 /** ごほうび地図の「発見レポート」リクエスト */
-export type ReportTopic = 'moonBack' | 'partyDeep' | 'moodTrend' | 'hiddenSelf'
+export type ReportTopic = 'moonBack' | 'partyDeep' | 'moodTrend' | 'hiddenSelf' | 'trueBuddy'
 export interface BehaviorBrief {
   days: number
   good: number
@@ -95,10 +95,19 @@ export interface AiReportRequest {
   topic: ReportTopic
   behavior?: BehaviorBrief
   lang?: Lang
+  /** `trueBuddy` 用：圧縮済みの「人となり」。生の会話は含まない */
+  persona?: string[]
+  /** `trueBuddy` 用：直近の「いまの空気」 */
+  air?: AirBrief
 }
 
 /** 発見レポートの依頼文(ユーザーメッセージ)。人格・データ土台は buildChatSystem を再利用する */
-function buildReportPrompt(topic: ReportTopic, behavior?: BehaviorBrief): string {
+function buildReportPrompt(
+  topic: ReportTopic,
+  behavior?: BehaviorBrief,
+  persona?: string[],
+  air?: AirBrief,
+): string {
   const b = behavior
   const bLine = b
     ? `【これまでの記録(行動の実測)】記録した日数 ${b.days}日 / いい ${b.good}・ふつう ${b.meh}・しんどい ${b.bad}${b.topDomains.length ? ` / よく選ぶ領域: ${b.topDomains.join('・')}` : ''} / 迎えてから ${b.sinceDays}日`
@@ -114,6 +123,36 @@ function buildReportPrompt(topic: ReportTopic, behavior?: BehaviorBrief): string
       return `${common}\n${bLine}\nテーマ:「気分のクセ」。上の行動の実測から、あなたが揺れやすい場面や気分の傾向を読み、出生図の該当天体と結びつけて「こういうときに揺れやすい/元気が出る」を4〜5文で。データが少なければ、少ない中で見える兆しを「〜かも」と控えめに。`
     case 'hiddenSelf':
       return `${common}\n${bLine}\nテーマ:「隠れた自分レポート」(いちばん特別な発見)。出生図が示す“本来こういう人”という建前と、上の行動の実測とのギャップに注目し、「星ではこう出ているけれど、あなたは実際こう動いている」という隠れた一面を、驚きとともに5〜6文で。決めつけず、やさしく。データが少なければ、今わかる範囲でそっと。`
+    case 'trueBuddy': {
+      // 地図の最終到達点。ここまで来た人にだけ渡すので、他のレポートより長く・個人的に。
+      // 材料は「出生図（生まれつき）」×「人となり（積み重ね）」×「いまの空気（この頃）」の3つ。
+      // 生の会話ログはここにも来ない — 届くのは圧縮済みの言葉だけ。
+      const pLine = persona?.length
+        ? `【積み重ねから見えているその人】\n${persona.map((l) => `- ${l}`).join('\n')}`
+        : '【積み重ねから見えているその人】まだ言葉にできるほどは溜まっていません。'
+      const aLine = [
+        air?.mood && `気分の流れ: ${air.mood}`,
+        air?.focus && `気にしていること: ${air.focus}`,
+        air?.hit && `占いの手応え: ${air.hit}`,
+      ]
+        .filter(Boolean)
+        .join(' / ')
+      return (
+        `${common}\n${bLine}\n${pLine}${aLine ? `\n【この頃の様子】${aLine}` : ''}\n` +
+        'テーマ:「ほんとうの相棒」。これは地図のいちばん奥、長く付き合ってくれた人にだけ渡すものです。' +
+        '出生図が示す“生まれつき”と、上の“積み重ねから見えているその人”を重ねて、' +
+        '**はじめて会った日には言えなかったこと**を伝えます。6〜7文と、他より少し長めに。' +
+        '書き方の注意: ' +
+        '(1)【ねぎらいから入らない】「ここまで来てくれてありがとう」のような前置きで始めない。1文目からいきなり中身に入る。' +
+        '(2)【総まとめにしない】これまでのレポートの要約を並べない。ここでしか言えないことを1つ選んで深く書く。' +
+        '(3)【具体的な出来事を作らない】上に書かれていないその人の出来事・予定・固有名詞を、知っているかのように書かない。' +
+        // 上の bLine で回数を渡しているので、放っておくと「しんどい日が半分近く」と数え上げる。
+        // 地図のいちばん奥で急に集計が出てくると、手紙が成績表に変わってしまう
+        '(4)【数えない】「◯回」「◯日」「半分近く」のように記録の数を語らない。渡した数は雰囲気をつかむためだけに使い、文章には出さない。' +
+        '(5)【重くしすぎない】卒業や別れのような締めくくり方はしない。これからも続く関係として書く。' +
+        '(6) 積み重ねの材料がまだ薄いときは、無理に深読みせず「これから見えてくること」として書く。'
+      )
+    }
   }
 }
 
@@ -471,7 +510,12 @@ function createReportHandler(apiKey: string | undefined): RawHandler {
           thinking: { type: 'adaptive' },
           output_config: { effort: 'low' },
           system: buildChatSystem(payload.context, langOf(payload)) + LANG_DIRECTIVE[langOf(payload)],
-          messages: [{ role: 'user', content: buildReportPrompt(payload.topic, payload.behavior) }],
+          messages: [
+            {
+              role: 'user',
+              content: buildReportPrompt(payload.topic, payload.behavior, payload.persona, payload.air),
+            },
+          ],
         })
         logUsage('report', AI_MODEL, response.usage, langOf(payload))
         const text = response.content
@@ -749,6 +793,8 @@ export interface PersonaRequest {
     says: string[]
     /** 行動記録の実測（全期間）。数を見てよいのは圧縮AIだけ */
     behavior?: BehaviorBrief
+    /** 1日1問の二択で選んだもの（日本語ラベル） */
+    picks?: string[]
   }
   messages: ChatMessage[]
   lang?: Lang
@@ -772,6 +818,13 @@ function buildPersonaSystem(c: PersonaRequest['context']): string {
     '【その人がこれまで話したこと】(本人の発言のみ)',
     ...c.says.map((s) => `- ${s}`),
   ]
+  if (c.picks?.length) {
+    lines.push(
+      '',
+      '【その人が二択で選んだこと】(遊びの質問に答えたもの。本人は診断だと思っていない)',
+      ...c.picks.map((p) => `- ${p}`),
+    )
+  }
   if (c.behavior) {
     const b = c.behavior
     lines.push(
