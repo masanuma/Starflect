@@ -30,6 +30,20 @@ export interface PageStrings {
   starsTitle: string
   starsLead: string
   /**
+   * ヒーロー直下に置く「大きな一文」×3。説明を付けず、一文だけを大きく見せる。
+   * 憲法の3つ（目的＝精度／主役＝AI相談／毎日ひらく理由）と1対1で対応させている。
+   * ※AI相談と「毎日書き下ろす」はLPでまったく訴求できていなかった（本文中の「AI」は
+   *   最下部の注記に2回だけだった）＝売りと決めたものが入口に無い状態だった。
+   */
+  /**
+   * 1要素＝1つの大きな一文。**配列の各要素が1行**になる。
+   * 日本語は改行位置がデザインの一部で、途中で「ほしキャラ相談室」が割れると訴求が死ぬ。
+   * 自動折り返しに任せず、意味のかたまりで明示的に改行する。
+   */
+  points: [string[], string[], string[]]
+  /** 説明を畳むときの見出し。説明は読みたい人だけが開く（憲法: 表に出す量を増やさない） */
+  moreDetail: string
+  /**
    * LP下部の「このアプリについて」。
    * データの扱い・AI相談の位置づけ・占いの位置づけを**1か所に集約**する。
    * 画面のあちこちに注記を散らすと世界観が壊れるので、アプリ側からはここへ寄せる。
@@ -61,12 +75,12 @@ export interface PageStrings {
 export const PAGE_STRINGS: Record<Lang, PageStrings> = {
   ja: {
     cta: 'ほしキャラ診断を開始する！',
-    heroNote: '登録不要・生年月日だけ・30秒',
+    heroNote: '登録不要・生年月日だけでOK・30秒',
     howTo: '使い方',
     steps: [
-      { t: '生年月日を入力', d: 'ニックネームと生年月日だけ。生まれた時刻・場所は任意（入れるとより詳しく）。' },
-      { t: 'あなたのほしキャラが判明', d: '太陽と月の組み合わせで、16キャラのどれかに。裏では全10天体を計算しています。' },
-      { t: 'ほしキャラに相談', d: '今日の運勢と、あなたの星を全部知ったほしキャラとのチャット。この先のことも、聞けば答えてくれます。' },
+      { t: '生年月日を入力', d: '生年月日だけでOK。時刻がわかれば、もっと詳しく占えます。' },
+      { t: 'あなたのほしキャラが判明', d: '太陽と月の組み合わせで、16キャラのどれかに決まります。' },
+      { t: 'ほしキャラに相談', d: '今日の運勢が読めます。なんでも相談してください。' },
     ],
     charTitle: (n) => `「${n}」ってどんな人？`,
     charTitleSeo: (n) => `太陽星座と月星座の組み合わせ「${n}」の性格`,
@@ -76,6 +90,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: '10天体と12星座のこと',
     starsTitle: '10天体と12星座のこと',
     starsLead: '診断結果に出てくる「太陽星座」「月星座」、そしてあなたをかたちづくる10の星。それぞれが何を担当しているのかをまとめました。',
+    points: [
+      ['ふつうの星座占いは、星ひとつ。', 'ほしキャラは、星を10コ。'],
+      ['あなたの星を全部知っている', '「ほしキャラ相談室」に、', 'なんでも相談してください。'],
+      ['毎日の占いは、', 'あなただけのものです。'],
+    ],
+    moreDetail: 'もっと詳しく',
     aboutAppTitle: 'このアプリについて',
     aboutAppItems: [
       { t: '星の計算はあなたの端末の中で', d: '生年月日と時刻から星の位置を計算する処理は、すべてお使いの端末内で行われます。入力した生年月日そのものを送信することはありません。' },
@@ -110,9 +130,9 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     heroNote: 'No signup · Just your birth date · 30 seconds',
     howTo: 'How it works',
     steps: [
-      { t: 'Enter your birth date', d: 'Just a nickname and birth date. Birth time and place are optional (they add more detail).' },
-      { t: 'Your Hoshi-Kyara is revealed', d: 'Your Sun and Moon decide which of the 16 you are. All ten planets are calculated behind the scenes.' },
-      { t: 'Ask your Hoshi-Kyara', d: 'Today’s reading, plus a chat with the Hoshi-Kyara that knows every one of your stars. Ask about what’s ahead and it will tell you.' },
+      { t: 'Enter your birth date', d: 'Your birth date is enough. Add the time for a finer reading.' },
+      { t: 'Your Hoshi-Kyara is revealed', d: 'Your Sun and Moon decide which of the 16 you are.' },
+      { t: 'Ask your Hoshi-Kyara', d: 'Your reading for today arrives. Ask about anything on your mind.' },
     ],
     charTitle: (n) => `What is “${n}” like?`,
     charTitleSeo: (n) => `Sun sign × Moon sign: the “${n}” personality`,
@@ -122,6 +142,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'About the 10 planets and 12 signs',
     starsTitle: 'About the 10 planets and 12 signs',
     starsLead: 'Your Sun sign, your Moon sign, and the ten stars that shape you — here is what each one is in charge of.',
+    points: [
+      ['Ordinary horoscopes: one star.', 'Hoshi-Kyara: ten.'],
+      ['It knows your whole chart.', 'Ask the Hoshi-Kyara Room', 'anything you like.'],
+      ['The reading of each day', 'belongs to you alone.'],
+    ],
+    moreDetail: 'Tell me more',
     aboutAppTitle: 'About this app',
     aboutAppItems: [
       { t: 'The astrology math runs on your device', d: 'Working out where the planets were from your birth date and time happens entirely in your browser. Your birth date itself is never sent to us.' },
@@ -156,9 +182,9 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     heroNote: 'Sin registro · Solo tu fecha de nacimiento · 30 segundos',
     howTo: 'Cómo funciona',
     steps: [
-      { t: 'Introduce tu fecha de nacimiento', d: 'Solo un apodo y la fecha. La hora y el lugar son opcionales (dan más detalle).' },
-      { t: 'Se revela tu Hoshi-Kyara', d: 'Tu Sol y tu Luna deciden cuál de los 16 eres. Los diez astros se calculan por detrás.' },
-      { t: 'Consulta a tu Hoshi-Kyara', d: 'La lectura de hoy y un chat con el Hoshi-Kyara que conoce todos tus astros. Pregúntale por lo que viene y te lo dirá.' },
+      { t: 'Introduce tu fecha de nacimiento', d: 'Con tu fecha de nacimiento basta. Con la hora, más detalle.' },
+      { t: 'Se revela tu Hoshi-Kyara', d: 'Tu Sol y tu Luna deciden cuál de los 16 eres.' },
+      { t: 'Consulta a tu Hoshi-Kyara', d: 'Llega tu lectura de hoy. Pregunta lo que quieras.' },
     ],
     charTitle: (n) => `¿Cómo es «${n}»?`,
     charTitleSeo: (n) => `Signo solar × signo lunar: la personalidad de «${n}»`,
@@ -168,6 +194,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'Sobre los 10 planetas y 12 signos',
     starsTitle: 'Sobre los 10 planetas y 12 signos',
     starsLead: 'Tu signo solar, tu signo lunar y los diez astros que te forman: esto es de lo que se encarga cada uno.',
+    points: [
+      ['Los horóscopos normales: un astro.', 'Hoshi-Kyara: diez.'],
+      ['Conoce toda tu carta.', 'Pregunta lo que quieras', 'en la Sala Hoshi-Kyara.'],
+      ['La lectura de cada día', 'es solo tuya.'],
+    ],
+    moreDetail: 'Cuéntame más',
     aboutAppTitle: 'Sobre esta app',
     aboutAppItems: [
       { t: 'Los cálculos se hacen en tu dispositivo', d: 'Calcular la posición de los astros a partir de tu fecha y hora de nacimiento ocurre por completo en tu navegador. Tu fecha de nacimiento nunca se envía.' },
@@ -202,9 +234,9 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     heroNote: 'Sans inscription · Juste ta date de naissance · 30 secondes',
     howTo: 'Comment ça marche',
     steps: [
-      { t: 'Saisis ta date de naissance', d: 'Juste un pseudo et la date. L’heure et le lieu sont facultatifs (plus de détails).' },
-      { t: 'Ton Hoshi-Kyara se révèle', d: 'Ton Soleil et ta Lune décident lequel des 16 tu es. Les dix astres sont calculés en coulisses.' },
-      { t: 'Demande à ton Hoshi-Kyara', d: 'La lecture du jour, et un échange avec le Hoshi-Kyara qui connaît tous tes astres. Demande-lui la suite, il te répondra.' },
+      { t: 'Saisis ta date de naissance', d: 'Ta date de naissance suffit. Avec l’heure, c’est plus fin.' },
+      { t: 'Ton Hoshi-Kyara se révèle', d: 'Ton Soleil et ta Lune décident lequel des 16 tu es.' },
+      { t: 'Demande à ton Hoshi-Kyara', d: 'Ta lecture du jour arrive. Demande ce que tu veux.' },
     ],
     charTitle: (n) => `Qui est « ${n} » ?`,
     charTitleSeo: (n) => `Signe solaire × signe lunaire : la personnalité « ${n} »`,
@@ -214,6 +246,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'À propos des 10 planètes et 12 signes',
     starsTitle: 'À propos des 10 planètes et 12 signes',
     starsLead: 'Ton signe solaire, ton signe lunaire et les dix astres qui te façonnent : voici ce dont chacun s’occupe.',
+    points: [
+      ['Les horoscopes ordinaires : un astre.', 'Hoshi-Kyara : dix.'],
+      ['Il connaît tout ton thème.', 'Pose au Salon Hoshi-Kyara', 'toutes tes questions.'],
+      ['La lecture de chaque jour', 'n’appartient qu’à toi.'],
+    ],
+    moreDetail: 'En savoir plus',
     aboutAppTitle: 'À propos de cette application',
     aboutAppItems: [
       { t: 'Les calculs se font sur ton appareil', d: 'Le calcul de la position des astres à partir de ta date et de ton heure de naissance se fait entièrement dans ton navigateur. Ta date de naissance n’est jamais envoyée.' },
@@ -248,9 +286,9 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     heroNote: 'Senza registrazione · Solo la data di nascita · 30 secondi',
     howTo: 'Come funziona',
     steps: [
-      { t: 'Inserisci la data di nascita', d: 'Solo un nickname e la data. Ora e luogo sono facoltativi (più dettagli).' },
-      { t: 'Si rivela il tuo Hoshi-Kyara', d: 'Sole e Luna decidono quale dei 16 sei. Tutti e dieci gli astri vengono calcolati dietro le quinte.' },
-      { t: 'Chiedi al tuo Hoshi-Kyara', d: 'La lettura di oggi e una chat con l’Hoshi-Kyara che conosce tutti i tuoi astri. Chiedi cosa verrà e te lo dirà.' },
+      { t: 'Inserisci la data di nascita', d: 'Basta la data di nascita. Con l’ora, ancora più preciso.' },
+      { t: 'Si rivela il tuo Hoshi-Kyara', d: 'Sole e Luna decidono quale dei 16 sei.' },
+      { t: 'Chiedi al tuo Hoshi-Kyara', d: 'Arriva la lettura di oggi. Chiedi quello che vuoi.' },
     ],
     charTitle: (n) => `Com’è «${n}»?`,
     charTitleSeo: (n) => `Segno solare × segno lunare: la personalità di «${n}»`,
@@ -260,6 +298,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'I 10 pianeti e i 12 segni',
     starsTitle: 'I 10 pianeti e i 12 segni',
     starsLead: 'Il tuo segno solare, il tuo segno lunare e i dieci astri che ti formano: ecco di cosa si occupa ognuno.',
+    points: [
+      ['Gli oroscopi comuni: un astro.', 'Hoshi-Kyara: dieci.'],
+      ['Conosce tutto il tuo tema.', 'Chiedi alla Sala Hoshi-Kyara', 'quello che vuoi.'],
+      ['La lettura di ogni giorno', 'è solo tua.'],
+    ],
+    moreDetail: 'Dimmi di più',
     aboutAppTitle: 'Su questa app',
     aboutAppItems: [
       { t: 'I calcoli avvengono sul tuo dispositivo', d: 'Il calcolo della posizione degli astri dalla tua data e ora di nascita avviene interamente nel tuo browser. La tua data di nascita non viene mai inviata.' },
@@ -294,9 +338,9 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     heroNote: 'Sem cadastro · Só a data de nascimento · 30 segundos',
     howTo: 'Como funciona',
     steps: [
-      { t: 'Digite sua data de nascimento', d: 'Só um apelido e a data. Hora e local são opcionais (mais detalhes).' },
-      { t: 'Seu Hoshi-Kyara é revelado', d: 'Seu Sol e sua Lua decidem qual dos 16 você é. Os dez astros são calculados nos bastidores.' },
-      { t: 'Pergunte ao seu Hoshi-Kyara', d: 'A leitura de hoje e uma conversa com o Hoshi-Kyara que conhece todos os seus astros. Pergunte o que vem aí e ele responde.' },
+      { t: 'Digite sua data de nascimento', d: 'Sua data de nascimento basta. Com a hora, fica mais fino.' },
+      { t: 'Seu Hoshi-Kyara é revelado', d: 'Seu Sol e sua Lua decidem qual dos 16 você é.' },
+      { t: 'Pergunte ao seu Hoshi-Kyara', d: 'Chega a sua leitura de hoje. Pergunte o que quiser.' },
     ],
     charTitle: (n) => `Como é «${n}»?`,
     charTitleSeo: (n) => `Signo solar × signo lunar: a personalidade de «${n}»`,
@@ -306,6 +350,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: 'Sobre os 10 planetas e 12 signos',
     starsTitle: 'Sobre os 10 planetas e 12 signos',
     starsLead: 'O seu signo solar, o seu signo lunar e os dez astros que formam você: veja do que cada um cuida.',
+    points: [
+      ['Os horóscopos comuns: um astro.', 'Hoshi-Kyara: dez.'],
+      ['Ela conhece todo o seu mapa.', 'Pergunte na Sala Hoshi-Kyara', 'o que quiser.'],
+      ['A leitura de cada dia', 'é só sua.'],
+    ],
+    moreDetail: 'Saiba mais',
     aboutAppTitle: 'Sobre este app',
     aboutAppItems: [
       { t: 'Os cálculos acontecem no seu aparelho', d: 'Calcular a posição dos astros a partir da sua data e hora de nascimento acontece inteiramente no seu navegador. A sua data de nascimento nunca é enviada.' },
@@ -340,9 +390,9 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     heroNote: '가입 불필요 · 생년월일만 · 30초',
     howTo: '사용 방법',
     steps: [
-      { t: '생년월일 입력', d: '닉네임과 생년월일만. 태어난 시각·장소는 선택(넣으면 더 자세히).' },
-      { t: '당신의 호시캐릭터 판명', d: '태양과 달의 조합으로 16캐릭터 중 하나가 정해져요. 뒤에서는 10행성을 모두 계산하고 있어요.' },
-      { t: '호시캐릭터에게 상담', d: '오늘의 운세와, 당신의 별을 전부 아는 호시캐릭터와의 채팅. 앞으로의 일도 물어보면 답해 줘요.' },
+      { t: '생년월일 입력', d: '생년월일만 있으면 OK. 시각을 알면 더 자세히.' },
+      { t: '당신의 호시캐릭터 판명', d: '태양과 달의 조합으로 16캐릭터 중 하나가 정해져요.' },
+      { t: '호시캐릭터에게 상담', d: '오늘의 운세가 도착해요. 궁금한 건 뭐든 상담해 주세요.' },
     ],
     charTitle: (n) => `「${n}」은 어떤 사람?`,
     charTitleSeo: (n) => `태양 별자리 × 달 별자리 ‘${n}’의 성격`,
@@ -352,6 +402,12 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLink: '10행성과 12별자리 이야기',
     starsTitle: '10행성과 12별자리 이야기',
     starsLead: '진단 결과에 나오는 태양 별자리와 달 별자리, 그리고 당신을 이루는 10개의 별. 각자 무엇을 담당하는지 정리했어요.',
+    points: [
+      ['보통 별자리 운세는 별 하나.', '호시캐릭터는 별 10개.'],
+      ['당신의 별을 전부 아는', '「Hoshi-Kyara 상담실」에', '무엇이든 상담해 주세요.'],
+      ['매일의 운세는,', '당신만의 것입니다.'],
+    ],
+    moreDetail: '더 자세히',
     aboutAppTitle: '이 앱에 대해',
     aboutAppItems: [
       { t: '별 계산은 당신의 기기 안에서', d: '생년월일과 시각으로 별의 위치를 계산하는 처리는 모두 사용 중인 기기 안에서 이루어집니다. 입력한 생년월일 자체를 전송하지는 않습니다.' },

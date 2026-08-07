@@ -61,6 +61,9 @@ const CSS = `
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--pink:#EA6596;--violet:#8A63DD;--ink:#3a2f57;--ink-sub:#7a6f96;--bg:#F8F5FD;--card:#fff;--line:#ece4f7}
 body{font-family:'Zen Kaku Gothic New','Hiragino Sans',sans-serif;color:var(--ink);background:var(--bg);line-height:1.8;-webkit-font-smoothing:antialiased}
+/* 日本語は自動折り返しだと「わかれ/ば」のように語の途中で割れて読みにくい。
+   auto-phrase は文節の切れ目で折り返す(未対応ブラウザは従来どおりなので害はない)。 */
+.hero h1,.hero p,.bigpoint,.step,.lead,.prose,.tcopy,.faq p,.aboutapp .abrow p{word-break:auto-phrase}
 .wrap{max-width:760px;margin:0 auto;padding:0 20px}
 a{color:var(--violet);text-decoration:none}
 h1,h2,h3{font-family:'Zen Maru Gothic',sans-serif}
@@ -77,21 +80,24 @@ h1,h2,h3{font-family:'Zen Maru Gothic',sans-serif}
 .hero-mascot svg{display:block}
 .hero h1{font-size:30px;font-weight:800;line-height:1.4;margin-bottom:12px}
 .hero .grad{background:linear-gradient(120deg,var(--pink),var(--violet));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:var(--ink-sub);font-size:15px;margin-bottom:22px}
+.hero p{color:var(--ink-sub);font-size:17px;line-height:1.9;margin:0 auto 18px;text-align:center;max-width:24em}@media(max-width:400px){.hero p{font-size:16px}}
 .cta{display:inline-block;padding:15px 30px;border-radius:999px;background:linear-gradient(120deg,var(--pink),var(--violet));color:#fff;font-family:'Zen Maru Gothic';font-weight:800;font-size:16px;box-shadow:0 10px 24px rgba(138,99,221,.28)}
-.note{font-size:12px;color:var(--ink-sub);margin-top:12px}
+.note{font-size:12.5px;color:var(--ink-sub);margin:0 0 20px}.cta-block .note{margin:12px 0 0}
 section{margin:36px 0}
 section h2{font-size:20px;font-weight:800;text-align:center;margin-bottom:8px}
 section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:20px;line-height:1.9}
+/* LPだけの特例: 説明文は改行位置さえ整えば中央のほうが収まりがよい(左詰めだと右に空白が残る)。
+   /stars・/c・/pair の説明は従来どおり左詰め。 */
+.lp section .lead{text-align:center;margin-left:auto;margin-right:auto;max-width:26em}
 .prose{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;font-size:15px}
 .prose p{margin-bottom:12px}.prose p:last-child{margin-bottom:0}
 .tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.tcard{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 12px;transition:transform .12s,box-shadow .12s}
+.tcard{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 13px;transition:transform .12s,box-shadow .12s}
 .tcard:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(138,99,221,.16)}
-.tav{width:64px;height:64px;border-radius:50%;background:#f3eefb;display:flex;align-items:center;justify-content:center;margin-bottom:3px}
+.tav{width:64px;height:64px;border-radius:50%;background:#f3eefb;display:flex;align-items:center;justify-content:center;margin:0 auto 5px}
 .tcombo{font-size:11px;color:var(--ink-sub)}
 .tname{font-family:'Zen Maru Gothic';font-weight:800;font-size:14.5px;color:var(--ink)}
-.tcopy{font-size:11.5px;color:var(--ink-sub);line-height:1.55}
+.tcopy{font-size:12.5px;color:var(--ink-sub);line-height:1.75;margin-top:2px}
 .formula{display:flex;gap:10px;justify-content:center;margin:18px 0}
 .fbox{flex:1;max-width:240px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
 .fbox .lb{font-size:11px;color:var(--ink-sub)}
@@ -103,11 +109,12 @@ section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:
 .steps{display:grid;gap:12px}
 .step{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
 .step .n{flex:none;width:30px;height:30px;border-radius:50%;background:linear-gradient(120deg,var(--pink),var(--violet));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px}
-.step b{font-family:'Zen Maru Gothic'}
+.step b{font-family:'Zen Maru Gothic';font-size:16.5px;display:block;margin-bottom:2px;line-height:1.5}.step div:last-child{font-size:14.5px;line-height:1.8}.step .n{margin-top:2px}@media(max-width:400px){.step{padding:14px}.step b{font-size:15.5px}.step div:last-child{font-size:13.5px}}
 .cta-block{text-align:center;margin:32px 0}
 .faq details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
 .faq summary{font-family:'Zen Maru Gothic';font-weight:700;cursor:pointer;font-size:14.5px}
 .faq p{margin-top:8px;font-size:13.5px;color:var(--ink-sub)}
+.points{display:grid;gap:14px;margin:28px 0}.bigpoint{font-family:'Zen Maru Gothic';font-weight:800;font-size:21px;line-height:1.65;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 20px}.bigpoint span{display:block;text-align:center}@media(max-width:400px){.bigpoint{font-size:18.5px;padding:18px 14px}}.foldprose{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 18px}.foldprose summary{font-family:'Zen Maru Gothic';font-weight:700;font-size:14.5px;cursor:pointer;list-style:none;color:var(--violet)}.foldprose summary::-webkit-details-marker{display:none}.foldprose summary::after{content:' ▾'}.foldprose[open] summary::after{content:' ▴'}.foldprose .prose{border:none;padding:16px 0 0;background:transparent}
 .chero{text-align:center;padding:20px 0 8px}
 .chero .av{width:150px;height:150px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center}
 .chero h1{font-size:30px;font-weight:900}
@@ -148,7 +155,7 @@ section .lead{text-align:left;color:var(--ink-sub);font-size:14px;margin-bottom:
 .starslink{display:block;text-align:center;margin:8px 0 0;font-size:13.5px}
 .footer{text-align:center;color:var(--ink-sub);font-size:12px;padding:32px 0;border-top:1px solid var(--line);margin-top:40px;line-height:1.9}
 @media(max-width:400px){.tgrid{gap:9px}.tcard{padding:12px 8px}.tav{width:56px;height:56px}.tname{font-size:13.5px}.tcopy{font-size:11px}.tcombo{font-size:10.5px}}@media(max-width:330px){.tgrid{grid-template-columns:1fr}}
-.cscope{text-align:center;font-size:12.5px;color:var(--ink-sub);margin:8px 0 0;font-weight:700;line-height:1.9}
+.cscope{text-align:left;font-size:12.5px;color:var(--ink-sub);margin:8px auto 0;font-weight:700;line-height:1.9;max-width:26em}
 .aboutapp .abox{display:grid;gap:10px}.aboutapp .abrow{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}.aboutapp .abrow b{display:block;font-family:'Zen Maru Gothic';font-size:14.5px;margin-bottom:4px}.aboutapp .abrow p{font-size:13px;color:var(--ink-sub);line-height:1.9}
 .pairhero{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 6px}
 .pairhero .pax{font-size:26px;color:var(--ink-sub);font-weight:700}
@@ -185,6 +192,24 @@ const planetMascot = (key: PlanetKey, size: number) =>
   renderToStaticMarkup(createElement(PlanetMascot, { planetKey: key, size }))
 const elMark = (el: Element) =>
   `<span class="elmark" style="background:${ELEMENT_COLOR[el]}"><svg width="18" height="18" viewBox="0 0 24 24">${ELEMENT_ICON[el]}</svg></span>`
+
+/**
+ * 説明文を最初の読点で改行する。
+ * 自動折り返しに任せると幅によって切れ目が変わるので、意味の切れ目＝最初の読点で必ず折る。
+ * 読点を持たない文はそのまま＝従来どおり自動折り返しになる。
+ * 和文の「、」「，」は改行が同じ役目を果たすので落とす。欧文・韓国語のカンマは文法上必要なので残す。
+ */
+/** 行末の和文読点を落とす。改行が読点の役目を果たすため。欧文・韓国語のカンマは文法上必要なので残す。 */
+function dropLineEndComma(line: string): string {
+  return line.replace(/[、，]$/, '')
+}
+
+function breakAtComma(text: string): string {
+  const m = text.match(/^(.+?)([、，]|,)\s*(.+)$/)
+  if (!m) return esc(text)
+  const head = m[2] === ',' ? m[1] + ',' : m[1]
+  return `${esc(head)}<br/>${esc(m[3])}`
+}
 
 interface LayoutOpts {
   lang: Lang
@@ -229,7 +254,7 @@ ${alternates}
 <meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
 <meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="${esc(o.ogTitle)}"/><meta name="twitter:image" content="${o.ogImage}"/>
 ${FONTS}${redirect}<style>${CSS}</style></head>
-<body><div class="wrap">
+<body><div class="wrap${o.kind === 'lp' ? ' lp' : ''}">
 <div class="topbar"><a href="${lpHref(o.lang)}" class="brand"><span class="brand-ic">${brand(30)}</span><span class="brand-tx">${esc(t.home.appTitle)}</span></a><nav class="langsw">${switcher}</nav></div>
 ${o.body}
 <div class="footer">© ${esc(t.home.appTitle)} 〜Starflect〜</div></div></body></html>`
@@ -238,7 +263,7 @@ ${o.body}
 type ST = ReturnType<typeof allStarTypes>[number]
 function tcard(lang: Lang, r: ST): string {
   const slug = slugOf(r.sunElement, r.moonElement)
-  return `<a class="tcard" href="${charHref(lang, slug)}"><span class="tav">${mascot(r.sunElement, r.moonElement, 58)}</span><span class="tcombo">${elementLabel(r.sunElement)} × ${elementLabel(r.moonElement)}</span><span class="tname">${esc(quoted(r.type.name))}</span><span class="tcopy">${esc(r.type.copy)}</span></a>`
+  return `<a class="tcard" href="${charHref(lang, slug)}"><span class="tav">${mascot(r.sunElement, r.moonElement, 58)}</span><span class="tcombo">${elementLabel(r.sunElement)} × ${elementLabel(r.moonElement)}</span><span class="tname">${esc(quoted(r.type.name))}</span><span class="tcopy">${breakAtComma(r.type.copy)}</span></a>`
 }
 
 /** 紹介LP */
@@ -259,26 +284,24 @@ export function renderLP(lang: Lang): string {
     .map((q) => `<details><summary>${esc(q.q)}</summary><p>${esc(q.a)}</p></details>`)
     .join('')
 
+  // 大きな一文×3。説明を付けない＝読ませずに伝える。
+  // 改行は自動折り返しに任せず、配列の1要素＝1行として明示的に入れる
+  // (日本語は改行位置がデザインの一部。「ほしキャラ相談室」が途中で割れると訴求が死ぬ)
+  const points = P.points
+    .map((lines) => `<p class="bigpoint"><span>${lines.map(dropLineEndComma).map(esc).join('<br/>')}</span></p>`)
+    .join('')
+
   const body = `
 <div class="hero">
-  <div class="hero-mascot">${brand(116)}</div>
+  <div class="hero-mascot">${brand(96)}</div>
   <h1>${esc(t.home.tagline1)}</h1>
-  <p>${esc(t.home.tagline2)}</p>
-  <a class="cta" href="/app?lang=${lang}">${esc(P.cta)}</a>
+  <!-- 説明はボタンの手前に一本化する。上と下で挟むと、同じ話が2か所にあるように見える -->
+  <p>${breakAtComma(t.home.tagline2)}</p>
   <p class="note">${esc(P.heroNote)}</p>
+  <a class="cta" href="/app?lang=${lang}">${esc(P.cta)}</a>
 </div>
 
-<section>
-  <h2>${esc(t.about.title)}</h2>
-  <div class="prose">${t.about.what.map((p) => `<p>${esc(p)}</p>`).join('')}</div>
-  <div class="formula">
-    <div class="fbox"><div class="lb">☉ ${esc(t.about.sunElement)}</div><div class="el">4</div></div>
-    <div class="fbox"><div class="lb">☽ ${esc(t.about.moonElement)}</div><div class="el">4</div></div>
-  </div>
-  <p class="lead">${esc(t.about.howTitle)} — 4 × 4 = 16</p>
-  <p class="lead" style="font-weight:700;color:var(--ink);margin-bottom:8px">${esc(t.about.elementsTitle)}</p>
-  <div class="els">${elements}</div>
-</section>
+<section class="points">${points}</section>
 
 <section>
   <h2>${esc(t.about.listTitle)}</h2>
@@ -291,6 +314,21 @@ export function renderLP(lang: Lang): string {
   <div class="steps">${steps}</div>
   <div class="cta-block"><a class="cta" href="/app?lang=${lang}">${esc(P.cta)}</a></div>
   <a class="starslink" href="${starsHref(lang)}">${esc(P.starsLink)} →</a>
+</section>
+
+<section>
+  <h2>${esc(t.about.title)}</h2>
+  <details class="foldprose">
+    <summary>${esc(P.moreDetail)}</summary>
+    <div class="prose">${t.about.what.map((p) => `<p>${esc(p)}</p>`).join('')}</div>
+    <div class="formula">
+      <div class="fbox"><div class="lb">☉ ${esc(t.about.sunElement)}</div><div class="el">4</div></div>
+      <div class="fbox"><div class="lb">☽ ${esc(t.about.moonElement)}</div><div class="el">4</div></div>
+    </div>
+    <p class="lead">${esc(t.about.howTitle)} — 4 × 4 = 16</p>
+    <p class="lead" style="font-weight:700;color:var(--ink);margin-bottom:8px">${esc(t.about.elementsTitle)}</p>
+    <div class="els">${elements}</div>
+  </details>
 </section>
 
 <section class="faq">
