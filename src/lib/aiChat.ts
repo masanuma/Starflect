@@ -6,7 +6,7 @@ import { getPlanet } from './planets'
 import { signName } from './signs'
 import { signIndex, degInSign } from './astro'
 import { findNatalAspects } from './natalAspects'
-import { forecastSet } from './fortune'
+import { forecastSet, longRangeTransits } from './fortune'
 import type { PeriodBrief } from './fortune'
 import { starTypeOf } from './startypes'
 import type { AirBrief, BehaviorBrief } from './companion'
@@ -26,6 +26,18 @@ export interface ChatChartContext {
   natalAspects?: string[]
   /** 今日〜来月＋この先数か月まで、期間ごとのトランジット見通し(全期間ぶん渡す) */
   periods: PeriodBrief[]
+  /**
+   * 3年先までの、木星・土星が出生の星に近づく時期。
+   * これが無いと「来年の夏は？」に答える材料が無く、AIは一般論を書くしかない。
+   */
+  longRange?: string[]
+  /**
+   * 今日の日付(YYYY-MM-DD)。**`longRange` とセットで必ず渡すこと。**
+   * これが無いとAIは「今日」が分からず、絶対日付の一覧を渡しても「来年の夏」を計算できない
+   * （実測で、2026年8月に「来年の夏は2026年8月ごろ」と答えた）。
+   * 端末の日付を使う＝`longRange` の計算基準と必ず一致する。
+   */
+  today?: string
   reading?: string
 }
 
@@ -53,7 +65,15 @@ export function buildChatContext(chart: ChartData): ChatChartContext {
     natalAspects: natalAspects.length ? natalAspects.map((a) => a.tech) : undefined,
     // 今日〜来月＋この先数か月まで、全期間のトランジットを渡す(1期間しか無くて濁す問題を解消)
     periods: forecastSet(chart.planets),
+    // さらに先(3年)まで。「来年の夏は？」に一般論ではなく、その人の配置で答えられるようにする
+    longRange: longRangeTransits(chart.planets),
+    today: todayISO(),
   }
+}
+
+/** 端末の今日(YYYY-MM-DD)。longRange の計算基準と揃えるため、サーバー時刻ではなくここで作る */
+function todayISO(now = new Date()): string {
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
 }
 
 /** 会話履歴を保存する localStorage キー(人ごとに分ける) */

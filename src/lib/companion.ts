@@ -324,7 +324,10 @@ export interface Milestone {
 
 export const MILESTONES: Milestone[] = [
   { at: 0, key: 'birth', content: 'ready' },
-  { at: 3, key: 'moonBack', content: 'ai' },
+  // 3 → 2 に下げた。初回セッションで「運勢を見る＋相談室で1往復」＝2 に届くので、
+  // その場で宝箱が1つ開く。D1が約26%なので、ここで開かないと大半の人は
+  // 「使い込むほど発見がひらく」という売りを一度も体験しないまま去る
+  { at: 2, key: 'moonBack', content: 'ai' },
   { at: 10, key: 'partyDeep', content: 'ai' },
   { at: 25, key: 'moodTrend', content: 'ai' },
   { at: 50, key: 'hiddenSelf', content: 'ai' },

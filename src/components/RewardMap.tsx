@@ -6,6 +6,7 @@ import { fetchAiReport, loadReport } from '../lib/aiReport'
 import type { ReportTopic } from '../lib/aiReport'
 import { useLang } from '../lib/i18n'
 import { useUI, quoted } from '../lib/ui'
+import { track } from '../lib/analytics'
 
 interface Props {
   /** 現在の累計シグナル(=地図の通貨)。使うほど増え、減らない */
@@ -70,6 +71,9 @@ export default function RewardMap({ signals, chart, starName, collapsible = fals
   function toggle(key: string, content: 'ready' | 'ai' | 'soon') {
     const next = open === key ? null : key
     setOpen(next)
+    // 宝箱が実際に開かれているかを、これまで一切測っていなかった。
+    // しきい値(3/10/25/50/100)を実データで調整するには、この2つが要る
+    if (next) track('map_box_open', { box: key, kind: content, signals })
     const rep = reports[key]
     if (next && content === 'ai' && !rep?.text && !rep?.loading) {
       void generate(key as ReportTopic)
@@ -98,7 +102,15 @@ export default function RewardMap({ signals, chart, starName, collapsible = fals
       </p>
 
       {collapsible && (
-        <button className={`map-toggle${expanded ? ' open' : ''}`} onClick={() => setExpanded((v) => !v)}>
+        <button
+          className={`map-toggle${expanded ? ' open' : ''}`}
+          onClick={() =>
+            setExpanded((v) => {
+              if (!v) track('map_open', { signals, unlocked: prog.tiers.filter((x) => x.unlocked).length })
+              return !v
+            })
+          }
+        >
           {expanded ? t.map.collapseMap : t.map.expandMap}
         </button>
       )}

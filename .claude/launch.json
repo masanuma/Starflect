@@ -13,6 +13,15 @@
       "runtimeArgs": ["start"],
       "port": 3000,
       "autoPort": true
+    },
+    {
+      "name": "tarot-dev",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": [
+        "/c",
+        "cd /d C:\\Users\\asanu\\Documents\\Sources\\tarot-reading && npm run dev -- -p 3100"
+      ],
+      "port": 3100
     }
   ]
 }

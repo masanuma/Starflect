@@ -806,3 +806,90 @@ export function forecastSet(natal: PlanetPos[], now = new Date()): PeriodBrief[]
     return { label: s.label, sky: f.skyNote, tone: f.toneLabel, items: f.items.map((i) => i.title) }
   })
 }
+
+/* ---------- 先の時期（「来年の夏はどう？」に答えるための材料） ---------- */
+
+/** 何年先まで見るか。木星は12年で一周するので、3年で約90°＝節目が数回ある */
+const LONG_RANGE_YEARS = 3
+/** 走査の刻み(日)。木星は1日0.08°しか動かないので10日刻みでも取りこぼさない */
+const LONG_RANGE_STEP_DAYS = 10
+/**
+ * 先の時期は「その頃ちょうど効いている配置」だけを知りたいので、
+ * 通常より狭いオーブで見る。広くすると常時どれかが当たって一覧が意味をなさなくなる。
+ */
+const LONG_RANGE_ORB = 2
+/** プロンプトに載せる上限。近い順に切る＝遠い未来より手前の質問のほうが多いはず */
+const LONG_RANGE_MAX = 16
+
+/** 「◯年◯月ごろ」の言い回し。月名そのものは Intl に任せる */
+const AROUND: Record<Lang, (m: string) => string> = {
+  ja: (m) => `${m}ごろ`,
+  en: (m) => `around ${m}`,
+  es: (m) => `hacia ${m}`,
+  fr: (m) => `vers ${m}`,
+  it: (m) => `verso ${m}`,
+  pt: (m) => `por volta de ${m}`,
+  ko: (m) => `${m}쯤`,
+}
+
+/**
+ * 長期の運行（木星・土星）が出生の星に近づく時期を、月単位で並べる。
+ *
+ * **なぜ必要か**：相談室には `forecastSet` の7期間（今日〜約2.5か月先）しか渡していないので、
+ * 「来年の夏は？」に答える材料が無く、AIは一般論を書くしかなかった。
+ * 「なんでも相談してください」と謳っている以上、これは矛盾になる。
+ *
+ * **なぜツール実行にしないか**：AIに日付を要求させてサーバーが計算する方式は使えない。
+ * サーバーは `astronomy-engine` を読み込めない（Railway の Node 18 で起動クラッシュする）。
+ * 天体計算はクライアント専用なので、**先に計算して渡す**のが素直な解。
+ *
+ * 速い星(月・水星など)は先の時期には意味がないので見ない。数年先を左右するのは木星と土星。
+ */
+export function longRangeTransits(natal: PlanetPos[], now = new Date()): string[] {
+  const lang = getLang()
+  const month = new Intl.DateTimeFormat(lang, { year: 'numeric', month: 'long' })
+  const slow: TransitKey[] = ['jupiter', 'saturn']
+  // 出生側は「その人の人生に効く」星に絞る。天王星〜冥王星への運行は世代的で個人の質問に効きにくい
+  const targets = natal.filter((n) => !['uranus', 'neptune', 'pluto'].includes(n.key))
+
+  interface Peak {
+    when: Date
+    transit: TransitKey
+    natalKey: PlanetKey
+    aspect: AspectDef
+    off: number
+  }
+  /** (運行星 × 出生星 × 角度) ごとに、いちばん近づいた1点だけを残す */
+  const best = new Map<string, Peak>()
+
+  const steps = Math.round((LONG_RANGE_YEARS * 365) / LONG_RANGE_STEP_DAYS)
+  for (let i = 1; i <= steps; i++) {
+    const when = new Date(now.getTime() + i * LONG_RANGE_STEP_DAYS * 86400_000)
+    for (const tKey of slow) {
+      const tLon = eclipticLongitude(TRANSIT_BODY[tKey], when)
+      for (const n of targets) {
+        const sep = separation(tLon, n.lon)
+        for (const a of ASPECTS) {
+          const off = Math.abs(sep - a.angle)
+          if (off > LONG_RANGE_ORB) continue
+          const id = `${tKey}:${n.key}:${a.angle}`
+          const prev = best.get(id)
+          if (!prev || off < prev.off) best.set(id, { when, transit: tKey, natalKey: n.key, aspect: a, off })
+        }
+      }
+    }
+  }
+
+  return [...best.values()]
+    .sort((x, y) => x.when.getTime() - y.when.getTime())
+    .slice(0, LONG_RANGE_MAX)
+    .map((p) => {
+      // ⚠️ 技術表記(「運行中の木星 × あなたの太陽 — 試練の角度(90°)」)では渡さない。
+      // 実測で、渡すとAIがそのまま口に出した（星名2つ＋角度の呼び名）。
+      // ルールで我慢させるより、**言ってほしくないものは最初から渡さない**のが確実。
+      // 運行側の星名は落として構わない — 相談室の言い換えルールで、
+      // どのみち「いまの巡り」「その頃の空」とまとめることになっている。
+      const plain = PLAIN_LINE[lang][p.aspect.angle](PLAIN_ROLE[lang][p.natalKey])
+      return `${(AROUND[lang] ?? AROUND.ja)(month.format(p.when))} — ${plain}`
+    })
+}

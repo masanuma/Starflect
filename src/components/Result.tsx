@@ -8,7 +8,7 @@ import PartyCard from './PartyCard'
 import ShareButtons from './ShareButtons'
 import Feedback from './Feedback'
 import ResultReveal from './ResultReveal'
-import { createCompanion, loadCompanion } from '../lib/companion'
+import { createCompanion, loadCompanion, markForecastSeen } from '../lib/companion'
 import { buildChatContext, chatStorageKey } from '../lib/aiChat'
 import PlanetMascot from './PlanetMascot'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
@@ -66,7 +66,10 @@ export default function Result({ data, onHome, onPair }: Props) {
       star_type: starSlug,
     })
     // 診断した時点で、このほしキャラを相棒として自動保存(次回から相棒ホームに戻る=毎日そばに)
-    createCompanion(data, starSlug ?? '')
+    const companion = createCompanion(data, starSlug ?? '')
+    // この画面でも運勢を見ている(StarReading を出している)のに数えていなかった。
+    // 初回セッションではここが唯一の加算源になり得るので、地図の1つ目が届くかどうかを左右する
+    markForecastSeen(companion)
     // 結果表示ごとに1回だけ
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
