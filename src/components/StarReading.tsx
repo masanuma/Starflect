@@ -15,7 +15,7 @@ import type { Hit } from '../lib/companion'
 import { track } from '../lib/analytics'
 import { starTypeOf } from '../lib/startypes'
 import { getPlanet } from '../lib/planets'
-import { signName } from '../lib/signs'
+import { signName, signKeywords } from '../lib/signs'
 import { signIndex } from '../lib/astro'
 import { streamAiFortune, facetOfNow } from '../lib/aiChat'
 import type { Facet } from '../lib/companion'
@@ -118,7 +118,10 @@ export default function StarReading({
           planets: chart.planets.map((p) => ({
             label: getPlanet(p.key).name,
             role: getPlanet(p.key).role,
+            // 星座名も渡すが、運勢のプロンプトはこれを載せない（載せると口に出すため）。
+            // 実際に使われるのは traits のほう
             sign: signName(signIndex(p.lon)),
+            traits: signKeywords(signIndex(p.lon)),
             deg: p.lon % 30,
             retro: p.retro,
           })),

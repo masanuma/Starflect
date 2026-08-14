@@ -6,7 +6,7 @@ import { starTypeOf } from '../lib/startypes'
 import type { PairChatContext } from '../lib/aiChat'
 import { streamAiPairChat, streamAiPairFortune } from '../lib/aiChat'
 import { getPlanet } from '../lib/planets'
-import { signName } from '../lib/signs'
+import { signName, signKeywords } from '../lib/signs'
 import { signIndex } from '../lib/astro'
 import { useUI } from '../lib/ui'
 import AiChat from './AiChat'
@@ -84,7 +84,12 @@ export default function PairResult({ data, onRetry, onHome }: Props) {
 
   // 相性チャット(相談室)に渡すふたりのデータ。選択中の期間の空模様を反映する。
   const natalOf = (p: PairPerson) =>
-    p.planets.map((pp) => ({ label: getPlanet(pp.key).name, sign: signName(signIndex(pp.lon)) }))
+    p.planets.map((pp) => ({
+      label: getPlanet(pp.key).name,
+      // 相性チャットは星座名を使うが、相性の読みは traits しか載せない（星座名が漏れるため）
+      sign: signName(signIndex(pp.lon)),
+      traits: signKeywords(signIndex(pp.lon)),
+    }))
   const pairChatContext: PairChatContext = {
     nameA: a.name,
     nameB: b.name,
