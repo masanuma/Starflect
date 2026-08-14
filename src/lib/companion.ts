@@ -28,6 +28,22 @@ export const PICK_IDS: PickId[] = ['alone', 'decide', 'holiday', 'newplace', 'ad
  * （毎回違うことを言うと「適当だ」と思われる。深掘りしたい人は相談室へ流す）
  * 言語ごとに別で持つ＝日本語で書いたものと英語で書いたものは別物として扱う。
  */
+/**
+ * 1日のうち、どの「面」の運勢か。
+ *
+ * **同じ日に同じ内容を2回出すのは引き直し**なので禁止のまま。かわりに**別の面**を出す。
+ * このアプリはほしキャラ自体が「太陽 × 月」でできているので、そこに素直に乗せた：
+ * ```
+ * day   (朝〜夕方)  太陽の面 — 今日どう動くか。外向き。行動で締める
+ * night (夜〜深夜)  月の面   — いまの気持ちの置き場所。内向き。静かに締める
+ * ```
+ * 月の面を「今日のふりかえり」にしなかったのは、深夜1時に成り立たないから。
+ * 「いまの気持ち」なら何時でも成り立つし、日記ではなく占いのままでいられる。
+ *
+ * 面ごとに1本・引き直し不可は変わらない。
+ */
+export type Facet = 'day' | 'night'
+
 export interface SavedFortune {
   /** 本文 */
   text: string
@@ -69,8 +85,14 @@ export interface DailyEntry {
   domain?: Domain
   /** その日の「今日の星」カードを見たか */
   forecastSeen?: boolean
-  /** その日の運勢（言語ごとに1本） */
+  /**
+   * その日の**太陽の面**（言語ごとに1本）。
+   * キー名が `fortune` のままなのは、すでに保存されている人のデータを壊さないため
+   * （面を足す前は、これが唯一の運勢だった）。
+   */
   fortune?: Partial<Record<Lang, SavedFortune>>
+  /** その日の**月の面**（言語ごとに1本） */
+  fortuneNight?: Partial<Record<Lang, SavedFortune>>
   /** その日の運勢の答え合わせ（後日1回だけ聞く） */
   hit?: Hit
   /** その日の二択の答え。`a` は 0=左 / 1=右 */
@@ -143,7 +165,7 @@ const sameChart = (a: ChartData, b: ChartData) => a.dateLabel === b.dateLabel &&
 
 /** 運勢とその答え合わせを落とす。答え合わせは運勢に対する評価なので、運勢を捨てるなら道連れにする */
 function stripFortune(entry: DailyEntry): DailyEntry {
-  const { fortune: _f, hit: _h, ...rest } = entry
+  const { fortune: _f, fortuneNight: _n, hit: _h, ...rest } = entry
   return rest
 }
 
@@ -407,7 +429,7 @@ export function pruneFortunes(state: CompanionState, now: Date = new Date(), kee
   const limit = todayKey(new Date(now.getTime() - keepDays * 86_400_000))
   const daily: Record<string, DailyEntry> = {}
   for (const [key, entry] of Object.entries(state.daily)) {
-    if (key >= limit || !entry.fortune) {
+    if (key >= limit || (!entry.fortune && !entry.fortuneNight)) {
       daily[key] = entry
       continue
     }
@@ -419,24 +441,32 @@ export function pruneFortunes(state: CompanionState, now: Date = new Date(), kee
   return { ...state, daily }
 }
 
-/** その日ぶんの運勢を保存する。すでにある場合は**上書きしない**（引き直し不可） */
+/** 面ごとの保存先。`day` のキー名が `fortune` なのは旧データ互換のため */
+const facetKey = (facet: Facet): 'fortune' | 'fortuneNight' => (facet === 'night' ? 'fortuneNight' : 'fortune')
+
+/**
+ * その日ぶんの運勢を保存する。すでにある場合は**上書きしない**（引き直し不可）。
+ * 面ごとに別枠なので、太陽の面を書いたあとでも月の面は書ける。
+ */
 export function saveFortune(
   state: CompanionState,
   text: string,
   basis: string[],
   lang: Lang = getLang(),
   now: Date = new Date(),
+  facet: Facet = 'day',
 ): CompanionState {
   const key = todayKey(now)
   const entry = state.daily[key] ?? {}
-  if (entry.fortune?.[lang]) return state /* すでに今日の分がある＝引き直させない */
+  const field = facetKey(facet)
+  if (entry[field]?.[lang]) return state /* すでにこの面の分がある＝引き直させない */
   const next: CompanionState = {
     ...state,
     daily: {
       ...state.daily,
       [key]: {
         ...entry,
-        fortune: { ...entry.fortune, [lang]: { text, writtenAt: now.toISOString(), basis } },
+        [field]: { ...entry[field], [lang]: { text, writtenAt: now.toISOString(), basis } },
       },
     },
   }
@@ -445,13 +475,14 @@ export function saveFortune(
   return pruned
 }
 
-/** その日ぶんの運勢（未生成なら undefined） */
+/** その日ぶんの運勢（その面が未生成なら undefined） */
 export function todaysFortune(
   state: CompanionState,
   lang: Lang = getLang(),
   now: Date = new Date(),
+  facet: Facet = 'day',
 ): SavedFortune | undefined {
-  return state.daily[todayKey(now)]?.fortune?.[lang]
+  return state.daily[todayKey(now)]?.[facetKey(facet)]?.[lang]
 }
 
 /**

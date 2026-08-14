@@ -9,7 +9,7 @@ import { findNatalAspects } from './natalAspects'
 import { forecastSet, longRangeTransits } from './fortune'
 import type { PeriodBrief } from './fortune'
 import { starTypeOf } from './startypes'
-import type { AirBrief, BehaviorBrief } from './companion'
+import type { AirBrief, BehaviorBrief, Facet } from './companion'
 
 export interface ChatMessage {
   role: 'user' | 'assistant'
@@ -74,6 +74,33 @@ export function buildChatContext(chart: ChartData): ChatChartContext {
 /** 端末の今日(YYYY-MM-DD)。longRange の計算基準と揃えるため、サーバー時刻ではなくここで作る */
 function todayISO(now = new Date()): string {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+}
+
+/**
+ * いま何時ごろか（プロンプト用の日本語1本。表示には使わない）。
+ *
+ * **なぜ必要か**：夕方に今日の運勢をひらいて「朝のうちに〜」と言われても使えない。
+ * 締めの「今日できる行動」がもう過ぎた時間帯を指すと、その1文がまるごと無駄になる。
+ *
+ * **サーバー時刻ではなく端末の時刻を使う**。サーバーはUTCなので、日本の夕方は
+ * サーバーでは午前になり、いちばん直したかったズレがそのまま残る。
+ */
+const BANDS = ['朝', '昼', '夕方', '夜', '深夜']
+
+export function timeOfDay(now = new Date()): string {
+  // 夜の面は時刻でしか出ないので、ローカル開発時だけ ?tod=夜 で切り替えられるようにする。
+  // ここで上書きすると、面の選択・気分タップの出し分け・プロンプトが一斉に揃う
+  if (typeof location !== 'undefined' && /^(localhost|127\.)/.test(location.hostname)) {
+    const forced = new URLSearchParams(location.search).get('tod')
+    if (forced && BANDS.includes(forced)) return forced
+  }
+  const h = now.getHours()
+  // 深夜(23〜4時)を先に返す。あとに回すと 0〜4時 が `h < 15` に吸われて「昼」になる
+  if (h >= 23 || h < 5) return '深夜'
+  if (h < 11) return '朝'
+  if (h < 15) return '昼'
+  if (h < 18) return '夕方'
+  return '夜'
 }
 
 /** 会話履歴を保存する localStorage キー(人ごとに分ける) */
@@ -151,7 +178,8 @@ export async function streamAiPairFortune(
 ): Promise<void> {
   await postStream(
     '/api/ai-pair-fortune',
-    { context, messages: [{ role: 'user', content: 'ふたりの相性を教えて' }], lang },
+    // 相性の読みも「今日のふたりでできること」で締めるので、同じく時間帯が要る
+    { context, messages: [{ role: 'user', content: 'ふたりの相性を教えて' }], lang, timeOfDay: timeOfDay() },
     onDelta,
   )
 }
@@ -170,12 +198,34 @@ export async function streamAiFortune(
   air?: AirBrief,
   /** 全期間を圧縮した「人となり」。圧縮済みの短い文だけ(生の会話は含まない) */
   persona?: string[],
+  /** 太陽の面(朝〜夕方) か 月の面(夜〜深夜) か */
+  facet: Facet = 'day',
 ): Promise<void> {
   await postStream(
     '/api/ai-fortune',
-    { context, messages: [{ role: 'user', content: '今日のわたしの運勢を教えて' }], lang, air, persona },
+    {
+      context,
+      messages: [
+        {
+          role: 'user',
+          content: facet === 'night' ? 'いまのわたしの気持ちを読んで' : '今日のわたしの運勢を教えて',
+        },
+      ],
+      lang,
+      air,
+      persona,
+      facet,
+      // 呼び出し側に任せず必ず付ける。忘れると「朝のうちに」が夜に出る
+      timeOfDay: timeOfDay(),
+    },
     onDelta,
   )
+}
+
+/** いまの時刻はどちらの面か。夜〜深夜が月の面 */
+export function facetOfNow(now = new Date()): Facet {
+  const t = timeOfDay(now)
+  return t === '夜' || t === '深夜' ? 'night' : 'day'
 }
 
 /* ---------- 人となり(記憶の圧縮) ---------- */

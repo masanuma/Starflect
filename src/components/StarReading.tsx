@@ -17,7 +17,8 @@ import { starTypeOf } from '../lib/startypes'
 import { getPlanet } from '../lib/planets'
 import { signName } from '../lib/signs'
 import { signIndex } from '../lib/astro'
-import { streamAiFortune } from '../lib/aiChat'
+import { streamAiFortune, facetOfNow } from '../lib/aiChat'
+import type { Facet } from '../lib/companion'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
 import { useUI } from '../lib/ui'
 
@@ -58,6 +59,11 @@ export default function StarReading({
   const t = useUI()
   const fortune = readFortune(chart.planets, 'today')
 
+  // どちらの面を読むかは時刻で決まる。夜〜深夜は月の面（いまの気持ち）。
+  // 面はマウント時に1度だけ決める＝生成中に日付境界をまたいでも入れ替わらない
+  const [facet] = useState<Facet>(() => facetOfNow())
+  const night = facet === 'night'
+
   const lonOf = (key: PlanetKey) => chart.planets.find((p) => p.key === key)?.lon
   const sunLon = lonOf('sun')
   const moonLon = lonOf('moon')
@@ -66,9 +72,11 @@ export default function StarReading({
 
   const [state, setState] = useState<State>(() => {
     const saved = loadCompanion()
-    const today = saved ? todaysFortune(saved) : undefined
+    const today = saved ? todaysFortune(saved, undefined, undefined, facet) : undefined
     return today ? { kind: 'done', text: today.text } : { kind: 'reading' }
   })
+  // 夜に見たときだけ、その日の朝ぶんを畳んで置いておく（読み返せるように）
+  const daytime = night ? (loadCompanion() ? todaysFortune(loadCompanion()!, undefined, undefined, 'day') : undefined) : undefined
   // 二重生成を防ぐ(StrictMode の二回マウントや、再レンダーでの再実行)
   const startedRef = useRef(false)
 
@@ -131,10 +139,13 @@ export default function StarReading({
         undefined,
         hasAir ? air : undefined,
         persona?.length ? persona : undefined,
+        facet,
       )
       const saved = loadCompanion()
       // 相棒がまだ作られていない瞬間(初回診断の直後)は保存を諦める。翌日また書けばよい
-      if (saved && acc.trim()) saveFortune(saved, acc.trim(), fortune.items.map((i) => i.title))
+      if (saved && acc.trim()) {
+        saveFortune(saved, acc.trim(), fortune.items.map((i) => i.title), undefined, undefined, facet)
+      }
     } catch {
       // 障害は素直に伝える。固定文でごまかすと「その人のために書いている」が嘘になる
       setState({ kind: 'error' })
@@ -158,8 +169,8 @@ export default function StarReading({
           </div>
         )}
         <div>
-          <p className="card-title">{t.companion.readingHeading}</p>
-          <p className="card-sub">{t.companion.readsIntro(name)}</p>
+          <p className="card-title">{night ? t.companion.readingHeadingNight : t.companion.readingHeading}</p>
+          <p className="card-sub">{night ? t.companion.readsIntroNight(name) : t.companion.readsIntro(name)}</p>
         </div>
       </div>
 
@@ -171,7 +182,7 @@ export default function StarReading({
             </div>
           )}
           <p className="fortune-waiting-msg">
-            {t.companion.fortuneWaiting}
+            {night ? t.companion.fortuneWaitingNight : t.companion.fortuneWaiting}
             <span className="fortune-dots" aria-hidden="true">
               <i />
               <i />
@@ -184,6 +195,14 @@ export default function StarReading({
       )}
 
       {state.kind === 'done' && <p className="fortune-body">{state.text}</p>}
+
+      {/* 夜に見たときだけ、朝に読んだ運勢を畳んで置く。読み返せるが、主役は月の面のまま */}
+      {night && daytime && (
+        <details className="fortune-why">
+          <summary>{t.companion.daytimeFortune}</summary>
+          <p className="fortune-body">{daytime.text}</p>
+        </details>
+      )}
 
       {/*
         答え合わせ。読み終えたあとが自然な間なので、本文の下に置く。

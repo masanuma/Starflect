@@ -25,7 +25,7 @@ import StarReading from './StarReading'
 import PartyCard from './PartyCard'
 import RewardMap from './RewardMap'
 import AiChat from './AiChat'
-import { buildChatContext, chatStorageKey, userSays, fetchPersona } from '../lib/aiChat'
+import { buildChatContext, chatStorageKey, userSays, fetchPersona, facetOfNow, timeOfDay } from '../lib/aiChat'
 import { useUI, quoted } from '../lib/ui'
 import { track } from '../lib/analytics'
 
@@ -51,7 +51,13 @@ export default function Companion({ state, onHome, onPair }: Props) {
 
   // 夜の振り返り: 今日すでにタップ済みなら 'done' で復元(同日に何度も聞かない)
   const todayEntry = state.daily[todayKey()]
-  const [phase, setPhase] = useState<TapPhase>(todayEntry?.mood ? 'done' : 'mood')
+  /**
+   * 一日を振り返るタップは、**一日が進んでから**にする。
+   * 朝7時に「今日はいかがでしたか？」と聞かれるのは、単純におかしい。
+   * これまでは時刻を一切見ておらず、朝でも夜でも同じ画面を出していた。
+   */
+  const askMood = facetOfNow() === 'night' || timeOfDay() === '夕方'
+  const [phase, setPhase] = useState<TapPhase>(todayEntry?.mood || !askMood ? 'done' : 'mood')
   const [mood, setMood] = useState<Mood | undefined>(todayEntry?.mood)
 
   // 2問目は「領域」と「遊びの二択」の取り合い。日付から決まるので、同じ日は何度開いても同じ問い。
@@ -135,7 +141,14 @@ export default function Companion({ state, onHome, onPair }: Props) {
     touchVisit(state)
     markForecastSeen(state)
     refreshSignals()
-    track('companion_open', { days_since: daysSince, star_type: state.starType })
+    // hour を送るまで「1日に何回・何時に開かれているか」が一切分からなかった。
+    // 時間帯で顔を変える施策が効いたかどうかは、この基準線が無いと判定できない
+    track('companion_open', {
+      days_since: daysSince,
+      star_type: state.starType,
+      hour: new Date().getHours(),
+      time_of_day: timeOfDay(),
+    })
     if (isWeekend) track('weekend_view', { star_type: state.starType })
     void refreshPersona()
     // マウント時に1回だけ
@@ -178,6 +191,12 @@ export default function Companion({ state, onHome, onPair }: Props) {
         autoAsk={autoAsk}
       />
 
+      {/*
+        朝〜昼は振り返りを聞かないので、カードごと出さない。
+        `phase==='done'` は「答えた人へのひとこと」なので、答えていない人に出すと
+        押してもいない気分への反応文が表示されてしまう
+      */}
+      {(askMood || todayEntry?.mood) && (
       <section className="tap-card">
         {phase === 'mood' && (
           <>
@@ -239,6 +258,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
 
         {phase === 'done' && <p className="tap-reaction">{reaction}</p>}
       </section>
+      )}
 
       {isWeekend && (
         <section className="weekend-card">

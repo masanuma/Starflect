@@ -272,6 +272,15 @@ export interface UIStrings {
     cautionLabel: string
     readsTitle: (name: string, period: string) => string
     readingHeading: string
+    /**
+     * 夜〜深夜に出す「月の面」。同じ内容を出し直すのではなく、別の面を読む。
+     * ほしキャラ自体が「太陽 × 月」なので、朝は太陽側・夜は月側が出てくる。
+     */
+    readingHeadingNight: string
+    readsIntroNight: (name: string) => string
+    fortuneWaitingNight: string
+    /** 夜に、その日の朝ぶんを畳んで置いておく見出し */
+    daytimeFortune: string
     /** 運勢は今日だけ出し、先の期間は相棒に聞いてもらう(毎日ひらく理由とAI利用を両取り) */
     askAheadTitle: string
     askAhead: { label: string; q: string }[]
@@ -593,6 +602,10 @@ const UI: Record<Lang, UIStrings> = {
       cautionLabel: '注意',
       readsTitle: (name, period) => `${name}が読む、${period}`,
       readingHeading: 'ほしキャラが読む、今日の運勢',
+      readingHeadingNight: 'ほしキャラが読む、いまの心もよう',
+      readsIntroNight: (name) => `あなたのほしキャラ「${name}」です。いまのあなたの内側を読みました。`,
+      fortuneWaitingNight: 'いま、あなたの心もようを読んでいます',
+      daytimeFortune: '今日の運勢を読み返す',
       askAheadTitle: 'この先が気になったら、聞いてみて',
       askAhead: [{ label: '明日は？', q: '明日はどんな一日になりそう？' }, { label: '今週は？', q: '今週はどんな流れ？' }, { label: '来月は？', q: '来月はどんな時期になりそう？' }],
       readsIntro: (name) => `あなたのほしキャラ「${name}」です。今の星の巡りを読みました。`,
@@ -913,6 +926,10 @@ const UI: Record<Lang, UIStrings> = {
       cautionLabel: 'Heads-up',
       readsTitle: (name, period) => `${period}, read by ${name}`,
       readingHeading: 'Your Hoshi-Kyara reads today’s stars',
+      readingHeadingNight: 'Your Hoshi-Kyara reads how you’re feeling',
+      readsIntroNight: (name) => `I’m “${name}”, your Hoshi-Kyara. Here’s what I see inside you right now.`,
+      fortuneWaitingNight: 'Reading how you’re feeling right now',
+      daytimeFortune: 'Read today’s reading again',
       askAheadTitle: 'Curious about what’s next? Just ask.',
       askAhead: [{ label: 'Tomorrow?', q: 'What’s tomorrow going to be like?' }, { label: 'This week?', q: 'How is this week shaping up?' }, { label: 'Next month?', q: 'What kind of month is next month going to be?' }],
       readsIntro: (name) => `I’m your Hoshi-Kyara, “${name}.” I’ve read the current stars for you.`,
@@ -1232,6 +1249,10 @@ const UI: Record<Lang, UIStrings> = {
       cautionLabel: 'Atención',
       readsTitle: (name, period) => `${period}, leído por ${name}`,
       readingHeading: 'Tu Hoshi-Kyara lee las estrellas de hoy',
+      readingHeadingNight: 'Tu Hoshi-Kyara lee cómo te sientes',
+      readsIntroNight: (name) => `Soy «${name}», tu Hoshi-Kyara. Esto es lo que veo dentro de ti ahora.`,
+      fortuneWaitingNight: 'Estoy leyendo cómo te sientes ahora',
+      daytimeFortune: 'Volver a leer lo de hoy',
       askAheadTitle: '¿Te pica la curiosidad? Pregúntame.',
       askAhead: [{ label: '¿Mañana?', q: '¿Cómo va a ser mañana?' }, { label: '¿Esta semana?', q: '¿Cómo se presenta esta semana?' }, { label: '¿El mes que viene?', q: '¿Qué tal va a ser el mes que viene?' }],
       readsIntro: (name) => `Soy tu Hoshi-Kyara, «${name}». He leído las estrellas de ahora para ti.`,
@@ -1551,6 +1572,10 @@ const UI: Record<Lang, UIStrings> = {
       cautionLabel: 'Vigilance',
       readsTitle: (name, period) => `${period}, lu par ${name}`,
       readingHeading: 'Ton Hoshi-Kyara lit les étoiles du jour',
+      readingHeadingNight: 'Ton Hoshi-Kyara lit ce que tu ressens',
+      readsIntroNight: (name) => `Je suis « ${name} », ton Hoshi-Kyara. Voici ce que je vois en toi maintenant.`,
+      fortuneWaitingNight: 'Je lis ce que tu ressens en ce moment',
+      daytimeFortune: 'Relire celle du jour',
       askAheadTitle: 'Curieux de la suite ? Demande-moi.',
       askAhead: [{ label: 'Demain ?', q: 'Ça va donner quoi, demain ?' }, { label: 'Cette semaine ?', q: 'Comment se présente cette semaine ?' }, { label: 'Le mois prochain ?', q: 'Ça va ressembler à quoi, le mois prochain ?' }],
       readsIntro: (name) => `Je suis ton Hoshi-Kyara, « ${name} ». J’ai lu les étoiles du moment pour toi.`,
@@ -1870,6 +1895,10 @@ const UI: Record<Lang, UIStrings> = {
       cautionLabel: 'Attenzione',
       readsTitle: (name, period) => `${period}, letto da ${name}`,
       readingHeading: 'Il tuo Hoshi-Kyara legge le stelle di oggi',
+      readingHeadingNight: 'Il tuo Hoshi-Kyara legge come ti senti',
+      readsIntroNight: (name) => `Sono «${name}», il tuo Hoshi-Kyara. Ecco cosa vedo dentro di te adesso.`,
+      fortuneWaitingNight: 'Sto leggendo come ti senti adesso',
+      daytimeFortune: 'Rileggi quella di oggi',
       askAheadTitle: 'Curioso/a di quel che viene? Chiedimelo.',
       askAhead: [{ label: 'Domani?', q: 'Come sarà domani?' }, { label: 'Questa settimana?', q: 'Come si prospetta questa settimana?' }, { label: 'Il mese prossimo?', q: 'Che mese sarà il prossimo?' }],
       readsIntro: (name) => `Sono il tuo Hoshi-Kyara, «${name}». Ho letto le stelle di adesso per te.`,
@@ -2189,6 +2218,10 @@ const UI: Record<Lang, UIStrings> = {
       cautionLabel: 'Atenção',
       readsTitle: (name, period) => `${period}, lido por ${name}`,
       readingHeading: 'Seu Hoshi-Kyara lê as estrelas de hoje',
+      readingHeadingNight: 'Seu Hoshi-Kyara lê como você está se sentindo',
+      readsIntroNight: (name) => `Sou “${name}”, seu Hoshi-Kyara. Isto é o que vejo dentro de você agora.`,
+      fortuneWaitingNight: 'Estou lendo como você está se sentindo agora',
+      daytimeFortune: 'Reler a de hoje',
       askAheadTitle: 'Curioso sobre o que vem? É só perguntar.',
       askAhead: [{ label: 'Amanhã?', q: 'Como vai ser o amanhã?' }, { label: 'Esta semana?', q: 'Como está esta semana?' }, { label: 'Mês que vem?', q: 'Que mês vai ser o próximo?' }],
       readsIntro: (name) => `Sou o seu Hoshi-Kyara, «${name}». Li as estrelas de agora para você.`,
@@ -2508,6 +2541,10 @@ const UI: Record<Lang, UIStrings> = {
       cautionLabel: '주의',
       readsTitle: (name, period) => `${name}의 ${period}`,
       readingHeading: '당신의 호시캐릭터가 읽는 오늘의 운세',
+      readingHeadingNight: '당신의 호시캐릭터가 읽는 지금의 마음',
+      readsIntroNight: (name) => `당신의 호시캐릭터 「${name}」이에요. 지금 당신의 안쪽을 읽었어요.`,
+      fortuneWaitingNight: '지금 당신의 마음을 읽고 있어요',
+      daytimeFortune: '오늘의 운세 다시 보기',
       askAheadTitle: '앞으로가 궁금하면, 물어보세요',
       askAhead: [{ label: '내일은?', q: '내일은 어떤 하루가 될까?' }, { label: '이번 주는?', q: '이번 주는 어떤 흐름이야?' }, { label: '다음 달은?', q: '다음 달은 어떤 시기가 될까?' }],
       readsIntro: (name) => `당신의 호시캐릭터 「${name}」입니다. 지금의 별의 흐름을 읽어 봤어요.`,
