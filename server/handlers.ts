@@ -980,6 +980,68 @@ function buildPersonaSystem(c: PersonaRequest['context']): string {
 const createPersonaHandler = (apiKey: string | undefined): RawHandler =>
   createStreamingChatHandler<PersonaRequest>(apiKey, 'persona', (p) => buildPersonaSystem(p.context))
 
+/* ---------- AIの疎通チェック ---------- */
+
+/**
+ * AIが本当に使える状態かを見る。
+ *
+ * **なぜ要るか**：2026-08-14 に APIキーが期限切れになり、**気づいたのは1時間以上あと**だった。
+ * その間、本番の毎日の運勢・相談室・相性がすべて500を返していた。
+ * 死活が分かる場所がどこにも無く、テスターの「AIにつながりません」が唯一の通知経路だった。
+ *
+ * `max_tokens: 1` なので費用はほぼゼロ。それでも毎回叩くと無駄なので結果をしばらく持ち回す。
+ */
+export type AiHealth = { ok: boolean; error?: string; checkedAt: string }
+
+/** 成否をどれだけ持ち回すか。落ちているときは短くして、復旧にすぐ気づけるようにする */
+const HEALTH_TTL_OK_MS = 10 * 60_000
+const HEALTH_TTL_NG_MS = 60_000
+
+export function createAiHealthCheck(apiKey: string | undefined): () => Promise<AiHealth> {
+  let cached: AiHealth | null = null
+  let cachedAt = 0
+  let inflight: Promise<AiHealth> | null = null
+
+  return async () => {
+    const ttl = cached?.ok ? HEALTH_TTL_OK_MS : HEALTH_TTL_NG_MS
+    if (cached && Date.now() - cachedAt < ttl) return cached
+    // 同時に複数来ても実際の呼び出しは1本にまとめる
+    if (inflight) return inflight
+    inflight = (async (): Promise<AiHealth> => {
+      const checkedAt = new Date().toISOString()
+      if (!apiKey || apiKey.includes('ここに')) {
+        return { ok: false, error: 'ANTHROPIC_API_KEY が未設定です', checkedAt }
+      }
+      try {
+        await new Anthropic({ apiKey }).messages.create({
+          model: AI_MODEL,
+          max_tokens: 1,
+          messages: [{ role: 'user', content: 'ping' }],
+        })
+        return { ok: true, checkedAt }
+      } catch (err) {
+        // 何が起きているかは運用者が知りたいので、種類を残す
+        const error =
+          err instanceof Anthropic.AuthenticationError
+            ? 'APIキーが無効です（期限切れ・失効の可能性）'
+            : err instanceof Anthropic.RateLimitError
+              ? 'レート上限です'
+              : err instanceof Anthropic.APIError
+                ? `Anthropic APIエラー (${err.status})`
+                : 'AIに接続できません'
+        return { ok: false, error, checkedAt }
+      }
+    })()
+    try {
+      cached = await inflight
+      cachedAt = Date.now()
+      return cached
+    } finally {
+      inflight = null
+    }
+  }
+}
+
 /** 相性鑑定・相談チャット・発見レポートのAPIハンドラを生成する(相棒との会話がAIの窓口を担う) */
 export function createAiHandlers(apiKey: string | undefined): {
   pairChat: RawHandler

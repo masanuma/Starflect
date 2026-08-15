@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url'
 import { readFileSync, statSync } from 'node:fs'
 import path from 'node:path'
 import express from 'express'
-import { createAiHandlers, createFeedbackHandler } from './handlers'
+import { createAiHandlers, createFeedbackHandler, createAiHealthCheck } from './handlers'
 import { renderLP, renderCharPage, renderStarsPage, renderPairPage, elementsOfSlug, CONTENT_LANGS } from './pages'
 import { CHAR_BY_SLUG } from './characters'
 import * as stats from './stats'
@@ -122,6 +122,7 @@ const SITEMAP = sitemapXml()
 
 const app = express()
 const handlers = createAiHandlers(process.env.ANTHROPIC_API_KEY)
+const aiHealth = createAiHealthCheck(process.env.ANTHROPIC_API_KEY)
 const feedback = createFeedbackHandler(process.env.FEEDBACK_SHEET_URL)
 
 /**
@@ -141,9 +142,22 @@ app.use((req, _res, next) => {
 })
 
 // 集計の閲覧。鍵(STATS_KEY)を設定していないときは存在しない扱いにする
-app.get('/api/stats', (req, res) => {
+/**
+ * 運用の見張り台。流入の集計に加えて、**AIが本当に使えるか**を返す。
+ *
+ * 2026-08-14 にAPIキーが期限切れになったとき、気づいたのは1時間以上あとだった。
+ * その間ずっと本番の運勢・相談室・相性が500を返していたのに、
+ * 死活が分かる場所がどこにも無かった（唯一の通知経路がテスターの申告だった）。
+ * `?ai=0` を付ければ従来どおり集計だけ返す。
+ */
+app.get('/api/stats', async (req, res) => {
   if (!STATS_KEY || req.query.key !== STATS_KEY) return res.status(404).send('Not found')
-  return res.json(stats.snapshot())
+  const snapshot = stats.snapshot()
+  if (req.query.ai === '0') return res.json(snapshot)
+  const ai = await aiHealth()
+  // AIが落ちていることは 200 の中身ではなく**HTTPステータス**でも分かるようにする。
+  // 外形監視(UptimeRobot 等)をこのURLに向けるだけで通知が飛ぶ
+  return res.status(ai.ok ? 200 : 503).json({ ai, stats: snapshot })
 })
 
 app.post('/api/ai-pair-chat', handlers.pairChat)
