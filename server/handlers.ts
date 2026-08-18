@@ -459,6 +459,71 @@ function logUsage(endpoint: string, model: string, usage: unknown, lang: Lang): 
         cost_usd: Number(costUsd.toFixed(5)),
       }),
   )
+  spentToday.add(costUsd)
+}
+
+/* ---------- AIの1日あたり上限（コスト暴走の保険） ---------- */
+
+/**
+ * その日に使ったAI費用を積む。**回数ではなく実際の支出**で見る。
+ *
+ * **なぜ要るか**：フォロワー6千人規模の告知を出すと、流入が桁で変わりうる。
+ * 相談室には上限が無く、何往復でもできる。1人の使いすぎより、
+ * **人が一気に増えたときの合計**のほうが現実的なリスク。
+ *
+ * ⚠️ プロセス内カウンタなので**再デプロイでリセットされる**。
+ * 厳密な会計ではなく「気づかないうちに数万円」を止めるための保険と割り切る。
+ * 正確な数字は Railway の請求と `AI_USAGE` ログを見ること。
+ */
+const spentToday = {
+  date: '',
+  usd: 0,
+  today(): string {
+    return new Date().toISOString().slice(0, 10)
+  },
+  roll(): void {
+    const d = this.today()
+    if (this.date !== d) {
+      this.date = d
+      this.usd = 0
+    }
+  },
+  add(usd: number): void {
+    this.roll()
+    this.usd += usd
+  },
+  get(): { date: string; usd: number } {
+    this.roll()
+    return { date: this.date, usd: Number(this.usd.toFixed(4)) }
+  },
+}
+
+/**
+ * 1日の上限(USD)。Railway の `AI_DAILY_BUDGET_USD` で調整できる。0 以下なら無制限。
+ *
+ * 既定を $10（約1,500円/日・月45,000円）にした根拠（2026-08 実測・9月単価換算）：
+ * ```
+ * 運勢1回 約2円 / 相談1往復 約2円 → 毎日ひらく人ひとり 約211円/月
+ * 実際にかかる額  定着10人 約2,300円/月 ／ 30人 約8,300円/月 ／ 80人 約22,000円/月
+ * ```
+ * いちばん当たった想定（月22,000円）の**2倍の位置**に置いてある。
+ * 実害が出る前に止まるが、伸びたときに邪魔をしない高さ。
+ *
+ * ⚠️ 最初は $3 にしていたが、**告知の初日に100人来ただけで当たる**と分かって上げた。
+ * いちばん見てほしい日に「お休みしています」を出すのが、いちばん高くつく。
+ */
+const DAILY_BUDGET_USD = Number(process.env.AI_DAILY_BUDGET_USD ?? '10')
+
+/** 今日の上限に達しているか。呼び出し**前**に見るので、1回ぶんは超過しうる */
+function overBudget(): boolean {
+  if (!(DAILY_BUDGET_USD > 0)) return false
+  return spentToday.get().usd >= DAILY_BUDGET_USD
+}
+
+/** 運用画面(`/api/stats`)に出す、今日のAI利用状況 */
+export function aiSpend(): { date: string; usd: number; budgetUsd: number; overBudget: boolean } {
+  const s = spentToday.get()
+  return { ...s, budgetUsd: DAILY_BUDGET_USD, overBudget: overBudget() }
 }
 
 /**
@@ -488,6 +553,12 @@ function createStreamingChatHandler<T extends { context?: unknown; messages?: Ch
       }
       if (!payload?.messages?.length || !payload.context) {
         return json(res, 400, { error: 'メッセージがありません' })
+      }
+      // コスト暴走の保険。落ちたことを隠さず素直に伝える(憲法: 固定文でごまかさない)
+      if (overBudget()) {
+        return json(res, 429, {
+          error: '今日はたくさんの方にご利用いただいたため、AIの読み上げをお休みしています。また明日おこしください。',
+        })
       }
 
       try {
@@ -562,6 +633,11 @@ function createReportHandler(apiKey: string | undefined): RawHandler {
       }
       if (!payload?.context || !payload.topic) {
         return json(res, 400, { error: 'データが不足しています' })
+      }
+      if (overBudget()) {
+        return json(res, 429, {
+          error: '今日はたくさんの方にご利用いただいたため、AIの読み上げをお休みしています。また明日おこしください。',
+        })
       }
 
       try {

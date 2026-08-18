@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url'
 import { readFileSync, statSync } from 'node:fs'
 import path from 'node:path'
 import express from 'express'
-import { createAiHandlers, createFeedbackHandler, createAiHealthCheck } from './handlers'
+import { createAiHandlers, createFeedbackHandler, createAiHealthCheck, aiSpend } from './handlers'
 import { renderLP, renderCharPage, renderStarsPage, renderPairPage, elementsOfSlug, CONTENT_LANGS } from './pages'
 import { CHAR_BY_SLUG } from './characters'
 import * as stats from './stats'
@@ -157,7 +157,7 @@ app.get('/api/stats', async (req, res) => {
   const ai = await aiHealth()
   // AIが落ちていることは 200 の中身ではなく**HTTPステータス**でも分かるようにする。
   // 外形監視(UptimeRobot 等)をこのURLに向けるだけで通知が飛ぶ
-  return res.status(ai.ok ? 200 : 503).json({ ai, stats: snapshot })
+  return res.status(ai.ok ? 200 : 503).json({ ai, spend: aiSpend(), stats: snapshot })
 })
 
 app.post('/api/ai-pair-chat', handlers.pairChat)

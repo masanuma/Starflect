@@ -48,8 +48,18 @@ export interface PageStrings {
    * データの扱い・AI相談の位置づけ・占いの位置づけを**1か所に集約**する。
    * 画面のあちこちに注記を散らすと世界観が壊れるので、アプリ側からはここへ寄せる。
    */
+  /**
+   * ヒーローに出す小さなバッジ。**注記はここに増やさない**（世界観が壊れるため）。
+   * 中身の説明は `aboutAppItems` の1項目として下にまとめる。
+   */
+  betaBadge: string
   aboutAppTitle: string
-  aboutAppItems: [{ t: string; d: string }, { t: string; d: string }, { t: string; d: string }]
+  aboutAppItems: [
+    { t: string; d: string },
+    { t: string; d: string },
+    { t: string; d: string },
+    { t: string; d: string },
+  ]
   /** 相性の紹介ページ(/pair)＝相性シェアの着地先 */
   pairTitle: string
   pairLead: string
@@ -96,11 +106,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['毎日の占いは、', 'あなただけのものです。'],
     ],
     moreDetail: 'もっと詳しく',
+    betaBadge: 'テスト公開中',
     aboutAppTitle: 'このアプリについて',
     aboutAppItems: [
       { t: '星の計算はあなたの端末の中で', d: '生年月日と時刻から星の位置を計算する処理は、すべてお使いの端末内で行われます。入力した生年月日そのものを送信することはありません。' },
       { t: '相談室でAIに送られるもの', d: 'ほしキャラに相談したときだけ、計算結果(星の配置と、あなたが書いたメッセージ)がAIに送られます。名前は入力した場合のみ含まれます。' },
       { t: '占いとして楽しんでください', d: 'この診断と相談室は娯楽としてお楽しみいただくものです。医療・カウンセリング・法律・投資などの専門的な助言ではありません。心や体の不調、安全にかかわることは、専門の窓口や医療機関にご相談ください。' },
+      { t: 'いまはテスト公開中です', d: '内容や見せ方を調整しながら育てている段階なので、占いの文章やアプリの作りは今後変わることがあります。記録はお使いの端末にだけ保存されるため、ブラウザのデータを消すと失われます。機種変更のときは、ページ下部の「データの引き継ぎ」からファイルに保存しておいてください。混み合っているときは、その日のAIの読み上げをお休みすることがあります。' },
     ],
     pairTitle: 'ふたりの相性を占う',
     pairLead: '相手の生年月日だけで、ふたりの相性がわかります。太陽星座と月星座を掛け合わせた「ほしキャラ」同士の相性なので、雑誌の12星座占いより細かく出ます。',
@@ -148,11 +160,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['The reading of each day', 'belongs to you alone.'],
     ],
     moreDetail: 'Tell me more',
+    betaBadge: 'Early release',
     aboutAppTitle: 'About this app',
     aboutAppItems: [
       { t: 'The astrology math runs on your device', d: 'Working out where the planets were from your birth date and time happens entirely in your browser. Your birth date itself is never sent to us.' },
       { t: 'What reaches the AI in the chat room', d: 'Only when you talk to your Hoshi-Kyara: the calculated chart and the message you wrote are sent to the AI. Your name is included only if you entered one.' },
       { t: 'Please enjoy it as entertainment', d: 'This reading and the chat room are for entertainment. They are not medical, counselling, legal or financial advice. For your health, your mental wellbeing or anything involving your safety, please contact a professional service.' },
+      { t: 'This is an early release', d: 'We are still shaping how it looks and reads, so the wording and the app itself may change. Your records are kept only on your own device, so clearing your browser data will lose them — before changing phones, save a file from “Move your data” at the bottom of the page. On busy days the AI readings may take a rest until the next day.' },
     ],
     pairTitle: 'See how you two match',
     pairLead: 'Just their birth date is enough. Because it matches Hoshi-Kyara — Sun sign blended with Moon sign — it goes finer than a magazine horoscope.',
@@ -200,11 +214,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['La lectura de cada día', 'es solo tuya.'],
     ],
     moreDetail: 'Cuéntame más',
+    betaBadge: 'Versión beta',
     aboutAppTitle: 'Sobre esta app',
     aboutAppItems: [
       { t: 'Los cálculos se hacen en tu dispositivo', d: 'Calcular la posición de los astros a partir de tu fecha y hora de nacimiento ocurre por completo en tu navegador. Tu fecha de nacimiento nunca se envía.' },
       { t: 'Qué llega a la IA en el consultorio', d: 'Solo cuando hablas con tu Hoshi-Kyara: se envían a la IA la carta calculada y el mensaje que escribiste. Tu nombre se incluye solo si lo introdujiste.' },
       { t: 'Disfrútalo como entretenimiento', d: 'Esta lectura y el consultorio son entretenimiento. No son consejo médico, psicológico, legal ni financiero. Para tu salud, tu bienestar emocional o cualquier cosa que afecte a tu seguridad, acude a un servicio profesional.' },
+      { t: 'Es una versión de prueba', d: 'Seguimos ajustando cómo se ve y cómo se lee, así que los textos y la app pueden cambiar. Tus registros se guardan solo en tu dispositivo, por lo que se pierden si borras los datos del navegador: antes de cambiar de móvil, guarda un archivo desde «Llevarte tus datos» al final de la página. En días de mucha actividad, las lecturas con IA pueden descansar hasta el día siguiente.' },
     ],
     pairTitle: 'Ved vuestra compatibilidad',
     pairLead: 'Basta con su fecha de nacimiento. Al comparar Hoshi-Kyara —el signo solar combinado con el lunar— sale más fino que un horóscopo de revista.',
@@ -252,11 +268,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['La lecture de chaque jour', 'n’appartient qu’à toi.'],
     ],
     moreDetail: 'En savoir plus',
+    betaBadge: 'Version bêta',
     aboutAppTitle: 'À propos de cette application',
     aboutAppItems: [
       { t: 'Les calculs se font sur ton appareil', d: 'Le calcul de la position des astres à partir de ta date et de ton heure de naissance se fait entièrement dans ton navigateur. Ta date de naissance n’est jamais envoyée.' },
       { t: 'Ce qui parvient à l’IA dans le salon', d: 'Uniquement quand tu parles à ton Hoshi-Kyara : le thème calculé et le message que tu as écrit sont envoyés à l’IA. Ton prénom n’est inclus que si tu l’as saisi.' },
       { t: 'À prendre comme un divertissement', d: 'Cette lecture et le salon sont un divertissement. Ce ne sont pas des conseils médicaux, psychologiques, juridiques ou financiers. Pour ta santé, ton moral ou tout ce qui touche à ta sécurité, adresse-toi à un service professionnel.' },
+      { t: 'C’est une version d’essai', d: 'Nous ajustons encore l’apparence et les textes : les formulations et l’application elle-même peuvent évoluer. Tes données sont conservées uniquement sur ton appareil et disparaissent si tu effaces les données du navigateur — avant de changer de téléphone, enregistre un fichier depuis « Emporter tes données » en bas de page. Les jours de forte affluence, les lectures par l’IA peuvent se mettre en pause jusqu’au lendemain.' },
     ],
     pairTitle: 'Voyez votre compatibilité',
     pairLead: 'Sa date de naissance suffit. Comme on compare les Hoshi-Kyara — signe solaire croisé avec signe lunaire — c’est plus fin qu’un horoscope de magazine.',
@@ -304,11 +322,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['La lettura di ogni giorno', 'è solo tua.'],
     ],
     moreDetail: 'Dimmi di più',
+    betaBadge: 'Versione beta',
     aboutAppTitle: 'Su questa app',
     aboutAppItems: [
       { t: 'I calcoli avvengono sul tuo dispositivo', d: 'Il calcolo della posizione degli astri dalla tua data e ora di nascita avviene interamente nel tuo browser. La tua data di nascita non viene mai inviata.' },
       { t: 'Cosa arriva all’IA nello spazio di consulenza', d: 'Solo quando parli con il tuo Hoshi-Kyara: il tema calcolato e il messaggio che hai scritto vengono inviati all’IA. Il tuo nome è incluso solo se lo hai inserito.' },
       { t: 'Prendilo come un intrattenimento', d: 'Questa lettura e lo spazio di consulenza sono un intrattenimento. Non sono consigli medici, psicologici, legali o finanziari. Per la tua salute, il tuo benessere o qualsiasi cosa riguardi la tua sicurezza, rivolgiti a un servizio professionale.' },
+      { t: 'È una versione di prova', d: 'Stiamo ancora sistemando l’aspetto e i testi, quindi le parole e l’app stessa possono cambiare. I tuoi dati restano solo sul tuo dispositivo e vanno persi se cancelli i dati del browser: prima di cambiare telefono, salva un file da «Porta con te i tuoi dati» in fondo alla pagina. Nei giorni più affollati le letture con l’IA possono fermarsi fino al giorno dopo.' },
     ],
     pairTitle: 'Scoprite la vostra affinità',
     pairLead: 'Basta la sua data di nascita. Confrontando gli Hoshi-Kyara — segno solare incrociato con quello lunare — è più preciso di un oroscopo da rivista.',
@@ -356,11 +376,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['A leitura de cada dia', 'é só sua.'],
     ],
     moreDetail: 'Saiba mais',
+    betaBadge: 'Versão beta',
     aboutAppTitle: 'Sobre este app',
     aboutAppItems: [
       { t: 'Os cálculos acontecem no seu aparelho', d: 'Calcular a posição dos astros a partir da sua data e hora de nascimento acontece inteiramente no seu navegador. A sua data de nascimento nunca é enviada.' },
       { t: 'O que chega à IA no espaço de consulta', d: 'Só quando você fala com o seu Hoshi-Kyara: o mapa calculado e a mensagem que você escreveu são enviados à IA. O seu nome só é incluído se você o tiver informado.' },
       { t: 'Aproveite como entretenimento', d: 'Esta leitura e o espaço de consulta são entretenimento. Não são orientação médica, psicológica, jurídica ou financeira. Para a sua saúde, o seu bem-estar ou qualquer coisa que envolva a sua segurança, procure um serviço profissional.' },
+      { t: 'É uma versão de teste', d: 'Ainda estamos ajustando a aparência e os textos, então as palavras e o próprio app podem mudar. Seus registros ficam só no seu aparelho e se perdem se você limpar os dados do navegador — antes de trocar de celular, salve um arquivo em “Leve seus dados”, no rodapé da página. Em dias movimentados, as leituras com IA podem descansar até o dia seguinte.' },
     ],
     pairTitle: 'Vejam a combinação de vocês',
     pairLead: 'Basta a data de nascimento dela. Como comparamos os Hoshi-Kyara — signo solar cruzado com o lunar — sai mais fino que um horóscopo de revista.',
@@ -408,11 +430,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['매일의 운세는,', '당신만의 것입니다.'],
     ],
     moreDetail: '더 자세히',
+    betaBadge: '테스트 공개 중',
     aboutAppTitle: '이 앱에 대해',
     aboutAppItems: [
       { t: '별 계산은 당신의 기기 안에서', d: '생년월일과 시각으로 별의 위치를 계산하는 처리는 모두 사용 중인 기기 안에서 이루어집니다. 입력한 생년월일 자체를 전송하지는 않습니다.' },
       { t: '상담실에서 AI에게 전달되는 것', d: '호시캐릭터에게 상담할 때만, 계산 결과(별의 배치와 당신이 쓴 메시지)가 AI에게 전달됩니다. 이름은 입력한 경우에만 포함됩니다.' },
       { t: '점으로 즐겨 주세요', d: '이 진단과 상담실은 오락으로 즐기시는 것입니다. 의료·상담·법률·투자 등의 전문적인 조언이 아닙니다. 마음이나 몸의 이상, 안전에 관한 일은 전문 창구나 의료기관에 상담해 주세요.' },
+      { t: '지금은 테스트 공개 중입니다', d: '내용과 보여 주는 방식을 다듬어 가는 단계라, 점의 문장이나 앱의 구성이 앞으로 바뀔 수 있습니다. 기록은 사용 중인 기기에만 저장되므로 브라우저 데이터를 지우면 사라집니다. 기기를 바꾸기 전에 페이지 아래쪽 「데이터 옮기기」에서 파일로 저장해 두세요. 이용이 몰리는 날에는 그날의 AI 읽기를 쉬는 경우가 있습니다.' },
     ],
     pairTitle: '두 사람의 궁합 보기',
     pairLead: '상대의 생년월일만 있으면 됩니다. 태양 별자리와 달 별자리를 곱한 ‘호시캐릭터’끼리의 궁합이라, 잡지 별자리 운세보다 세밀하게 나와요.',

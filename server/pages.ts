@@ -78,6 +78,8 @@ h1,h2,h3{font-family:'Zen Maru Gothic',sans-serif}
 .hero{text-align:center;padding:24px 0 28px}
 .hero-mascot{width:116px;margin:0 auto 10px;filter:drop-shadow(0 10px 20px rgba(138,99,221,.28))}
 .hero-mascot svg{display:block}
+/* 「テスト公開中」。見えるが主張しない大きさに留める＝世界観より先に注記が目に入らないように */
+.beta{display:inline-block;margin:0 auto 10px;padding:3px 12px;border:1px solid var(--line);border-radius:999px;font-size:11.5px;color:var(--ink-sub);letter-spacing:.04em}
 .hero h1{font-size:30px;font-weight:800;line-height:1.4;margin-bottom:12px}
 .hero .grad{background:linear-gradient(120deg,var(--pink),var(--violet));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{color:var(--ink-sub);font-size:17px;line-height:1.9;margin:0 auto 18px;text-align:center;max-width:24em}@media(max-width:400px){.hero p{font-size:16px}}
@@ -294,6 +296,12 @@ export function renderLP(lang: Lang): string {
   const body = `
 <div class="hero">
   <div class="hero-mascot">${brand(96)}</div>
+  <!--
+    「まだ正式版ではない」を伝える唯一の表示。ここ以外には増やさない。
+    ボタンの下（heroNote）に足すと、以前指摘のあった「同じ場所に注記が二重」に戻ってしまう。
+    中身の説明は下部の「このアプリについて」に1項目としてまとめてある。
+  -->
+  <p class="beta">${esc(P.betaBadge)}</p>
   <h1>${esc(t.home.tagline1)}</h1>
   <!-- 説明はボタンの手前に一本化する。上と下で挟むと、同じ話が2か所にあるように見える -->
   <p>${breakAtComma(t.home.tagline2)}</p>
