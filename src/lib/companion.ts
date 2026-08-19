@@ -114,6 +114,8 @@ export interface CompanionState {
   lastHitAskAt?: string
   /** 全期間の記録を圧縮した「人となり」(層2の第2の窓) */
   persona?: Persona
+  /** 相棒ホームで感想を送った日(ISO)。**一度送ったら二度と聞かない**ための記録 */
+  feedbackSentAt?: string
   /**
    * 累計シグナル(=「ごほうび地図」の通貨)。使うほど貯まる一方で、減らない・罰しない。
    * 連打で薄く稼げないよう、気分は「その日はじめて残したとき」だけ+1・会話は1往復+1・運勢閲覧は1日+1で数える。
@@ -632,6 +634,34 @@ export function currentAir(
   if (gap) air.gap = gap
   if (hit) air.hit = hit
   return air
+}
+
+/* ---------- 相棒ホームで感想を聞く ---------- */
+
+/**
+ * 感想を聞き始めるシグナル数。1日に2〜3たまるので、だいたい**2〜3日使ってから**になる。
+ * 初日に聞いても「まだ分からない」しか返らないし、毎日の面がまだ体験できていない。
+ */
+const FEEDBACK_MIN_SIGNALS = 5
+
+/**
+ * 相棒ホームで感想を聞くべきか。
+ *
+ * **毎日は聞かない。一度送ったら二度と聞かない。**
+ * 診断結果の画面には最初から感想欄があるが、毎日の運勢・答え合わせ・1日1問といった
+ * **いちばん新しい面には受け口が無かった**（＝いちばん感想が欲しいところが取れていなかった）。
+ */
+export function shouldAskFeedback(state: CompanionState): boolean {
+  if (state.feedbackSentAt) return false
+  return currentSignals(state) >= FEEDBACK_MIN_SIGNALS
+}
+
+/** 感想を送ったことを記録する（二度と聞かないため） */
+export function markFeedbackSent(state: CompanionState, now: Date = new Date()): CompanionState {
+  const base = loadCompanion() ?? state
+  const next: CompanionState = { ...base, feedbackSentAt: now.toISOString() }
+  saveCompanion(next)
+  return next
 }
 
 /* ---------- 1日1問（遊びの二択） ---------- */

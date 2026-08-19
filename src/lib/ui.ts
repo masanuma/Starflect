@@ -304,6 +304,13 @@ export interface UIStrings {
     hitSkip: string
     hitThanks: string
     /**
+     * 相棒ホームで聞く感想。診断結果の「この診断はどうでしたか？」とは別の聞き方にする
+     * （聞きたいのは毎日の運勢・答え合わせ・1日1問といった、使い続けた先の体験）。
+     * 数日使ってから1回だけ聞き、送ったら二度と出さない。
+     */
+    feedbackTitle: string
+    feedbackSub: string
+    /**
      * 1日1問の遊びの二択。気分タップの2問目として、領域の代わりに数日に1度だけ出す。
      * `PickId` で型付けしているので、どれか1問でも訳が抜けると型チェックで落ちる。
      */
@@ -620,6 +627,8 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'わかんない',
       hitSkip: '答えない',
       hitThanks: '教えてくれてありがとうございます。次に生かしますね。',
+      feedbackTitle: 'ここまで使ってみて、どうですか？',
+      feedbackSub: '毎日の運勢のこと、気になるところ、なんでも聞かせてください',
       picks: {
         alone: { q: 'もし今日、1時間だけ自由になったら？', a: ['ひとりで過ごす', '誰かと過ごす'] },
         decide: { q: '何かを決めるとき、どっち？', a: ['ぴんときたほう', '調べてから'] },
@@ -944,6 +953,8 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'Not sure',
       hitSkip: 'Skip',
       hitThanks: 'Thank you for telling me. I’ll keep it in mind.',
+      feedbackTitle: 'How is it going so far?',
+      feedbackSub: 'Anything about the daily readings, or anything that feels off — I’d love to hear it',
       picks: {
         alone: { q: 'If you had one free hour today?', a: ['Spend it alone', 'Spend it with someone'] },
         decide: { q: 'When you decide something, which is it?', a: ['Go with my gut', 'Look into it first'] },
@@ -1267,6 +1278,8 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'No sabría decir',
       hitSkip: 'Ahora no',
       hitThanks: 'Gracias por contármelo. Lo tendré en cuenta.',
+      feedbackTitle: '¿Qué tal te va hasta ahora?',
+      feedbackSub: 'Lo que sea sobre las lecturas diarias, o algo que no encaje: me encantaría saberlo',
       picks: {
         alone: { q: 'Si hoy tuvieras una hora libre…', a: ['Pasarla a solas', 'Pasarla con alguien'] },
         decide: { q: 'Cuando decides algo, ¿qué haces?', a: ['Seguir la intuición', 'Informarme antes'] },
@@ -1590,6 +1603,8 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'Je ne sais pas',
       hitSkip: 'Passer',
       hitThanks: 'Merci de me le dire. J’en tiendrai compte.',
+      feedbackTitle: 'Comment ça se passe jusqu’ici ?',
+      feedbackSub: 'Tout ce qui concerne les lectures quotidiennes, ou ce qui te gêne : dis-le-moi',
       picks: {
         alone: { q: 'Si tu avais une heure libre aujourd’hui ?', a: ['La passer seul·e', 'La passer avec quelqu’un'] },
         decide: { q: 'Pour décider, tu fais comment ?', a: ['Au feeling', 'Après avoir cherché'] },
@@ -1913,6 +1928,8 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'Non saprei',
       hitSkip: 'Salta',
       hitThanks: 'Grazie per avermelo detto. Ne terrò conto.',
+      feedbackTitle: 'Come sta andando finora?',
+      feedbackSub: 'Qualsiasi cosa sulle letture quotidiane, o qualcosa che non torna: raccontamelo',
       picks: {
         alone: { q: 'Se oggi avessi un’ora libera?', a: ['La passo da solo/a', 'La passo con qualcuno'] },
         decide: { q: 'Quando decidi, come fai?', a: ['Vado d’istinto', 'Prima mi informo'] },
@@ -2236,6 +2253,8 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: 'Não sei dizer',
       hitSkip: 'Agora não',
       hitThanks: 'Obrigada por contar. Vou levar isso em conta.',
+      feedbackTitle: 'Como está sendo até agora?',
+      feedbackSub: 'Qualquer coisa sobre as leituras diárias, ou algo que não encaixe: quero saber',
       picks: {
         alone: { q: 'Se hoje tivesse uma hora livre?', a: ['Ficar sozinho/a', 'Ficar com alguém'] },
         decide: { q: 'Na hora de decidir, como é?', a: ['Vou na intuição', 'Pesquiso antes'] },
@@ -2559,6 +2578,8 @@ const UI: Record<Lang, UIStrings> = {
       hitDunno: '잘 모르겠어요',
       hitSkip: '나중에',
       hitThanks: '알려 주셔서 고마워요. 다음에 참고할게요.',
+      feedbackTitle: '지금까지 어떠세요?',
+      feedbackSub: '매일의 운세에 대해서든, 마음에 걸리는 점이든 무엇이든 들려주세요',
       picks: {
         alone: { q: '오늘 한 시간이 생긴다면?', a: ['혼자 보내기', '누군가와 보내기'] },
         decide: { q: '뭔가 정할 때는 어느 쪽?', a: ['느낌이 오는 쪽', '알아보고 나서'] },

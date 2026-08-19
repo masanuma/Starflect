@@ -16,6 +16,8 @@ import {
   recordPick,
   personaPicks,
   PICK_IDS,
+  shouldAskFeedback,
+  markFeedbackSent,
 } from '../lib/companion'
 import { starTypeOf } from '../lib/startypes'
 import { readFortune } from '../lib/fortune'
@@ -24,6 +26,7 @@ import HoshiKyaraMascot from './HoshiKyaraMascot'
 import StarReading from './StarReading'
 import PartyCard from './PartyCard'
 import RewardMap from './RewardMap'
+import Feedback from './Feedback'
 import AiChat from './AiChat'
 import { buildChatContext, chatStorageKey, userSays, fetchPersona, facetOfNow, timeOfDay } from '../lib/aiChat'
 import { useUI, quoted } from '../lib/ui'
@@ -47,6 +50,8 @@ export default function Companion({ state, onHome, onPair }: Props) {
   const [daysSince] = useState(() => daysSinceLastVisit(state))
   // ごほうび地図の現在シグナル。タップ・会話・運勢閲覧で増える(端末の最新を反映)
   const [signals, setSignals] = useState(() => currentSignals(state))
+  // 出すかどうかはマウント時に1度だけ決める。使っている最中に急に湧いて出ないように
+  const [askFeedback, setAskFeedback] = useState(() => shouldAskFeedback(loadCompanion() ?? state))
   const refreshSignals = () => setSignals(currentSignals(loadCompanion() ?? state))
 
   // 夜の振り返り: 今日すでにタップ済みなら 'done' で復元(同日に何度も聞かない)
@@ -288,6 +293,25 @@ export default function Companion({ state, onHome, onPair }: Props) {
       <RewardMap signals={signals} chart={state.chart} starName={starType?.type.name ?? ''} collapsible />
 
       <PartyCard data={state.chart} collapsedByDefault />
+
+      {/*
+        毎日の面の感想を聞く受け口。診断結果の画面には最初からあったが、
+        毎日の運勢・答え合わせ・1日1問といった**いちばん新しい面には無かった**。
+        数日使ってから1回だけ聞き、送ったら二度と出さない（毎日聞くと宿題になる）。
+      */}
+      {askFeedback && (
+        <Feedback
+          page="companion"
+          starType={state.starType}
+          chart={state.chart}
+          title={t.companion.feedbackTitle}
+          sub={t.companion.feedbackSub}
+          onSent={() => {
+            markFeedbackSent(state)
+            setAskFeedback(false)
+          }}
+        />
+      )}
 
       <div className="result-actions">
         <button className="ghost" onClick={onPair}>

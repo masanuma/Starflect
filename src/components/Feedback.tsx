@@ -13,11 +13,19 @@ export default function Feedback({
   page,
   starType,
   chart,
+  title,
+  sub,
+  onSent,
 }: {
   page: string
   starType?: string
   /** 感想を聞くのも自分のほしキャラ。あればマスコットを出す */
   chart?: ChartData
+  /** 見出しの差し替え。既定は診断結果向けの文言なので、毎日の面では別の聞き方をする */
+  title?: string
+  sub?: string
+  /** 送信されたことを親に伝える（二度と聞かないよう記録するため） */
+  onSent?: () => void
 }) {
   const { lang } = useLang()
   const t = useUI()
@@ -40,6 +48,7 @@ export default function Feedback({
     void sendFeedback({ rating, comment: comment.trim() || undefined, lang, starType, page })
     track('feedback', { rating, page })
     setSent(true)
+    onSent?.()
   }
 
   if (sent) {
@@ -59,8 +68,8 @@ export default function Feedback({
           </div>
         )}
         <div>
-          <p className="card-title">{t.feedback.title}</p>
-          <p className="card-sub">{t.feedback.sub}</p>
+          <p className="card-title">{title ?? t.feedback.title}</p>
+          <p className="card-sub">{sub ?? t.feedback.sub}</p>
         </div>
       </header>
 
