@@ -26,6 +26,7 @@ import HoshiKyaraMascot from './HoshiKyaraMascot'
 import StarReading from './StarReading'
 import PartyCard from './PartyCard'
 import RewardMap from './RewardMap'
+import InviteTeaser from './InviteTeaser'
 import Feedback from './Feedback'
 import DayCheck from './DayCheck'
 import AiChat from './AiChat'
@@ -183,6 +184,9 @@ export default function Companion({ state, onHome, onPair }: Props) {
       )}
       <p className="companion-greeting">{greeting}</p>
       <h2 className="companion-name">{starType ? quoted(starType.type.name) : ''}</h2>
+
+      {/* すでに相棒がいる人が招待リンクで来た場合。招待は「今日の運勢」より新しい出来事なので上に置く */}
+      <InviteTeaser mySlug={state.starType} onPair={onPair} />
 
       {/* 毎日ひらく理由＝今日の運勢。ここを一等地に置く。
           地図や星の内訳は「たまに見る」ものなので、相談室・振り返りより下へ送る */}

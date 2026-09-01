@@ -375,6 +375,14 @@ export interface UIStrings {
     pairHeading: string
     pairText: (a: string, b: string, percent: number, nickname: string) => string
   }
+  /** 相性の招待ループ。招待リンク( ?i=<slug> )で来た人に出すティザー */
+  invite: {
+    heading: string
+    senderIs: (name: string) => string
+    youTwo: (nickname: string) => string
+    note: string
+    cta: string
+  }
 }
 
 const UI: Record<Lang, UIStrings> = {
@@ -702,7 +710,7 @@ const UI: Record<Lang, UIStrings> = {
     },
     share: {
       heading: '結果を友だちにもシェア',
-      text: (name) => `私のほしキャラは${name}でした✨ あなたは16キャラのどれ？`,
+      text: (name) => `私のほしキャラは${name}でした✨ あなたは16キャラのどれ？診断すると、ふたりの相性も分かるよ`,
       hashtags: ['ほしキャラ診断'],
       native: 'シェアする',
       copy: 'リンクをコピー',
@@ -710,6 +718,13 @@ const UI: Record<Lang, UIStrings> = {
       pairHeading: '結果をシェアする',
       pairText: (a, b, percent, nickname) =>
         `「${a}」×「${b}」の相性は${percent}%、${nickname}でした✨ あなたたちの相性も占えます`,
+    },
+    invite: {
+      heading: 'この診断を送ってくれた人がいます',
+      senderIs: (name) => `送ってくれた人のほしキャラは${name}。`,
+      youTwo: (nickname) => `ふたりは「${nickname}」`,
+      note: 'ここまではキャラ同士の相性。ふたりの生まれた日から見ると、もっとくわしく分かります。',
+      cta: 'ふたりの相性をくわしく見る',
     },
   },
   en: {
@@ -1036,13 +1051,20 @@ const UI: Record<Lang, UIStrings> = {
     },
     share: {
       heading: 'Share your result with friends',
-      text: (name) => `My Hoshi-Kyara is ${name} ✨ Which of the 16 are you?`,
+      text: (name) => `My Hoshi-Kyara is ${name} ✨ Which of the 16 are you? Find out — and see how we match`,
       hashtags: ['HoshiKyara'],
       native: 'Share',
       copy: 'Copy link',
       copied: 'Copied ✓',
       pairHeading: 'Share the result',
       pairText: (a, b, percent, nickname) => `${a} × ${b} scored ${percent}% — ${nickname}✨ Check your own match too`,
+    },
+    invite: {
+      heading: 'Someone sent you this reading',
+      senderIs: (name) => `Their Hoshi-Kyara is ${name}.`,
+      youTwo: (nickname) => `You two: ${nickname}`,
+      note: "That's just the character match. Your birth dates together tell a much richer story.",
+      cta: 'See your full compatibility',
     },
   },
   es: {
@@ -1369,13 +1391,20 @@ const UI: Record<Lang, UIStrings> = {
     },
     share: {
       heading: 'Comparte tu resultado con amigos',
-      text: (name) => `Mi Hoshi-Kyara es ${name} ✨ ¿Cuál de los 16 eres tú?`,
+      text: (name) => `Mi Hoshi-Kyara es ${name} ✨ ¿Cuál de los 16 eres tú? Descúbrelo y mira nuestra compatibilidad`,
       hashtags: ['HoshiKyara'],
       native: 'Compartir',
       copy: 'Copiar enlace',
       copied: 'Copiado ✓',
       pairHeading: 'Comparte el resultado',
       pairText: (a, b, percent, nickname) => `${a} × ${b}: ${percent}% de compatibilidad, ${nickname}✨ Descubre también la vuestra`,
+    },
+    invite: {
+      heading: 'Alguien te envió esta lectura',
+      senderIs: (name) => `Su Hoshi-Kyara es ${name}.`,
+      youTwo: (nickname) => `Vosotros dos: ${nickname}`,
+      note: 'Esto es solo la afinidad entre personajes. Con vuestras fechas de nacimiento, la lectura es mucho más profunda.',
+      cta: 'Ver vuestra compatibilidad completa',
     },
   },
   fr: {
@@ -1702,13 +1731,20 @@ const UI: Record<Lang, UIStrings> = {
     },
     share: {
       heading: 'Partage ton résultat avec tes amis',
-      text: (name) => `Mon Hoshi-Kyara est ${name} ✨ Lequel des 16 es-tu ?`,
+      text: (name) => `Mon Hoshi-Kyara est ${name} ✨ Lequel des 16 es-tu ? Découvre-le et vois notre compatibilité`,
       hashtags: ['HoshiKyara'],
       native: 'Partager',
       copy: 'Copier le lien',
       copied: 'Copié ✓',
       pairHeading: 'Partager le résultat',
       pairText: (a, b, percent, nickname) => `${a} × ${b} : ${percent}% de compatibilité, ${nickname}✨ Découvrez la vôtre aussi`,
+    },
+    invite: {
+      heading: "Quelqu'un t'a envoyé cette lecture",
+      senderIs: (name) => `Son Hoshi-Kyara est ${name}.`,
+      youTwo: (nickname) => `Vous deux : ${nickname}`,
+      note: "Ce n'est que l'affinité entre personnages. Avec vos dates de naissance, la lecture est bien plus riche.",
+      cta: 'Voir votre compatibilité complète',
     },
   },
   it: {
@@ -2035,13 +2071,20 @@ const UI: Record<Lang, UIStrings> = {
     },
     share: {
       heading: 'Condividi il risultato con gli amici',
-      text: (name) => `Il mio Hoshi-Kyara è ${name} ✨ Quale dei 16 sei tu?`,
+      text: (name) => `Il mio Hoshi-Kyara è ${name} ✨ Quale dei 16 sei tu? Scoprilo e guarda la nostra affinità`,
       hashtags: ['HoshiKyara'],
       native: 'Condividi',
       copy: 'Copia link',
       copied: 'Copiato ✓',
       pairHeading: 'Condividi il risultato',
       pairText: (a, b, percent, nickname) => `${a} × ${b}: ${percent}% di affinità, ${nickname}✨ Scoprite anche la vostra`,
+    },
+    invite: {
+      heading: 'Qualcuno ti ha inviato questa lettura',
+      senderIs: (name) => `Il suo Hoshi-Kyara è ${name}.`,
+      youTwo: (nickname) => `Voi due: ${nickname}`,
+      note: "Questa è solo l'affinità tra personaggi. Con le vostre date di nascita, la lettura è molto più ricca.",
+      cta: 'Vedi la vostra affinità completa',
     },
   },
   pt: {
@@ -2368,13 +2411,20 @@ const UI: Record<Lang, UIStrings> = {
     },
     share: {
       heading: 'Compartilhe seu resultado com amigos',
-      text: (name) => `Meu Hoshi-Kyara é ${name} ✨ Qual dos 16 é você?`,
+      text: (name) => `Meu Hoshi-Kyara é ${name} ✨ Qual dos 16 é você? Descubra e veja nossa combinação`,
       hashtags: ['HoshiKyara'],
       native: 'Compartilhar',
       copy: 'Copiar link',
       copied: 'Copiado ✓',
       pairHeading: 'Compartilhar o resultado',
       pairText: (a, b, percent, nickname) => `${a} × ${b}: ${percent}% de combinação, ${nickname}✨ Descubram a de vocês também`,
+    },
+    invite: {
+      heading: 'Alguém te enviou esta leitura',
+      senderIs: (name) => `O Hoshi-Kyara dessa pessoa é ${name}.`,
+      youTwo: (nickname) => `Vocês dois: ${nickname}`,
+      note: 'Isso é só a combinação entre personagens. Com as datas de nascimento de vocês, a leitura fica muito mais rica.',
+      cta: 'Ver a compatibilidade completa',
     },
   },
   ko: {
@@ -2701,13 +2751,20 @@ const UI: Record<Lang, UIStrings> = {
     },
     share: {
       heading: '결과를 친구에게 공유',
-      text: (name) => `내 호시캐릭터는 ${name} ✨ 당신은 16캐릭터 중 누구?`,
+      text: (name) => `내 호시캐릭터는 ${name} ✨ 당신은 16캐릭터 중 누구? 진단하면 우리 궁합도 볼 수 있어요`,
       hashtags: ['호시캐릭터진단'],
       native: '공유하기',
       copy: '링크 복사',
       copied: '복사됨 ✓',
       pairHeading: '결과 공유하기',
       pairText: (a, b, percent, nickname) => `${a} × ${b} 궁합은 ${percent}%, ${nickname}였어요✨ 두 사람의 궁합도 볼 수 있어요`,
+    },
+    invite: {
+      heading: '이 진단을 보내준 사람이 있어요',
+      senderIs: (name) => `보내준 사람의 호시캐릭터는 ${name}.`,
+      youTwo: (nickname) => `두 사람은 ${nickname}`,
+      note: '여기까지는 캐릭터끼리의 궁합이에요. 두 사람의 생년월일로 보면 훨씬 자세히 알 수 있어요.',
+      cta: '두 사람의 궁합 자세히 보기',
     },
   },
 }

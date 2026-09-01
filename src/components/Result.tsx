@@ -6,6 +6,7 @@ import AiChat from './AiChat'
 import StarReading from './StarReading'
 import PartyCard from './PartyCard'
 import ShareButtons from './ShareButtons'
+import InviteTeaser from './InviteTeaser'
 import Feedback from './Feedback'
 import ResultReveal from './ResultReveal'
 import { createCompanion, loadCompanion, markForecastSeen } from '../lib/companion'
@@ -150,6 +151,9 @@ export default function Result({ data, onHome, onPair }: Props) {
           </div>
         </section>
       )}
+
+      {/* 招待リンクで来た人には「送ってくれた人との相性」を最初に見せる。誘われた人のいちばんの関心はここ */}
+      <InviteTeaser mySlug={starSlug} onPair={onPair} />
 
       {/* 初回は情報量が多いので、この画面の歩き方と“いちばんのおすすめ”を先に示す */}
       {isFirst && (

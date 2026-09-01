@@ -15,8 +15,9 @@ import { useUI } from './lib/ui'
 import { getLang } from './lib/i18n'
 import { hasCompanion, loadCompanion } from './lib/companion'
 import type { CompanionState } from './lib/companion'
-import { initAnalytics, getConsent, setConsent } from './lib/analytics'
+import { initAnalytics, getConsent, setConsent, track } from './lib/analytics'
 import type { Consent } from './lib/analytics'
+import { saveInvite, loadInvite } from './lib/invite'
 
 type Screen =
   | { page: 'home' }
@@ -32,10 +33,15 @@ const lpPath = () => (getLang() === 'ja' ? '/' : `/${getLang()}`)
 export default function App() {
   // 2回目以降(相棒がいる)は相棒ホームを起点にする
   const [screen, setScreen] = useState<Screen>(() => {
-    // 相性ページ(/pair)のCTAから来た人は相性フォームを直接ひらく。
-    // 相性を見たくて来ているので、相棒がいても相棒ホームには寄せない。
-    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('mode') === 'pair') {
-      return { page: 'pairForm' }
+    if (typeof window !== 'undefined') {
+      const q = new URLSearchParams(window.location.search)
+      // 招待リンク( ?i=<slug> )の預かりは**初回レンダーより前**にやる。
+      // InviteTeaser が初回レンダー中に loadInvite() を読むので、useEffect では間に合わない
+      const i = q.get('i')
+      if (i) saveInvite(i)
+      // 相性ページ(/pair)のCTAから来た人は相性フォームを直接ひらく。
+      // 相性を見たくて来ているので、相棒がいても相棒ホームには寄せない。
+      if (q.get('mode') === 'pair') return { page: 'pairForm' }
     }
     const saved = hasCompanion() ? loadCompanion() : null
     return saved ? { page: 'companion', state: saved } : { page: 'home' }
@@ -46,6 +52,9 @@ export default function App() {
   // 起動時、すでに許可済みなら解析を読み込む
   useEffect(() => {
     initAnalytics()
+    // 招待の預かり自体はレンダー前(useState初期化)で済んでいる。ここでは解析だけ
+    const i = new URLSearchParams(window.location.search).get('i')
+    if (i && loadInvite() === i) track('invite_open', { star_type: i })
   }, [])
 
   // /app の <title> は index.html の日本語のまま全言語に出ていた（ペルソナテストで発覚）。

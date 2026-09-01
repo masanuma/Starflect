@@ -4062,3 +4062,61 @@ body {
   font-size: 13px;
   padding: 9px 18px;
 }
+
+/* ── 相性の招待ティザー(招待リンクで来た人だけに出る) ── */
+.invite-card {
+  background: linear-gradient(135deg, var(--pink-faint) 0%, var(--gold-faint) 100%);
+  border: 1.5px solid var(--pink-soft);
+  border-radius: 20px;
+  padding: 18px 20px 20px;
+  margin: 0 0 16px;
+  box-shadow: 0 4px 16px rgba(200, 120, 200, 0.1);
+}
+
+.invite-heading {
+  font-family: var(--font-pop);
+  font-weight: 900;
+  font-size: 14px;
+  color: var(--violet-strong);
+  margin: 0 0 12px;
+}
+
+.invite-body {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.invite-mascot {
+  flex: none;
+}
+
+.invite-line {
+  font-size: 13.5px;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.invite-nick {
+  font-family: var(--font-pop);
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--violet-strong);
+  margin: 0;
+}
+
+.invite-note {
+  font-size: 12.5px;
+  color: var(--ink-sub);
+  margin: 12px 0 12px;
+  line-height: 1.7;
+}
+
+.invite-cta {
+  font-size: 14px;
+  padding: 13px;
+}
+
+.invite-body > div {
+  text-align: left;
+}

@@ -460,6 +460,14 @@ export function renderCharPage(lang: Lang, slug: string): string | null {
 </section>
 
 <a class="back" href="${lpHref(lang)}">${esc(P.backToTop)}</a>
+
+<!--
+  相性の招待ループ: シェア経由(utm_source付き)でこのキャラページに来た人は、
+  ほぼ確実に「このキャラの人」から送られている。CTAに ?i=<slug> を足して
+  アプリへ運ぶと、診断後に「送ってくれた人との相性」ティザーが出る。
+  LPの図鑑から自分で回遊して来た人(utm無し)には付けない=「送ってくれた人」の誤爆を防ぐ。
+-->
+<script>try{if(/[?&]utm_source=/.test(location.search)){document.querySelectorAll('a.cta').forEach(function(a){var h=a.getAttribute('href');if(h&&h.indexOf('/app')===0){a.setAttribute('href',h+(h.indexOf('?')>=0?'&':'?')+'i=${slug}')}})}}catch(e){}</script>
 `
   return layout({
     lang,
