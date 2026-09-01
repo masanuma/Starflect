@@ -289,7 +289,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
         </section>
       )}
 
-      {/* 進み具合(Lv)は見出しに残しつつ、宝箱一覧は畳んでおく */}
+      {/* 気づきの数は見出しに残しつつ、手紙の一覧は畳んでおく */}
       <RewardMap signals={signals} chart={state.chart} starName={starType?.type.name ?? ''} collapsible />
 
       <PartyCard data={state.chart} collapsedByDefault />

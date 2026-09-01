@@ -16,9 +16,9 @@ interface Props {
   /** ほしキャラ名(括弧なしの生の名前。表示時に言語別の括弧を付ける) */
   starName: string
   /**
-   * 宝箱の一覧を畳んでおく(相棒ホーム用)。
+   * 手紙の一覧を畳んでおく(相棒ホーム用)。
    * 見出しと Lv の進捗だけ残すので「どこまで深まったか」は毎日目に入りつつ、
-   * 毎日は見ない宝箱一覧が一等地を占めなくなる。
+   * 毎日は見ない手紙一覧が一等地を占めなくなる。
    */
   collapsible?: boolean
 }
@@ -32,8 +32,8 @@ interface ReportState {
 /**
  * ごほうび地図(縦ロードマップ)。
  * 「使い込むほど、自分についての発見がひらく」を最初から見せておく＝アプリの売り。
- * 宝箱を開くと、AIが出生図×行動ログからその人だけの発見レポートを生成(初回のみ・以降キャッシュ)。
- * 減らない・罰しない。まだ実装していない宝箱は「準備中」。
+ * 手紙を開くと、AIが出生図×行動ログからその人だけの内容を生成(初回のみ・以降キャッシュ)。
+ * 減らない・罰しない。しきい値や生成の仕組みは宝箱時代のまま＝変わったのは服だけ。
  */
 export default function RewardMap({ signals, chart, starName, collapsible = false }: Props) {
   const t = useUI()
@@ -130,8 +130,9 @@ export default function RewardMap({ signals, chart, starName, collapsible = fals
               key={tier.key}
               className={`map-node${tier.unlocked ? ' is-unlocked' : ' is-locked'}${isNext ? ' is-next' : ''}`}
             >
+              {/* 🔒はゲームの語彙。手紙の体裁では「開ける封筒」と「まだ書いている途中」 */}
               <div className="map-node-dot" aria-hidden="true">
-                {tier.unlocked ? '✦' : '🔒'}
+                {tier.unlocked ? '✉' : '✎'}
               </div>
               <div className="map-node-body">
                 <button
@@ -144,7 +145,8 @@ export default function RewardMap({ signals, chart, starName, collapsible = fals
                     <span className="map-node-cta">{isOpen ? t.map.close : t.map.open}</span>
                   ) : (
                     <span className="map-node-lock">
-                      {isNext ? t.map.lockedHint(prog.remaining) : `Lv.${tier.at}`}
+                      {/* 旧: `Lv.${tier.at}`。数字の残っていた最後の場所 */}
+                      {isNext ? t.map.lockedHint(prog.remaining) : t.map.lockedFar}
                     </span>
                   )}
                 </button>
