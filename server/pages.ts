@@ -78,6 +78,15 @@ h1,h2,h3{font-family:'Zen Maru Gothic',sans-serif}
 .hero{text-align:center;padding:24px 0 28px}
 .hero-mascot{width:116px;margin:0 auto 10px;filter:drop-shadow(0 10px 20px rgba(138,99,221,.28))}
 .hero-mascot svg{display:block}
+/* 相談室の会話サンプル。実際のチャット画面に寄せた吹き出し */
+.chatsample h2{text-align:center}
+.cs-thread{max-width:480px;margin:18px auto 0;display:flex;flex-direction:column;gap:10px}
+.cs-row{display:flex;align-items:flex-end;gap:8px}
+.cs-you{justify-content:flex-end}
+.cs-star .cs-ic{flex:none;width:30px;height:30px;margin-bottom:2px}
+.cs-bubble{margin:0;padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.8;max-width:82%;word-break:auto-phrase}
+.cs-you .cs-bubble{background:linear-gradient(135deg,var(--pink) 0%,var(--violet) 100%);color:#fff;border-bottom-right-radius:4px}
+.cs-star .cs-bubble{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px}
 /* 「テスト公開中」。見えるが主張しない大きさに留める＝世界観より先に注記が目に入らないように */
 .beta{display:inline-block;margin:0 auto 10px;padding:3px 12px;border:1px solid var(--line);border-radius:999px;font-size:11.5px;color:var(--ink-sub);letter-spacing:.04em}
 .hero h1{font-size:30px;font-weight:800;line-height:1.4;margin-bottom:12px}
@@ -310,6 +319,24 @@ export function renderLP(lang: Lang): string {
 </div>
 
 <section class="points">${points}</section>
+
+<!--
+  相談室の会話サンプル。「なんでも相談してください」と言うだけでは
+  ただのチャットボットに見える(ペルソナテスト)ので、言うのではなく見せる。
+  返答1が精度(出生図＋時期)、返答2が記憶(覚えてくれている)を担う。
+-->
+<section class="chatsample">
+  <h2>${esc(P.chatSampleTitle)}</h2>
+  <div class="cs-thread">
+    ${P.chatSample
+      .map((m) =>
+        m.who === 'you'
+          ? `<div class="cs-row cs-you"><p class="cs-bubble">${esc(m.text)}</p></div>`
+          : `<div class="cs-row cs-star"><span class="cs-ic">${brand(30)}</span><p class="cs-bubble">${esc(m.text)}</p></div>`,
+      )
+      .join('\n    ')}
+  </div>
+</section>
 
 <section>
   <h2>${esc(t.about.listTitle)}</h2>

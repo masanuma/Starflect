@@ -44,6 +44,20 @@ export interface PageStrings {
   /** 説明を畳むときの見出し。説明は読みたい人だけが開く（憲法: 表に出す量を増やさない） */
   moreDetail: string
   /**
+   * 相談室の会話サンプル。ペルソナテストで「相談室の質が伝わる前に離脱する」
+   * 「LPからはただのチャットボットにしか見えない」と出たため、**言うのではなく見せる**。
+   * 4つの吹き出しに役割がある：質問(共感できる悩み) → 返答1(出生図＋時期＝精度) →
+   * 相づち(関係の温度) → 返答2(覚えてくれている＝記憶)。
+   * 実際のチャットにできないことは書かない（先の時期は longRange、継続は履歴の再送で本当にできる）。
+   */
+  chatSampleTitle: string
+  chatSample: [
+    { who: 'you' | 'star'; text: string },
+    { who: 'you' | 'star'; text: string },
+    { who: 'you' | 'star'; text: string },
+    { who: 'you' | 'star'; text: string },
+  ]
+  /**
    * LP下部の「このアプリについて」。
    * データの扱い・AI相談の位置づけ・占いの位置づけを**1か所に集約**する。
    * 画面のあちこちに注記を散らすと世界観が壊れるので、アプリ側からはここへ寄せる。
@@ -106,6 +120,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['毎日の占いは、', 'あなただけのものです。'],
     ],
     moreDetail: 'もっと詳しく',
+    chatSampleTitle: "たとえば、こんな会話をしています",
+    chatSample: [
+      { who: "you", text: "来月、転職の面接があるんです。うまくいくでしょうか" },
+      { who: "star", text: "もともと、じっくり準備して臨むほうが力が出るたちですよね。ちょうど来月、あなたの「がんばりどころ」に追い風が来ています。日が決まったら教えてください。その日の空を読んでおきますね。" },
+      { who: "you", text: "ありがとう。決まったら伝えます" },
+      { who: "star", text: "待っていますね。このところお仕事の話が続いていますが、少しずつ前に進んでいますよ。" },
+    ],
     betaBadge: 'テスト公開中',
     aboutAppTitle: 'このアプリについて',
     aboutAppItems: [
@@ -160,6 +181,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['The reading of each day', 'belongs to you alone.'],
     ],
     moreDetail: 'Tell me more',
+    chatSampleTitle: "Conversations look like this",
+    chatSample: [
+      { who: "you", text: "I have a job interview next month. Will it go well?" },
+      { who: "star", text: "You do your best when you can prepare at your own pace — that is in your chart. And next month, a tailwind reaches the part of you that handles challenges. Tell me once the date is set, and I will read the sky for that day." },
+      { who: "you", text: "Thank you. I will let you know." },
+      { who: "star", text: "I will be here. You have been talking about work a lot lately — and you are moving forward, step by step." },
+    ],
     betaBadge: 'Early release',
     aboutAppTitle: 'About this app',
     aboutAppItems: [
@@ -214,6 +242,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['La lectura de cada día', 'es solo tuya.'],
     ],
     moreDetail: 'Cuéntame más',
+    chatSampleTitle: "Las conversaciones son así",
+    chatSample: [
+      { who: "you", text: "El mes que viene tengo una entrevista de trabajo. ¿Me irá bien?" },
+      { who: "star", text: "Tú rindes mejor cuando preparas las cosas con calma — eso está en tu carta. Y justo el mes que viene llega un viento a favor a tu zona de retos. Cuando tengas la fecha, dímelo y leeré el cielo de ese día." },
+      { who: "you", text: "Gracias. Te aviso en cuanto la sepa." },
+      { who: "star", text: "Aquí estaré. Últimamente hablas mucho del trabajo — y estás avanzando, paso a paso." },
+    ],
     betaBadge: 'Versión beta',
     aboutAppTitle: 'Sobre esta app',
     aboutAppItems: [
@@ -268,6 +303,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['La lecture de chaque jour', 'n’appartient qu’à toi.'],
     ],
     moreDetail: 'En savoir plus',
+    chatSampleTitle: "Les conversations ressemblent à ça",
+    chatSample: [
+      { who: "you", text: "J’ai un entretien d’embauche le mois prochain. Ça va bien se passer ?" },
+      { who: "star", text: "Tu donnes le meilleur de toi quand tu prépares les choses posément — c’est dans ton thème. Et justement, le mois prochain, un vent favorable arrive sur ta zone d’efforts. Dis-moi quand la date sera fixée, et je lirai le ciel de ce jour-là." },
+      { who: "you", text: "Merci. Je te tiens au courant." },
+      { who: "star", text: "Je serai là. Ces derniers temps, tu parles beaucoup du travail — et tu avances, pas à pas." },
+    ],
     betaBadge: 'Version bêta',
     aboutAppTitle: 'À propos de cette application',
     aboutAppItems: [
@@ -322,6 +364,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['La lettura di ogni giorno', 'è solo tua.'],
     ],
     moreDetail: 'Dimmi di più',
+    chatSampleTitle: "Le conversazioni sono così",
+    chatSample: [
+      { who: "you", text: "Il mese prossimo ho un colloquio di lavoro. Andrà bene?" },
+      { who: "star", text: "Dai il meglio quando prepari le cose con calma — è nel tuo tema. E proprio il mese prossimo arriva un vento a favore sulla tua zona delle sfide. Dimmi quando avrai la data, e leggerò il cielo di quel giorno." },
+      { who: "you", text: "Grazie. Ti farò sapere." },
+      { who: "star", text: "Io sono qui. Ultimamente parli spesso del lavoro — e stai andando avanti, passo dopo passo." },
+    ],
     betaBadge: 'Versione beta',
     aboutAppTitle: 'Su questa app',
     aboutAppItems: [
@@ -376,6 +425,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['A leitura de cada dia', 'é só sua.'],
     ],
     moreDetail: 'Saiba mais',
+    chatSampleTitle: "As conversas são assim",
+    chatSample: [
+      { who: "you", text: "Mês que vem tenho uma entrevista de emprego. Será que vai dar certo?" },
+      { who: "star", text: "Você rende melhor quando prepara as coisas com calma — isso está no seu mapa. E justamente no mês que vem chega um vento a favor na sua zona de desafios. Quando tiver a data, me conte, que eu leio o céu daquele dia." },
+      { who: "you", text: "Combinado! Aviso assim que souber." },
+      { who: "star", text: "Vou estar aqui. Ultimamente você fala bastante do trabalho — e está avançando, passo a passo." },
+    ],
     betaBadge: 'Versão beta',
     aboutAppTitle: 'Sobre este app',
     aboutAppItems: [
@@ -431,6 +487,13 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       ['매일의 운세는,', '당신만의 것입니다.'],
     ],
     moreDetail: '더 자세히',
+    chatSampleTitle: "이런 대화를 나눠요",
+    chatSample: [
+      { who: "you", text: "다음 달에 이직 면접이 있어요. 잘될까요?" },
+      { who: "star", text: "원래 차분히 준비할수록 힘이 나는 분이시잖아요 — 그건 당신의 별에 있어요. 마침 다음 달, 당신의 「노력하는 자리」에 순풍이 불어와요. 날짜가 정해지면 알려 주세요. 그날의 하늘을 읽어 둘게요." },
+      { who: "you", text: "고마워요. 정해지면 말할게요." },
+      { who: "star", text: "기다리고 있을게요. 요즘 일 이야기를 자주 하시는데, 조금씩 앞으로 나아가고 있어요." },
+    ],
     betaBadge: '테스트 공개 중',
     aboutAppTitle: '이 앱에 대해',
     aboutAppItems: [
