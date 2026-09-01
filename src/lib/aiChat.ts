@@ -225,6 +225,30 @@ export async function streamAiFortune(
   )
 }
 
+/**
+ * 「この日、どう？」＝選んだ日がどんな日かを読む。
+ * 毎日の運勢とは別物の**照会**なので、保存も引き直し禁止も無い。
+ * その日の運行(periods[0])は呼び出し側がクライアントで計算して渡す。
+ */
+export async function streamAiDayCheck(
+  context: ChatChartContext,
+  dateLabel: string,
+  onDelta: (text: string) => void,
+  lang?: Lang,
+): Promise<void> {
+  await postStream(
+    '/api/ai-fortune',
+    {
+      context,
+      messages: [{ role: 'user', content: `「${dateLabel}」はわたしにとってどんな日？` }],
+      lang,
+      targetDate: dateLabel,
+      facet: 'day',
+    },
+    onDelta,
+  )
+}
+
 /** いまの時刻はどちらの面か。夜〜深夜が月の面 */
 export function facetOfNow(now = new Date()): Facet {
   const t = timeOfDay(now)

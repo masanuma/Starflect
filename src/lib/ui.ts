@@ -317,6 +317,14 @@ export interface UIStrings {
     feedbackTitle: string
     feedbackSub: string
     /**
+     * 「この日、どう？」＝日付を選ぶと、その日が自分にとってどんな日かを読む。
+     * 読む占いを「使う占い」にする一手。人はこれから来る日付(面接・デート・引っ越し)を常に抱えていて、
+     * それを調べる用事は再訪問の理由になる。エンジンは任意の日付を計算できるのに、今日しか見せていなかった。
+     */
+    dayCheckTitle: string
+    dayCheckSub: string
+    dayCheckButton: string
+    /**
      * 1日1問の遊びの二択。気分タップの2問目として、領域の代わりに数日に1度だけ出す。
      * `PickId` で型付けしているので、どれか1問でも訳が抜けると型チェックで落ちる。
      */
@@ -638,6 +646,9 @@ const UI: Record<Lang, UIStrings> = {
       hitThanks: '教えてくれてありがとうございます。次に生かしますね。',
       feedbackTitle: 'ここまで使ってみて、どうですか？',
       feedbackSub: '毎日の運勢のこと、気になるところ、なんでも聞かせてください',
+      dayCheckTitle: 'この日、どう？',
+      dayCheckSub: '気になる日を選ぶと、あなたにとってどんな日かを読みます。面接、デート、引っ越し——3年先まで。',
+      dayCheckButton: 'この日を読む',
       picks: {
         alone: { q: 'もし今日、1時間だけ自由になったら？', a: ['ひとりで過ごす', '誰かと過ごす'] },
         decide: { q: '何かを決めるとき、どっち？', a: ['ぴんときたほう', '調べてから'] },
@@ -966,6 +977,9 @@ const UI: Record<Lang, UIStrings> = {
       hitThanks: 'Thank you for telling me. I’ll keep it in mind.',
       feedbackTitle: 'How is it going so far?',
       feedbackSub: 'Anything about the daily readings, or anything that feels off — I’d love to hear it',
+      dayCheckTitle: 'How about this day?',
+      dayCheckSub: 'Pick a date — an interview, a date night, a move — and I will read what kind of day it is for you. Up to three years ahead.',
+      dayCheckButton: 'Read this day',
       picks: {
         alone: { q: 'If you had one free hour today?', a: ['Spend it alone', 'Spend it with someone'] },
         decide: { q: 'When you decide something, which is it?', a: ['Go with my gut', 'Look into it first'] },
@@ -1293,6 +1307,9 @@ const UI: Record<Lang, UIStrings> = {
       hitThanks: 'Gracias por contármelo. Lo tendré en cuenta.',
       feedbackTitle: '¿Qué tal te va hasta ahora?',
       feedbackSub: 'Lo que sea sobre las lecturas diarias, o algo que no encaje: me encantaría saberlo',
+      dayCheckTitle: '¿Y este día?',
+      dayCheckSub: 'Elige una fecha — una entrevista, una cita, una mudanza — y leeré qué día será para ti. Hasta tres años adelante.',
+      dayCheckButton: 'Leer este día',
       picks: {
         alone: { q: 'Si hoy tuvieras una hora libre…', a: ['Pasarla a solas', 'Pasarla con alguien'] },
         decide: { q: 'Cuando decides algo, ¿qué haces?', a: ['Seguir la intuición', 'Informarme antes'] },
@@ -1620,6 +1637,9 @@ const UI: Record<Lang, UIStrings> = {
       hitThanks: 'Merci de me le dire. J’en tiendrai compte.',
       feedbackTitle: 'Comment ça se passe jusqu’ici ?',
       feedbackSub: 'Tout ce qui concerne les lectures quotidiennes, ou ce qui te gêne : dis-le-moi',
+      dayCheckTitle: 'Et ce jour-là ?',
+      dayCheckSub: 'Choisis une date — un entretien, un rendez-vous, un déménagement — et je lirai quel jour ce sera pour toi. Jusqu’à trois ans en avance.',
+      dayCheckButton: 'Lire ce jour',
       picks: {
         alone: { q: 'Si tu avais une heure libre aujourd’hui ?', a: ['La passer seul·e', 'La passer avec quelqu’un'] },
         decide: { q: 'Pour décider, tu fais comment ?', a: ['Au feeling', 'Après avoir cherché'] },
@@ -1947,6 +1967,9 @@ const UI: Record<Lang, UIStrings> = {
       hitThanks: 'Grazie per avermelo detto. Ne terrò conto.',
       feedbackTitle: 'Come sta andando finora?',
       feedbackSub: 'Qualsiasi cosa sulle letture quotidiane, o qualcosa che non torna: raccontamelo',
+      dayCheckTitle: 'E questo giorno?',
+      dayCheckSub: 'Scegli una data — un colloquio, un appuntamento, un trasloco — e leggerò che giorno sarà per te. Fino a tre anni avanti.',
+      dayCheckButton: 'Leggi questo giorno',
       picks: {
         alone: { q: 'Se oggi avessi un’ora libera?', a: ['La passo da solo/a', 'La passo con qualcuno'] },
         decide: { q: 'Quando decidi, come fai?', a: ['Vado d’istinto', 'Prima mi informo'] },
@@ -2274,6 +2297,9 @@ const UI: Record<Lang, UIStrings> = {
       hitThanks: 'Obrigada por contar. Vou levar isso em conta.',
       feedbackTitle: 'Como está sendo até agora?',
       feedbackSub: 'Qualquer coisa sobre as leituras diárias, ou algo que não encaixe: quero saber',
+      dayCheckTitle: 'E esse dia?',
+      dayCheckSub: 'Escolha uma data — uma entrevista, um encontro, uma mudança — e eu leio que dia será para você. Até três anos à frente.',
+      dayCheckButton: 'Ler esse dia',
       picks: {
         alone: { q: 'Se hoje tivesse uma hora livre?', a: ['Ficar sozinho/a', 'Ficar com alguém'] },
         decide: { q: 'Na hora de decidir, como é?', a: ['Vou na intuição', 'Pesquiso antes'] },
@@ -2601,6 +2627,9 @@ const UI: Record<Lang, UIStrings> = {
       hitThanks: '알려 주셔서 고마워요. 다음에 참고할게요.',
       feedbackTitle: '지금까지 어떠세요?',
       feedbackSub: '매일의 운세에 대해서든, 마음에 걸리는 점이든 무엇이든 들려주세요',
+      dayCheckTitle: '이날은 어때요?',
+      dayCheckSub: '궁금한 날짜를 고르면, 당신에게 어떤 날인지 읽어 드려요. 면접, 데이트, 이사 — 3년 앞까지.',
+      dayCheckButton: '이날 읽기',
       picks: {
         alone: { q: '오늘 한 시간이 생긴다면?', a: ['혼자 보내기', '누군가와 보내기'] },
         decide: { q: '뭔가 정할 때는 어느 쪽?', a: ['느낌이 오는 쪽', '알아보고 나서'] },
