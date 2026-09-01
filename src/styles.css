@@ -2233,6 +2233,18 @@ body {
   margin: 10px 0 0;
 }
 
+/* 出会いの一行。キャラ自身の声なので、分類ラベル(type-count)より一段あたたかく見せる */
+.type-meeting {
+  font-family: var(--font-pop);
+  font-size: 13.5px;
+  line-height: 1.9;
+  color: var(--violet-strong);
+  text-align: center;
+  max-width: 24em;
+  margin: 16px auto 0;
+  word-break: auto-phrase;
+}
+
 /* 初回だけ出す「この画面の歩き方」。情報量の多い結果画面で現在地と主役を示す */
 .guide-card {
   background: linear-gradient(135deg, var(--pink-faint) 0%, var(--gold-faint) 100%);

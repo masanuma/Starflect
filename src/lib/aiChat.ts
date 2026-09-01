@@ -200,6 +200,8 @@ export async function streamAiFortune(
   persona?: string[],
   /** 太陽の面(朝〜夕方) か 月の面(夜〜深夜) か */
   facet: Facet = 'day',
+  /** 出会って最初の1本か。初回だけ「明日聞かせて」という約束で閉じる */
+  firstMeeting = false,
 ): Promise<void> {
   await postStream(
     '/api/ai-fortune',
@@ -215,6 +217,7 @@ export async function streamAiFortune(
       air,
       persona,
       facet,
+      firstMeeting,
       // 呼び出し側に任せず必ず付ける。忘れると「朝のうちに」が夜に出る
       timeOfDay: timeOfDay(),
     },

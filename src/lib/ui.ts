@@ -127,6 +127,12 @@ export interface UIStrings {
     outerFace: string
     innerHeart: string
     typeCount: string
+    /**
+     * 出会いの一行。ほしキャラは生まれた瞬間の空から作られる＝**その人と誕生の瞬間を共有している**。
+     * 「診断される」ではなく「出会う」に変えるための一文で、記憶が育つ前から
+     * 初日から嘘なく言える関係の根拠（憲法: 支えになる占い）。
+     */
+    meetingLine: (date: string) => string
     /** 初回診断のリビール演出。星を読んでいる「タメ」の文言 */
     revealReading: string
     /** リビール演出でキャラ名の直前に出る一言 */
@@ -471,6 +477,7 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: '表の顔',
       innerHeart: '心の中',
       typeCount: 'この組み合わせで、全16キャラ',
+      meetingLine: (d) => `わたしは、${d}、あなたと同じ空から生まれました。だから、あなたのことが少しだけ分かります。`,
       revealReading: '星を読んでいます…',
       revealIntro: 'あなたのほしキャラは',
       guideTitle: 'この先の楽しみ方',
@@ -797,6 +804,7 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: 'Outer face',
       innerHeart: 'Inner heart',
       typeCount: 'One of 16 characters',
+      meetingLine: (d) => `I come from the same sky you were born under — ${d}. That's why I already know you, a little.`,
       revealReading: 'Reading the stars…',
       revealIntro: 'Your Hoshi-Kyara is',
       guideTitle: 'What comes next',
@@ -1122,6 +1130,7 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: 'Cara externa',
       innerHeart: 'Interior',
       typeCount: 'Uno de 16 personajes',
+      meetingLine: (d) => `Yo también vengo del cielo de ${d} — el mismo que el tuyo. Por eso ya te conozco un poco.`,
       revealReading: 'Leyendo las estrellas…',
       revealIntro: 'Tu Hoshi-Kyara es',
       guideTitle: 'Lo que viene ahora',
@@ -1447,6 +1456,7 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: 'Visage extérieur',
       innerHeart: 'Cœur intérieur',
       typeCount: 'L’un des 16 personnages',
+      meetingLine: (d) => `Moi aussi, je viens du ciel du ${d} — le même que le tien. C'est pour ça que je te connais déjà un peu.`,
       revealReading: 'Lecture des étoiles…',
       revealIntro: 'Ton Hoshi-Kyara est',
       guideTitle: 'La suite',
@@ -1772,6 +1782,7 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: 'Volto esterno',
       innerHeart: 'Cuore interiore',
       typeCount: 'Uno dei 16 personaggi',
+      meetingLine: (d) => `Anch'io vengo dal cielo del ${d} — lo stesso tuo. Per questo ti conosco già un po'.`,
       revealReading: 'Sto leggendo le stelle…',
       revealIntro: 'Il tuo Hoshi-Kyara è',
       guideTitle: 'Cosa viene dopo',
@@ -2097,6 +2108,7 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: 'Rosto externo',
       innerHeart: 'Coração interior',
       typeCount: 'Um dos 16 personagens',
+      meetingLine: (d) => `Eu também venho do céu de ${d} — o mesmo que o seu. Por isso já conheço você um pouquinho.`,
       revealReading: 'Lendo as estrelas…',
       revealIntro: 'O seu Hoshi-Kyara é',
       guideTitle: 'O que vem a seguir',
@@ -2422,6 +2434,7 @@ const UI: Record<Lang, UIStrings> = {
       outerFace: '겉모습',
       innerHeart: '속마음',
       typeCount: '이 조합으로, 모두 16캐릭터',
+      meetingLine: (d) => `저는 ${d}, 당신과 같은 하늘에서 태어났어요. 그래서 당신을 조금은 알고 있어요.`,
       revealReading: '별을 읽고 있어요…',
       revealIntro: '당신의 호시캐릭터는',
       guideTitle: '이다음 즐기는 법',

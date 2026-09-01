@@ -130,6 +130,12 @@ export default function Result({ data, onHome, onPair }: Props) {
             </div>
           </div>
           <p className="type-count">{t.result.typeCount}</p>
+          {/*
+            出会いの一行。式（太陽×月＝どこから生まれたか）の直後に、キャラ自身の声で置く。
+            ほしキャラは生まれた瞬間の空から作られる＝誕生の瞬間を共有する存在。
+            「診断される」ではなく「出会う」——ここが関係の始まり（憲法: 支えになる占い）
+          */}
+          <p className="type-meeting">{t.result.meetingLine(data.dateLabel)}</p>
 
           <div className="type-detail">
             <p className="type-text">{starType.type.text}</p>

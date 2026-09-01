@@ -739,6 +739,8 @@ export interface FortuneRequest {
    * 同じ日に同じものを2回出すのは引き直しなので禁止のまま。**別の面**を出す。
    */
   facet?: 'day' | 'night'
+  /** 出会って最初の1本か。初回だけ、答え合わせの予告＝「明日聞かせて」という約束で閉じる */
+  firstMeeting?: boolean
   /**
    * 全期間を圧縮した「人となり」（層2の第2の窓）。
    * 生の会話ログはここには含まれない — 圧縮済みの短い文だけが届く。
@@ -764,6 +766,7 @@ function buildFortuneSystem(
   persona?: string[],
   timeOfDay?: string,
   facet: 'day' | 'night' = 'day',
+  firstMeeting = false,
 ): string {
   const who = c.name ? honorificName(c.name, lang) : 'あなた'
   const me = c.starTypeName ?? 'ほしキャラ'
@@ -885,6 +888,16 @@ function buildFortuneSystem(
     '- 上に書かれていない配置を勝手に作り出さない',
     '- 「〜を見てみますね」「今日のあなたは」のような前置きから始めない。1文目からいきなり中身を書く',
   )
+  // 出会って最初の1本だけ、言いっぱなしにしない占いであることを「約束」として見せる。
+  // 答え合わせ機能は翌日にならないと発動しないので、初日はここで予告する。
+  // 「診断される」ではなく「出会う」——関係はここから始まる（憲法: 支えになる占い）。
+  if (firstMeeting) {
+    lines.push(
+      '- 【はじめましての結び・今回だけ】これはこの人に書く、いちばん最初の運勢です。上の結びの1文のあとに、さらに1〜2文だけ足して閉じてください(全体で6文まで可)：' +
+        '星から分かることは読めたけれど、あなたが今日をどんなふうに過ごすかは、まだ知らない。明日、今日がどうだったか聞かせてほしい——という約束で終わる。' +
+        'かしこまらない。「よろしくお願いします」のような挨拶や自己紹介は書かない。約束だけを、軽く',
+    )
+  }
   if (night) {
     lines.push(
       // 昼の面と同じ材料を渡しているので、放っておくと同じことを書く。
@@ -919,7 +932,8 @@ const createFortuneHandler = (apiKey: string | undefined): RawHandler =>
     apiKey,
     'fortune',
     (p) =>
-      buildFortuneSystem(p.context, langOf(p), p.air, p.persona, p.timeOfDay, p.facet) + LANG_DIRECTIVE[langOf(p)],
+      buildFortuneSystem(p.context, langOf(p), p.air, p.persona, p.timeOfDay, p.facet, p.firstMeeting) +
+      LANG_DIRECTIVE[langOf(p)],
     true /* 「今日のわたしの運勢を教えて」はこちらが書いた日本語なので、言語指示を後ろに置く */,
   )
 
