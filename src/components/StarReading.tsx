@@ -20,7 +20,10 @@ import { signIndex } from '../lib/astro'
 import { streamAiFortune, facetOfNow } from '../lib/aiChat'
 import type { Facet } from '../lib/companion'
 import HoshiKyaraMascot from './HoshiKyaraMascot'
-import { useUI } from '../lib/ui'
+import { useUI, quoted } from '../lib/ui'
+import { useLang } from '../lib/i18n'
+import { makeShareCard, pickQuote } from '../lib/shareCard'
+import { renderToStaticMarkup } from 'react-dom/server'
 
 /** 答え合わせで振り返る運勢の抜粋。全文を貼ると今日の運勢より長くなって主役が入れ替わる */
 const excerpt = (text: string, max = 56) => (text.length <= max ? text : `${text.slice(0, max)}…`)
@@ -57,7 +60,56 @@ export default function StarReading({
   daysSince?: number
 }) {
   const t = useUI()
+  const { lang } = useLang()
   const fortune = readFortune(chart.planets, 'today')
+
+  // 「今日の1枚」＝運勢の締めの1文を画像カードにする。拡散の最小単位。
+  // 生成は全部この端末内(canvas)で、サーバーには何も送らない
+  const [card, setCard] = useState<{ url: string; blob: Blob } | null>(null)
+  async function makeCard(text: string) {
+    if (!starType) return
+    try {
+      track('share_card_make', { facet })
+      const svg = renderToStaticMarkup(
+        <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={400} />,
+      )
+      const blob = await makeShareCard({
+        mascotSvg: svg,
+        dateLabel: new Intl.DateTimeFormat(lang, { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date()),
+        typeName: quoted(starType.type.name),
+        quote: pickQuote(text),
+      })
+      setCard((prev) => {
+        if (prev) URL.revokeObjectURL(prev.url)
+        return { url: URL.createObjectURL(blob), blob }
+      })
+    } catch {
+      /* 生成できない環境では何も出さない */
+    }
+  }
+  async function shareCard() {
+    if (!card) return
+    const file = new File([card.blob], 'starflect.png', { type: 'image/png' })
+    try {
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file] })
+        track('share_card_share', { facet })
+        return
+      }
+    } catch {
+      /* キャンセル等は無視して保存に流さない */
+      return
+    }
+    saveCard()
+  }
+  function saveCard() {
+    if (!card) return
+    const a = document.createElement('a')
+    a.href = card.url
+    a.download = `starflect-${new Date().toISOString().slice(0, 10)}.png`
+    a.click()
+    track('share_card_save', { facet })
+  }
 
   // どちらの面を読むかは時刻で決まる。夜〜深夜は月の面（いまの気持ち）。
   // 面はマウント時に1度だけ決める＝生成中に日付境界をまたいでも入れ替わらない
@@ -202,6 +254,26 @@ export default function StarReading({
       )}
 
       {state.kind === 'done' && <p className="fortune-body">{state.text}</p>}
+
+      {/* 今日の1枚。締めの1文だけを画像にする＝全文の全公開は求めない */}
+      {state.kind === 'done' && !card && (
+        <button className="ghost card-make" onClick={() => void makeCard(state.text)}>
+          {t.companion.cardMake}
+        </button>
+      )}
+      {card && (
+        <div className="card-preview">
+          <img src={card.url} alt="" />
+          <div className="card-actions">
+            <button className="cta card-btn" onClick={() => void shareCard()}>
+              {t.companion.cardShare}
+            </button>
+            <button className="ghost card-btn" onClick={saveCard}>
+              {t.companion.cardSave}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 夜に見たときだけ、朝に読んだ運勢を畳んで置く。読み返せるが、主役は月の面のまま */}
       {night && daytime && (

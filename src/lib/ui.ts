@@ -324,6 +324,10 @@ export interface UIStrings {
     dayCheckTitle: string
     dayCheckSub: string
     dayCheckButton: string
+    /** 「今日の1枚」＝運勢の締めの1文を画像カードにしてシェア/保存する。拡散の最小単位 */
+    cardMake: string
+    cardShare: string
+    cardSave: string
     /**
      * 1日1問の遊びの二択。気分タップの2問目として、領域の代わりに数日に1度だけ出す。
      * `PickId` で型付けしているので、どれか1問でも訳が抜けると型チェックで落ちる。
@@ -649,6 +653,9 @@ const UI: Record<Lang, UIStrings> = {
       dayCheckTitle: 'この日、どう？',
       dayCheckSub: '気になる日を選ぶと、あなたにとってどんな日かを読みます。面接、デート、引っ越し——3年先まで。',
       dayCheckButton: 'この日を読む',
+      cardMake: '今日の1枚をつくる',
+      cardShare: '共有する',
+      cardSave: '画像を保存',
       picks: {
         alone: { q: 'もし今日、1時間だけ自由になったら？', a: ['ひとりで過ごす', '誰かと過ごす'] },
         decide: { q: '何かを決めるとき、どっち？', a: ['ぴんときたほう', '調べてから'] },
@@ -980,6 +987,9 @@ const UI: Record<Lang, UIStrings> = {
       dayCheckTitle: 'How about this day?',
       dayCheckSub: 'Pick a date — an interview, a date night, a move — and I will read what kind of day it is for you. Up to three years ahead.',
       dayCheckButton: 'Read this day',
+      cardMake: 'Make today’s card',
+      cardShare: 'Share',
+      cardSave: 'Save image',
       picks: {
         alone: { q: 'If you had one free hour today?', a: ['Spend it alone', 'Spend it with someone'] },
         decide: { q: 'When you decide something, which is it?', a: ['Go with my gut', 'Look into it first'] },
@@ -1310,6 +1320,9 @@ const UI: Record<Lang, UIStrings> = {
       dayCheckTitle: '¿Y este día?',
       dayCheckSub: 'Elige una fecha — una entrevista, una cita, una mudanza — y leeré qué día será para ti. Hasta tres años adelante.',
       dayCheckButton: 'Leer este día',
+      cardMake: 'Crear la tarjeta de hoy',
+      cardShare: 'Compartir',
+      cardSave: 'Guardar imagen',
       picks: {
         alone: { q: 'Si hoy tuvieras una hora libre…', a: ['Pasarla a solas', 'Pasarla con alguien'] },
         decide: { q: 'Cuando decides algo, ¿qué haces?', a: ['Seguir la intuición', 'Informarme antes'] },
@@ -1640,6 +1653,9 @@ const UI: Record<Lang, UIStrings> = {
       dayCheckTitle: 'Et ce jour-là ?',
       dayCheckSub: 'Choisis une date — un entretien, un rendez-vous, un déménagement — et je lirai quel jour ce sera pour toi. Jusqu’à trois ans en avance.',
       dayCheckButton: 'Lire ce jour',
+      cardMake: 'Créer la carte du jour',
+      cardShare: 'Partager',
+      cardSave: 'Enregistrer l’image',
       picks: {
         alone: { q: 'Si tu avais une heure libre aujourd’hui ?', a: ['La passer seul·e', 'La passer avec quelqu’un'] },
         decide: { q: 'Pour décider, tu fais comment ?', a: ['Au feeling', 'Après avoir cherché'] },
@@ -1970,6 +1986,9 @@ const UI: Record<Lang, UIStrings> = {
       dayCheckTitle: 'E questo giorno?',
       dayCheckSub: 'Scegli una data — un colloquio, un appuntamento, un trasloco — e leggerò che giorno sarà per te. Fino a tre anni avanti.',
       dayCheckButton: 'Leggi questo giorno',
+      cardMake: 'Crea la carta di oggi',
+      cardShare: 'Condividi',
+      cardSave: 'Salva immagine',
       picks: {
         alone: { q: 'Se oggi avessi un’ora libera?', a: ['La passo da solo/a', 'La passo con qualcuno'] },
         decide: { q: 'Quando decidi, come fai?', a: ['Vado d’istinto', 'Prima mi informo'] },
@@ -2300,6 +2319,9 @@ const UI: Record<Lang, UIStrings> = {
       dayCheckTitle: 'E esse dia?',
       dayCheckSub: 'Escolha uma data — uma entrevista, um encontro, uma mudança — e eu leio que dia será para você. Até três anos à frente.',
       dayCheckButton: 'Ler esse dia',
+      cardMake: 'Criar o cartão de hoje',
+      cardShare: 'Compartilhar',
+      cardSave: 'Salvar imagem',
       picks: {
         alone: { q: 'Se hoje tivesse uma hora livre?', a: ['Ficar sozinho/a', 'Ficar com alguém'] },
         decide: { q: 'Na hora de decidir, como é?', a: ['Vou na intuição', 'Pesquiso antes'] },
@@ -2630,6 +2652,9 @@ const UI: Record<Lang, UIStrings> = {
       dayCheckTitle: '이날은 어때요?',
       dayCheckSub: '궁금한 날짜를 고르면, 당신에게 어떤 날인지 읽어 드려요. 면접, 데이트, 이사 — 3년 앞까지.',
       dayCheckButton: '이날 읽기',
+      cardMake: '오늘의 카드 만들기',
+      cardShare: '공유하기',
+      cardSave: '이미지 저장',
       picks: {
         alone: { q: '오늘 한 시간이 생긴다면?', a: ['혼자 보내기', '누군가와 보내기'] },
         decide: { q: '뭔가 정할 때는 어느 쪽?', a: ['느낌이 오는 쪽', '알아보고 나서'] },
