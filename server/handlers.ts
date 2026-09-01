@@ -530,10 +530,43 @@ export function aiSpend(): { date: string; usd: number; budgetUsd: number; overB
  * ストリーミング会話ハンドラの共通実装。相談チャット(ほしキャラ本人)と相性チャット(ふたり)で
  * ストリーム処理は同一。system プロンプトの作り方だけ buildSystem で差し替える。
  */
+/**
+ * 最後のユーザーメッセージの末尾に、出力言語の指示を足す。
+ *
+ * **なぜ必要か**：運勢・相性・レポートは、こちらが**日本語の固定文**をユーザーメッセージとして送っている
+ * （「今日のわたしの運勢を教えて」など）。モデルが最後に読むのはこれなので、
+ * システムプロンプト末尾の `LANG_DIRECTIVE` が負けて**日本語で返ってくる**。
+ *
+ * 実測（2026-08-19）：フランス語・韓国語は**3回中3回**とも日本語だった。レポートも同じ。
+ * 英語・スペイン語・イタリア語・ポルトガル語は通っていたので、
+ * **言語によって勝ち負けが変わる不安定な状態**だった。
+ *
+ * 固定文を7言語ぶん訳す手もあるが、指示の効き目は「最後に読んだもの」で決まるので、
+ * ここに置くほうが確実で、翻訳の負債も増えない。
+ */
+function withLangDirective(messages: ChatMessage[], lang: Lang): ChatMessage[] {
+  const directive = LANG_DIRECTIVE[lang]
+  if (!directive) return messages /* 日本語は指示そのものが空 */
+  const out = messages.map((m) => ({ ...m }))
+  for (let i = out.length - 1; i >= 0; i--) {
+    if (out[i].role === 'user') {
+      out[i].content += directive
+      break
+    }
+  }
+  return out
+}
+
 function createStreamingChatHandler<T extends { context?: unknown; messages?: ChatMessage[]; lang?: Lang }>(
   apiKey: string | undefined,
   endpoint: string,
   buildSystem: (payload: T) => string,
+  /**
+   * ユーザーメッセージを**こちらが書いている**エンドポイントか（運勢・相性の読み）。
+   * true のときだけ、そのメッセージの末尾にも言語指示を足す。
+   * 相談室は利用者本人がその言語で書くので、触らない。
+   */
+  weAuthorTheMessage = false,
 ): RawHandler {
   return (req, res) => {
     void (async () => {
@@ -569,7 +602,9 @@ function createStreamingChatHandler<T extends { context?: unknown; messages?: Ch
           thinking: { type: 'adaptive' },
           output_config: { effort: 'low' },
           system: buildSystem(payload),
-          messages: payload.messages.map((m) => ({ role: m.role, content: m.content })),
+          messages: (weAuthorTheMessage ? withLangDirective(payload.messages, langOf(payload)) : payload.messages).map(
+            (m) => ({ role: m.role, content: m.content }),
+          ),
         })
 
         stream.on('text', (delta) => {
@@ -648,12 +683,17 @@ function createReportHandler(apiKey: string | undefined): RawHandler {
           thinking: { type: 'adaptive' },
           output_config: { effort: 'low' },
           system: buildChatSystem(payload.context, langOf(payload)) + LANG_DIRECTIVE[langOf(payload)],
-          messages: [
-            {
-              role: 'user',
-              content: buildReportPrompt(payload.topic, payload.behavior, payload.persona, payload.air),
-            },
-          ],
+          // 依頼文も日本語なので、末尾に言語指示を置く（運勢・相性と同じ理由）。
+          // 実測でフランス語・韓国語のレポートが日本語で返っていた
+          messages: withLangDirective(
+            [
+              {
+                role: 'user',
+                content: buildReportPrompt(payload.topic, payload.behavior, payload.persona, payload.air),
+              },
+            ],
+            langOf(payload),
+          ),
         })
         logUsage('report', AI_MODEL, response.usage, langOf(payload))
         const text = response.content
@@ -880,6 +920,7 @@ const createFortuneHandler = (apiKey: string | undefined): RawHandler =>
     'fortune',
     (p) =>
       buildFortuneSystem(p.context, langOf(p), p.air, p.persona, p.timeOfDay, p.facet) + LANG_DIRECTIVE[langOf(p)],
+    true /* 「今日のわたしの運勢を教えて」はこちらが書いた日本語なので、言語指示を後ろに置く */,
   )
 
 /* ---------- ふたりの相性の読み(AIが書く) ---------- */
@@ -975,6 +1016,7 @@ const createPairFortuneHandler = (apiKey: string | undefined): RawHandler =>
     apiKey,
     'pair-fortune',
     (p) => buildPairFortuneSystem(p.context, langOf(p), p.timeOfDay) + LANG_DIRECTIVE[langOf(p)],
+    true /* 「ふたりの相性を教えて」も同じく、こちらが書いた日本語 */,
   )
 
 /* ---------- 人となり(記憶の圧縮) ---------- */
