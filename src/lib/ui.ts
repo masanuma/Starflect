@@ -710,7 +710,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Same star sign, and still no two people alike.',
-      tagline2: 'Your birth date and time make a “Hoshi-Kyara” that is only yours.',
+      tagline2: 'Your birth date and time make a “Hoshi-Kyara” — a little star character that is only yours.',
       greetNew: 'Hi, welcome to Hoshi-Kyara.',
       greetBack: 'Welcome back.',
       aboutLink: 'What is Hoshi-Kyara?',
@@ -729,7 +729,7 @@ const UI: Record<Lang, UIStrings> = {
       title: 'Frequently asked questions',
       items: [
         {
-          q: 'What is Hoshi-Kyara diagnosis?',
+          q: 'What is Hoshi-Kyara?',
           a: 'It’s an astrology reading that blends your Sun sign (outer face) and Moon sign (inner heart) to sort you into one of 16 “star characters,” then reads your personality and fortune from all 10 planets.',
         },
         {
@@ -1037,7 +1037,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'El mismo signo, y aun así nadie igual a ti.',
-      tagline2: 'Tu fecha y hora de nacimiento crean un «Hoshi-Kyara» que es solo tuyo.',
+      tagline2: 'Tu fecha y hora de nacimiento crean un «Hoshi-Kyara»: un pequeño personaje estelar que es solo tuyo.',
       greetNew: 'Hola, te damos la bienvenida a Hoshi-Kyara.',
       greetBack: 'Bienvenida de nuevo.',
       aboutLink: '¿Qué es Hoshi-Kyara?',
@@ -1056,7 +1056,7 @@ const UI: Record<Lang, UIStrings> = {
       title: 'Preguntas frecuentes',
       items: [
         {
-          q: '¿Qué es el diagnóstico Hoshi-Kyara?',
+          q: '¿Qué es Hoshi-Kyara?',
           a: 'Es un horóscopo que combina tu signo solar (tu cara externa) y tu signo lunar (tu interior) para clasificarte en uno de 16 “personajes estelares”, y luego lee tu personalidad y tu fortuna a partir de los 10 planetas.',
         },
         {
@@ -1364,7 +1364,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Même signe, et pourtant personne ne te ressemble.',
-      tagline2: 'Ta date et ton heure de naissance donnent un « Hoshi-Kyara » rien qu’à toi.',
+      tagline2: 'Ta date et ton heure de naissance donnent un « Hoshi-Kyara » : un petit personnage étoile rien qu’à toi.',
       greetNew: 'Bonjour, bienvenue sur Hoshi-Kyara.',
       greetBack: 'Bon retour.',
       aboutLink: 'C’est quoi Hoshi-Kyara ?',
@@ -1383,7 +1383,7 @@ const UI: Record<Lang, UIStrings> = {
       title: 'Questions fréquentes',
       items: [
         {
-          q: 'Qu’est-ce que le diagnostic Hoshi-Kyara ?',
+          q: 'C’est quoi, Hoshi-Kyara ?',
           a: 'C’est un horoscope qui combine ton signe solaire (ta face visible) et ton signe lunaire (ton for intérieur) pour te classer parmi 16 « personnages stellaires », puis lit ta personnalité et ta destinée à partir des 10 planètes.',
         },
         {
@@ -1691,7 +1691,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Stesso segno, eppure nessuno è uguale a te.',
-      tagline2: 'La tua data e ora di nascita creano un «Hoshi-Kyara» solo tuo.',
+      tagline2: 'La tua data e ora di nascita creano un «Hoshi-Kyara»: un piccolo personaggio stellare solo tuo.',
       greetNew: 'Ciao, benvenuto/a su Hoshi-Kyara.',
       greetBack: 'Bentornato/a.',
       aboutLink: 'Cos’è Hoshi-Kyara?',
@@ -1710,7 +1710,7 @@ const UI: Record<Lang, UIStrings> = {
       title: 'Domande frequenti',
       items: [
         {
-          q: 'Che cos’è la diagnosi Hoshi-Kyara?',
+          q: 'Che cos’è Hoshi-Kyara?',
           a: 'È un oroscopo che combina il tuo segno solare (il volto esterno) e il segno lunare (il tuo interiore) per collocarti in uno dei 16 “personaggi stellari”, poi legge personalità e fortuna a partire dai 10 pianeti.',
         },
         {
@@ -2018,7 +2018,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: 'Mesmo signo, e ainda assim ninguém igual a você.',
-      tagline2: 'A sua data e hora de nascimento criam um «Hoshi-Kyara» só seu.',
+      tagline2: 'A sua data e hora de nascimento criam um «Hoshi-Kyara»: um personagem-estrela só seu.',
       greetNew: 'Olá, boas-vindas ao Hoshi-Kyara.',
       greetBack: 'Bem-vindo/a de volta.',
       aboutLink: 'O que é Hoshi-Kyara?',
@@ -2037,7 +2037,7 @@ const UI: Record<Lang, UIStrings> = {
       title: 'Perguntas frequentes',
       items: [
         {
-          q: 'O que é o diagnóstico Hoshi-Kyara?',
+          q: 'O que é Hoshi-Kyara?',
           a: 'É um horóscopo que combina o seu signo solar (a face externa) e o signo lunar (o seu interior) para classificá-lo em um dos 16 “personagens estelares”, e depois lê a personalidade e a sorte a partir dos 10 planetas.',
         },
         {
@@ -2345,7 +2345,7 @@ const UI: Record<Lang, UIStrings> = {
     home: {
       appTitle: 'Hoshi-Kyara',
       tagline1: '같은 별자리라도, 한 사람 한 사람 다릅니다.',
-      tagline2: '태어난 날과 시간으로 만들어지는, 당신만의 「호시캐릭터」.',
+      tagline2: '태어난 날과 시간으로 만들어지는, 당신만의 별 캐릭터 「호시캐릭터」.',
       greetNew: '처음 뵙겠습니다, 호시캐릭터 진단이에요.',
       greetBack: '어서 오세요.',
       aboutLink: 'Hoshi-Kyara란?',

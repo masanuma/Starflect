@@ -99,7 +99,7 @@ export interface PageStrings {
 export const PAGE_STRINGS: Record<Lang, PageStrings> = {
   ja: {
     cta: 'ほしキャラ診断を開始する！',
-    heroNote: '登録不要・生年月日だけでOK・30秒',
+    heroNote: '無料・登録不要・生年月日だけでOK・30秒',
     howTo: '使い方',
     steps: [
       { t: '生年月日を入力', d: '生年月日だけでOK。時刻がわかれば、もっと詳しく占えます。' },
@@ -143,7 +143,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       '「今日のふたり」と、ふたり専門の相談室つき。恋愛でも仕事でも聞けます。',
     ],
     pairCta: 'ふたりの相性を占う',
-    pairNote: '登録不要・ふたりの生年月日だけ・1分',
+    pairNote: '無料・登録不要・ふたりの生年月日だけ・1分',
     planetsTitle: 'あなたをかたちづくる星たち',
     planetsLead: '生まれた瞬間、それぞれの星がどの星座にいたか。星が「誰が」を、星座が「どんなふうに」を表します。上昇星座を入れて全11キャラです。',
     signsTitle: '12星座と4つのエレメント',
@@ -159,8 +159,8 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     g3Lead: '7年〜30年かけてゆっくり移動します。だから同じ時代に生まれた人とは、ほぼ同じ。友だちと冥王星が同じなのは、このためです。',
   },
   en: {
-    cta: 'Start your Hoshi-Kyara diagnosis!',
-    heroNote: 'No signup · Just your birth date · 30 seconds',
+    cta: 'Meet your Hoshi-Kyara!',
+    heroNote: 'Free · No signup · Just your birth date · 30 seconds',
     howTo: 'How it works',
     steps: [
       { t: 'Enter your birth date', d: 'Your birth date is enough. Add the time for a finer reading.' },
@@ -220,8 +220,8 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     g3Lead: 'These drift slowly, taking 7 to 30 years per sign. That is why people born around the same time share them — and why your friend often has the same Pluto as you.',
   },
   es: {
-    cta: '¡Empieza tu diagnóstico Hoshi-Kyara!',
-    heroNote: 'Sin registro · Solo tu fecha de nacimiento · 30 segundos',
+    cta: '¡Conoce a tu Hoshi-Kyara!',
+    heroNote: 'Gratis · Sin registro · Solo tu fecha de nacimiento · 30 segundos',
     howTo: 'Cómo funciona',
     steps: [
       { t: 'Introduce tu fecha de nacimiento', d: 'Con tu fecha de nacimiento basta. Con la hora, más detalle.' },
@@ -281,8 +281,8 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     g3Lead: 'Avanzan muy despacio: de 7 a 30 años por signo. Por eso quienes nacieron en la misma época los comparten, y tu amigo suele tener el mismo Plutón que tú.',
   },
   fr: {
-    cta: 'Commencer le diagnostic Hoshi-Kyara !',
-    heroNote: 'Sans inscription · Juste ta date de naissance · 30 secondes',
+    cta: 'Rencontre ton Hoshi-Kyara !',
+    heroNote: 'Gratuit · Sans inscription · Juste ta date de naissance · 30 secondes',
     howTo: 'Comment ça marche',
     steps: [
       { t: 'Saisis ta date de naissance', d: 'Ta date de naissance suffit. Avec l’heure, c’est plus fin.' },
@@ -342,8 +342,8 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     g3Lead: 'Ils avancent lentement : de 7 à 30 ans par signe. Voilà pourquoi les personnes nées à la même époque les partagent, et pourquoi ton ami a souvent le même Pluton que toi.',
   },
   it: {
-    cta: 'Inizia la tua diagnosi Hoshi-Kyara!',
-    heroNote: 'Senza registrazione · Solo la data di nascita · 30 secondi',
+    cta: 'Incontra il tuo Hoshi-Kyara!',
+    heroNote: 'Gratis · Senza registrazione · Solo la data di nascita · 30 secondi',
     howTo: 'Come funziona',
     steps: [
       { t: 'Inserisci la data di nascita', d: 'Basta la data di nascita. Con l’ora, ancora più preciso.' },
@@ -403,8 +403,8 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     g3Lead: 'Si spostano lentamente: da 7 a 30 anni per segno. Per questo chi è nato nello stesso periodo li condivide, e il tuo amico spesso ha il tuo stesso Plutone.',
   },
   pt: {
-    cta: 'Começar o diagnóstico Hoshi-Kyara!',
-    heroNote: 'Sem cadastro · Só a data de nascimento · 30 segundos',
+    cta: 'Conheça seu Hoshi-Kyara!',
+    heroNote: 'Grátis · Sem cadastro · Só a data de nascimento · 30 segundos',
     howTo: 'Como funciona',
     steps: [
       { t: 'Digite sua data de nascimento', d: 'Sua data de nascimento basta. Com a hora, fica mais fino.' },
@@ -465,7 +465,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
   },
   ko: {
     cta: '호시캐릭터 진단 시작하기!',
-    heroNote: '가입 불필요 · 생년월일만 · 30초',
+    heroNote: '무료 · 가입 불필요 · 생년월일만 · 30초',
     howTo: '사용 방법',
     steps: [
       { t: '생년월일 입력', d: '생년월일만 있으면 OK. 시각을 알면 더 자세히.' },

@@ -48,6 +48,14 @@ export default function App() {
     initAnalytics()
   }, [])
 
+  // /app の <title> は index.html の日本語のまま全言語に出ていた（ペルソナテストで発覚）。
+  // タブ・ブックマーク・共有に出る文字列なので、言語に追随させる。
+  // 非日本語圏では「Starflect」のほうがブランドとして機能している（発音できる・ドメインと一致）ため、
+  // ja 以外は Starflect を先頭に置く。
+  useEffect(() => {
+    document.title = getLang() === 'ja' ? 'ほしキャラ診断 〜Starflect〜' : `Starflect — ${t.home.appTitle}`
+  }, [t])
+
   // 画面が切り替わったら常に一番上から表示する
   useEffect(() => {
     window.scrollTo(0, 0)
