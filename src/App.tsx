@@ -62,7 +62,8 @@ export default function App() {
   // 非日本語圏では「Starflect」のほうがブランドとして機能している（発音できる・ドメインと一致）ため、
   // ja 以外は Starflect を先頭に置く。
   useEffect(() => {
-    document.title = getLang() === 'ja' ? 'ほしキャラ診断 〜Starflect〜' : `Starflect — ${t.home.appTitle}`
+    // appTitleが非日本語で'Starflect'になったため、連結すると「Starflect — Starflect」になる。単体でよい
+    document.title = getLang() === 'ja' ? 'ほしキャラ診断 〜Starflect〜' : 'Starflect'
   }, [t])
 
   // 画面が切り替わったら常に一番上から表示する

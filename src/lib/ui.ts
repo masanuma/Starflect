@@ -746,7 +746,7 @@ const UI: Record<Lang, UIStrings> = {
       backToModes: '← Back to modes',
     },
     home: {
-      appTitle: 'Hoshi-Kyara',
+      appTitle: 'Starflect',
       tagline1: 'Same star sign, and still no two people alike.',
       tagline2: 'Your birth date and time make a “Hoshi-Kyara” — a little star character that is only yours.',
       greetNew: 'Hi, welcome to Hoshi-Kyara.',
@@ -1090,7 +1090,7 @@ const UI: Record<Lang, UIStrings> = {
       backToModes: '← Volver a los modos',
     },
     home: {
-      appTitle: 'Hoshi-Kyara',
+      appTitle: 'Starflect',
       tagline1: 'El mismo signo, y aun así nadie igual a ti.',
       tagline2: 'Tu fecha y hora de nacimiento crean un «Hoshi-Kyara»: un pequeño personaje estelar que es solo tuyo.',
       greetNew: 'Hola, te damos la bienvenida a Hoshi-Kyara.',
@@ -1434,7 +1434,7 @@ const UI: Record<Lang, UIStrings> = {
       backToModes: '← Retour aux modes',
     },
     home: {
-      appTitle: 'Hoshi-Kyara',
+      appTitle: 'Starflect',
       tagline1: 'Même signe, et pourtant personne ne te ressemble.',
       tagline2: 'Ta date et ton heure de naissance donnent un « Hoshi-Kyara » : un petit personnage étoile rien qu’à toi.',
       greetNew: 'Bonjour, bienvenue sur Hoshi-Kyara.',
@@ -1778,7 +1778,7 @@ const UI: Record<Lang, UIStrings> = {
       backToModes: '← Torna ai modi',
     },
     home: {
-      appTitle: 'Hoshi-Kyara',
+      appTitle: 'Starflect',
       tagline1: 'Stesso segno, eppure nessuno è uguale a te.',
       tagline2: 'La tua data e ora di nascita creano un «Hoshi-Kyara»: un piccolo personaggio stellare solo tuo.',
       greetNew: 'Ciao, benvenuto/a su Hoshi-Kyara.',
@@ -2122,7 +2122,7 @@ const UI: Record<Lang, UIStrings> = {
       backToModes: '← Voltar aos modos',
     },
     home: {
-      appTitle: 'Hoshi-Kyara',
+      appTitle: 'Starflect',
       tagline1: 'Mesmo signo, e ainda assim ninguém igual a você.',
       tagline2: 'A sua data e hora de nascimento criam um «Hoshi-Kyara»: um personagem-estrela só seu.',
       greetNew: 'Olá, boas-vindas ao Hoshi-Kyara.',
@@ -2466,7 +2466,7 @@ const UI: Record<Lang, UIStrings> = {
       backToModes: '← 모드 선택으로',
     },
     home: {
-      appTitle: 'Hoshi-Kyara',
+      appTitle: 'Starflect',
       tagline1: '같은 별자리라도, 한 사람 한 사람 다릅니다.',
       tagline2: '태어난 날과 시간으로 만들어지는, 당신만의 별 캐릭터 ‘호시캐릭터’.',
       greetNew: '처음 뵙겠습니다, 호시캐릭터 진단이에요.',

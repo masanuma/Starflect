@@ -252,6 +252,9 @@ function layout(o: LayoutOpts): string {
     ? `<script>try{if(localStorage.getItem('starflect-companion:v1')&&!/[?&]stay/.test(location.search))location.replace('/app')}catch(e){}</script>`
     : ''
   const t = ui()
+  // ブランドの正式表記。日本語だけ「ほしキャラ」推し、他言語はStarflectが主役
+  // (非日本語圏ではStarflectのほうが発音できてドメインとも一致する。ペルソナテスト2回で同じ指摘)
+  const brandFull = o.lang === 'ja' ? `${t.home.appTitle} 〜Starflect〜` : t.home.appTitle
   return `<!doctype html><html lang="${o.lang}"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#F8F5FD"/>
 <title>${esc(o.title)}</title>
 <meta name="description" content="${esc(o.description)}"/>
@@ -259,7 +262,7 @@ function layout(o: LayoutOpts): string {
 <meta name="robots" content="index, follow, max-image-preview:large"/>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
 ${alternates}
-<meta property="og:type" content="website"/><meta property="og:site_name" content="ほしキャラ診断 〜Starflect〜"/>
+<meta property="og:type" content="website"/><meta property="og:site_name" content="${esc(brandFull)}"/>
 <meta property="og:title" content="${esc(o.ogTitle)}"/><meta property="og:description" content="${esc(o.description)}"/>
 <meta property="og:url" content="${canonical}"/><meta property="og:image" content="${o.ogImage}"/>
 <meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
@@ -268,7 +271,7 @@ ${FONTS}${redirect}<style>${CSS}</style></head>
 <body><div class="wrap${o.kind === 'lp' ? ' lp' : ''}">
 <div class="topbar"><a href="${lpHref(o.lang)}" class="brand"><span class="brand-ic">${brand(30)}</span><span class="brand-tx">${esc(t.home.appTitle)}</span></a><nav class="langsw">${switcher}</nav></div>
 ${o.body}
-<div class="footer">© ${esc(t.home.appTitle)} 〜Starflect〜</div></div></body></html>`
+<div class="footer">© ${esc(brandFull)}</div></div></body></html>`
 }
 
 type ST = ReturnType<typeof allStarTypes>[number]
@@ -377,7 +380,7 @@ ${aboutApp}
     lang,
     title: `${t.home.appTitle}｜${t.home.tagline2}`,
     description: `${t.home.tagline1} ${t.home.tagline2}`,
-    ogTitle: `${t.home.appTitle} 〜Starflect〜`,
+    ogTitle: lang === 'ja' ? `${t.home.appTitle} 〜Starflect〜` : t.home.appTitle,
     ogImage: `${ORIGIN}/ogp/default.png`,
     body,
     kind: 'lp',
