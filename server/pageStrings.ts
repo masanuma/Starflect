@@ -262,7 +262,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: 'Es una versión de prueba', d: 'Seguimos ajustando cómo se ve y cómo se lee, así que los textos y la app pueden cambiar. Tus registros se guardan solo en tu dispositivo, por lo que se pierden si borras los datos del navegador: antes de cambiar de móvil, guarda un archivo desde «Llevarte tus datos» al final de la página. En días de mucha actividad, las lecturas con IA pueden descansar hasta el día siguiente.' },
     ],
     pairTitle: 'Ved vuestra compatibilidad',
-    pairLead: 'Basta con su fecha de nacimiento. Al comparar Star Character —el signo solar combinado con el lunar— sale más fino que un horóscopo de revista.',
+    pairLead: 'Basta con su fecha de nacimiento. Al comparar vuestros Star Characters —el signo solar combinado con el lunar— sale más fino que un horóscopo de revista.',
     pairPoints: [
       'Solo introduce su fecha de nacimiento. Un apodo sirve como nombre.',
       'Obtenéis un porcentaje y un nombre para la pareja (por ejemplo, «gran dúo»). 16 × 16 combinaciones.',
@@ -303,7 +303,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLead: 'Ton signe solaire, ton signe lunaire et les dix astres qui te façonnent : voici ce dont chacun s’occupe.',
     points: [
       ['Les horoscopes ordinaires : un astre.', 'Star Character : dix.'],
-      ['Il connaît tout ton thème.', 'Pose au Salon Star Character', 'toutes tes questions.'],
+      ['Il connaît tout ton thème.', 'Pose toutes tes questions', 'au Salon Star Character.'],
       ['Le Soleil le jour, la Lune la nuit.', 'La lecture de chaque jour', 'n’appartient qu’à toi.'],
     ],
     moreDetail: 'En savoir plus',
@@ -323,7 +323,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: 'C’est une version d’essai', d: 'Nous ajustons encore l’apparence et les textes : les formulations et l’application elle-même peuvent évoluer. Tes données sont conservées uniquement sur ton appareil et disparaissent si tu effaces les données du navigateur — avant de changer de téléphone, enregistre un fichier depuis « Emporter tes données » en bas de page. Les jours de forte affluence, les lectures par l’IA peuvent se mettre en pause jusqu’au lendemain.' },
     ],
     pairTitle: 'Voyez votre compatibilité',
-    pairLead: 'Sa date de naissance suffit. Comme on compare les Star Character — signe solaire croisé avec signe lunaire — c’est plus fin qu’un horoscope de magazine.',
+    pairLead: 'Sa date de naissance suffit. Comme on compare les Star Characters — signe solaire croisé avec signe lunaire — c’est plus fin qu’un horoscope de magazine.',
     pairPoints: [
       'Entre simplement sa date de naissance. Un surnom suffit comme nom.',
       'Vous obtenez un pourcentage et un nom pour le duo (par exemple « super duo »). 16 × 16 combinaisons.',
@@ -446,7 +446,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: 'É uma versão de teste', d: 'Ainda estamos ajustando a aparência e os textos, então as palavras e o próprio app podem mudar. Os seus registos ficam só no seu aparelho e perdem-se se limpar os dados do navegador — antes de trocar de telemóvel, guarde um ficheiro em “Leve os seus dados”, no rodapé da página. Em dias movimentados, as leituras com IA podem descansar até o dia seguinte.' },
     ],
     pairTitle: 'Vejam a combinação de vocês',
-    pairLead: 'Basta a data de nascimento dela. Como comparamos os Star Character — signo solar cruzado com o lunar — sai mais fino que um horóscopo de revista.',
+    pairLead: 'Basta a data de nascimento dela. Como comparamos os Star Characters — signo solar cruzado com o lunar — sai mais fino que um horóscopo de revista.',
     pairPoints: [
       'Basta inserir a data de nascimento. Um apelido serve como nome.',
       'Vocês recebem uma porcentagem e um nome para a dupla (por exemplo, «grande dupla»). 16 × 16 combinações.',
@@ -474,7 +474,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     howTo: '사용 방법',
     steps: [
       { t: '생년월일 입력', d: '생년월일만 있으면 OK. 시각을 알면 더 자세히.' },
-      { t: '당신의 스타 캐릭터 확인', d: '태양과 달의 조합으로 16캐릭터 중 하나가 정해져요.' },
+      { t: '당신의 스타 캐릭터 확인', d: '태양과 달의 조합으로 16가지 캐릭터 중 하나가 정해져요.' },
       { t: '스타 캐릭터에게 상담', d: '오늘의 운세가 도착해요. 궁금한 건 뭐든 상담해 주세요.' },
     ],
     charTitle: (n) => `‘${n}’은 어떤 사람?`,
@@ -508,7 +508,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: '지금은 테스트 공개 중입니다', d: '내용과 보여 주는 방식을 다듬어 가는 단계라, 점의 문장이나 앱의 구성이 앞으로 바뀔 수 있습니다. 기록은 사용 중인 기기에만 저장되므로 브라우저 데이터를 지우면 사라집니다. 기기를 바꾸기 전에 페이지 아래쪽 ‘데이터 옮기기’에서 파일로 저장해 두세요. 이용이 몰리는 날에는 그날의 AI 읽기를 쉬는 경우가 있습니다.' },
     ],
     pairTitle: '두 사람의 궁합 보기',
-    pairLead: '상대의 생년월일만 있으면 됩니다. 태양 별자리와 달 별자리를 곱한 ‘스타 캐릭터’끼리의 궁합이라, 잡지 별자리 운세보다 세밀하게 나와요.',
+    pairLead: '상대의 생년월일만 있으면 돼요. 태양 별자리와 달 별자리를 곱한 ‘스타 캐릭터’끼리의 궁합이라, 잡지 별자리 운세보다 세밀하게 나와요.',
     pairPoints: [
       '상대의 생년월일만 넣으면 됩니다. 이름은 닉네임도 괜찮아요.',
       '궁합 %와 두 사람의 별칭(예: 명콤비)이 나와요. 조합은 16 × 16가지.',
@@ -524,7 +524,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     howReadLead: '행성이 "누가"를, 별자리가 "어떤 식으로"를 나타내요. 둘을 합치면 이런 한 문장이 돼요.',
     whoLabel: '행성 = 누가',
     howLabel: '별자리 = 어떤 식으로',
-    sunNote: '잡지나 TV의 12별자리 운세에서 말하는 "당신의 별자리"가 바로 이 태양 별자리예요.',
+    sunNote: '잡지나 TV의 12별자리 운세에서 말하는 ‘당신의 별자리’가 바로 이 태양 별자리예요.',
     ascNote: '※ 상승궁은 행성이 아니라, 태어난 순간 동쪽 지평선과 만나던 지점이에요. 약 2시간마다 바뀌기 때문에 태어난 시각을 알면 더 정확해져요.',
     g1Lead: '며칠에서 두 달 정도면 다음 별자리로 옮겨 가요. 빠르게 움직이는 만큼 사람마다 달라서, 당신다움이 가장 잘 드러나는 곳이에요.',
     g2Lead: '1년에서 2년 반에 걸쳐 별자리를 옮겨요. 사회 속에서의 역할과, 단련되는 자리를 나타내요.',
