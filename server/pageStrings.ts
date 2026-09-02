@@ -98,7 +98,9 @@ export interface PageStrings {
 
 export const PAGE_STRINGS: Record<Lang, PageStrings> = {
   ja: {
-    cta: 'ほしキャラ診断を開始する！',
+    // 「診断を開始する」はシステムっぽく硬い(ペルソナ再テスト ja good1/4)。
+    // 他言語はMeet型でgood14/20の実績があるので、jaも「出会う」に揃える
+    cta: 'あなたのほしキャラに会いに行く！',
     heroNote: '無料・登録不要・生年月日だけでOK・30秒',
     howTo: '使い方',
     steps: [
@@ -117,7 +119,8 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     points: [
       ['ふつうの星座占いは、星ひとつ。', 'ほしキャラは、星を10コ。'],
       ['あなたの星を全部知っている', '「ほしキャラ相談室」に、', 'なんでも相談してください。'],
-      ['毎日の占いは、', 'あなただけのものです。'],
+      // 朝夜の面は「毎日ひらく理由」の本命なのにLPに無かった(ペルソナ再テスト④の残り14人)
+      ['朝は太陽の面、夜は月の面。', '毎日の占いは、', 'あなただけのものです。'],
     ],
     moreDetail: 'もっと詳しく',
     chatSampleTitle: "たとえば、こんな会話をしています",
@@ -176,9 +179,10 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsTitle: 'About the 10 planets and 12 signs',
     starsLead: 'Your Sun sign, your Moon sign, and the ten stars that shape you — here is what each one is in charge of.',
     points: [
-      ['Ordinary horoscopes: one star.', 'Hoshi-Kyara: ten.'],
+      // 動詞なしの「one star / ten」はレビューの星評価(★1 vs ★10)に誤読され得る(ペルソナ再テスト)
+      ['Ordinary horoscopes read one star.', 'Hoshi-Kyara reads ten.'],
       ['It knows your whole chart.', 'Ask the Hoshi-Kyara Room', 'anything you like.'],
-      ['The reading of each day', 'belongs to you alone.'],
+      ['The Sun by day, the Moon by night.', 'The reading of each day', 'belongs to you alone.'],
     ],
     moreDetail: 'Tell me more',
     chatSampleTitle: "Conversations look like this",
@@ -239,7 +243,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     points: [
       ['Los horóscopos normales: un astro.', 'Hoshi-Kyara: diez.'],
       ['Conoce toda tu carta.', 'Pregunta lo que quieras', 'en la Sala Hoshi-Kyara.'],
-      ['La lectura de cada día', 'es solo tuya.'],
+      ['El Sol de día, la Luna de noche.', 'La lectura de cada día', 'es solo tuya.'],
     ],
     moreDetail: 'Cuéntame más',
     chatSampleTitle: "Las conversaciones son así",
@@ -300,7 +304,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     points: [
       ['Les horoscopes ordinaires : un astre.', 'Hoshi-Kyara : dix.'],
       ['Il connaît tout ton thème.', 'Pose au Salon Hoshi-Kyara', 'toutes tes questions.'],
-      ['La lecture de chaque jour', 'n’appartient qu’à toi.'],
+      ['Le Soleil le jour, la Lune la nuit.', 'La lecture de chaque jour', 'n’appartient qu’à toi.'],
     ],
     moreDetail: 'En savoir plus',
     chatSampleTitle: "Les conversations ressemblent à ça",
@@ -361,7 +365,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     points: [
       ['Gli oroscopi comuni: un astro.', 'Hoshi-Kyara: dieci.'],
       ['Conosce tutto il tuo tema.', 'Chiedi alla Sala Hoshi-Kyara', 'quello che vuoi.'],
-      ['La lettura di ogni giorno', 'è solo tua.'],
+      ['Il Sole di giorno, la Luna di notte.', 'La lettura di ogni giorno', 'è solo tua.'],
     ],
     moreDetail: 'Dimmi di più',
     chatSampleTitle: "Le conversazioni sono così",
@@ -404,10 +408,11 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
   },
   pt: {
     cta: 'Conheça seu Hoshi-Kyara!',
-    heroNote: 'Grátis · Sem cadastro · Só a data de nascimento · 30 segundos',
+    // ペルソナ再テスト: pt-PT話者4/4人が「ブラジル語彙」と指摘。cadastro→registo, celular→telemóvel, Digite→Introduza
+    heroNote: 'Grátis · Sem registo · Só a data de nascimento · 30 segundos',
     howTo: 'Como funciona',
     steps: [
-      { t: 'Digite sua data de nascimento', d: 'Sua data de nascimento basta. Com a hora, fica mais fino.' },
+      { t: 'Introduza a sua data de nascimento', d: 'A sua data de nascimento basta. Com a hora, fica mais fino.' },
       { t: 'Seu Hoshi-Kyara é revelado', d: 'Seu Sol e sua Lua decidem qual dos 16 você é.' },
       { t: 'Pergunte ao seu Hoshi-Kyara', d: 'Chega a sua leitura de hoje. Pergunte o que quiser.' },
     ],
@@ -422,7 +427,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     points: [
       ['Os horóscopos comuns: um astro.', 'Hoshi-Kyara: dez.'],
       ['Ela conhece todo o seu mapa.', 'Pergunte na Sala Hoshi-Kyara', 'o que quiser.'],
-      ['A leitura de cada dia', 'é só sua.'],
+      ['O Sol de dia, a Lua à noite.', 'A leitura de cada dia', 'é só sua.'],
     ],
     moreDetail: 'Saiba mais',
     chatSampleTitle: "As conversas são assim",
@@ -438,7 +443,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: 'Os cálculos acontecem no seu aparelho', d: 'Calcular a posição dos astros a partir da sua data e hora de nascimento acontece inteiramente no seu navegador. A sua data de nascimento nunca é enviada.' },
       { t: 'O que chega à IA no espaço de consulta', d: 'Só quando você fala com o seu Hoshi-Kyara: o mapa calculado e a mensagem que você escreveu são enviados à IA. O seu nome só é incluído se você o tiver informado.' },
       { t: 'Aproveite como entretenimento', d: 'Esta leitura e o espaço de consulta são entretenimento. Não são orientação médica, psicológica, jurídica ou financeira. Para a sua saúde, o seu bem-estar ou qualquer coisa que envolva a sua segurança, procure um serviço profissional.' },
-      { t: 'É uma versão de teste', d: 'Ainda estamos ajustando a aparência e os textos, então as palavras e o próprio app podem mudar. Seus registros ficam só no seu aparelho e se perdem se você limpar os dados do navegador — antes de trocar de celular, salve um arquivo em “Leve seus dados”, no rodapé da página. Em dias movimentados, as leituras com IA podem descansar até o dia seguinte.' },
+      { t: 'É uma versão de teste', d: 'Ainda estamos ajustando a aparência e os textos, então as palavras e o próprio app podem mudar. Os seus registos ficam só no seu aparelho e perdem-se se limpar os dados do navegador — antes de trocar de telemóvel, guarde um ficheiro em “Leve os seus dados”, no rodapé da página. Em dias movimentados, as leituras com IA podem descansar até o dia seguinte.' },
     ],
     pairTitle: 'Vejam a combinação de vocês',
     pairLead: 'Basta a data de nascimento dela. Como comparamos os Hoshi-Kyara — signo solar cruzado com o lunar — sai mais fino que um horóscopo de revista.',
@@ -448,7 +453,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       'Vem com «vocês dois hoje» e um espaço de consulta só para vocês: amor ou trabalho, pergunte o que quiser.',
     ],
     pairCta: 'Ver a combinação de vocês',
-    pairNote: 'Sem cadastro · Só duas datas de nascimento · 1 minuto',
+    pairNote: 'Sem registo · Só duas datas de nascimento · 1 minuto',
     planetsTitle: 'Os astros que formam você',
     planetsLead: 'Onde cada astro estava no instante do seu nascimento. O planeta diz "quem" e o signo diz "de que jeito". Com o Ascendente, são onze personagens.',
     signsTitle: 'Os 12 signos e os 4 elementos',
@@ -469,10 +474,10 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     howTo: '사용 방법',
     steps: [
       { t: '생년월일 입력', d: '생년월일만 있으면 OK. 시각을 알면 더 자세히.' },
-      { t: '당신의 호시캐릭터 판명', d: '태양과 달의 조합으로 16캐릭터 중 하나가 정해져요.' },
+      { t: '당신의 호시캐릭터 확인', d: '태양과 달의 조합으로 16캐릭터 중 하나가 정해져요.' },
       { t: '호시캐릭터에게 상담', d: '오늘의 운세가 도착해요. 궁금한 건 뭐든 상담해 주세요.' },
     ],
-    charTitle: (n) => `「${n}」은 어떤 사람?`,
+    charTitle: (n) => `‘${n}’은 어떤 사람?`,
     charTitleSeo: (n) => `태양 별자리 × 달 별자리 ‘${n}’의 성격`,
     comboItem: (ss, ms) => `태양 ${ss} × 달 ${ms}`,
     otherTitle: '다른 호시캐릭터',
@@ -482,15 +487,15 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
     starsLead: '진단 결과에 나오는 태양 별자리와 달 별자리, 그리고 당신을 이루는 10개의 별. 각자 무엇을 담당하는지 정리했어요.',
     points: [
       ['보통 별자리 운세는 별 하나.', '호시캐릭터는 별 10개.'],
-      // 韓国語は全体で「호시캐릭터」に統一している。ここだけラテン文字だった
-      ['당신의 별을 전부 아는', '「호시캐릭터 상담실」에', '무엇이든 상담해 주세요.'],
-      ['매일의 운세는,', '당신만의 것입니다.'],
+      // 韓国語は全体で‘호시캐릭터’に統一している。ここだけラテン文字だった
+      ['당신의 별을 전부 아는', '‘호시캐릭터 상담실’에', '무엇이든 상담해 주세요.'],
+      ['낮에는 태양의 얼굴, 밤에는 달의 얼굴.', '매일의 운세는,', '당신만의 것입니다.'],
     ],
     moreDetail: '더 자세히',
     chatSampleTitle: "이런 대화를 나눠요",
     chatSample: [
       { who: "you", text: "다음 달에 이직 면접이 있어요. 잘될까요?" },
-      { who: "star", text: "원래 차분히 준비할수록 힘이 나는 분이시잖아요 — 그건 당신의 별에 있어요. 마침 다음 달, 당신의 「노력하는 자리」에 순풍이 불어와요. 날짜가 정해지면 알려 주세요. 그날의 하늘을 읽어 둘게요." },
+      { who: "star", text: "원래 차분히 준비할수록 힘이 나는 분이시잖아요 — 그건 당신의 별에 있어요. 마침 다음 달, 당신의 ‘노력하는 자리’에 순풍이 불어와요. 날짜가 정해지면 알려 주세요. 그날의 하늘을 읽어 둘게요." },
       { who: "you", text: "고마워요. 정해지면 말할게요." },
       { who: "star", text: "기다리고 있을게요. 요즘 일 이야기를 자주 하시는데, 조금씩 앞으로 나아가고 있어요." },
     ],
@@ -500,7 +505,7 @@ export const PAGE_STRINGS: Record<Lang, PageStrings> = {
       { t: '별 계산은 당신의 기기 안에서', d: '생년월일과 시각으로 별의 위치를 계산하는 처리는 모두 사용 중인 기기 안에서 이루어집니다. 입력한 생년월일 자체를 전송하지는 않습니다.' },
       { t: '상담실에서 AI에게 전달되는 것', d: '호시캐릭터에게 상담할 때만, 계산 결과(별의 배치와 당신이 쓴 메시지)가 AI에게 전달됩니다. 이름은 입력한 경우에만 포함됩니다.' },
       { t: '점으로 즐겨 주세요', d: '이 진단과 상담실은 오락으로 즐기시는 것입니다. 의료·상담·법률·투자 등의 전문적인 조언이 아닙니다. 마음이나 몸의 이상, 안전에 관한 일은 전문 창구나 의료기관에 상담해 주세요.' },
-      { t: '지금은 테스트 공개 중입니다', d: '내용과 보여 주는 방식을 다듬어 가는 단계라, 점의 문장이나 앱의 구성이 앞으로 바뀔 수 있습니다. 기록은 사용 중인 기기에만 저장되므로 브라우저 데이터를 지우면 사라집니다. 기기를 바꾸기 전에 페이지 아래쪽 「데이터 옮기기」에서 파일로 저장해 두세요. 이용이 몰리는 날에는 그날의 AI 읽기를 쉬는 경우가 있습니다.' },
+      { t: '지금은 테스트 공개 중입니다', d: '내용과 보여 주는 방식을 다듬어 가는 단계라, 점의 문장이나 앱의 구성이 앞으로 바뀔 수 있습니다. 기록은 사용 중인 기기에만 저장되므로 브라우저 데이터를 지우면 사라집니다. 기기를 바꾸기 전에 페이지 아래쪽 ‘데이터 옮기기’에서 파일로 저장해 두세요. 이용이 몰리는 날에는 그날의 AI 읽기를 쉬는 경우가 있습니다.' },
     ],
     pairTitle: '두 사람의 궁합 보기',
     pairLead: '상대의 생년월일만 있으면 됩니다. 태양 별자리와 달 별자리를 곱한 ‘호시캐릭터’끼리의 궁합이라, 잡지 별자리 운세보다 세밀하게 나와요.',
