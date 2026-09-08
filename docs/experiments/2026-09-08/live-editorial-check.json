@@ -1,0 +1,82 @@
+[
+  {
+    "index": 1,
+    "lang": "ja",
+    "facet": "day",
+    "outlook": "good",
+    "date": "2026-09-10",
+    "result": {
+      "version": 2,
+      "headline": "手を動かした分だけ、深まる日。",
+      "paragraphs": [
+        "机の上を整えたり、気になっていた小さな作業に手をつけたり。今日はそういう地道な一手が、思ったよりすんなり進みやすい流れです。ふと集中が乗ってきて、気づけば時間を忘れていた、なんて瞬間があるかもしれません。",
+        "あなたの中にある粘り強さと、物事の奥まで見通す力が、今日は追い風を受けています。一方で、勢いよく動きたい気持ちとじっくり構えたい気持ちがせめぎ合う場面もありそうですが、それも自分らしさの一部。急がず取り組んだことほど、あとで満足感につながりそうです。"
+      ],
+      "caution": "",
+      "questions": [
+        "今日、集中しやすいのはどんなことですか?",
+        "じっくり取り組みたいテーマはありますか?"
+      ]
+    }
+  },
+  {
+    "index": 4,
+    "lang": "ja",
+    "facet": "day",
+    "outlook": "careful",
+    "date": "2026-09-13",
+    "result": {
+      "version": 2,
+      "headline": "静けさの中に、好きな一皿を。",
+      "paragraphs": [
+        "今日は気持ちが引っぱり合いやすい日。誰かと予定を合わせるより、ひとりで選べる小さなことに目を向けてみると落ち着きます。例えば、いつもより丁寧に淹れたお茶とか、お気に入りの器を出してみるとか。そんな些細な選択が、今日はちゃんと心を支えてくれます。",
+        "あなたは本来、じっくり物事を積み上げる審美眼の人。だからこそ、気持ちがせめぎ合う日は無理に前へ進めなくても大丈夫。動と静が押し合う今日は、静を選んでも何も失いません。ただ好きなものに囲まれて過ごすだけで、明日への土台が静かに整っていきます。"
+      ],
+      "caution": "心が揺れて言葉がきつくなりそうな場面では、返事を少し先延ばしにすると穏やかに収まります。",
+      "questions": [
+        "今日、ひとりで落ち着ける時間はどう作れそう？",
+        "このせめぎ合いの感じ、他にどんな場面で出やすい?"
+      ]
+    }
+  },
+  {
+    "index": 4,
+    "lang": "ja",
+    "facet": "night",
+    "outlook": "careful",
+    "date": "2026-09-13",
+    "result": {
+      "version": 2,
+      "headline": "揺れる心も、今夜は灯りのそば",
+      "paragraphs": [
+        "今夜は月がてんびん座を巡り、あなたの中の情熱や心の部屋と少し押し合いをしています。だから気持ちが右に左にと揺れても不思議はありません。温かい飲み物を用意して、好きな音楽を小さく流すだけで、その揺れは案外心地よいリズムに変わっていくものです。",
+        "あなたの月はもともと責任感が強く、頑張りを積み重ねる性質。今日はその真面目さを少し脇に置いて、心が求めるままに揺れてみていいのです。無理に答えを出そうとせず、揺れている自分をそのまま眺める夜があってもいい。安定という土台は、今夜も変わらずあなたの中にあります。"
+      ],
+      "caution": "気持ちが行き違いやすい夜なので、誰かとのやり取りは急いで結論を出さず、明日以降に持ち越しても大丈夫です。",
+      "questions": [
+        "この揺れはいつ頃落ち着きそうですか",
+        "心を落ち着けるのに向いていることは何ですか"
+      ]
+    }
+  },
+  {
+    "index": 0,
+    "lang": "en",
+    "facet": "day",
+    "outlook": "steady",
+    "date": "2026-09-09",
+    "result": {
+      "version": 2,
+      "headline": "A quiet fire, steadily fed",
+      "paragraphs": [
+        "Picture a stove burner turned low but never off — that's your energy today. The sun in Virgo and moon in Leo stir a small tug between wanting to polish details and wanting to be seen doing something bold. Mars meeting your own Mars gives real momentum underneath, so a task you start almost on a whim could carry further than expected, like a walk that turns into a much longer, satisfying loop.",
+        "This pull between refining and performing isn't a flaw to fix — it's just today's weather over your usual bedrock steadiness. Your sun's patience and your moon's quiet endurance are still right there underneath, holding things together even if the day feels a bit like two hands reaching in different directions. By evening, that friction tends to settle on its own, leaving something you actually finished."
+      ],
+      "caution": "If a small disagreement flares up around midday, it likely says more about the day's crosscurrents than about anything lasting — no need to over-read it.",
+      "questions": [
+        "What does the 'ひっぱり合い' between my sun and Mars mean for how I should approach today?",
+        "How can I use the Mars energy without feeling scattered?"
+      ]
+    }
+  }
+]

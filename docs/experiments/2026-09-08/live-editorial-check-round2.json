@@ -1,0 +1,82 @@
+[
+  {
+    "index": 1,
+    "lang": "ja",
+    "facet": "day",
+    "outlook": "good",
+    "date": "2026-09-10",
+    "result": {
+      "version": 2,
+      "headline": "動きたい気持ちに、じっくり応える日。",
+      "paragraphs": [
+        "今日はなんだか体を動かしたい、行動したい気持ちがふつふつと湧いてきそうです。散歩コースを少し変えてみる、気になっていた場所まで足を延ばしてみる。そんな小さな『動く楽しみ』が、思った以上に発見をくれるかもしれません。",
+        "あなたはもともと、勢いだけでなく、じっくり積み上げて形にする粘り強さを持つ人。今日はその粘り強さと、湧き上がる行動力が引っ張り合いつつも、奥のほうでは深いところの再生や気づきへとつながっていく巡りです。焦らず動いた分だけ、あとで『あれが効いていたんだ』と思える一日になりそうです。"
+      ],
+      "caution": "",
+      "questions": [
+        "行動力と粘り強さのバランスが分かりません",
+        "動きたい気持ちとの付き合い方を知りたい"
+      ]
+    }
+  },
+  {
+    "index": 4,
+    "lang": "ja",
+    "facet": "day",
+    "outlook": "careful",
+    "date": "2026-09-13",
+    "result": {
+      "version": 2,
+      "headline": "静かな昼、心はいつも通りでいい",
+      "paragraphs": [
+        "今日は気持ちと行動がすこし噛み合いにくく、誰かに合わせようとするほど疲れを感じやすいかもしれません。それなら無理に予定を詰めず、好きな飲み物を選ぶ、窓の外を眺めるといった、自分だけの小さな時間を挟んでみてください。それだけで午後の空気が少し軽くなります。",
+        "あなたは元々、どっしりと粘り強く物事を積み上げていける人。今日のようにペースが乱れやすい日でも、その土台は揺らいでいません。焦って動くより、心が落ち着く場所に戻ることを選んでいい日。静けさの中にも、ちゃんと安心はあります。"
+      ],
+      "caution": "人との温度差を感じても、その場で結論を出そうとせず一呼吸おくと楽になります。",
+      "questions": [
+        "気持ちがすれ違いやすい日の過ごし方を知りたい",
+        "心を落ち着けるためにできることを教えて"
+      ]
+    }
+  },
+  {
+    "index": 4,
+    "lang": "ja",
+    "facet": "night",
+    "outlook": "careful",
+    "date": "2026-09-13",
+    "result": {
+      "version": 2,
+      "headline": "心はそっと、揺れてもいい夜",
+      "paragraphs": [
+        "今夜は気持ちがあちこち引っ張られるような、少し落ち着かなさを感じるかもしれません。誰かを想う気持ちと、自分のしたいことがすれ違う感じ。でも、それは今日だけの一時的な巡り。無理に答えを出そうとせず、好きな飲み物を用意して、部屋の灯りを少し落とすだけでも、気持ちがふっとほどける瞬間があるはずです。",
+        "あなたはもともと、じっくり物事を受け止めて粘り強く形にしていく人。だからこそ今夜のような『すれ違い』も、いつか腑に落ちる伏線になっていきます。今は結論を急がず、心が落ち着く場所にいるだけで十分。揺れた分だけ、後で見える景色が深くなるはずです。"
+      ],
+      "caution": "気持ちがすれ違いやすい夜なので、大事な話は今夜より落ち着いた日に譲ると安心です。",
+      "questions": [
+        "気持ちがすれ違う時、どう受け止めたらいいですか",
+        "心が落ち着かない夜の過ごし方を知りたいです"
+      ]
+    }
+  },
+  {
+    "index": 0,
+    "lang": "en",
+    "facet": "day",
+    "outlook": "steady",
+    "date": "2026-09-09",
+    "result": {
+      "version": 2,
+      "headline": "Steady ground, quiet spark",
+      "paragraphs": [
+        "Today the Sun in Virgo and Moon in Leo bring a gentle breeze to your inner depths, while transiting Mars lines up beautifully with your own Mars — a real boost of energy for anything that calls for stamina or follow-through. You might notice a small task, a walk, or a bit of physical effort feels easier and more satisfying than usual, like your body and will are finally moving in the same direction.",
+        "At the same time, there's a bit of push-pull between today's Sun and your natal Mars, and the Moon is stirring something deeper around transformation and letting go. For someone as steady and quietly determined as you, this isn't a day to force a decision — it's more like standing firm while a little inner weather passes through. Let the drive carry you forward, and let the tension simply be there without needing to resolve it today."
+      ],
+      "caution": "",
+      "questions": [
+        "I feel a pull between wanting to push forward and wanting to pause — how do I read that?",
+        "What does this energy mean for something I've been slowly working toward?"
+      ]
+    }
+  }
+]

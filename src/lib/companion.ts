@@ -45,6 +45,8 @@ export const PICK_IDS: PickId[] = ['alone', 'decide', 'holiday', 'newplace', 'ad
 export type Facet = 'day' | 'night'
 
 export interface SavedFortune {
+  /** Calculated outlook at generation time, kept stable with the saved text. */
+  toneLevel?: number
   /** 本文 */
   text: string
   /** 書いた時刻(ISO) */
@@ -122,6 +124,8 @@ export interface CompanionState {
    * 旧データ(このフィールド無し)は daily から推定して補完する(currentSignals)。
    */
   signals?: number
+  /** One short reading per calendar week and language. Old backups may omit this. */
+  weekly?: Partial<Record<Lang, {weekStart: string; chartKey: string; text: string}>>
 }
 
 const STORAGE_KEY = 'starflect-companion:v1'
@@ -201,7 +205,7 @@ export function createCompanion(chart: ChartData, starType: string, now: Date = 
     }
     // 「人となり」も前の人のもの。会話ログは生年月日＋名前でキーが分かれるので自動で切り替わるが、
     // これは相棒の状態に乗っているので明示的に捨てる
-    const { persona: _drop, ...keep } = existing
+    const { persona: _drop, weekly: _dropWeekly, ...keep } = existing
     state = { ...keep, chart, starType, daily }
   }
   saveCompanion(state)
@@ -457,6 +461,7 @@ export function saveFortune(
   lang: Lang = getLang(),
   now: Date = new Date(),
   facet: Facet = 'day',
+  toneLevel?: number,
 ): CompanionState {
   const key = todayKey(now)
   const entry = state.daily[key] ?? {}
@@ -468,7 +473,7 @@ export function saveFortune(
       ...state.daily,
       [key]: {
         ...entry,
-        [field]: { ...entry[field], [lang]: { text, writtenAt: now.toISOString(), basis } },
+        [field]: { ...entry[field], [lang]: { text, writtenAt: now.toISOString(), basis, toneLevel } },
       },
     },
   }

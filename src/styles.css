@@ -1781,6 +1781,47 @@ body {
   white-space: pre-wrap;
 }
 
+/* Editorial reading: a visible outlook, then a quiet reading column. */
+.reading-card--editorial { padding: clamp(20px, 4vw, 32px); }
+.fortune-outlook { display: flex; align-items: center; gap: 14px; border: 1px solid; border-radius: 18px; padding: 14px 18px; margin: 20px 0 28px; }
+.fortune-outlook--good { background: #fff8e7; border-color: #ead59d; color: #76501d; }
+.fortune-outlook--steady { background: #f0f5fc; border-color: #ccdbee; color: #3c587d; }
+.fortune-outlook--careful { background: #fff1e3; border-color: #e5bf91; color: #7e4c24; }
+.fortune-weather { width: 84px; height: 76px; flex: 0 0 84px; }
+.fortune-outlook-eyebrow { margin: 0 0 3px; font-size: 11px; font-weight: 650; letter-spacing: .07em; }
+.fortune-outlook-label { margin: 0; font-size: clamp(20px, 4.8vw, 25px); font-weight: 800; line-height: 1.4; }
+.fortune-outlook-hint { margin: 4px 0 0; font-size: 12px; line-height: 1.6; }
+.fortune-editorial, .fortune-prose { max-width: 38rem; margin-inline: auto; }
+.fortune-headline { margin: 0 0 22px; font-size: clamp(21px, 4.9vw, 27px); line-height: 1.65; letter-spacing: .025em; text-wrap: pretty; overflow-wrap: anywhere; }
+.fortune-prose { font-size: 16px; line-height: 2; letter-spacing: .025em; color: var(--ink); overflow-wrap: anywhere; }
+.fortune-prose p { margin: 0 0 19px; white-space: pre-wrap; }
+.fortune-prose p:last-child { margin-bottom: 0; }
+.fortune-caution { margin: 24px 0 0; padding: 16px 18px; border-left: 3px solid #bb8244; background: #fbf5ed; border-radius: 0 12px 12px 0; }
+.fortune-caution p { margin: 0; font-size: 14px; line-height: 1.9; color: #67492d; }
+.fortune-caution .fortune-caution-label { font-size: 12px; font-weight: 750; margin-bottom: 6px; }
+.fortune-followup { margin-top: 27px; border-top: 1px solid var(--card-border); padding-top: 19px; }
+.fortune-followup > p { margin: 0 0 12px; font-size: 12px; color: var(--ink-sub); }
+.fortune-followup > div { display: flex; flex-wrap: wrap; gap: 9px; }
+.fortune-followup button { min-height: 44px; max-width: 100%; border: 1px solid #d9cce9; border-radius: 12px; background: #f8f4fc; color: #62477a; padding: 11px 14px; font: inherit; font-size: 13px; line-height: 1.6; text-align: left; cursor: pointer; overflow-wrap: anywhere; }
+.fortune-followup button:hover { background: #eee5f7; border-color: #a789be; }
+.fortune-followup button:focus-visible { outline: 3px solid #8556ac; outline-offset: 3px; }
+.weekly-reading { margin-top: 26px; padding: 19px 20px; border-radius: 15px; background: #f5f1fb; border: 1px solid #ded3ed; color: #4c3b65; }
+.weekly-reading-heading { display: flex; align-items: baseline; gap: 8px; }
+.weekly-reading-heading h4 { margin: 0; font-size: 14px; line-height: 1.7; }
+.weekly-reading-dates { margin: 3px 0 12px; color: #6e5b88; font-size: 11px; }
+.weekly-reading-body, .weekly-reading > p[role="status"], .weekly-reading [role="alert"] p { margin: 0; font-size: 14px; line-height: 1.9; overflow-wrap: anywhere; }
+.weekly-reading button { margin-top: 12px; min-height: 44px; background: transparent; border: none; border-bottom: 1px solid #baa5d0; color: #664181; font: inherit; font-size: 13px; text-align: left; cursor: pointer; }
+.weekly-reading button:focus-visible { outline: 3px solid #8556ac; outline-offset: 3px; }
+.result-synthesis { margin: 16px 0; padding: 18px 20px; background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; text-align: left; font-size: 14px; line-height: 1.9; }
+.result-synthesis summary { cursor: pointer; font-weight: 700; }
+.reading-card--editorial .card-make { margin-top: 24px; }
+@media (max-width: 420px) {
+  .fortune-outlook { padding: 12px; gap: 9px; }
+  .fortune-weather { width: 66px; height: 66px; flex-basis: 66px; }
+  .fortune-followup > div { flex-direction: column; }
+  .fortune-followup button { width: 100%; }
+}
+
 /* 待ち時間は「読み込み中」ではなく「いま読んでいる」として見せる。
    一般の占いが一瞬なのは在庫から引くから。数秒かかるのは、その人のために今書いているから */
 .fortune-waiting {

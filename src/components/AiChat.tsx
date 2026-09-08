@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, ReactNode } from 'react'
 import type { ChatChartContext, ChatMessage } from '../lib/aiChat'
-import { streamAiChat } from '../lib/aiChat'
+import { streamAiChat, buildChatContext } from '../lib/aiChat'
 import { earnChatSignal } from '../lib/companion'
 import type { ChartData, PlanetKey } from '../lib/types'
 import type { Lang } from '../lib/i18n'
@@ -58,7 +58,8 @@ export default function AiChat({ context, storageKey, chart, stream, headerIcon,
   // 見出し等は copy 上書き優先、無ければ相談室の既定文言
   const cp: ChatCopy = copy ?? { title: t.chat.title, sub: t.chat.sub, intro: t.chat.intro, starters: t.chat.starters }
   // ストリームは stream 上書き優先、無ければ context を使う既定チャット
-  const runStream = stream ?? ((msgs: ChatMessage[], onDelta: (t: string) => void, l: Lang) => streamAiChat(context as ChatChartContext, msgs, onDelta, l))
+  const runStream = stream ?? ((msgs: ChatMessage[], onDelta: (t: string) => void, l: Lang) =>
+    streamAiChat(chart ? { ...context, ...buildChatContext(chart) } : context as ChatChartContext, msgs, onDelta, l))
   // ヘッダーアイコン: 上書き優先、無ければ自分のほしキャラマスコット
   const icon: ReactNode = headerIcon ?? (chatStar ? <HoshiKyaraMascot sunElement={chatStar.sunElement} moonElement={chatStar.moonElement} size={52} /> : null)
   const [messages, setMessages] = useState<ChatMessage[]>(() => loadMessages(storageKey))

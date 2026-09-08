@@ -1,6 +1,6 @@
 /** 相談チャット。server/handlers.ts の Chat* と対で管理する */
 
-import type { Lang } from './i18n'
+import { getLang, type Lang } from './i18n'
 import type { ChartData, PlanetKey } from './types'
 import { getPlanet } from './planets'
 import { signName } from './signs'
@@ -10,6 +10,10 @@ import { forecastSet, longRangeTransits } from './fortune'
 import type { PeriodBrief } from './fortune'
 import { starTypeOf } from './startypes'
 import type { AirBrief, BehaviorBrief, Facet } from './companion'
+import type { FortuneOutlook } from './fortuneReading'
+import { fortunePlainText } from './fortuneReading'
+import { loadCompanion, todaysFortune } from './companion'
+import { calendarWeek, loadWeekly } from './weeklyReading'
 
 export interface ChatMessage {
   role: 'user' | 'assistant'
@@ -22,7 +26,7 @@ export interface ChatChartContext {
   placeLabel?: string
   starTypeName?: string
   starTypeCopy?: string
-  planets: { label: string; role?: string; sign: string; deg: number; retro?: boolean }[]
+  planets: { label: string; role?: string; sign: string; deg: number; retro?: boolean; traits?: string[] }[]
   natalAspects?: string[]
   /** 今日〜来月＋この先数か月まで、期間ごとのトランジット見通し(全期間ぶん渡す) */
   periods: PeriodBrief[]
@@ -39,6 +43,7 @@ export interface ChatChartContext {
    */
   today?: string
   reading?: string
+  weeklyReading?: string
 }
 
 /** チャートから相談チャット用のコンテキストを組み立てる(Result / Companion 共用) */
@@ -48,6 +53,10 @@ export function buildChatContext(chart: ChartData): ChatChartContext {
   const moonLon = lonOf('moon')
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
   const natalAspects = findNatalAspects(chart.planets)
+  const saved = loadCompanion()
+  const samePerson = saved && saved.chart.dateLabel === chart.dateLabel && saved.chart.name === chart.name &&
+    JSON.stringify(saved.chart.planets) === JSON.stringify(chart.planets)
+  const reading = samePerson ? todaysFortune(saved, undefined, undefined, facetOfNow()) : undefined
   return {
     name: chart.name,
     dateLabel: chart.dateLabel,
@@ -68,6 +77,8 @@ export function buildChatContext(chart: ChartData): ChatChartContext {
     // さらに先(3年)まで。「来年の夏は？」に一般論ではなく、その人の配置で答えられるようにする
     longRange: longRangeTransits(chart.planets),
     today: todayISO(),
+    reading: reading ? fortunePlainText(reading.text) : undefined,
+    weeklyReading: loadWeekly(chart, calendarWeek().start, getLang()),
   }
 }
 
@@ -202,6 +213,7 @@ export async function streamAiFortune(
   facet: Facet = 'day',
   /** 出会って最初の1本か。初回だけ「明日聞かせて」という約束で閉じる */
   firstMeeting = false,
+  outlook?: FortuneOutlook,
 ): Promise<void> {
   await postStream(
     '/api/ai-fortune',
@@ -218,6 +230,8 @@ export async function streamAiFortune(
       persona,
       facet,
       firstMeeting,
+      formatVersion: 2,
+      outlook,
       // 呼び出し側に任せず必ず付ける。忘れると「朝のうちに」が夜に出る
       timeOfDay: timeOfDay(),
     },
@@ -230,6 +244,16 @@ export async function streamAiFortune(
  * 毎日の運勢とは別物の**照会**なので、保存も引き直し禁止も無い。
  * その日の運行(periods[0])は呼び出し側がクライアントで計算して渡す。
  */
+export async function streamAiWeekly(
+  context: ChatChartContext,
+  week: { start: string; end: string; days: PeriodBrief[] },
+  onDelta: (text: string) => void,
+  lang: Lang,
+): Promise<void> {
+  await postStream('/api/ai-fortune', { context, week, lang, horizon: 'week', formatVersion: 2,
+    messages: [{role:'user', content:'今週、楽しみにしていいことを短く教えてください。'}] }, onDelta)
+}
+
 export async function streamAiDayCheck(
   context: ChatChartContext,
   dateLabel: string,

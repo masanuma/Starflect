@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { ChartData, PlanetKey } from '../lib/types'
 import { synthesize } from '../lib/synthesis'
 import { starTypeOf, elementPhrase } from '../lib/startypes'
@@ -54,8 +54,6 @@ export default function Result({ data, onHome, onPair }: Props) {
     () => isFirst && !(typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches),
   )
   const [played, setPlayed] = useState(false)
-  // 「歩き方」案内から相談室へ運ぶ
-  const chatRef = useRef<HTMLDivElement>(null)
   // 運勢カードの「この先が気になったら」から相談室へ質問を投げる
   const [autoAsk, setAutoAsk] = useState<{ q: string; n: number } | undefined>()
   const ask = (q: string) => setAutoAsk((prev) => ({ q, n: (prev?.n ?? 0) + 1 }))
@@ -140,14 +138,6 @@ export default function Result({ data, onHome, onPair }: Props) {
 
           <div className="type-detail">
             <p className="type-text">{starType.type.text}</p>
-            {synthesis && (
-              <div className="type-synth">
-                <p className="type-synth-label">{t.result.synthLabel}</p>
-                <p className="type-text">{synthesis.intro}</p>
-                <p className="type-text">{synthesis.balance}</p>
-                <p className="type-text">{synthesis.relation}</p>
-              </div>
-            )}
           </div>
         </section>
       )}
@@ -155,26 +145,18 @@ export default function Result({ data, onHome, onPair }: Props) {
       {/* 招待リンクで来た人には「送ってくれた人との相性」を最初に見せる。誘われた人のいちばんの関心はここ */}
       <InviteTeaser mySlug={starSlug} onPair={onPair} />
 
-      {/* 初回は情報量が多いので、この画面の歩き方と“いちばんのおすすめ”を先に示す */}
-      {isFirst && (
-        <section className="guide-card">
-          <p className="guide-title">✦ {t.result.guideTitle}</p>
-          <p className="guide-body">{t.result.guideBody(data.planets.length)}</p>
-          <button
-            className="guide-cta"
-            onClick={() => {
-              // 動きが苦手な設定のときは滑らせずに一気に運ぶ
-              const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-              chatRef.current?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
-            }}
-          >
-            {t.result.guideCta} ↓
-          </button>
-        </section>
-      )}
+      <StarReading key={t.companion.readingHeading} chart={data} onAsk={ask} />
 
-      {/* 「自分は何者か」を見てから人に見せる流れにする(星の内訳→シェア) */}
-      <PartyCard data={data} />
+      <AiChat context={chatContext} storageKey={chatStorageKey(data)} chart={data} autoAsk={autoAsk} />
+
+      {/* 最初に今日を楽しむ。星の詳しい説明は、その後で気になる人が読む。 */}
+      <PartyCard data={data} collapsedByDefault />
+      {synthesis && (
+        <details className="result-synthesis">
+          <summary>{t.result.synthLabel}</summary>
+          <p>{synthesis.intro}</p><p>{synthesis.balance}</p><p>{synthesis.relation}</p>
+        </details>
+      )}
 
       {starType && (
         <ShareButtons
@@ -184,12 +166,6 @@ export default function Result({ data, onHome, onPair }: Props) {
           label={starSlug}
         />
       )}
-
-      <StarReading chart={data} onAsk={ask} />
-
-      <div ref={chatRef}>
-        <AiChat context={chatContext} storageKey={chatStorageKey(data)} chart={data} autoAsk={autoAsk} />
-      </div>
 
       <Feedback page="result" starType={starSlug} chart={data} />
 

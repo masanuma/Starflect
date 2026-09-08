@@ -17,8 +17,7 @@ interface Props {
   starName: string
   /**
    * 手紙の一覧を畳んでおく(相棒ホーム用)。
-   * 見出しと Lv の進捗だけ残すので「どこまで深まったか」は毎日目に入りつつ、
-   * 毎日は見ない手紙一覧が一等地を占めなくなる。
+   * 見出しだけ残し、読める手紙は開いたときに静かに並べる。
    */
   collapsible?: boolean
 }
@@ -30,8 +29,7 @@ interface ReportState {
 }
 
 /**
- * ごほうび地図(縦ロードマップ)。
- * 「使い込むほど、自分についての発見がひらく」を最初から見せておく＝アプリの売り。
+ * 読める手紙の一覧。利用回数の数字や、未解放の予告は見せない。
  * 手紙を開くと、AIが出生図×行動ログからその人だけの内容を生成(初回のみ・以降キャッシュ)。
  * 減らない・罰しない。しきい値や生成の仕組みは宝箱時代のまま＝変わったのは服だけ。
  */
@@ -92,15 +90,6 @@ export default function RewardMap({ signals, chart, starName, collapsible = fals
         </div>
       </div>
 
-      <p className="map-progress">
-        {t.map.progressLead(quoted(starName), signals)}
-        {prog.next ? (
-          <span className="map-progress-next"> · {t.map.toNext(prog.remaining, t.map.tiers[prog.next.key].name)}</span>
-        ) : (
-          <span className="map-progress-next"> · {t.map.allDone}</span>
-        )}
-      </p>
-
       {collapsible && (
         <button
           className={`map-toggle${expanded ? ' open' : ''}`}
@@ -117,38 +106,27 @@ export default function RewardMap({ signals, chart, starName, collapsible = fals
 
       {expanded && (
       <>
-      <p className="map-earn">{t.map.earnHint}</p>
-
       <ol className="map-track">
-        {prog.tiers.map((tier) => {
+        {prog.tiers.filter((tier) => tier.unlocked).map((tier) => {
           const info = t.map.tiers[tier.key]
-          const isNext = prog.next?.key === tier.key
           const isOpen = open === tier.key
           const rep = reports[tier.key]
           return (
             <li
               key={tier.key}
-              className={`map-node${tier.unlocked ? ' is-unlocked' : ' is-locked'}${isNext ? ' is-next' : ''}`}
+              className="map-node is-unlocked"
             >
               {/* 🔒はゲームの語彙。手紙の体裁では「開ける封筒」と「まだ書いている途中」 */}
               <div className="map-node-dot" aria-hidden="true">
-                {tier.unlocked ? '✉' : '✎'}
+                ✉
               </div>
               <div className="map-node-body">
                 <button
                   className="map-node-head"
-                  onClick={() => tier.unlocked && toggle(tier.key, tier.content)}
-                  disabled={!tier.unlocked}
+                  onClick={() => toggle(tier.key, tier.content)}
                 >
                   <span className="map-node-name">{info.name}</span>
-                  {tier.unlocked ? (
-                    <span className="map-node-cta">{isOpen ? t.map.close : t.map.open}</span>
-                  ) : (
-                    <span className="map-node-lock">
-                      {/* 旧: `Lv.${tier.at}`。数字の残っていた最後の場所 */}
-                      {isNext ? t.map.lockedHint(prog.remaining) : t.map.lockedFar}
-                    </span>
-                  )}
+                  <span className="map-node-cta">{isOpen ? t.map.close : t.map.open}</span>
                 </button>
                 <p className="map-node-teaser">{info.teaser}</p>
                 {isOpen && tier.unlocked && (

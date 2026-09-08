@@ -191,7 +191,7 @@ export default function Companion({ state, onHome, onPair }: Props) {
       {/* 毎日ひらく理由＝今日の運勢。ここを一等地に置く。
           地図や星の内訳は「たまに見る」ものなので、相談室・振り返りより下へ送る */}
       {/* daysSince は touchVisit より前にcaptureした値。渡さないと「ひさしぶり」が永久に出ない */}
-      <StarReading chart={state.chart} onAsk={ask} daysSince={daysSince} />
+      <StarReading key={t.companion.readingHeading} chart={state.chart} onAsk={ask} daysSince={daysSince} />
 
       {/* 「この日、どう？」— 読む占いを使う占いに。先の日付を調べる用事が再訪問の理由になる */}
       <DayCheck chart={state.chart} />

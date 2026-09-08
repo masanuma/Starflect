@@ -24,6 +24,9 @@ import { useUI, quoted } from '../lib/ui'
 import { useLang } from '../lib/i18n'
 import { makeShareCard, pickQuote } from '../lib/shareCard'
 import { renderToStaticMarkup } from 'react-dom/server'
+import FortuneContent, { FortuneOutlookBanner } from './FortuneContent'
+import WeeklyReading from './WeeklyReading'
+import { fortuneOutlook, fortunePlainText, parseFortuneReading } from '../lib/fortuneReading'
 
 /** 答え合わせで振り返る運勢の抜粋。全文を貼ると今日の運勢より長くなって主役が入れ替わる */
 const excerpt = (text: string, max = 56) => (text.length <= max ? text : `${text.slice(0, max)}…`)
@@ -43,8 +46,7 @@ type State =
  * **1日1本・引き直し不可**。保存済みがあればそれを見せる(毎回違うことを言うと「適当だ」と思われる)。
  * 深掘りしたい人は下のチップから相談室へ流す。
  *
- * 先の期間(明日/今週/来月…)は出さない。先まで見せると"明日また来る理由"も
- * "相棒に聞く理由"も同時に消えてしまうため。
+ * 見出し・二段落・任意の注意・相談の入口で、今日の読みどころを伝える。
  */
 export default function StarReading({
   chart,
@@ -61,7 +63,7 @@ export default function StarReading({
 }) {
   const t = useUI()
   const { lang } = useLang()
-  const fortune = readFortune(chart.planets, 'today')
+  const [fortune] = useState(() => readFortune(chart.planets, 'today'))
 
   // 「今日の1枚」＝運勢の締めの1文を画像カードにする。拡散の最小単位。
   // 生成は全部この端末内(canvas)で、サーバーには何も送らない
@@ -77,7 +79,7 @@ export default function StarReading({
         mascotSvg: svg,
         dateLabel: new Intl.DateTimeFormat(lang, { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date()),
         typeName: quoted(starType.type.name),
-        quote: pickQuote(text),
+        quote: parseFortuneReading(text)?.headline ?? pickQuote(fortunePlainText(text)),
       })
       setCard((prev) => {
         if (prev) URL.revokeObjectURL(prev.url)
@@ -121,6 +123,10 @@ export default function StarReading({
   const moonLon = lonOf('moon')
   const starType = sunLon !== undefined && moonLon !== undefined ? starTypeOf(sunLon, moonLon) : null
   const name = starType?.type.name ?? ''
+  const [toneLevel] = useState(() => {
+    const saved = loadCompanion()
+    return (saved ? todaysFortune(saved, lang, undefined, facet)?.toneLevel : undefined) ?? fortune.toneLevel
+  })
 
   const [state, setState] = useState<State>(() => {
     const saved = loadCompanion()
@@ -160,7 +166,7 @@ export default function StarReading({
     // 人となり（全期間）。会話がまだ少ない人には無い。生成は相棒ホーム側で裏で走らせる
     const persona = saved0?.persona?.lines
     // これまで一度も運勢を書いたことがない＝出会って最初の1本。
-    // 初回だけ「明日、今日がどうだったか聞かせて」という約束で閉じる（答え合わせの予告）
+    // 旧形式との互換フラグ。新版では初日も翌日の報告を求めない。
     const firstMeeting = !saved0 || !Object.values(saved0.daily).some((e) => e.fortune || e.fortuneNight)
     try {
       await streamAiFortune(
@@ -190,20 +196,25 @@ export default function StarReading({
           ],
         },
         (delta) => {
-          // 届いた分から順に出す＝「読み込み中」ではなく「いま書いている」に見せる
+          // JSONが揃うまで待つ。形式の断片を画面に出さない。
           acc += delta
-          setState({ kind: 'done', text: acc })
         },
-        undefined,
+        lang,
         hasAir ? air : undefined,
         persona?.length ? persona : undefined,
         facet,
         firstMeeting,
+        fortuneOutlook(toneLevel),
       )
+      const reading = parseFortuneReading(acc)
+      if (!reading) throw new Error('Invalid fortune response')
+      const text = JSON.stringify(reading)
+      setState({ kind: 'done', text })
       const saved = loadCompanion()
       // 相棒がまだ作られていない瞬間(初回診断の直後)は保存を諦める。翌日また書けばよい
-      if (saved && acc.trim()) {
-        saveFortune(saved, acc.trim(), fortune.items.map((i) => i.title), undefined, undefined, facet)
+      if (saved && saved.chart.dateLabel === chart.dateLabel && saved.chart.name === chart.name &&
+          JSON.stringify(saved.chart.planets) === JSON.stringify(chart.planets)) {
+        saveFortune(saved, text, fortune.items.map((i) => i.title), lang, undefined, facet, toneLevel)
       }
     } catch {
       // 障害は素直に伝える。固定文でごまかすと「その人のために書いている」が嘘になる
@@ -220,7 +231,7 @@ export default function StarReading({
   }, [])
 
   return (
-    <section className="reading-card">
+    <section className="reading-card reading-card--editorial">
       <div className="card-head">
         {starType && (
           <div className="card-head-icon" aria-hidden="true">
@@ -233,8 +244,10 @@ export default function StarReading({
         </div>
       </div>
 
+      <FortuneOutlookBanner level={toneLevel} night={night} />
+
       {state.kind === 'reading' && (
-        <div className="fortune-waiting">
+        <div className="fortune-waiting" role="status" aria-live="polite">
           {starType && (
             <div className="fortune-waiting-star" aria-hidden="true">
               <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={68} />
@@ -253,7 +266,8 @@ export default function StarReading({
         </div>
       )}
 
-      {state.kind === 'done' && <p className="fortune-body">{state.text}</p>}
+      {state.kind === 'done' && <FortuneContent text={state.text} onAsk={onAsk} />}
+      {state.kind === 'done' && <WeeklyReading key={lang} chart={chart} onAsk={onAsk} />}
 
       {/* 今日の1枚。締めの1文だけを画像にする＝全文の全公開は求めない */}
       {state.kind === 'done' && !card && (
@@ -279,7 +293,7 @@ export default function StarReading({
       {night && daytime && (
         <details className="fortune-why">
           <summary>{t.companion.daytimeFortune}</summary>
-          <p className="fortune-body">{daytime.text}</p>
+          <FortuneContent text={daytime.text} />
         </details>
       )}
 
@@ -290,7 +304,7 @@ export default function StarReading({
       {state.kind === 'done' && ask && (
         <div className="hit-ask">
           <p className="hit-ask-q">{t.companion.hitAsk(ask.daysAgo)}</p>
-          <p className="hit-ask-quote">{excerpt(ask.fortune.text)}</p>
+          <p className="hit-ask-quote">{excerpt(fortunePlainText(ask.fortune.text))}</p>
           <div className="hit-ask-btns">
             <button onClick={() => answerHit('hit')}>{t.companion.hitYes}</button>
             <button onClick={() => answerHit('soso')}>{t.companion.hitSoso}</button>
@@ -305,7 +319,7 @@ export default function StarReading({
       {thanked && <p className="hit-thanks">{t.companion.hitThanks}</p>}
 
       {state.kind === 'error' && (
-        <div className="fortune-error">
+        <div className="fortune-error" role="alert">
           <p>{t.companion.fortuneError}</p>
           <button className="ghost" onClick={() => void generate()}>
             {t.companion.fortuneRetry}

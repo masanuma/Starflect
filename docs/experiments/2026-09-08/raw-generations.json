@@ -1,0 +1,338 @@
+[
+  {
+    "date": "2026-09-09",
+    "version": "old",
+    "model": "claude-sonnet-5",
+    "promptHash": "170ed7d28abb1719614831845b789eb96f03845f0107b8b6c0d8b068661e24d7",
+    "createdAt": "2026-09-08T04:06:32.710Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2376,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 259,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "もともと、想像力や共感でものを動かしていくやる気担当のところがあなたの持ち味ですが、今日はそこに大きな追い風が吹いていて、いつもよりすっと行動に移せる勢いがあります。ただ同時に、今日の空は真正面から引っぱり合うような気配も持っていて、動きたい気持ちとブレーキがせめぎ合う一日になりそう。どちらが正しいというより、その引っぱり合い自体がエネルギーなので、朝のうちに一番気になっていたことから手をつけてみてください。星から分かるのはここまでで、そこから先、あなたが実際にどんな一日にするかはわたしにもまだわかりません。また明日、今日がどんな日だったか聞かせてください。"
+  },
+  {
+    "date": "2026-09-09",
+    "version": "new",
+    "model": "claude-sonnet-5",
+    "promptHash": "8d31c42635590680997ccdd0073a043530c72ab2be2a43fddc18b9cf4557ff6c",
+    "createdAt": "2026-09-08T04:06:42.621Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2047,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 556,
+      "output_tokens_details": {
+        "thinking_tokens": 83
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "**やわらかい行動力が、今日はよく効く日**\n\n朝から、なんとなく体がすっと動く感じがあるかもしれません。あなたの内側にある火星は「想像力」や「共感」を静かに燃やすタイプですが、今日はそこに軽やかな行動力が重なって、思いついたことをそのまま形にしやすい流れ。誰かのために動いたり、ふと気になった小さなことに手をつけたりすると、思った以上にしっくりくる感触が返ってきそうです。どっしりした山のようなあなたが、今日だけは少し身軽に動けるような、そんな一日です。\n\nひとつ気をつけるなら：午前のうちに気持ちが張り詰めやすい場面があれば、結論を急がず一呼吸置くとちょうどよさそうです。\n\n話の続き：\n- 今日、動き出すのにいいタイミングはいつ頃？\n- 誰かとの関わりで気をつけたいことは？\n\n編集用根拠：「運行中の火星 × あなたの火星(行動力) — 大きな追い風(120°)」を主軸に採用。出生の火星の性質（想像力・共感・癒やし）と結びつけ、行動力が「静かな共感的行動」として発揮される形で解釈。「運行中の月 × あなたの冥王星(再生) — 試練の角度(90°)」は注意点として軽く反映。"
+  },
+  {
+    "date": "2026-09-10",
+    "version": "old",
+    "model": "claude-sonnet-5",
+    "promptHash": "1b089e51abee9964782dfd8ccadc2eddc9b5c2d49950d8c2f2737ff31a40f65c",
+    "createdAt": "2026-09-08T04:06:47.371Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2189,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 163,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "想像力と共感で動くやる気担当が、今日は自分の中で綱引きしているような感じがあるかもしれません。でも同じ星が、あなたの奥に眠る変身の達人にはしっかり追い風を送っていて、深く集中したいことには思いのほか粘れる日です。表向きの勢いより、内側の手応えを信じていいタイミングです。朝のうちに、ずっと気になっていた一つのことだけに絞って手をつけてみてください。"
+  },
+  {
+    "date": "2026-09-10",
+    "version": "new",
+    "model": "claude-sonnet-5",
+    "promptHash": "aeb763cb17696783edff1dd5ee13fc35e6c1cba18800bbd866242ec8ffdad7d4",
+    "createdAt": "2026-09-08T04:06:57.511Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2051,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 557,
+      "output_tokens_details": {
+        "thinking_tokens": 100
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "**今日は、動くほどに気持ちがほどける日**\n\n朝から体を少し動かしたくなるような、静かな高まりを感じるかもしれません。あなたの中にある火星は「想像力・共感・癒やし」を静かに支える星。今日はそこへ追い風が吹いていて、誰かの話にふっと寄り添えたり、動いた分だけ心が軽くなるような感覚があるでしょう。どっしり構える山のあなたが、今日は少し身軽に動いてみたくなる、そんな一日です。\n\nひとつ気をつけるなら：やる気と冷静さが引っぱり合う場面もあるので、勢いだけで押し切らず、一呼吸おいてから動くと心地よく進みます。\n\n話の続き：\n- 今日、動いてみたい場所や人がいるか一緒に考える\n- 誰かへの共感が空回りしないためのコツを知りたい\n\n編集用根拠：「運行中の火星 × あなたの火星(行動力) — 大きな追い風(120°)」を主軸に採用。出生の火星の性質「想像力、共感、癒やし」と結び付け、体を動かすこと・人への共感が今日の追い風になると解釈。注意点として「運行中の太陽 × あなたの火星(行動力) — ひっぱり合い(180°)」を軽く添えた。"
+  },
+  {
+    "date": "2026-09-11",
+    "version": "old",
+    "model": "claude-sonnet-5",
+    "promptHash": "5ad6d592f4d95c53f7ea4d4621590caa46db6e078c992904ad1e31dcc9187117",
+    "createdAt": "2026-09-08T04:07:02.160Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2186,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 215,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "想像力や共感を人一倍抱えこむたちなので、今日みたいに空気がやわらかい朝は、頭の中に浮かぶ景色がいつもより鮮やかに広がります。いまの巡りが、あなたの癒し手にそっと追い風を送っていて、思いついたことを形にしやすいタイミングです。同時にやる気担当のところは自分の中で引っ張り合いも起きやすいので、焦って全部進めようとせず、一つだけ選んで動くくらいがちょうどいいです。朝のうちに、頭に浮かんでいることをひとつだけメモに書き出してみてください。"
+  },
+  {
+    "date": "2026-09-11",
+    "version": "new",
+    "model": "claude-sonnet-5",
+    "promptHash": "3504c4f1143f55ff9409d2242833d94463f95e3246149c14170f18189b36705c",
+    "createdAt": "2026-09-08T04:07:12.646Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2048,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 572,
+      "output_tokens_details": {
+        "thinking_tokens": 138
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "**細部にふと目が留まる、静かに冴える一日**\n\n朝の空気の中、いつもより物の輪郭がくっきり見える感じがするかもしれません。書類の並び、部屋の配置、誰かの言葉の選び方――あなたが持つ審美眼が今日はよく働いて、「あ、これでいいんだ」という小さな発見がありそうです。月が想像力の領域を後押ししていて、理屈より先に「なんとなく良い」と感じる感覚を信じてよさそうな日。じっくり見極める粘り強さと直感が、珍しく手を取り合ってくれます。\n\nひとつ気をつけるなら：やる気が急かされるような場面では、いつもの自分のペースを譲らなくて大丈夫です。\n\n話の続き：\n- 直感を信じていい場面の見分け方\n- 焦らされたときの対処法\n\n編集用根拠：「運行中の月 × あなたの海王星(想像力) — 大きな追い風(120°)」を主軸に採用。出生の太陽(審美眼・粘り強さ)と結びつけ、直感と審美眼が調和する一日として構成。「運行中の太陽 × あなたの火星(行動力) — ひっぱり合い(180°)」を注意点として軽く言及。"
+  },
+  {
+    "date": "2026-09-12",
+    "version": "old",
+    "model": "claude-sonnet-5",
+    "promptHash": "4768fab93f6dea724911f17da29e6ccd7f786b88ea164c521807cae5eada6042",
+    "createdAt": "2026-09-08T04:07:16.987Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2186,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 188,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "もともと、やる気に火がつくとまっすぐ突き進むたちですが、今日はその勢いが心の内側と押し合いになりやすい空気です。動きたい気持ちと、落ち着いていたい気持ちがせめぎ合って、ちょっとそわそわするかもしれません。ただ同時に、やる気そのものには追い風も吹いているので、動くこと自体は間違っていません。今日は、頭に浮かんだ「やりたいこと」をひとつだけ選んで、午前中のうちに手をつけてみてください。"
+  },
+  {
+    "date": "2026-09-12",
+    "version": "new",
+    "model": "claude-sonnet-5",
+    "promptHash": "220179567fff4c2c21cc32e676babf9225143ac6f30204e30a2eca0b8930f90a",
+    "createdAt": "2026-09-08T04:07:27.616Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2048,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 584,
+      "output_tokens_details": {
+        "thinking_tokens": 118
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "**今日は「動きたい気持ち」と「じっくり派」がせめぎ合う日**\n\n朝から、何かをすぐ形にしたい気持ちがふつふつと湧いてくるかもしれません。でも、あなたの土台にあるのは、じっくり見極めてから動く安定志向。今日はその両方が同時に主張してくる感じで、少しもどかしさを感じる場面もありそうです。ただ、内側の行動力そのものには追い風もあるので、焦らず一歩ずつ進めれば、意外なところで弾みがつく瞬間があります。急かされている気がしても、自分の歩幅を選び直していい日です。\n\nひとつ気をつけるなら：早く結果を出したい焦りから、雑に判断してしまわないよう、一呼吸置いてから決めると安心です。\n\n話の続き：\n- 「今抱えている迷いごと、どう整理すればいい？」\n- 「行動したい気持ちが空回りしないためのコツは？」\n\n編集用根拠：「運行中の太陽 × あなたの火星(行動力) — ひっぱり合い(180°)」を主軸に、出生の太陽(安定・粘り強さ)との緊張として解釈。補助として「運行中の火星 × あなたの火星(行動力) — 大きな追い風(120°)」を採用し、行動力自体への後押しとして描写した。"
+  },
+  {
+    "date": "2026-09-13",
+    "version": "old",
+    "model": "claude-sonnet-5",
+    "promptHash": "7055f809f80ed6c0b26a7a12d1fa08ecf969f386525392a4d92929fcb50d59a8",
+    "createdAt": "2026-09-08T04:07:33.193Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2180,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 225,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "もともとあなたの恋の案内人は、情熱を持って自分から動きたいたちです。でも今日の空は、その動きたい気持ちに「ちょっと待って」とブレーキをかけてくるような空気。誰かとの距離感が思うようにいかなくても、それはあなたの魅力が足りないからではなく、今日はそういう巡り合わせなだけです。無理に相手に合わせにいったり、逆に押し切ろうとせず、今日は自分のペースを保つことを優先してみてください。これからの時間、返信や誘いを急がず、まず自分のやりたいことをひとつ片付けてから動いてみるといいと思います。"
+  },
+  {
+    "date": "2026-09-13",
+    "version": "new",
+    "model": "claude-sonnet-5",
+    "promptHash": "03107c2feef45feac08ad8a48e97518dceba9fedce4f4b3a48b4f2418c5d99d6",
+    "createdAt": "2026-09-08T04:07:41.969Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2042,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 515,
+      "output_tokens_details": {
+        "thinking_tokens": 107
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "**今日は、じっとしていたい気持ちと動きたい気持ちが引っぱり合う日**\n\n朝から「動きたい」気持ちと「今日はゆっくりでいい」気持ちが、綱引きみたいに交互に顔を出すかもしれません。あなたの本来の落ち着きは、こういう日にこそ効いてきます。無理にどちらかへ決めず、午前は静かに、午後は少し動いてみる、くらいの二段構えにすると、思ったより心地よく収まりそうです。じっとしている自分を責めなくて大丈夫です。\n\nひとつ気をつけるなら：予定を詰め込みすぎず、余白を先に確保しておくと楽です。\n\n話の続き：\n- 今日一日のペース配分について相談したい\n- 動きたい気持ちとの付き合い方を聞きたい\n\n編集用根拠：「運行中の太陽 × あなたの火星(行動力) — ひっぱり合い(180°)」を主軸に採用。太陽（主人公：安定・粘り強さ）と火星（戦士：想像力・共感）の綱引きを、トーン「充電期間」と合わせて、動と静のバランスの話として展開した。"
+  },
+  {
+    "date": "2026-09-14",
+    "version": "old",
+    "model": "claude-sonnet-5",
+    "promptHash": "9816e1756b499df34f99cd20b3642aca8918ae2b09a5c249abc0829ffcbdf763",
+    "createdAt": "2026-09-08T04:07:46.323Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2179,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 202,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "元々、責任を背負うと最後まで粘り抜くたちなので、今日みたいに課題っぽい重さが心にのしかかる日は、いつも以上に肩に力が入りやすいです。でも今日の空は、あなたの心担当のほうへ大きく味方していて、朝のうちに感じる重さは思ったより長引かないはず。無理に一人で背負い込もうとせず、誰かに一言相談してみると、思ったよりすっと軽くなります。まずは今日、気になっている件をひとつだけ、信頼できる人にメッセージで伝えてみてください。"
+  },
+  {
+    "date": "2026-09-14",
+    "version": "new",
+    "model": "claude-sonnet-5",
+    "promptHash": "91e4175bf83ddc590f64ffa3f0682e54c5bfce0920b1864bcd3e71f18feb021b",
+    "createdAt": "2026-09-08T04:07:55.653Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2041,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 493,
+      "output_tokens_details": {
+        "thinking_tokens": 46
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "**今日は「じっくり整える」ことが気持ちよく進みそう**\n\n朝の空気の中、太陽があなたの心にやさしく寄り添っています。もともと物事をコツコツ積み上げて形にする力がある人なので、今日は焦らず丁寧に取り組んだことほど、思った以上にしっくり収まる感じがあるかもしれません。部屋の片づけでも、資料の見直しでも、「ちゃんとやった」という手応えが静かな満足につながりそうです。てんびん座の月が示すように、バランスを取り直すだけでも十分な収穫になりますよ。\n\nひとつ気をつけるなら：やる気が空回りして周りとテンポがずれることがあるので、急かされても自分の間合いを保つと楽です。\n\n話の続き：\n- 「仕事の進め方、今日はどう整えるといい？」\n- 「人との距離感、今日気をつけたいことは？」\n\n編集用根拠：「運行中の太陽 × あなたの月(心) — 大きな追い風(120°)」を主軸に採用。太陽(安定・審美眼・粘り強さ)と月(責任感・達成・忍耐)の重なりから、コツコツ取り組む安心感をテーマにした。「運行中の月×土星の試練角」は注意点として一文に反映。"
+  },
+  {
+    "date": "2026-09-15",
+    "version": "old",
+    "model": "claude-sonnet-5",
+    "promptHash": "6c11ede720f6ca9af9c29c511938ec3e533d6954044d2b97ff04d89544a83cd9",
+    "createdAt": "2026-09-08T04:08:00.408Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2177,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 185,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "責任感が強くて、達成するまで粘れるのがもともとのあなたの持ち味ですが、今日はその癒し手の部分にいまの空が大きな追い風を送っている感じです。じっくり型のあなたにしては珍しく、朝から気持ちが軽く前に進みやすい流れが来ています。ただ心の奥では何かとの引っ張り合いも起きているので、焦って結論を出さなくて大丈夫です。この流れがあるうちに、今日中に片付けたかった一件に手をつけてみてください。"
+  },
+  {
+    "date": "2026-09-15",
+    "version": "new",
+    "model": "claude-sonnet-5",
+    "promptHash": "6a42b52569272863edec003070e30d45e7238a0280c5ff16037b5b83b14fd852",
+    "createdAt": "2026-09-08T04:08:08.807Z",
+    "stopReason": "end_turn",
+    "usage": {
+      "input_tokens": 2039,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 445,
+      "output_tokens_details": {
+        "thinking_tokens": 39
+      },
+      "service_tier": "standard",
+      "inference_geo": "global"
+    },
+    "text": "**じっくり整う一日、心の芯に光が差します**\n\n今日は運行中の太陽が、あなたの月にやさしく追い風を送っています。責任感を持ってコツコツ積み上げてきたことが、ふと認められたり、心がすっと落ち着く瞬間があるかもしれません。山のようにどっしりした本来のあなたらしさが、今日は無理なく表に出てきそうです。午後にほっと一息つけるような、静かな満足感を探してみてください。\n\nひとつ気をつけるなら：火星の勢いと心がすれ違いやすい時間帯もあるので、誰かの言葉にカチンときても、すぐ言い返さず一呼吸置くと楽です。\n\n話の続き：\n- 「今日、頑張りが認められそうな場面ってどんな時？」\n- 「イライラをうまく受け流すコツを知りたい」\n\n編集用根拠：「運行中の太陽 × あなたの月(心) — 大きな追い風(120°)」を主軸に、月の性質（責任感・達成・忍耐）と結びつけた。「運行中の火星 × あなたの月(心) — ひっぱり合い(180°)」を注意点として補足。"
+  }
+]

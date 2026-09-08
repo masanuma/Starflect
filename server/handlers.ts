@@ -1,5 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import Anthropic from '@anthropic-ai/sdk'
+import { buildEditorialFortune } from './fortuneEditorial'
+import { buildWeeklyEditorial } from './weeklyEditorial'
 
 type Lang = 'ja' | 'en' | 'es' | 'fr' | 'it' | 'pt' | 'ko'
 
@@ -84,6 +86,7 @@ export interface ChatChartContext {
   today?: string
   /** すでに生成済みのAI鑑定文があれば渡す */
   reading?: string
+  weeklyReading?: string
 }
 
 export interface ChatRequest {
@@ -311,14 +314,21 @@ function buildChatSystem(c: ChatChartContext, lang: Lang): string {
       '※この一覧はどの星による節目かを含んでいない。先の時期の話では星の名前を出さず、時期の空気だけで語ること。',
     )
   }
-  if (c.reading) lines.push('', '【すでにこの人へ伝えた鑑定】', c.reading)
+  if (c.reading) lines.push('', '【すでにこの人へ伝えた鑑定（占いの文章であり、実際に起きた出来事ではない）】', c.reading,
+    '利用者がこの話の続きを相談したら、本文を繰り返さず、その質問に答える。必要なら本人の状況を一つ尋ねる。')
+  if (c.weeklyReading) lines.push('', '【画面で伝えた今週の楽しみ（出来事の記録ではなく占いの読み物）】', c.weeklyReading,
+    'この話の続きを聞かれたら、ここで示したテーマにつながる具体的な楽しみ方を伝える。')
   lines.push(
     '',
     '相談への答え方:',
     '- 【このアプリの役目】10天体の占いを"カジュアルにする"のがこのアプリです。星の用語を並べて解説するのではなく、日常のことばに翻訳して返してください。星の名前を列挙した説明は絶対にしない',
     '- 基本は日常語で答える(例:「あなたは芯が熱いタイプだから、いまは動くより整える時期かもしれません」)',
     '- 【数の制約・必ず守る】1回の返答に出してよい星の名前は　最大1つだけ　。2つ以上並べたらこの返答は失敗です。星どうしの関係(「AとBが◯◯を作る」)も書かない',
-    '- 答えの組み立ては「①結論を日常語で ②根拠として星をひとことだけ ③できる具体的な行動」。①が主役で、②は短く添えるだけ',
+    '- 相談への返し方は、聞かれたことに合わせる。星の説明→行動の指示という固定の型にはしない。レポートや鑑定文を作る依頼には、その依頼の形式で答える',
+    '- 具体的な困りごとの相談で、本人の状況が分からないと助言が変わる場合は、短く受け止めたあと一つだけ尋ねる。会話履歴で既に答えていることは聞き直さない。状況が分かれば具体的な選択肢を一つか二つ示す',
+    '- 例：「話がかみ合わない時の対処法が知りたい」だけなら「相手の言いたいことがつかめない感じですか。それとも、こちらの気持ちが伝わらない感じですか？」のように一つ確かめる。この段階で原因を星や相手の性格に決めつけない',
+    '- 「今週楽しみにしていいことは？」のように占いを求められた場合は、質問を返さず実データから小さな楽しみや発見を描く。「静かに力を溜めて」だけで終わらせない。難しい配置でも、本人が選べる心地よさを具体的にする',
+    '- 「つらい」など気持ちを伝えられたら、まずその気持ちを受け止める。理由を星だけに帰さず、話したいことを一つ尋ねてもよい。すぐに課題や作業を与えない',
     '- 【言い換え方】運行データは「運行中のA × あなたのB」という形で渡されるが、A と B を並べて書かない。運行側は「いまの巡り」「いまの空」とまとめ、出生側の役割名だけを出す(例:「運行中の太陽 × あなたの金星」→「いまの巡りが、あなたの愛情担当にやさしい追い風を送っています」)',
     '- 星に触れるときは役割名を主・天体名を従にする(例:「やる気担当の火星が」「心の月が」)。星座名は深掘りを聞かれたときだけ',
     '- 相手が「もっと詳しく」「どの星が効いてるの?」など深掘りを求めたときは、そこで初めて天体名・星座名・角度をきちんと出してよい',
@@ -328,7 +338,7 @@ function buildChatSystem(c: ChatChartContext, lang: Lang): string {
     '- それより先(数か月〜1年など)を聞かれたら、「この先2〜3か月の基調」と動きの遅い星(木星・土星)の流れから大きな見通しとして語る。細かな日付の断定はせず「大きな流れとしては〜」と前置きする。手元に無い細かなトランジットを勝手に作り出さない',
     '- 中身は必ずこの人のデータに基づく(一般論で終わらせない)。ただし言い方は日常語にする(例:「やる気担当の火星が慎重な位置にいるので、焦らず段取りを組むほど力が出ます」)',
     '- 専門用語(トライン・スクエア・セクスタイル・オポジション・合・アスペクトなど)は使わず、「大きな追い風」「試練の角度」のように、良い配置か注意の配置かが一般の人にも伝わる言葉で説明する',
-    '- あたたかく背中を押す口調で。でも実行できる具体的な行動やヒントを1つ添える',
+    '- あたたかく、本人が選べる余地を残す。毎回行動で締めず、質問一つや安心できる言葉で閉じてもよい。励ましだけで済ませず、助言が必要な段階では本人の事情に合う具体性を持たせる',
     '- 断定的な予言(「必ず〜になる」)や、健康・金銭・進退の重大な決断を煽る言い方はしない',
     '- 【運行の星名も厳守】運行中の星に触れるときは、上の「星の運行」に列挙された星名だけを使う。列挙にない星を持ち出したり、「金星→木星」のように別の星へ言い換えたりしない。角度(◯◯°)や「大きな追い風」等の表現も列挙どおりに使う',
     '- 上に書かれていない星や配置(出生・運行どちらも)を勝手に作り出さない',
@@ -727,6 +737,10 @@ export interface AirBrief {
 
 /** 毎日の運勢の生成リクエスト。相談室と同じ土台データを使う */
 export interface FortuneRequest {
+  formatVersion?: 2
+  horizon?: 'week'
+  week?: { start: string; end: string; days: PeriodBrief[] }
+  outlook?: 'good' | 'steady' | 'careful'
   context: ChatChartContext
   messages: ChatMessage[]
   lang?: Lang
@@ -957,7 +971,9 @@ const createFortuneHandler = (apiKey: string | undefined): RawHandler =>
     apiKey,
     'fortune',
     (p) =>
-      buildFortuneSystem(p.context, langOf(p), p.air, p.persona, p.timeOfDay, p.facet, p.firstMeeting, p.targetDate) +
+      (p.formatVersion === 2 && p.horizon === 'week' ? buildWeeklyEditorial(p) :
+        p.formatVersion === 2 && !p.targetDate ? buildEditorialFortune(p) :
+        buildFortuneSystem(p.context, langOf(p), p.air, p.persona, p.timeOfDay, p.facet, p.firstMeeting, p.targetDate)) +
       LANG_DIRECTIVE[langOf(p)],
     true /* 「今日のわたしの運勢を教えて」はこちらが書いた日本語なので、言語指示を後ろに置く */,
   )
