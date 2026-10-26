@@ -4161,3 +4161,27 @@ body {
 .invite-body > div {
   text-align: left;
 }
+.fortune-greeting { display:flex; align-items:center; gap:14px; margin:22px 0 18px; }
+.reading-card--editorial { container-type:inline-size; }
+.reading-card--editorial:lang(ko), .special-letters:lang(ko), .map-card:lang(ko) { word-break:keep-all; overflow-wrap:anywhere; }
+.fortune-greeting-mascot { flex:0 0 76px; border-radius:50%; background:#eef1fa; }
+.fortune-greeting--good .fortune-greeting-mascot { background:#fff0bd; box-shadow:0 0 0 5px #fff9e9; transform:rotate(-5deg); }
+.fortune-greeting--careful .fortune-greeting-mascot { background:#faebdb; box-shadow:0 0 0 5px #fffbf5; }
+.fortune-greeting h3 { position:relative; margin:0; padding:16px 18px; border:1px solid #ded6ed; border-radius:19px 19px 19px 4px; background:#faf7ff; color:#45365b; font-size:17px; line-height:1.85; font-weight:600; overflow-wrap:anywhere; }
+.special-letters { margin:22px 0; }
+.special-letter { margin:12px 0; border:1px solid #dcc9a6; border-radius:18px; background:linear-gradient(135deg,#fffaf0,#fffdf9 60%,#f6efff); overflow:hidden; }
+.special-letter > summary { display:flex; align-items:center; gap:16px; padding:20px; cursor:pointer; list-style:none; }
+.special-letter > summary::-webkit-details-marker { display:none; }
+.special-letter-seal { display:grid; place-items:center; flex:0 0 52px; height:52px; border-radius:50%; background:#eee1ca; color:#705338; font-size:28px; }
+.special-letter-title,.special-letter-date,.special-letter-open { display:block; }
+.special-letter-title { color:#60492e; font-size:15px; font-weight:700; line-height:1.65; }
+.special-letter-date { margin-top:5px; color:#796750; font-size:12px; line-height:1.7; }
+.special-letter-open { margin-top:8px; color:#735191; font-size:13px; }
+.special-letter[open] .special-letter-open { display:none; }
+.special-letter-body { padding:0 22px 20px; color:#4d4058; font-size:15px; line-height:2; overflow-wrap:anywhere; }
+.special-letter-body > p { margin:0; }
+.special-letter-body button { min-height:44px; padding:8px 16px; border:1px solid #d5c5e3; border-radius:12px; background:#fff; color:#604979; cursor:pointer; }
+.special-letter-archive > summary { padding:12px 0; min-height:44px; font-size:13px; color:#725786; cursor:pointer; }
+.special-letter summary:focus-visible,.special-letter button:focus-visible,.special-letter-archive > summary:focus-visible { outline:3px solid #8c67b2; outline-offset:3px; }
+@media(max-width:420px) { .fortune-greeting { gap:10px; align-items:flex-start; }.fortune-greeting-mascot { flex-basis:52px; }.fortune-greeting-mascot svg { width:52px; height:52px; }.fortune-greeting h3 { padding:12px; font-size:16px; }.special-letter > summary { padding:16px; gap:12px; } }
+@container(max-width:360px) { .fortune-greeting { gap:10px; align-items:flex-start; }.fortune-greeting-mascot { flex-basis:52px; }.fortune-greeting-mascot svg { width:52px; height:52px; }.fortune-greeting h3 { padding:12px; font-size:16px; }.special-letter > summary { padding:16px; gap:12px; } }

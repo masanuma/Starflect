@@ -2,6 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import Anthropic from '@anthropic-ai/sdk'
 import { buildEditorialFortune } from './fortuneEditorial'
 import { buildWeeklyEditorial } from './weeklyEditorial'
+import { buildSpecialEditorial } from './specialEditorial'
 
 type Lang = 'ja' | 'en' | 'es' | 'fr' | 'it' | 'pt' | 'ko'
 
@@ -21,6 +22,9 @@ const LANG_DIRECTIVE: Record<Lang, string> = {
   pt: '\n\n【CRITICAL — OUTPUT LANGUAGE】Responda INTEIRAMENTE em português natural e caloroso. Os dados podem conter nomes de signos/planetas em japonês — traduza-os para o português (しし座→Leão, 火星→Marte, 上昇星座→Ascendente, etc.). Traduza também os títulos de seção para o português, mantendo o estilo de colchetes 【】.',
   ko: '\n\n【CRITICAL — OUTPUT LANGUAGE】전적으로 자연스럽고 따뜻한 한국어로 답하세요. 데이터에 일본어 별자리/행성 이름이 있을 수 있으니 한국어로 번역하세요(しし座→사자자리, 火星→화성, 上昇星座→상승궁 등). 섹션 제목도 한국어로 번역하되 【】 괄호 스타일은 유지하세요.',
 }
+
+LANG_DIRECTIVE.fr += ' Utilise le vouvoiement partout, y compris dans la courte bulle du personnage : vous/votre/vos, jamais tu/ton/ta. Les questions suggérées sont formulées à la première personne du lecteur.'
+LANG_DIRECTIVE.pt += ' Dirija-se ao leitor de forma consistente com você e verbos na terceira pessoa, inclusive nas falas citadas; não alterne com tu, teu ou verbos na segunda pessoa. As perguntas sugeridas usam a primeira pessoa do leitor.'
 
 const SERVER_LANGS = ['en', 'es', 'fr', 'it', 'pt', 'ko']
 const langOf = (payload: unknown): Lang => {
@@ -128,7 +132,7 @@ function buildReportPrompt(
     ? `【これまでの記録(行動の実測)】記録した日数 ${b.days}日 / いい ${b.good}・ふつう ${b.meh}・しんどい ${b.bad}${b.topDomains.length ? ` / よく選ぶ領域: ${b.topDomains.join('・')}` : ''} / 迎えてから ${b.sinceDays}日`
     : '【これまでの記録】まだ記録は少なめです。'
   const common =
-    'これは「ごほうび地図」で相手が解放した、特別な発見レポートです。占い師の一般論ではなく、わたし(あなたのほしキャラ)が、あなただけに見つけた発見として書きます。見出しや箇条書きは使わず、地の文で。専門用語は使わない。断定的な予言や重大な決断の煽りはしない。文末に定型のまとめや次回予告はつけない。'
+    'これは「ごほうび地図」で相手が解放した、特別な発見レポートです。占い師の一般論ではなく、わたし(あなたのほしキャラ)が、あなただけに見つけた発見として書きます。見出しや箇条書きは使わず、地の文で。専門用語は使わない。断定的な予言や重大な決断の煽りはしない。文末に定型のまとめや次回予告はつけない。本人の性別は不明なので、性別を決めつける呼びかけや形容詞を避け、言語に合う自然な言い換えをする。出生図からの解釈と実際の記憶を区別する。記録にない行動を「見ていた」「覚えている」と言わない。生活の例は可能性として描き、実際の習慣と断定しない。'
   switch (topic) {
     case 'moonBack':
       return `${common}\nテーマ:「月星座の裏側」。出生の月星座に注目し、太陽(人前で見せる表の顔)との違い＝安心しているときやひとりのときに出る“素のあなた”を、具体的な場面を交えて3〜4文で。表からは見えないスイッチを言い当てる感を出す。`
@@ -738,7 +742,8 @@ export interface AirBrief {
 /** 毎日の運勢の生成リクエスト。相談室と同じ土台データを使う */
 export interface FortuneRequest {
   formatVersion?: 2
-  horizon?: 'week'
+  horizon?: 'week' | 'special'
+  moment?: {date:string;transit:string;natal:string;angle:number}
   week?: { start: string; end: string; days: PeriodBrief[] }
   outlook?: 'good' | 'steady' | 'careful'
   context: ChatChartContext
@@ -971,7 +976,8 @@ const createFortuneHandler = (apiKey: string | undefined): RawHandler =>
     apiKey,
     'fortune',
     (p) =>
-      (p.formatVersion === 2 && p.horizon === 'week' ? buildWeeklyEditorial(p) :
+      (p.formatVersion === 2 && p.horizon === 'special' ? buildSpecialEditorial(p) :
+        p.formatVersion === 2 && p.horizon === 'week' ? buildWeeklyEditorial(p) :
         p.formatVersion === 2 && !p.targetDate ? buildEditorialFortune(p) :
         buildFortuneSystem(p.context, langOf(p), p.air, p.persona, p.timeOfDay, p.facet, p.firstMeeting, p.targetDate)) +
       LANG_DIRECTIVE[langOf(p)],

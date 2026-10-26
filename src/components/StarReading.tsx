@@ -26,6 +26,7 @@ import { makeShareCard, pickQuote } from '../lib/shareCard'
 import { renderToStaticMarkup } from 'react-dom/server'
 import FortuneContent, { FortuneOutlookBanner } from './FortuneContent'
 import WeeklyReading from './WeeklyReading'
+import SpecialLetters from './SpecialLetters'
 import { fortuneOutlook, fortunePlainText, parseFortuneReading } from '../lib/fortuneReading'
 
 /** 答え合わせで振り返る運勢の抜粋。全文を貼ると今日の運勢より長くなって主役が入れ替わる */
@@ -266,7 +267,9 @@ export default function StarReading({
         </div>
       )}
 
-      {state.kind === 'done' && <FortuneContent text={state.text} onAsk={onAsk} />}
+      {state.kind === 'done' && <FortuneContent text={state.text} onAsk={onAsk} outlook={fortuneOutlook(toneLevel)}
+        mascot={starType && <HoshiKyaraMascot sunElement={starType.sunElement} moonElement={starType.moonElement} size={76} />} />}
+      {state.kind === 'done' && <SpecialLetters chart={chart} />}
       {state.kind === 'done' && <WeeklyReading key={lang} chart={chart} onAsk={onAsk} />}
 
       {/* 今日の1枚。締めの1文だけを画像にする＝全文の全公開は求めない */}

@@ -1,0 +1,70 @@
+[
+  {
+    "kind": "day",
+    "value": {
+      "version": 2,
+      "headline": "丁寧に選ぶほど、輝く一日",
+      "greeting": "今日は台所から漂う香りや、誰かのふとした一言に耳を澄ませてみて。案外そこに発見があるよ。",
+      "paragraphs": [
+        "今日は行動力に追い風が吹きつつも、少し引っぱり合う場面もありそう。急がず、目の前のことをひとつずつ丁寧に選ぶくらいがちょうど良い巡りです。ふと目に留まった小さな発見が、今日の楽しみになるかもしれません。",
+        "あなたの粘り強さと審美眼は、こういう『あせらず選ぶ』時間でこそ活きてきます。急いで結論を出すより、じっくり向き合う中で見えてくるものを大事にすると、気づけば充実した一日として残りそうです。"
+      ],
+      "caution": "",
+      "questions": [
+        "行動したい気持ちと落ち着きたい気持ちがぶつかる時、どう過ごせばいい？",
+        "じっくり選ぶ良さを日常でどう活かせる?"
+      ]
+    }
+  },
+  {
+    "kind": "night",
+    "value": {
+      "version": 2,
+      "headline": "心の器を満たす夜に",
+      "greeting": "あたたかいお茶を一口。今日は味わうことそのものが、小さなごちそうだよ。",
+      "paragraphs": [
+        "今日は月が、あなたの愛情や想像の部分と少し引っぱり合う巡り。誰かと気持ちがすれ違ったように感じても、それは今夜の空模様のせいかもしれません。無理に答えを出そうとせず、好きな香りのお茶や、肌触りのいい毛布など、体で感じる心地よさに寄り添ってみてください。",
+        "あなたはもともと、じっくり味わい積み重ねる力を持つ人。今日のような揺れやすい夜こそ、その粘り強さがそっと支えになります。誰かのためでなく、自分のためだけの小さな安らぎを一つ選ぶだけで、心の器がゆっくり満ちていくはずです。"
+      ],
+      "caution": "気持ちがすれ違いやすい夜なので、大事な話は今夜決めつけず、明日また眺め直すくらいの余白を持つと安心です。",
+      "questions": [
+        "気持ちがすれ違う時どう過ごせばいい",
+        "今夜安心できる過ごし方を知りたい"
+      ]
+    }
+  },
+  {
+    "kind": "english",
+    "value": {
+      "version": 2,
+      "headline": "Today's Push Meets Your Steady Ground",
+      "greeting": "Today your energy wants to move—maybe a brisk walk or a task you can really dig into.",
+      "paragraphs": [
+        "There's a restless, active pulse in the air today, the kind that makes you want to tackle something head-on—clearing a task, moving your body, finally starting that thing you've been circling. It might feel like two urges pulling at once: push forward, or hold steady. Both are welcome.",
+        "This is where your natural staying power shines. You're built like solid ground, someone who doesn't rush but doesn't quit either, and today's extra drive can channel right into that strength—turning restlessness into real, quiet progress rather than scattered motion. By evening, you may notice something actually finished, or at least meaningfully moved."
+      ],
+      "caution": "",
+      "questions": [
+        "How can I use restless energy without feeling scattered?",
+        "What does it mean when my drive and my patience pull in different directions?"
+      ]
+    }
+  },
+  {
+    "kind": "special",
+    "moment": {
+      "id": "2026-01-13:venus:sun:120",
+      "date": "2026-01-13",
+      "from": "2026-01-10",
+      "until": "2026-01-16",
+      "transit": "venus",
+      "natal": "sun",
+      "angle": 120,
+      "offset": 0.4262715501836283
+    },
+    "value": {
+      "version": 1,
+      "text": "この頃、あなたが選び抜いた器やお気に入りの布地に、ふと目が吸い寄せられそうです。じっくり触れて確かめる時間そのものが、静かな喜びになりますよ。"
+    }
+  }
+]

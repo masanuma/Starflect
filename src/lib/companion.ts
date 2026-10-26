@@ -126,6 +126,7 @@ export interface CompanionState {
   signals?: number
   /** One short reading per calendar week and language. Old backups may omit this. */
   weekly?: Partial<Record<Lang, {weekStart: string; chartKey: string; text: string}>>
+  specialLetters?: import('./specialLetters').SpecialLetter[]
 }
 
 const STORAGE_KEY = 'starflect-companion:v1'
@@ -196,6 +197,9 @@ export function createCompanion(chart: ChartData, starType: string, now: Date = 
     state = { chart, starType, createdAt: iso, lastVisitAt: iso, daily: {} }
   } else if (sameChart(existing.chart, chart)) {
     state = { ...existing, chart, starType }
+    if (existing.chart.name !== chart.name || existing.chart.dateLabel !== chart.dateLabel || existing.chart.placeLabel !== chart.placeLabel) {
+      delete state.specialLetters
+    }
   } else {
     const daily: Record<string, DailyEntry> = {}
     for (const [key, entry] of Object.entries(existing.daily)) {
@@ -205,7 +209,7 @@ export function createCompanion(chart: ChartData, starType: string, now: Date = 
     }
     // 「人となり」も前の人のもの。会話ログは生年月日＋名前でキーが分かれるので自動で切り替わるが、
     // これは相棒の状態に乗っているので明示的に捨てる
-    const { persona: _drop, weekly: _dropWeekly, ...keep } = existing
+    const { persona: _drop, weekly: _dropWeekly, specialLetters: _dropLetters, ...keep } = existing
     state = { ...keep, chart, starType, daily }
   }
   saveCompanion(state)

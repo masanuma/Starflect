@@ -19,16 +19,22 @@ Starflect は「静的フロント(Vite/React)+ AI鑑定API(Express)」を **1�
 
 ## Railway での設定
 
+2026-10-26のセキュリティ対応で、ビルダーをDockerfileに変更する準備をしています（本番未反映）。`Dockerfile` のビルド・実行ステージは両方Node.js 24.22.1を使用します。今後のセキュリティ更新では両ステージとpackage.jsonの最低バージョン、scripts/check-node.mjsを更新してください。
+
+デプロイ後はRailwayのビルド成功、起動ログの `Node.js 24.22.1`、公開トップと `/app?lang=ja`、AI応答を確認してください。Dockerビルドはローカル未検証です。現在の作業ツリーには未公開の吹き出し・特別便・多言語修正も含まれます。
+
 1. Railway で **New Project → Deploy from GitHub repo** を選び、このリポジトリを指定。
 2. **Variables** に環境変数を1つ追加:
    - `ANTHROPIC_API_KEY` = 発行した API キー(`sk-ant-...`)
    - ※ `PORT` は Railway が自動注入するので設定不要。
 3. デプロイが始まる。[railway.json](railway.json) の設定により:
-   - Build: `npm run build`(= `vite build`。`dist/` を生成)
+   - Build: Dockerfile内で `npm ci` → `npm run build`（実行ステージは本番依存のみ）
    - Start: `npm start`(= `tsx server/index.ts`)
 4. 完了後、**Settings → Networking → Generate Domain** で公開URLを発行。
 
 ## ローカルで本番構成を確認する
+
+Windowsのこの作業環境では、修正版の専用Nodeを選ぶ `./scripts/local.ps1` で開発サーバーを起動できます。ビルドは `./scripts/local.ps1 -Task build`、本番構成の起動は `./scripts/local.ps1 -Task start`。別のPCではNode.js 24.22.1以上の24系を先に導入してください。`.runtime` のバイナリは共有されません。
 
 ```bash
 npm run build          # dist/ を生成

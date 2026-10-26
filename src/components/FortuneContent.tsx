@@ -2,6 +2,7 @@ import { useLang } from '../lib/i18n'
 import { fortuneLabels } from '../lib/fortuneLabels'
 import { fortuneOutlook, parseFortuneReading } from '../lib/fortuneReading'
 import type { FortuneOutlook } from '../lib/fortuneReading'
+import type { ReactNode } from 'react'
 
 /** The outlook is calculated from the stars, never inferred from optimistic wording. */
 export function FortuneWeather({ outlook }: { outlook: FortuneOutlook }) {
@@ -35,13 +36,16 @@ export function FortuneOutlookBanner({ level, night = false }: { level: number; 
   </div>
 }
 
-export default function FortuneContent({ text, onAsk }: { text: string; onAsk?: (q: string) => void }) {
+export default function FortuneContent({ text, onAsk, mascot, outlook = 'steady' }: { text: string; onAsk?: (q: string) => void; mascot?: ReactNode; outlook?: FortuneOutlook }) {
   const { lang } = useLang()
   const labels = fortuneLabels[lang]
   const reading = parseFortuneReading(text)
   if (!reading) return <div className="fortune-prose">{text.split(/\n\s*\n/).filter(Boolean).map((p, i) => <p key={i}>{p}</p>)}</div>
   return <div className="fortune-editorial">
-    <h3 className="fortune-headline">{reading.headline}</h3>
+    {reading.greeting ? <div className={`fortune-greeting fortune-greeting--${outlook}`}>
+      {mascot && <div className="fortune-greeting-mascot" aria-hidden="true">{mascot}</div>}
+      <h3>{reading.greeting}</h3>
+    </div> : <h3 className="fortune-headline">{reading.headline}</h3>}
     <div className="fortune-prose">{reading.paragraphs.map((p, i) => <p key={i}>{p}</p>)}</div>
     {reading.caution && <aside className="fortune-caution">
       <p className="fortune-caution-label"><span aria-hidden="true">◇</span> {labels.caution}</p>

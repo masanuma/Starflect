@@ -14,6 +14,7 @@ import type { FortuneOutlook } from './fortuneReading'
 import { fortunePlainText } from './fortuneReading'
 import { loadCompanion, todaysFortune } from './companion'
 import { calendarWeek, loadWeekly } from './weeklyReading'
+import { aiFailureMessage } from './aiErrors'
 
 export interface ChatMessage {
   role: 'user' | 'assistant'
@@ -137,25 +138,27 @@ export interface PairChatContext {
 
 /** text/plain を逐次読み込む共通処理。届いた断片ごとに onDelta を呼ぶ。 */
 async function postStream(url: string, body: unknown, onDelta: (text: string) => void): Promise<void> {
+  const lang=(body as {lang?:Lang}).lang ?? getLang()
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-  })
+  }).catch(()=>{throw new Error(aiFailureMessage(lang))})
 
   if (!res.ok || !res.body) {
-    const data = (await res.json().catch(() => null)) as { error?: string } | null
-    throw new Error(data?.error ?? `サーバーエラー (${res.status})`)
+    throw new Error(aiFailureMessage(lang,res.status))
   }
 
   const reader = res.body.getReader()
   const decoder = new TextDecoder()
+  let received=false
   for (;;) {
-    const { done, value } = await reader.read()
+    const { done, value } = await reader.read().catch(()=>{throw new Error(aiFailureMessage(lang))})
     if (done) break
     const chunk = decoder.decode(value, { stream: true })
-    if (chunk) onDelta(chunk)
+    if (chunk) { received=true;onDelta(chunk) }
   }
+  if(!received)throw new Error(aiFailureMessage(lang))
 }
 
 /** 相談チャット(ほしキャラ本人)をストリーミングで受け取る。 */
@@ -252,6 +255,11 @@ export async function streamAiWeekly(
 ): Promise<void> {
   await postStream('/api/ai-fortune', { context, week, lang, horizon: 'week', formatVersion: 2,
     messages: [{role:'user', content:'今週、楽しみにしていいことを短く教えてください。'}] }, onDelta)
+}
+
+export async function streamAiSpecial(context:ChatChartContext, moment:{date:string;transit:string;natal:string;angle:number}, onDelta:(text:string)=>void, lang:Lang):Promise<void> {
+  await postStream('/api/ai-fortune',{context,moment,lang,horizon:'special',formatVersion:2,
+    messages:[{role:'user',content:'この星の節目に楽しみにしていいことを、短いお便りにしてください。'}]},onDelta)
 }
 
 export async function streamAiDayCheck(

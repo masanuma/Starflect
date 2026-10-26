@@ -1,0 +1,498 @@
+[
+  {
+    "lang": "en",
+    "kind": "day",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "Drive meets a little friction, in a good way",
+      "greeting": "There's a real spark in your step today—maybe a good coffee tastes even better than usual.",
+      "paragraphs": [
+        "Today has real momentum behind it. Something in you wants to push forward—maybe it's tackling a task you've been circling, or finally saying the thing you've been holding back. There's a strong energy backing you up, like wind at your back when you start moving.",
+        "But there's also a small tug happening: your drive to act might bump against a pull to slow down or reconsider timing. For someone as steady and real as you, this isn't a conflict to solve—it's just two true impulses sharing the same day. You don't have to pick one right now. Notice which one feels louder this afternoon, and let that be enough."
+      ],
+      "caution": "",
+      "questions": [
+        "I feel pulled in two directions today—how do I know which one to trust?",
+        "How do I use a strong-drive day without overdoing it?"
+      ]
+    }
+  },
+  {
+    "lang": "ja",
+    "kind": "day",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "火が灯る日、進み方はひとつじゃない",
+      "greeting": "今日は体を動かしたくなる日。好きな音楽をかけて、少し早歩きしてみようか。",
+      "paragraphs": [
+        "今日はいつもより「動きたい」気持ちが強く出てきそうです。歩く速さを少し上げてみる、後回しにしていた用事に手をつけてみる。そんな小さな一歩が、思った以上に気持ちよく進みそうな追い風があります。",
+        "一方で、勢いよく進みたい自分と、立ち止まって様子を見たい自分がせめぎ合う場面もあるかもしれません。どっしり構えるあなたには、その両方を抱えたまま進む力があります。焦らず、でも足は止めずに。考えを整理する力にも支えがあるので、頭の中で計画を立てるのも今日は楽しい時間になりそうです。"
+      ],
+      "caution": "",
+      "questions": [
+        "やる気はあるのに迷いも出てくるときの対処法を知りたい",
+        "計画を立てるのが得意なタイプに合う進め方を知りたい"
+      ]
+    }
+  },
+  {
+    "lang": "en",
+    "kind": "night",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "Where drive meets a quiet room",
+      "greeting": "Tonight, let your Warrior rest a little—maybe with something warm to drink and a favorite playlist nearby.",
+      "paragraphs": [
+        "Today's sky put a push-and-pull right on your Warrior's energy—Mars wanting to charge forward while the Sun's pull tugs the other way. That kind of restlessness can feel like sitting still is somehow the harder task. There's no need to resolve it tonight; it's just a real tension passing through.",
+        "But underneath, something steadier is humming: a real tailwind moving through your own drive and your capacity for transformation. You're built solid, the real deal, so this evening doesn't need to prove anything—just a lamp, a familiar chair, maybe a snack you actually like. Let the restlessness sit beside you instead of pushing you out the door."
+      ],
+      "caution": "If the pull to go do something restless shows up, a short walk around your own home or a stretch can be enough without needing to leave.",
+      "questions": [
+        "I feel restless at night even when I know I should rest—what helps?",
+        "How do I tell the difference between useful drive and just tension?"
+      ]
+    }
+  },
+  {
+    "lang": "en",
+    "kind": "weekly",
+    "ok": true,
+    "value": "This week, your inner drive stays lit steady and strong, like a fire that just keeps burning no matter what pulls at it. You might enjoy channeling that quiet, mountain-solid energy into something physical or hands-on, just for the satisfaction of it."
+  },
+  {
+    "lang": "ja",
+    "kind": "night",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "力があるからこそ、静かに使う夜",
+      "greeting": "今夜は好きな飲み物を一杯。じっくり味わうだけで十分だよ。",
+      "paragraphs": [
+        "今日は体の奥に力が満ちているのに、外に出そうとすると少し押し返される、そんなせめぎ合いの気配があります。どっしり構えるあなたなら、無理に動かさず、今いる場所でその力を静かに燃やしておくくらいがちょうどよさそうです。",
+        "考え事は思ったより整理されやすい巡りなので、頭の中で今日あったことを振り返るだけでも収穫があるはず。結果を急がず、灯りの下でゆっくり息をつく時間が、明日への静かな支えになりそうです。"
+      ],
+      "caution": "",
+      "questions": [
+        "力が余っている感じがして落ち着きません",
+        "考えがまとまらないときの整理の仕方が知りたいです"
+      ]
+    }
+  },
+  {
+    "lang": "en",
+    "kind": "special",
+    "ok": true,
+    "value": "This period, gentle Venus warms your steady Taurus sun—like sunlight settling on a favorite worn table. A small, comforting pleasure may catch your eye and feel simply, quietly good.",
+    "moment": {
+      "id": "2026-01-13:venus:sun:120",
+      "date": "2026-01-13",
+      "from": "2026-01-10",
+      "until": "2026-01-16",
+      "transit": "venus",
+      "natal": "sun",
+      "angle": 120,
+      "offset": 0.4262715501836283
+    }
+  },
+  {
+    "lang": "en",
+    "kind": "chat",
+    "ok": true,
+    "value": "Thanks for bringing that to me. Just so I can point you the right way — is it more that you can't quite grasp what the other person's actually trying to say, or that you feel like your side isn't landing with them?"
+  },
+  {
+    "lang": "ja",
+    "kind": "weekly",
+    "ok": true,
+    "value": "どっしり構えるあなたの中で、いつもより体を動かしたい力がじわりと湧いてくる週です。散歩の距離を少し伸ばしてみたり、体を使う作業に手を出したりすると、揺るがない山らしい満足感を味わえそうです。"
+  },
+  {
+    "lang": "ja",
+    "kind": "special",
+    "ok": true,
+    "value": "この頃、じっくり味わってきたお気に入りの店や道具に、ふと心が和む瞬間が訪れそう。急がず、いつもの心地よさを噛みしめるように過ごせたら、それだけで十分な実りになりますよ。",
+    "moment": {
+      "id": "2026-01-13:venus:sun:120",
+      "date": "2026-01-13",
+      "from": "2026-01-10",
+      "until": "2026-01-16",
+      "transit": "venus",
+      "natal": "sun",
+      "angle": 120,
+      "offset": 0.4262715501836283
+    }
+  },
+  {
+    "lang": "en",
+    "kind": "followup",
+    "ok": true,
+    "value": "That sounds frustrating — wanting fairness but feeling unheard is draining. Good timing though: your thinking-and-talking side (the Strategist in you) is getting a strong boost from the current skies today, so words are likely to land clearer than usual if you have the conversation now. Try being very concrete rather than general — instead of \"share more,\" name one specific task you'd like handed over this week, and ask directly if they can take it."
+  },
+  {
+    "lang": "ja",
+    "kind": "chat",
+    "ok": true,
+    "value": "相手の言いたいことがつかめない感じですか、それとも自分の気持ちがうまく伝わらない感じですか?どちらのすれ違いか教えてもらえますか。"
+  },
+  {
+    "lang": "es",
+    "kind": "day",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "Empuje real, con un pulso que cuidar",
+      "greeting": "Hoy tu paso tiene chispa: hasta caminar rápido al trabajo puede saberte a victoria pequeña.",
+      "paragraphs": [
+        "Hay un viento fuerte a tu favor: ganas de moverte, de terminar lo que empezaste, de decir 'esto lo hago yo'. Es un buen día para esa tarea física o esa conversación directa que venías posponiendo, no por obligación sino porque hoy te sale con gusto.",
+        "Al mismo tiempo, ese impulso puede chocar con tu propio ritmo cuando alguien más marca el paso o el reloj aprieta. Tú eres de los que necesitan sentir el terreno firme bajo los pies antes de lanzarse; si algo se atasca hoy, no es que hayas fallado, es solo el tira y afloja entre tu prisa y tu solidez de siempre."
+      ],
+      "caution": "",
+      "questions": [
+        "¿Cómo canalizo esta energía sin chocar con los demás?",
+        "¿Por qué a veces mi impulso se frena de golpe?"
+      ]
+    }
+  },
+  {
+    "lang": "ja",
+    "kind": "followup",
+    "ok": true,
+    "value": "あなたの知性担当の軍師、水星は生まれつき少し逆行気味で、勢いで話すより一度きちんと言葉を練ってから伝えるタイプなんです。今回も「気持ちを察して」より、「この作業をこの割合でお願いしたい」と具体的な分担を数字や範囲で示すほうが響きやすいと思います。一度、紙に整理してから話してみるのはどうでしょう?"
+  },
+  {
+    "lang": "es",
+    "kind": "night",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "Un tira y afloja que también descansa",
+      "greeting": "Esta noche, deja que suene algo con ritmo propio: puede ser tu playlist favorita a bajo volumen.",
+      "paragraphs": [
+        "Hoy tu impulso interior estuvo un poco dividido, como si quisieras avanzar y frenar a la vez. Ahora que cae la noche, no hace falta resolver esa tensión: puedes simplemente notar cómo tu cuerpo pide una pausa distinta, quizás con una luz más cálida o una manta cerca.",
+        "Tú eres de los que necesitan sentir las cosas de verdad, sin adornos. Esa autenticidad hoy se topó con un pulso interno más fuerte de lo habitual. Está bien que la noche no traiga conclusiones, solo un lugar tranquilo donde ese impulso pueda bajar la voz."
+      ],
+      "caution": "",
+      "questions": [
+        "¿Cómo puedo calmar esa sensación de tira y afloja antes de dormir?",
+        "¿Por qué hoy sentí más impulso de lo normal?"
+      ]
+    }
+  },
+  {
+    "lang": "fr",
+    "kind": "day",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "Un vent puissant, un bras de fer joyeux",
+      "greeting": "Aujourd'hui, ton élan a un peu de résistance à jouer contre — et ça peut être grisant !",
+      "paragraphs": [
+        "Aujourd'hui, l'énergie souffle fort dans vos voiles : une envie d'avancer, de pousser un peu plus loin que d'habitude, comme quand on accélère le pas sur un chemin qu'on connaît bien. Une petite tension peut se glisser dans la journée, un peu comme un bras de fer amical où l'on sent la force en face — sans que ce soit un problème à résoudre.",
+        "Vous qui êtes du genre solide, autant à l'intérieur qu'à l'extérieur, vous savez tenir bon sans vous laisser bousculer. Cette journée vous invite à savourer votre élan naturel, même s'il rencontre un peu de résistance : c'est justement ce frottement qui rend la victoire plus savoureuse."
+      ],
+      "caution": "",
+      "questions": [
+        "Comment canaliser une énergie forte sans m'épuiser ?",
+        "Comment transformer une tension du jour en quelque chose de positif ?"
+      ]
+    }
+  },
+  {
+    "lang": "es",
+    "kind": "weekly",
+    "ok": true,
+    "value": "Esta semana tu energía y tu fuerza interior están en plena sintonía, como una montaña que avanza sin prisa pero sin pausa. Date el gusto de emprender algo físico que te apetezca —caminar, mover el cuerpo, empujar un proyecto pendiente— y disfruta esa sensación de constancia que tanto te reconforta."
+  },
+  {
+    "lang": "es",
+    "kind": "special",
+    "ok": true,
+    "value": "En este período, tu Sol en Tauro recibe la luz suave de Venus: puede que disfrutes de una mesa bien puesta, una tela agradable al tacto o un rato tranquilo rodeado de belleza sencilla. Deja que ese placer auténtico te reconforte, sin prisa.",
+    "moment": {
+      "id": "2026-01-13:venus:sun:120",
+      "date": "2026-01-13",
+      "from": "2026-01-10",
+      "until": "2026-01-16",
+      "transit": "venus",
+      "natal": "sun",
+      "angle": 120,
+      "offset": 0.4262715501836283
+    }
+  },
+  {
+    "lang": "fr",
+    "kind": "night",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "Ce soir, laisser retomber la tension",
+      "greeting": "Ce soir, un thé chaud et une lumière douce suffisent à faire un bon moment.",
+      "paragraphs": [
+        "Aujourd'hui, une part de vous avait envie d'avancer franchement, pendant qu'une autre butait sur un mur invisible — comme un moteur qui tourne sans qu'on appuie sur l'accélérateur. Ce n'est pas un échec, juste une journée où l'élan et le frein se sont un peu disputés.",
+        "Vous, si solide dedans comme dehors, n'avez pas besoin de prouver quoi que ce soit ce soir. Choisissez juste ce qui est vrai pour vous là, maintenant : une couverture, un silence agréable, un mot doux à vous-même. Demain le vent portera peut-être plus loin."
+      ],
+      "caution": "",
+      "questions": [
+        "Comment calmer une frustration qui ne veut pas partir ?",
+        "Comment savoir ce dont j'ai vraiment besoin le soir ?"
+      ]
+    }
+  },
+  {
+    "lang": "es",
+    "kind": "chat",
+    "ok": true,
+    "value": "¿Es más que sientes que no logras entender lo que la otra persona quiere decirte, o que es tu manera de sentir la que no está llegando a ella? Contándome eso puedo ayudarte a ver por dónde soltar el nudo."
+  },
+  {
+    "lang": "fr",
+    "kind": "weekly",
+    "ok": true,
+    "value": "Cette semaine, votre énergie et votre imagination avancent joyeusement du même pas, comme deux vieux amis qui se retrouvent. Laissez-vous porter par une envie simple, un projet créatif ou une balade qui vous fait du bien, sans chercher plus loin."
+  },
+  {
+    "lang": "fr",
+    "kind": "special",
+    "ok": true,
+    "value": "Vénus effleure ton Soleil du Taureau avec douceur : ces jours-ci, savoure un plaisir simple et tangible, un bon repas, une matière agréable sous la main, sans rien forcer.",
+    "moment": {
+      "id": "2026-01-13:venus:sun:120",
+      "date": "2026-01-13",
+      "from": "2026-01-10",
+      "until": "2026-01-16",
+      "transit": "venus",
+      "natal": "sun",
+      "angle": 120,
+      "offset": 0.4262715501836283
+    }
+  },
+  {
+    "lang": "es",
+    "kind": "followup",
+    "ok": true,
+    "value": "Entiendo, es agotador sentir que explicas y explicas y no cala. Tu parte de estratega interno funciona mejor con lo concreto: en vez de pedir \"más responsabilidad\" en general, prueba a nombrarle una tarea específica con un límite claro (\"¿puedes encargarte de esto desde el jueves?\"). Eso deja menos espacio para que la petición se diluya. ¿Ya intentaste ponerlo así de concreto o hasta ahora habías hablado más en términos generales?"
+  },
+  {
+    "lang": "fr",
+    "kind": "chat",
+    "ok": true,
+    "value": "Merci de me poser ça. Pour bien vous répondre : c'est plutôt que vous n'arrivez pas à saisir ce que l'autre veut dire, ou que c'est vous qui avez du mal à faire passer ce que vous ressentez ?"
+  },
+  {
+    "lang": "fr",
+    "kind": "followup",
+    "ok": true,
+    "value": "Ah, je comprends — c'est frustrant de sentir que le message ne passe pas. Votre penseur intérieur (Mercure) est du genre à avancer pas à pas, avec du concret plutôt que des grandes phrases : ça peut aider de proposer une répartition précise et chiffrée (\"je m'occupe de X, toi de Y\") plutôt qu'une demande générale de \"partager plus\". Voulez-vous qu'on réfléchisse ensemble à comment formuler ça très concrètement ?"
+  },
+  {
+    "lang": "it",
+    "kind": "day",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "Il vento soffia dritto nelle vele",
+      "greeting": "Oggi il tuo passo ha una spinta in più: sentirai le gambe leggere, quasi a tempo di musica.",
+      "paragraphs": [
+        "Oggi c'è una spinta che ti fa venire voglia di partire, di dire sì a un'idea invece di rimandarla. Potresti scoprire che una cosa lasciata a metà ieri, oggi si muove da sola, come se il momento giusto fosse arrivato senza avvisare.",
+        "Tu che sei un Guerriero nel profondo, oggi senti il tuo Marte rispondere a questo slancio: energia vera, non agitazione vuota. C'è anche un piccolo tira e molla tra il fare e il fermarsi a pensare — nessun problema, puoi lasciare che convivano, senza sceglierne uno per forza."
+      ],
+      "caution": "",
+      "questions": [
+        "Come uso al meglio questa energia forte oggi?",
+        "Perché sento anche un po' di tira e molla insieme alla spinta?"
+      ]
+    }
+  },
+  {
+    "lang": "pt",
+    "kind": "day",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "Sua força pede um rumo, não uma pausa",
+      "greeting": "Hoje sua garra encontra um vento forte a favor — vai ter energia sobrando para o que importa.",
+      "paragraphs": [
+        "Hoje o ânimo está alto, quase transbordando: aquela vontade de resolver logo, de ir com tudo. Pode ser um bom dia para colocar as mãos em algo que você vinha adiando, ou simplesmente para uma caminhada mais rápida do que o normal, sentindo o corpo respondendo bem.",
+        "Você é alguém sólido por dentro e por fora, e hoje essa força interna encontra um empurrão a mais — mas também um pequeno cabo de guerra entre agir rápido e pensar com calma. Não precisa escolher um lado agora: dá para deixar a energia trabalhar a seu favor, sem precisar provar nada a ninguém."
+      ],
+      "caution": "Se sentir aquela vontade de resolver tudo ao mesmo tempo, escolha uma coisa só para começar — o resto pode esperar sem perder força.",
+      "questions": [
+        "Como posso usar essa energia de hoje sem me esgotar?",
+        "Por que às vezes sinto essa disputa entre agir rápido e pensar com calma?"
+      ]
+    }
+  },
+  {
+    "lang": "it",
+    "kind": "night",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "Un tira e molla che si ammorbidisce la sera",
+      "greeting": "Stasera lascia che sia la Luna in Leone a scegliere la playlist, non il dovere.",
+      "paragraphs": [
+        "Oggi il tuo slancio interiore ha voluto correre in più direzioni insieme, e forse hai sentito quella spinta forte mescolarsi a un po' di attrito, come un motore acceso a metà. Ora che la luce cala, non serve più decidere chi vince: puoi semplicemente lasciare che il corpo si fermi dove sei.",
+        "Il tuo Guerriero interiore non si spegne facilmente, lo sai bene, ma stasera può restare comodo anche senza vittorie da portare a casa. Una luce calda, una coperta, un suono familiare bastano a dirgli che va tutto bene così. Il vento che oggi ti ha spinto resta con te, pronto per domani."
+      ],
+      "caution": "",
+      "questions": [
+        "Come faccio a calmarmi quando sento due spinte opposte dentro di me?",
+        "Ho un'energia forte ma stasera non so dove metterla, che faccio?"
+      ]
+    }
+  },
+  {
+    "lang": "it",
+    "kind": "weekly",
+    "ok": true,
+    "value": "Questa settimana la tua energia gioca a spingere e tirare, come una corda tesa che alla fine trova il suo equilibrio. Concediti il piacere di seguire quello slancio a modo tuo, magari in un piccolo gesto fisico o creativo che ti fa sentire vivo."
+  },
+  {
+    "lang": "pt",
+    "kind": "night",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "Sua garra em modo repouso",
+      "greeting": "Hoje a força quer sair, mas o sofá também chama. Que tal um chá quentinho antes de decidir?",
+      "paragraphs": [
+        "Hoje seu ímpeto natural (aquele Marte cheio de vontade) sente um empurrão forte, mas também esbarra num Sol que puxa para outro lado — como querer sair correndo e, ao mesmo tempo, ficar parado olhando pela janela. Não precisa resolver essa tensão agora à noite.",
+        "Você é feito de solidez por dentro e por fora, e essa noite pede justamente isso: um cantinho onde a inquietação possa descansar sem cobrança. Uma luz mais baixa, uma música que você já conhece de cor, o silêncio do lugar onde você está — tudo isso já é suficiente companhia para hoje."
+      ],
+      "caution": "",
+      "questions": [
+        "Como lidar com essa sensação de vontade e cansaço ao mesmo tempo?",
+        "O que posso fazer para relaxar melhor à noite?"
+      ]
+    }
+  },
+  {
+    "lang": "it",
+    "kind": "special",
+    "ok": true,
+    "value": "In questo periodo Venere sfiora dolcemente il tuo Sole in Toro: potresti ritrovare piacere in un gesto semplice e concreto, come una tavola ben apparecchiata o un tessuto piacevole al tatto. Lascia che la bellezza quieta ti raggiunga senza cercarla a tutti i costi.",
+    "moment": {
+      "id": "2026-01-13:venus:sun:120",
+      "date": "2026-01-13",
+      "from": "2026-01-10",
+      "until": "2026-01-16",
+      "transit": "venus",
+      "natal": "sun",
+      "angle": 120,
+      "offset": 0.4262715501836283
+    }
+  },
+  {
+    "lang": "pt",
+    "kind": "weekly",
+    "ok": true,
+    "value": "Esta semana, sua força tranquila de montanha encontra um vento forte a favor: aquela vontade antiga de agarrar algo com garra ganha espaço para respirar. Vale se permitir um pequeno desafio físico ou criativo que já vinha adiando, só pelo prazer de sentir a própria firmeza em ação."
+  },
+  {
+    "lang": "it",
+    "kind": "chat",
+    "ok": true,
+    "value": "Capisco, è una sensazione frustrante quando le parole non arrivano dove vorresti. Per capire meglio: è più che non riesci a cogliere cosa vuole dirti l'altra persona, o senti che sei tu a non riuscire a far passare quello che provi?"
+  },
+  {
+    "lang": "pt",
+    "kind": "special",
+    "ok": false,
+    "status": 200,
+    "raw": "{\"version\":1,\"text\":\"この頃、金星が生まれ持った太陽と穏やかに響き合うようです。誰かと囲む食卓や、丁寧に選んだ小さな贈り物が、いつもより温かく心に残るかもしれません。ゆっくり味わってみてください。\"}",
+    "error": "Error: Japanese mixed into response"
+  },
+  {
+    "lang": "pt",
+    "kind": "chat",
+    "ok": true,
+    "value": "Entendo — essa sensação de falar e sentir que não chega ao outro lado é cansativa. Para eu te ajudar melhor: é mais a impressão de que você não consegue captar o que a outra pessoa quer dizer, ou de que aquilo que você sente não está sendo entendido por ela?"
+  },
+  {
+    "lang": "it",
+    "kind": "followup",
+    "ok": true,
+    "value": "Capisco, è faticoso sentirsi soli a portare il peso senza che l'altro se ne accorga. Una cosa che potrebbe aiutarti: invece di parlare in generale di \"condividere di più\", prova a chiedere una cosa concreta e piccola, tipo un compito specifico entro una data precisa — è più difficile schivare una richiesta chiara che una lamentela generale. In più, in questo periodo il tuo lato stratega ha un vento favorevole per esprimersi con parole dirette e ferme, quindi è un buon momento per dirlo senza troppi giri.\n\nVuoi che pensiamo insieme a come formulare quella richiesta specifica?"
+  },
+  {
+    "lang": "pt",
+    "kind": "followup",
+    "ok": true,
+    "value": "Isso é frustrante — querer algo tão razoável e sentir que a mensagem não passa. Uma coisa que ajuda é trocar o \"gostaria que partilhasses mais\" por um pedido bem concreto, tipo \"podes ficar com X e eu fico com Y a partir de amanhã\" — pedidos específicos costumam furar barreiras que pedidos gerais não furam. Você já chegou a pedir algo assim, nome por nome, ou tem sido mais no campo do \"seria bom se...\"?"
+  },
+  {
+    "lang": "ko",
+    "kind": "day",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "힘이 넘치는 날, 방향만 살짝",
+      "greeting": "오늘은 몸이 먼저 움직이고 싶어할지도 몰라요. 걷는 발걸음 소리에 귀 기울여보세요.",
+      "paragraphs": [
+        "오늘은 화성이 당신의 화성과 강하게 손을 맞잡아서, 평소보다 몸에 힘이 도는 걸 느낄 수 있어요. 계단을 두 칸씩 오르거나, 미뤄뒀던 산책을 나서는 것처럼 몸을 쓰는 일이 유난히 개운하게 느껴질 것 같아요. 그 김에 수성과 토성도 손을 잡아서, 미뤄둔 과제 하나가 뜻밖에 술술 풀리는 발견도 있을 수 있어요.",
+        "다만 태양과 화성이 서로 당기는 힘도 있어서, '이렇게 하고 싶다'는 마음과 '해야 할 일'이 살짝 엇갈릴 수 있어요. 겉으로도 속으로도 든든한 당신이라면, 그 팽팽함조차 오늘 하루를 활기차게 만드는 재료로 써볼 수 있을 거예요. 몸을 움직인 만큼, 마음도 한결 가벼워지는 저녁이 기다리고 있을지도 몰라요."
+      ],
+      "caution": "",
+      "questions": [
+        "오늘 몸을 움직이기 좋은 방법이 있을까요",
+        "하고 싶은 일과 해야 할 일이 부딪힐 때 어떻게 하면 좋을까요"
+      ]
+    }
+  },
+  {
+    "lang": "ko",
+    "kind": "night",
+    "ok": true,
+    "value": {
+      "version": 2,
+      "headline": "움직이고 싶은 마음, 오늘은 쉬어도 돼요",
+      "greeting": "오늘 밤엔 좋아하는 음악 한 곡, 그거면 충분해요.",
+      "paragraphs": [
+        "오늘은 마음속에서 '더 하고 싶다'는 힘과 '이만하면 됐다'는 마음이 살짝 부딪히는 날이에요. 억지로 몰아붙이지 않아도, 지금 있는 자리에서 좋아하는 향의 차 한 잔이나 익숙한 음악을 틀어두는 것만으로 충분히 채워질 수 있어요.",
+        "당신은 겉으로도 속으로도 든든하게 중심을 잡는 사람이라, 이런 날에도 크게 흔들리지 않아요. 다만 오늘만큼은 그 단단함을 애써 증명하지 않아도 괜찮아요. 편안한 자리에서 하루를 그냥 흘려보내는 것도 당신다운 선택이에요."
+      ],
+      "caution": "의욕이 앞서 무리하게 움직이고 싶어질 수 있으니, 오늘은 몸이 원하는 만큼만 움직여주세요.",
+      "questions": [
+        "의욕과 휴식 사이에서 균형 잡는 법을 알고 싶어요",
+        "오늘처럼 마음이 조급할 때 어떻게 다스리면 좋을까요"
+      ]
+    }
+  },
+  {
+    "lang": "ko",
+    "kind": "weekly",
+    "ok": true,
+    "value": "이번 주는 몸을 움직이는 것 자체가 즐거움이 되는 흐름이라, 평소 하던 산책이나 정리정돈에서도 은근한 활력을 느낄 수 있어요. 흔들리지 않는 산답게, 꾸준히 해오던 일 속에서 문득 성취감을 맛보는 순간이 찾아올 거예요."
+  },
+  {
+    "lang": "ko",
+    "kind": "special",
+    "ok": true,
+    "value": "이 무렵엔 좋아하는 사람과 마주 앉아 따뜻한 차를 나누듯, 편안한 시간이 자연스럽게 곁에 머물러요. 애써 꾸미지 않아도 마음이 잘 전해지는 순간이 있을 거예요.",
+    "moment": {
+      "id": "2026-01-13:venus:sun:120",
+      "date": "2026-01-13",
+      "from": "2026-01-10",
+      "until": "2026-01-16",
+      "transit": "venus",
+      "natal": "sun",
+      "angle": 120,
+      "offset": 0.4262715501836283
+    }
+  },
+  {
+    "lang": "ko",
+    "kind": "chat",
+    "ok": true,
+    "value": "이야기가 겉도는 느낌, 답답하시겠어요. 그런데 그게 상대방 말의 의도를 못 잡겠는 쪽인가요, 아니면 내 마음이 잘 안 전해지는 쪽인가요?"
+  },
+  {
+    "lang": "ko",
+    "kind": "followup",
+    "ok": true,
+    "value": "부탁이 무리한 요구처럼 들릴까 봐 말이 자꾸 부드러워지다가 오히려 흐려지는 걸지도 몰라요. 당신은 원래 뭐든 든든하게 짊어지는 편이라, \"괜찮아요\"가 먼저 나오는 타입이잖아요. 오늘은 지성 담당이 힘을 받는 흐름이라, 감정을 앞세우기보다 \"이 일은 이만큼, 저 일은 이만큼\" 하고 구체적인 업무량을 숫자나 목록으로 짚어서 말해보면 의도가 훨씬 또렷하게 전달될 거예요."
+  }
+]

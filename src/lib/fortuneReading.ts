@@ -2,6 +2,7 @@
 export interface FortuneReading {
   version: 2
   headline: string
+  greeting?: string
   paragraphs: string[]
   caution: string
   questions: string[]
@@ -16,7 +17,8 @@ export function parseFortuneReading(text: string): FortuneReading | null {
     if (value?.version !== 2 || typeof value.headline !== 'string' || !value.headline.trim() ||
       value.headline.length > 200 || !strings(value.paragraphs, 1, 3) ||
       typeof value.caution !== 'string' || value.caution.length > 1000 || !strings(value.questions, 0, 2)) return null
-    return { version: 2, headline: value.headline.trim(), paragraphs: value.paragraphs.map((p: string) => p.trim()),
+    if (value.greeting !== undefined && (typeof value.greeting !== 'string' || !value.greeting.trim() || value.greeting.length > 300)) return null
+    return { version: 2, headline: value.headline.trim(), ...(value.greeting ? {greeting:value.greeting.trim()} : {}), paragraphs: value.paragraphs.map((p: string) => p.trim()),
       caution: value.caution.trim(), questions: value.questions.map((q: string) => q.trim()) }
   } catch { return null }
 }
@@ -24,7 +26,7 @@ export function parseFortuneReading(text: string): FortuneReading | null {
 /** Sharing and retrospective excerpts must never expose JSON or consultation buttons. */
 export function fortunePlainText(text: string): string {
   const reading = parseFortuneReading(text)
-  return reading ? [reading.headline, ...reading.paragraphs, reading.caution].filter(Boolean).join('\n\n') : text
+  return reading ? [reading.greeting ?? reading.headline, ...reading.paragraphs, reading.caution].filter(Boolean).join('\n\n') : text
 }
 
 export type FortuneOutlook = 'good' | 'steady' | 'careful'

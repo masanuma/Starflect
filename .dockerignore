@@ -1,0 +1,10 @@
+.git
+.env
+.env.*
+.runtime
+node_modules
+dist
+.claude
+.codex
+.agents
+*.log

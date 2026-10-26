@@ -277,5 +277,5 @@ for (const sig of ['SIGTERM', 'SIGINT'] as const) {
 
 const port = Number(process.env.PORT) || 3000
 app.listen(port, () => {
-  console.log(`Starflect server listening on port ${port}`)
+  console.log(`Starflect server listening on port ${port} (Node.js ${process.versions.node})`)
 })

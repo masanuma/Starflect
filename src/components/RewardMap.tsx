@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import type { ChartData } from '../lib/types'
 import { mapProgress, loadCompanion, behaviorBrief, currentAir } from '../lib/companion'
 import { buildChatContext } from '../lib/aiChat'
-import { fetchAiReport, loadReport } from '../lib/aiReport'
+import { fetchAiReport, loadReport, loadLegacyReport, legacyReportLabel } from '../lib/aiReport'
 import type { ReportTopic } from '../lib/aiReport'
 import { useLang } from '../lib/i18n'
 import { useUI, quoted } from '../lib/ui'
@@ -33,7 +33,12 @@ interface ReportState {
  * 手紙を開くと、AIが出生図×行動ログからその人だけの内容を生成(初回のみ・以降キャッシュ)。
  * 減らない・罰しない。しきい値や生成の仕組みは宝箱時代のまま＝変わったのは服だけ。
  */
-export default function RewardMap({ signals, chart, starName, collapsible = false }: Props) {
+export default function RewardMap(props:Props) {
+  const {lang}=useLang()
+  return <LocalizedRewardMap key={lang} {...props}/>
+}
+
+function LocalizedRewardMap({ signals, chart, starName, collapsible = false }: Props) {
   const t = useUI()
   const { lang } = useLang()
   const prog = mapProgress(signals)
@@ -45,7 +50,7 @@ export default function RewardMap({ signals, chart, starName, collapsible = fals
   const context = useMemo(() => buildChatContext(chart), [chart])
 
   async function generate(topic: ReportTopic) {
-    const cached = loadReport(context, topic)
+    const cached = loadReport(context, topic, lang)
     if (cached) {
       setReports((r) => ({ ...r, [topic]: { text: cached } }))
       return
@@ -111,6 +116,7 @@ export default function RewardMap({ signals, chart, starName, collapsible = fals
           const info = t.map.tiers[tier.key]
           const isOpen = open === tier.key
           const rep = reports[tier.key]
+          const legacy = tier.content === 'ai' ? loadLegacyReport(context,tier.key as ReportTopic) : null
           return (
             <li
               key={tier.key}
@@ -151,6 +157,7 @@ export default function RewardMap({ signals, chart, starName, collapsible = fals
                     )}
                   </>
                 )}
+                {isOpen && legacy && <details className="fortune-why"><summary>{legacyReportLabel[lang]}</summary><p className="map-node-content">{legacy}</p></details>}
               </div>
             </li>
           )
