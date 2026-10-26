@@ -19,9 +19,9 @@ Starflect は「静的フロント(Vite/React)+ AI鑑定API(Express)」を **1�
 
 ## Railway での設定
 
-2026-10-26のセキュリティ対応で、ビルダーをDockerfileに変更する準備をしています（本番未反映）。`Dockerfile` のビルド・実行ステージは両方Node.js 24.22.1を使用します。今後のセキュリティ更新では両ステージとpackage.jsonの最低バージョン、scripts/check-node.mjsを更新してください。
+2026-10-26のセキュリティ対応で、ビルダーをDockerfileに変更しました（facd6fd、本番反映済み）。`Dockerfile` のビルド・実行ステージは両方Node.js 24.22.1を使用します。今後のセキュリティ更新では両ステージとpackage.jsonの最低バージョン、scripts/check-node.mjsを更新してください。
 
-デプロイ後はRailwayのビルド成功、起動ログの `Node.js 24.22.1`、公開トップと `/app?lang=ja`、AI応答を確認してください。Dockerビルドはローカル未検証です。現在の作業ツリーには未公開の吹き出し・特別便・多言語修正も含まれます。
+デプロイ後はRailwayのビルド成功、起動ログの `Node.js 24.22.1`、公開トップと `/app?lang=ja`、AI応答を確認してください。DockerビルドはRailwayで成功を確認済みです。吹き出し・特別便・多言語修正も同時公開しました。
 
 1. Railway で **New Project → Deploy from GitHub repo** を選び、このリポジトリを指定。
 2. **Variables** に環境変数を1つ追加:
